@@ -37,7 +37,7 @@ test("the public ecosystem contains exactly the three CSS libraries", () => {
 test("the headline count includes densities and native color schemes", () => {
   const homepage = readFileSync(`${repositoryRoot}/app/page.tsx`, "utf8");
 
-  assert.equal(SUPPORTED_COMBINATIONS_LABEL, "176,400");
+  assert.equal(SUPPORTED_COMBINATIONS_LABEL, "218,400");
   assert.match(homepage, /SUPPORTED_COMBINATIONS_LABEL/);
   assert.equal(20 * 7 * 3 * (20 * 20 + 20), 176_400);
 });

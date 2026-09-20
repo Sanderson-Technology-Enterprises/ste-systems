@@ -14,6 +14,8 @@ import {
   CDN_MARKUP,
   ECOSYSTEM_PACKAGES,
   NPM_INSTALL,
+  UI_STYLE_KIT_INSTALL_SPEC,
+  UI_STYLE_KIT_THEME_COMMIT,
 } from "../app/data/ecosystem";
 import {
   UI_SEMANTIC_CLASS_BY_SUFFIX,
@@ -180,9 +182,11 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
 });
 
 test("installation examples pin approved versions and cascade order", () => {
+  const uiStyleKitCdnRoot = `https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@${UI_STYLE_KIT_THEME_COMMIT}`;
+
   assert.equal(
     NPM_INSTALL,
-    "npm install ui-style-kit-css@2.4.0 layout-style-css@3.2.0 interactive-surface-css@1.7.0",
+    `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC} layout-style-css@3.2.0 interactive-surface-css@1.7.0`,
   );
   assert.deepEqual(BUNDLER_IMPORTS, [
     'import "ui-style-kit-css/visual.css";',
@@ -194,12 +198,12 @@ test("installation examples pin approved versions and cascade order", () => {
     {
       packageName: "ui-style-kit-css",
       kind: "style",
-      href: "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.0/dist/ui-style-kit.visual.min.css",
+      href: `${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css`,
     },
     {
       packageName: "ui-style-kit-css",
       kind: "style",
-      href: "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.0/styles/interactive-surface-theme.css",
+      href: `${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css`,
     },
     {
       packageName: "interactive-surface-css",
@@ -215,8 +219,8 @@ test("installation examples pin approved versions and cascade order", () => {
   assert.equal(
     CDN_MARKUP,
     [
-      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.0/dist/ui-style-kit.visual.min.css">',
-      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.0/styles/interactive-surface-theme.css">',
+      `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css">`,
+      `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css">`,
       '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/interactive-surface-css@1.7.0/state-core.css">',
       '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layout-style-css@3.2.0/dist/layout-style-css.min.css">',
     ].join("\n"),
@@ -250,10 +254,9 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
     { one: 3, pair: 3, all: 1 },
   );
 
-  const uiVisualCdn =
-    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.0/dist/ui-style-kit.visual.min.css">';
-  const uiThemeCdn =
-    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.0/styles/interactive-surface-theme.css">';
+  const uiStyleKitCdnRoot = `https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@${UI_STYLE_KIT_THEME_COMMIT}`;
+  const uiVisualCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css">`;
+  const uiThemeCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css">`;
   const interactionCoreCdn =
     '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/interactive-surface-css@1.7.0/state-core.css">';
   const interactionStandaloneCdn =
@@ -272,7 +275,7 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
     "ui-only": {
       packages: ["ui-style-kit-css"],
       snippets: [
-        "npm install ui-style-kit-css@2.4.0",
+        `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`,
         'import "ui-style-kit-css/visual.css";',
         uiVisualCdn,
       ],
@@ -288,7 +291,7 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
     "layout-ui": {
       packages: ["layout-style-css", "ui-style-kit-css"],
       snippets: [
-        "npm install layout-style-css@3.2.0 ui-style-kit-css@2.4.0",
+        `npm install layout-style-css@3.2.0 ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`,
         [
           'import "ui-style-kit-css/visual.css";',
           'import "layout-style-css";',
@@ -310,7 +313,7 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
     "ui-interactive": {
       packages: ["ui-style-kit-css", "interactive-surface-css"],
       snippets: [
-        "npm install ui-style-kit-css@2.4.0 interactive-surface-css@1.7.0",
+        `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC} interactive-surface-css@1.7.0`,
         [
           'import "ui-style-kit-css/visual.css";',
           'import "ui-style-kit-css/interactive-surface-theme.css";',
@@ -350,9 +353,13 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
         (candidate) => candidate.name === packageName,
       )?.version;
       assert.ok(packageVersion, packageName);
-      assert.match(
-        path.snippets[0].code,
-        new RegExp(`${packageName}@${packageVersion}`),
+      const installSpec =
+        packageName === "ui-style-kit-css"
+          ? UI_STYLE_KIT_INSTALL_SPEC
+          : packageVersion;
+      assert.ok(
+        path.snippets[0].code.includes(`${packageName}@${installSpec}`),
+        packageName,
       );
     }
   }
@@ -416,7 +423,10 @@ test("site consumes the CSS libraries as local dependencies", async () => {
   };
 
   assert.equal(manifest.dependencies["layout-style-css"], "3.2.0");
-  assert.equal(manifest.dependencies["ui-style-kit-css"], "2.4.0");
+  assert.equal(
+    manifest.dependencies["ui-style-kit-css"],
+    UI_STYLE_KIT_INSTALL_SPEC,
+  );
   assert.equal(manifest.dependencies["interactive-surface-css"], "1.7.0");
   assert.match(
     layoutSource,
@@ -776,6 +786,11 @@ test("catalog exposes every released ecosystem option", async () => {
     "foundry-amber",
     "soft-orchid",
     "electric-noir",
+    "signal-yellow",
+    "botanical-green",
+    "cobalt-electric",
+    "stone-graphite",
+    "walnut-clay",
   ]);
   assert.deepEqual(UI_MODES, ["light", "dark", "contrast"]);
   assert.deepEqual(INTERACTION_VARIANTS, [
@@ -828,7 +843,11 @@ test("documented package versions match the pinned CDN URLs", () => {
 
     assert.notEqual(cdn.length, 0);
     for (const { href } of cdn) {
-      assert.ok(href.includes(`${pkg.name}@${pkg.version}`));
+      const expectedPin =
+        pkg.name === "ui-style-kit-css"
+          ? `${pkg.name}@${UI_STYLE_KIT_THEME_COMMIT}`
+          : `${pkg.name}@${pkg.version}`;
+      assert.ok(href.includes(expectedPin), pkg.name);
     }
   }
 });
@@ -870,7 +889,7 @@ test("site identity targets the transferred organization", () => {
   );
   assert.equal(
     site.socialImageAlt,
-    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.",
+    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.",
   );
   assert.equal(site.brandLogoPath, "ste-systems-logo.png");
   assert.equal(site.brandLogo, "https://stesystems.com/ste-systems-logo.png");

@@ -52,7 +52,7 @@ test("atlas coverage mirrors every published library contract", () => {
 });
 
 test("possibility count includes densities and native color schemes", () => {
-  const sharedThemePairings = 20 * 20;
+  const sharedThemePairings = 20 * 25;
   const nativeThemePairings = 20;
 
   assert.deepEqual(LAYOUT_DENSITIES, ["compact", "normal", "spacious"]);
@@ -60,7 +60,7 @@ test("possibility count includes densities and native color schemes", () => {
     SUPPORTED_COMBINATIONS,
     20 * 7 * 3 * (sharedThemePairings + nativeThemePairings),
   );
-  assert.equal(SUPPORTED_COMBINATIONS, 176_400);
-  assert.equal(SUPPORTED_COMBINATIONS_LABEL, "176,400");
+  assert.equal(SUPPORTED_COMBINATIONS, 218_400);
+  assert.equal(SUPPORTED_COMBINATIONS_LABEL, "218,400");
   assert.equal("modes" in ATLAS_COVERAGE.ui, false);
 });

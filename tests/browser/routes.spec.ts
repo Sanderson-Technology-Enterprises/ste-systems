@@ -163,6 +163,17 @@ test("homepage and lab remain collision-free across the responsive matrix", asyn
               ".brand-copy, .navigation-toggle, .navigation-link, .navigation-actions .site-action",
             ),
           ).filter((label) => label.getClientRects().length > 0);
+          const overflowingLabels = visibleLabels
+            .map((label) => ({
+              label:
+                label.getAttribute("aria-label") ??
+                label.textContent?.trim() ??
+                "unlabeled header control",
+              overflow: label.scrollWidth - label.clientWidth,
+            }))
+            // Integer DOM metrics can differ by one CSS pixel after font and
+            // device-pixel rounding without producing visible clipping.
+            .filter(({ overflow }) => overflow > 1);
 
           return {
             brandClearsNavigation:
@@ -170,19 +181,22 @@ test("homepage and lab remain collision-free across the responsive matrix", asyn
                 ? brand.getBoundingClientRect().right <=
                   navigation.getBoundingClientRect().left
                 : false,
-            labelsFit: visibleLabels.every(
-              (label) => label.scrollWidth <= label.clientWidth,
-            ),
+            labelsFit: overflowingLabels.length === 0,
             noHorizontalOverflow:
               document.documentElement.scrollWidth <=
               document.documentElement.clientWidth,
+            overflowingLabels,
           };
         });
 
-      expect(headerHealth).toEqual({
+      expect(
+        headerHealth,
+        `${route} at ${viewport.width}x${viewport.height}`,
+      ).toEqual({
         brandClearsNavigation: true,
         labelsFit: true,
         noHorizontalOverflow: true,
+        overflowingLabels: [],
       });
 
       if (route === "./lab/" && viewport.width === 768) {

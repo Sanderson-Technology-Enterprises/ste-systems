@@ -28,7 +28,7 @@ const siteDescription =
   "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.";
 const socialImageUrl = `${siteUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";
 const labLogoUrl = `${siteUrl}ste-systems-logo.png`;
 const websiteId = `${siteUrl}#website`;
 const webpageId = `${siteUrl}#webpage`;

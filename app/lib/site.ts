@@ -20,7 +20,7 @@ export const SITE = {
   repository: "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
   socialImage: `${productionUrl}ste-systems-social-preview.png`,
   socialImageAlt:
-    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.",
+    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.",
   brandLogoPath: "ste-systems-logo.png",
   brandLogo: `${productionUrl}ste-systems-logo.png`,
   brandLogoAlt: "STE Systems logo",

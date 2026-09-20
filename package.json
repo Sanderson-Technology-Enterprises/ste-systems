@@ -38,7 +38,7 @@
     "next": "16.3.4",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "ui-style-kit-css": "2.4.0"
+    "ui-style-kit-css": "https://codeload.github.com/Foscat/ui-style-kit-css/tar.gz/4b97e379657c99767263347823f2808fb466ecf9"
   },
   "overrides": {
     "postcss": "8.5.25"

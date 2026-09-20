@@ -25,7 +25,7 @@ const repositoryUrl =
   "https://github.com/Sanderson-Technology-Enterprises/ste-systems";
 const socialImageUrl = `${canonicalUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";
 const websiteId = `${canonicalUrl}#website`;
 const webpageId = `${canonicalUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
