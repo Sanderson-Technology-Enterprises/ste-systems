@@ -28,6 +28,7 @@ const pagesBasePath = "/ste-systems";
 const canonicalUrl = "https://stesystems.com/";
 const labUrl = `${canonicalUrl}lab/`;
 const componentsUrl = `${canonicalUrl}components/`;
+const healthUrl = `${canonicalUrl}health/`;
 const corporateUrl = "https://sandersontechnologyenterprises.com/";
 const corporateOrganizationId = `${corporateUrl}#organization`;
 const repositoryUrl =
@@ -168,6 +169,18 @@ test("the Pages artifact publishes the transferred canonical identity", async ()
   for (const staleUrl of staleLabUrls) {
     assert.equal(shippingOutput.includes(staleUrl), false, staleUrl);
   }
+});
+
+test("the Pages artifact publishes a monitor-friendly health page", async () => {
+  const health = await readFile(
+    path.join(outRoot, "health", "index.html"),
+    "utf8",
+  );
+
+  assert.ok(health.includes("STE Systems is online."));
+  assert.ok(health.includes(`href="${healthUrl}"`));
+  assert.ok(health.includes('name="robots" content="noindex, nofollow"'));
+  assert.ok(health.includes('data-theme="midnight-gold"'));
 });
 
 test("route structured data separates the overview, lab, and atlas", async () => {

@@ -142,7 +142,15 @@ test("homepage and lab remain collision-free across the responsive matrix", asyn
       const menu = page.getByRole("button", {
         name: /Open menu|Open lab sections|Open atlas sections/,
       });
-      if (await menu.isVisible()) await menu.click();
+      if (await menu.isVisible()) {
+        await menu.click();
+        await expect(page.locator(".navigation-toggle")).toHaveAttribute(
+          "aria-expanded",
+          "true",
+        );
+      }
+
+      await page.evaluate(() => document.fonts.ready);
 
       const headerHealth = await page
         .locator(".site-header")
@@ -150,9 +158,11 @@ test("homepage and lab remain collision-free across the responsive matrix", asyn
           const brand = header.querySelector<HTMLElement>(".brand");
           const navigation =
             header.querySelector<HTMLElement>(".site-navigation");
-          const visibleLinks = Array.from(
-            header.querySelectorAll<HTMLElement>("a"),
-          ).filter((link) => link.getClientRects().length > 0);
+          const visibleLabels = Array.from(
+            header.querySelectorAll<HTMLElement>(
+              ".brand-copy, .navigation-toggle, .navigation-link, .navigation-actions .site-action",
+            ),
+          ).filter((label) => label.getClientRects().length > 0);
 
           return {
             brandClearsNavigation:
@@ -160,8 +170,8 @@ test("homepage and lab remain collision-free across the responsive matrix", asyn
                 ? brand.getBoundingClientRect().right <=
                   navigation.getBoundingClientRect().left
                 : false,
-            labelsFit: visibleLinks.every(
-              (link) => link.scrollWidth <= link.clientWidth,
+            labelsFit: visibleLabels.every(
+              (label) => label.scrollWidth <= label.clientWidth,
             ),
             noHorizontalOverflow:
               document.documentElement.scrollWidth <=

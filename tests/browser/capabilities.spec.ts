@@ -312,6 +312,39 @@ async function readInteractionSignature(locator: Locator) {
   });
 }
 
+/**
+ * Places a pointer specimen below the sticky configuration deck and hovers it.
+ *
+ * @param page - Active laboratory page.
+ * @param target - Specimen that must receive the real pointer interaction.
+ */
+async function hoverPointerSpecimen(page: Page, target: Locator) {
+  await target.evaluate((element) => {
+    element.scrollIntoView({
+      behavior: "instant",
+      block: "end",
+      inline: "center",
+    });
+
+    const shell = document.querySelector<HTMLElement>(".configuration-shell");
+    const shellBottom = shell?.getBoundingClientRect().bottom ?? 0;
+    const bounds = element.getBoundingClientRect();
+
+    if (bounds.top <= shellBottom + 24) {
+      window.scrollBy({
+        behavior: "instant",
+        top: bounds.top - shellBottom - 24,
+      });
+    }
+  });
+  const bounds = await target.boundingBox();
+  if (bounds === null) throw new Error("Pointer specimen has no bounding box.");
+  await page.mouse.move(
+    bounds.x + bounds.width / 2,
+    bounds.y + bounds.height / 2,
+  );
+}
+
 async function openTask4Details(page: Page) {
   await page
     .locator("#ui-native details, #interactions details")
@@ -1595,7 +1628,7 @@ test("interaction laboratory makes real state-collision precedence observable", 
   expect(base.scale).not.toBe("none");
   expect(base.rotate).not.toBe("none");
 
-  await target.hover();
+  await hoverPointerSpecimen(page, target);
   await expect(winner).toHaveText(supportsFineHover ? "hover" : "base");
   const hovered = await readInteractionSignature(target);
   if (supportsFineHover) {
@@ -1609,26 +1642,18 @@ test("interaction laboratory makes real state-collision precedence observable", 
   expect(hovered.scale).toBe(base.scale);
   expect(hovered.rotate).toBe(base.rotate);
 
-  const bounds = await target.boundingBox();
-  expect(bounds).not.toBeNull();
-  if (bounds !== null) {
-    await page.mouse.move(
-      bounds.x + bounds.width / 2,
-      bounds.y + bounds.height / 2,
-    );
-    await page.mouse.down();
-    await expect(winner).toHaveText("active");
-    await expect
-      .poll(async () => (await readInteractionSignature(target)).translate)
-      .toBe(base.translate);
-    await expect
-      .poll(async () => (await readInteractionSignature(target)).layerOpacity)
-      .toBe(base.layerOpacity);
-    await page.mouse.up();
-  }
+  await page.mouse.down();
+  await expect(winner).toHaveText("active");
+  await expect
+    .poll(async () => (await readInteractionSignature(target)).translate)
+    .toBe(base.translate);
+  await expect
+    .poll(async () => (await readInteractionSignature(target)).layerOpacity)
+    .toBe(base.layerOpacity);
+  await page.mouse.up();
 
   await persistent.getByRole("radio", { name: "Pressed" }).check();
-  await target.hover();
+  await hoverPointerSpecimen(page, target);
   await expect(winner).toHaveText("pressed");
   const pressed = await readInteractionSignature(target);
   expect(pressed.layerOpacity).toBeGreaterThan(base.layerOpacity);
@@ -1971,21 +1996,13 @@ test("review contract gates the collision readout with actual hover capability",
     () => matchMedia("(hover: hover) and (pointer: fine)").matches,
   );
 
-  await target.hover();
+  await hoverPointerSpecimen(page, target);
   await expect(winner).toHaveText(supportsFineHover ? "hover" : "base");
 
-  const bounds = await target.boundingBox();
-  expect(bounds).not.toBeNull();
-  if (bounds !== null) {
-    await page.mouse.move(
-      bounds.x + bounds.width / 2,
-      bounds.y + bounds.height / 2,
-    );
-    await page.mouse.down();
-    await expect(winner).toHaveText("active");
-    await page.mouse.up();
-    await expect(winner).toHaveText(supportsFineHover ? "hover" : "base");
-  }
+  await page.mouse.down();
+  await expect(winner).toHaveText("active");
+  await page.mouse.up();
+  await expect(winner).toHaveText(supportsFineHover ? "hover" : "base");
 });
 
 test("interaction laboratory replays and announces semantic outcome feedback", async ({

@@ -74,13 +74,16 @@ test(
           (detail as HTMLDetailsElement).open = true;
       });
     await page.getByRole("button", { name: "Validate native field" }).click();
-    await page
+    const selectedRadio = page
       .getByRole("radiogroup", { name: "Persistent collision state" })
-      .getByRole("radio", { name: "Selected" })
-      .check();
+      .getByRole("radio", { name: "Selected" });
+    /** Activate native controls from the keyboard so sticky chrome cannot intercept them. */
+    await selectedRadio.scrollIntoViewIfNeeded();
+    await selectedRadio.focus();
+    await selectedRadio.press("Space");
+    await expect(selectedRadio).toBeChecked();
     const busyCheckbox = page.getByRole("checkbox", { name: "Busy" });
-    // Exercise native keyboard activation without depending on a pointer target
-    // that WebKit may scroll beneath the sticky site header.
+    /** Exercise the second native control through the same keyboard path. */
     await busyCheckbox.scrollIntoViewIfNeeded();
     await busyCheckbox.focus();
     await busyCheckbox.press("Space");
