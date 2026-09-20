@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const browserPort = process.env.PLAYWRIGHT_TEST_PORT?.trim() || "4173";
-const browserBaseUrl = `http://127.0.0.1:${browserPort}/interface-systems-lab/`;
+const browserBaseUrl = `http://127.0.0.1:${browserPort}/ste-systems/`;
 
 export default defineConfig({
   testDir: "./tests/browser",

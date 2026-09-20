@@ -24,7 +24,7 @@ import {
 } from "../lib/structured-data";
 
 const labDescription =
-  "Configure layout, visual style, palette, and mode, then inspect all three Interface Systems Lab CSS libraries on shared semantic markup.";
+  "Configure layout, visual style, palette, and mode, then inspect all three STE Systems CSS libraries on shared semantic markup.";
 
 export const metadata: Metadata = {
   title: "Configurable CSS workbench",
@@ -62,7 +62,7 @@ const serializedLabStructuredData = serializeStructuredData(
  * Renders the configurable package workbench and its focused laboratory
  * sections under the shared Lab experience provider.
  *
- * @returns The exported Interface Systems Lab route.
+ * @returns The exported STE Systems Lab route.
  */
 export default function Lab() {
   return (

@@ -110,7 +110,7 @@ const server = createServer(async (request, response) => {
 
 server.listen(requestedPort, host, () => {
   console.log(
-    `Serving the Pages preview at http://${host}:${requestedPort}/interface-systems-lab/.`,
+    `Serving the Pages preview at http://${host}:${requestedPort}/ste-systems/.`,
   );
 });
 

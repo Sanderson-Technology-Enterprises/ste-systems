@@ -29,15 +29,15 @@ export function SiteHeader({
         <a
           className="brand ly-cluster ly-gap-2"
           href={resolvedBrandHref}
-          aria-label="Interface Systems Lab home"
+          aria-label="STE Systems home"
         >
           {/* The explicit helper keeps this rendered asset correct in local and Pages builds. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="brand-logo"
-            src={withBasePath("/favicon-48x48.png")}
-            width="48"
-            height="48"
+            src={withBasePath(`/${SITE.brandLogoPath}`)}
+            width="72"
+            height="54"
             alt=""
             aria-hidden="true"
             decoding="async"

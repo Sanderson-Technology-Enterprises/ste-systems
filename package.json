@@ -1,8 +1,8 @@
 {
-  "name": "interface-systems-lab",
+  "name": "ste-systems",
   "version": "0.1.0",
   "private": true,
-  "author": "Sanderson Technology Enterprises",
+  "author": "Sanderson Technology Enterprises LLC",
   "engines": {
     "node": ">=22.13.0"
   },
@@ -12,7 +12,7 @@
     "prebuild": "npm run assets:build",
     "build": "next build",
     "prebuild:pages": "npm run assets:build",
-    "build:pages": "cross-env PAGES_BASE_PATH=/interface-systems-lab next build",
+    "build:pages": "cross-env PAGES_BASE_PATH=/ste-systems next build",
     "start": "next start",
     "preview:prepare": "node scripts/prepare-preview.mjs",
     "preview:serve": "node scripts/serve-preview.mjs .preview 4173",
@@ -58,5 +58,5 @@
     "typescript": "5.9.3"
   },
   "type": "module",
-  "displayName": "Interface Systems Lab"
+  "displayName": "STE Systems"
 }

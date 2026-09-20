@@ -1,32 +1,32 @@
-const basePath = "/interface-systems-lab";
-const origin = "https://sanderson-technology-enterprises.github.io";
-const productionUrl = `${origin}${basePath}/`;
+const basePath = "";
+const origin = "https://stesystems.com";
+const productionUrl = `${origin}/`;
 const labPath = "/lab/";
 const componentsPath = "/components/";
 
 export const SITE = {
   basePath,
   origin,
-  name: "Interface Systems Lab",
-  title: "Interface Systems Lab | Accessible CSS Interface Systems",
+  name: "STE Systems",
+  title: "STE Systems | Accessible Three-Library Design System",
   description:
-    "Explore and combine layout-style-css, ui-style-kit-css, and interactive-surface-css in a live accessible interface workbench.",
+    "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.",
   url: productionUrl,
   labPath,
   labUrl: new URL(labPath.replace(/^\/+/, ""), productionUrl).href,
   componentsPath,
   componentsUrl: new URL(componentsPath.replace(/^\/+/, ""), productionUrl)
     .href,
-  repository:
-    "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab",
-  socialImage: `${productionUrl}interface-systems-lab-social-card.png`,
+  repository: "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
+  socialImage: `${productionUrl}ste-systems-social-preview.png`,
   socialImageAlt:
-    "Interface Systems Lab social card with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.",
-  brandLogoPath: "android-chrome-512x512.png",
-  brandLogo: `${productionUrl}android-chrome-512x512.png`,
-  brandLogoAlt: "Interface Systems Lab logo",
+    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.",
+  brandLogoPath: "ste-systems-logo.png",
+  brandLogo: `${productionUrl}ste-systems-logo.png`,
+  brandLogoAlt: "STE Systems logo",
   owner: {
     name: "Sanderson Technology Enterprises",
+    legalName: "Sanderson Technology Enterprises LLC",
     title: "Sanderson Technology Enterprises | Strategic Platform Development",
     slogan: "Strategic Platform Development",
     url: "https://sandersontechnologyenterprises.com/",
@@ -36,13 +36,13 @@ export const SITE = {
     image:
       "https://sandersontechnologyenterprises.com/assets/social-preview.png",
     description:
-      "Founder-led software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for adult entertainment businesses.",
+      "Software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for specialized businesses.",
   },
   customizedPlatforms: {
     name: "Customized Platforms",
     url: "https://customizedplatforms.com/",
   },
-  productLine: "A Sanderson Technology Enterprises product",
+  productLine: "A product of Sanderson Technology Enterprises LLC",
   locale: "en_US",
 } as const;
 

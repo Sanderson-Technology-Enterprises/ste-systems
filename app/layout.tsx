@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   applicationName: SITE.name,
-  authors: [{ name: SITE.owner.name }],
-  creator: SITE.owner.name,
-  publisher: SITE.owner.name,
+  authors: [{ name: SITE.owner.legalName }],
+  creator: SITE.owner.legalName,
+  publisher: SITE.owner.legalName,
   referrer: "origin-when-cross-origin",
   icons: {
     icon: [
@@ -100,7 +100,7 @@ const globalStructuredData = {
       "@type": "Organization",
       "@id": SITE.owner.organizationId,
       name: SITE.owner.name,
-      legalName: SITE.owner.name,
+      legalName: SITE.owner.legalName,
       slogan: SITE.owner.slogan,
       description: SITE.owner.description,
       url: SITE.owner.url,

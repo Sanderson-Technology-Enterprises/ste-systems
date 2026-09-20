@@ -149,14 +149,17 @@
 .footer-logo {
   display: block;
   flex: 0 0 auto;
-  inline-size: 3rem;
-  block-size: 3rem;
   object-fit: contain;
 }
 
-.footer-logo {
+.brand-logo {
   inline-size: 4rem;
-  block-size: 4rem;
+  block-size: 3rem;
+}
+
+.footer-logo {
+  inline-size: 8rem;
+  block-size: 6rem;
 }
 
 .site-navigation,

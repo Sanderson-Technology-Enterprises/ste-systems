@@ -15,9 +15,9 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="footer-logo"
-            src={withBasePath("/android-chrome-192x192.png")}
-            width="64"
-            height="64"
+            src={withBasePath(`/${SITE.brandLogoPath}`)}
+            width="144"
+            height="108"
             alt=""
             aria-hidden="true"
             loading="lazy"
@@ -32,7 +32,7 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
 
         <div className="ly-cluster ly-gap-4 ly-items-start">
           <a href={companyUrl} target="_blank" rel="noreferrer noopener">
-            Sanderson Technology Enterprises
+            {SITE.owner.legalName}
             <ExternalLinkIcon />
             <span className="ly-visually-hidden"> (opens in a new tab)</span>
           </a>

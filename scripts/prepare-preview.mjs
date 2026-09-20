@@ -3,7 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const previewRoot = path.join(root, ".preview");
-const projectRoot = path.join(previewRoot, "interface-systems-lab");
+const projectRoot = path.join(previewRoot, "ste-systems");
 
 // Mirror the GitHub Pages project path so local browser QA exercises real URLs.
 await rm(previewRoot, { recursive: true, force: true });
@@ -15,6 +15,4 @@ await cp(
 );
 await mkdir(path.join(root, ".tmp"), { recursive: true });
 
-console.log(
-  "Prepared the GitHub Pages preview at .preview/interface-systems-lab/.",
-);
+console.log("Prepared the GitHub Pages preview at .preview/ste-systems/.");

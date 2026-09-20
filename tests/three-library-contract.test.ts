@@ -42,11 +42,39 @@ test("the headline count includes densities and native color schemes", () => {
   assert.equal(20 * 7 * 3 * (20 * 20 + 20), 176_400);
 });
 
-test("site identity exposes both STE destinations", () => {
+test("STE Systems identity exposes the approved brand assets and destinations", () => {
   const identity = SITE as typeof SITE & {
     customizedPlatforms: { name: string; url: string };
+    owner: typeof SITE.owner & { legalName: string };
+    productLine: string;
   };
 
+  assert.equal(identity.name, "STE Systems");
+  assert.equal(
+    identity.title,
+    "STE Systems | Accessible Three-Library Design System",
+  );
+  assert.equal(identity.url, "https://stesystems.com/");
+  assert.equal(
+    identity.socialImage,
+    "https://stesystems.com/ste-systems-social-preview.png",
+  );
+  assert.equal(
+    identity.brandLogo,
+    "https://stesystems.com/ste-systems-logo.png",
+  );
+  assert.equal(
+    identity.repository,
+    "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
+  );
+  assert.equal(
+    identity.owner.legalName,
+    "Sanderson Technology Enterprises LLC",
+  );
+  assert.equal(
+    identity.productLine,
+    "A product of Sanderson Technology Enterprises LLC",
+  );
   assert.equal(
     identity.owner.url,
     "https://sandersontechnologyenterprises.com/",

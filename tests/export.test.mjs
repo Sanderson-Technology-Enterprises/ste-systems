@@ -24,17 +24,20 @@ const outRoot = path.join(repositoryRoot, "out");
 const googleVerificationFile = "google5abb0289b99a9f42.html";
 const googleVerificationText =
   "google-site-verification: google5abb0289b99a9f42.html";
-const canonicalUrl =
-  "https://sanderson-technology-enterprises.github.io/interface-systems-lab/";
+const pagesBasePath = "/ste-systems";
+const canonicalUrl = "https://stesystems.com/";
 const labUrl = `${canonicalUrl}lab/`;
 const componentsUrl = `${canonicalUrl}components/`;
 const corporateUrl = "https://sandersontechnologyenterprises.com/";
 const corporateOrganizationId = `${corporateUrl}#organization`;
 const repositoryUrl =
-  "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab";
-const socialImageUrl = `${canonicalUrl}interface-systems-lab-social-card.png`;
+  "https://github.com/Sanderson-Technology-Enterprises/ste-systems";
+const siteTitle = "STE Systems | Accessible Three-Library Design System";
+const siteDescription =
+  "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.";
+const socialImageUrl = `${canonicalUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "Interface Systems Lab social card with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
 const websiteId = `${canonicalUrl}#website`;
 const webpageId = `${canonicalUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
@@ -43,6 +46,8 @@ const packagesId = `${canonicalUrl}#packages`;
 const staleLabUrls = [
   "https://foscat.github.io/interface-systems-lab/",
   "https://github.com/Foscat/interface-systems-lab",
+  "https://sanderson-technology-enterprises.github.io/interface-systems-lab/",
+  "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab",
 ];
 
 test("the Pages artifact publishes the exact Google verification file at its root", async () => {
@@ -118,6 +123,20 @@ test("the Pages artifact publishes the transferred canonical identity", async ()
   ].join("\n");
 
   assert.ok(index.includes(`<link rel="canonical" href="${canonicalUrl}"`));
+  assert.ok(index.includes(`<title>${siteTitle}</title>`));
+  assert.ok(
+    index.includes(`<meta name="description" content="${siteDescription}"`),
+  );
+  assert.ok(
+    index.includes(
+      '<meta name="author" content="Sanderson Technology Enterprises LLC"',
+    ),
+  );
+  assert.ok(
+    index.includes(
+      '<meta name="publisher" content="Sanderson Technology Enterprises LLC"',
+    ),
+  );
   assert.ok(lab.includes(`<link rel="canonical" href="${labUrl}"`));
   assert.ok(
     components.includes(`<link rel="canonical" href="${componentsUrl}"`),
@@ -183,11 +202,11 @@ test("route structured data separates the overview, lab, and atlas", async () =>
   assert.equal(organization["@id"], corporateOrganizationId);
   assert.equal(organization.url, corporateUrl);
   assert.equal(organization.name, "Sanderson Technology Enterprises");
-  assert.equal(organization.legalName, "Sanderson Technology Enterprises");
+  assert.equal(organization.legalName, "Sanderson Technology Enterprises LLC");
   assert.equal(organization.slogan, "Strategic Platform Development");
   assert.equal(
     organization.description,
-    "Founder-led software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for adult entertainment businesses.",
+    "Software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for specialized businesses.",
   );
   assert.equal(
     organization.logo,
@@ -221,7 +240,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
   assert.equal(application.codeRepository, repositoryUrl);
   assert.equal(application.isAccessibleForFree, true);
   assert.equal(application.operatingSystem, "Any");
-  assert.equal(application.logo, `${canonicalUrl}android-chrome-512x512.png`);
+  assert.equal(application.logo, `${canonicalUrl}ste-systems-logo.png`);
   assert.equal(nodesOfType(atlasNodes, "WebPage")[0].url, componentsUrl);
   assert.equal(
     nodesOfType(atlasNodes, "SoftwareApplication")[0].url,
@@ -294,7 +313,7 @@ test("exported documents separate 404 identity and keep local assets Pages-safe"
     for (const reference of localAssetReferences(html)) {
       assert.match(
         reference,
-        /^\/interface-systems-lab(?:\/|$)/,
+        /^\/ste-systems(?:\/|$)/,
         `${documentName} asset is not Pages-safe: ${reference}`,
       );
     }
@@ -312,18 +331,14 @@ test("crawler routes and manifest remain stable and Pages-aware", async () => {
       ),
       readFile(path.join(repositoryRoot, "out", "index.html"), "utf8"),
       readFile(
-        path.join(
-          repositoryRoot,
-          "out",
-          "interface-systems-lab-social-card.png",
-        ),
+        path.join(repositoryRoot, "out", "ste-systems-social-preview.png"),
       ),
     ]);
   const manifest = JSON.parse(manifestSource);
 
   assert.match(
     index,
-    /<link rel="manifest" href="\/interface-systems-lab\/manifest\.webmanifest"/,
+    /<link rel="manifest" href="\/ste-systems\/manifest\.webmanifest"/,
   );
   assert.ok(robots.includes(`Sitemap: ${canonicalUrl}sitemap.xml`));
   const host = robots.match(/^Host:\s*(.+)$/m)?.[1]?.trim();
@@ -339,30 +354,36 @@ test("crawler routes and manifest remain stable and Pages-aware", async () => {
   assert.ok(sitemap.includes(`<loc>${componentsUrl}</loc>`));
   assert.doesNotMatch(sitemap, /<lastmod>/);
   for (const key of ["id", "start_url", "scope"]) {
-    assert.equal(manifest[key], "/interface-systems-lab/", key);
+    assert.equal(manifest[key], "/ste-systems/", key);
   }
   assert.deepEqual(manifest.icons, [
     {
-      src: "/interface-systems-lab/android-chrome-192x192.png",
+      src: "/ste-systems/android-chrome-192x192.png",
       sizes: "192x192",
       type: "image/png",
       purpose: "any",
     },
     {
-      src: "/interface-systems-lab/android-chrome-512x512.png",
+      src: "/ste-systems/android-chrome-512x512.png",
       sizes: "512x512",
       type: "image/png",
       purpose: "any",
     },
     {
-      src: "/interface-systems-lab/maskable-icon-512x512.png",
+      src: "/ste-systems/maskable-icon-512x512.png",
       sizes: "512x512",
       type: "image/png",
       purpose: "maskable",
     },
   ]);
   for (const icon of manifest.icons) {
-    await access(path.join(repositoryRoot, "out", icon.src.slice(23)));
+    await access(
+      path.join(
+        repositoryRoot,
+        "out",
+        icon.src.slice(pagesBasePath.length + 1),
+      ),
+    );
   }
   assert.deepEqual(
     [...socialImage.subarray(0, 8)],
@@ -449,9 +470,7 @@ test("the Pages artifact contains every isolated integration fixture", async () 
     const fixture = await readFile(fixturePath, "utf8");
     assert.match(
       page,
-      new RegExp(
-        `src="/interface-systems-lab/fixtures/generated/${id}\\.html"`,
-      ),
+      new RegExp(`src="/ste-systems/fixtures/generated/${id}\\.html"`),
     );
     assert.doesNotMatch(fixture, /https?:\/\//);
 
@@ -477,7 +496,7 @@ test("the package directory links to Pages-prefixed standalone fixtures", async 
     assert.match(
       page,
       new RegExp(
-        `data-standalone-fixture="${id}"[^>]+href="/interface-systems-lab/fixtures/generated/${id}\\.html"`,
+        `data-standalone-fixture="${id}"[^>]+href="/ste-systems/fixtures/generated/${id}\\.html"`,
       ),
     );
   }

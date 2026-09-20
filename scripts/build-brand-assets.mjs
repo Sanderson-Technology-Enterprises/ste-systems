@@ -12,12 +12,19 @@ const socialCardSource = path.join(
   repositoryRoot,
   "assets",
   "brand",
-  "interface-systems-lab-social-card-source.png",
+  "ste-systems-social-preview-source.png",
 );
 const socialCardOutput = path.join(
   publicRoot,
-  "interface-systems-lab-social-card.png",
+  "ste-systems-social-preview.png",
 );
+const steSystemsLogoSource = path.join(publicRoot, "ste-systems-logo.png");
+const steSystemsMarkCrop = {
+  left: 0,
+  top: 0,
+  width: 1448,
+  height: 724,
+};
 
 const transparentOutputs = new Map([
   ["favicon-16x16.png", 16],
@@ -70,19 +77,66 @@ async function renderTransparent(masterBuffer, size) {
     .toBuffer();
 }
 
+/**
+ * Removes nearly transparent color noise left by the supplied PNG export.
+ *
+ * @param {Buffer} input RGBA-compatible image buffer.
+ * @param {number} [alphaFloor=5] Alpha values at or below this floor are cleared.
+ * @returns {Promise<Buffer>} Cleaned PNG buffer.
+ */
+async function removeTransparentColorNoise(input, alphaFloor = 5) {
+  const { data, info } = await sharp(input)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  for (let offset = 3; offset < data.length; offset += info.channels) {
+    if (data[offset] <= alphaFloor) {
+      data[offset] = 0;
+    }
+  }
+
+  return sharp(data, { raw: info }).png().toBuffer();
+}
+
+/**
+ * Produces the complete favicon family from an approved transparent mark.
+ *
+ * @param {object} options Build options.
+ * @param {string} options.sourceMaster Approved source artwork path.
+ * @param {{left: number, top: number, width: number, height: number}} [options.markCrop]
+ * Crop isolating the favicon mark from a larger lockup.
+ * @param {string} [options.outputRoot] Destination directory.
+ * @returns {Promise<{masterBuffer: Buffer}>} Generated normalized master.
+ */
 export async function buildLogoFamily({
   sourceMaster,
+  markCrop,
   outputRoot = publicRoot,
 }) {
-  const input = await readFile(sourceMaster);
-  const metadata = await sharp(input).metadata();
-  if (
-    metadata.width !== metadata.height ||
-    !metadata.width ||
-    metadata.width < 1024
-  ) {
-    throw new Error("Brand master must be a square image at least 1024px.");
+  const sourceInput = await readFile(sourceMaster);
+  const sourceMetadata = await sharp(sourceInput).metadata();
+  if (!sourceMetadata.width || !sourceMetadata.height) {
+    throw new Error("Brand source must expose readable image dimensions.");
   }
+
+  if (
+    markCrop &&
+    (markCrop.left < 0 ||
+      markCrop.top < 0 ||
+      markCrop.width < 1 ||
+      markCrop.height < 1 ||
+      markCrop.left + markCrop.width > sourceMetadata.width ||
+      markCrop.top + markCrop.height > sourceMetadata.height)
+  ) {
+    throw new Error("Brand mark crop must remain inside the source artwork.");
+  }
+
+  const input = markCrop
+    ? await removeTransparentColorNoise(
+        await sharp(sourceInput).extract(markCrop).png().toBuffer(),
+      )
+    : sourceInput;
 
   // A production master must expose a real matte rather than a baked
   // transparency grid or a completely opaque background.
@@ -95,6 +149,10 @@ export async function buildLogoFamily({
   }
 
   const masterBuffer = await sharp(input)
+    .trim({
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+      threshold: 16,
+    })
     .resize(1254, 1254, {
       fit: "contain",
       background: { r: 0, g: 0, b: 0, alpha: 0 },
@@ -213,6 +271,7 @@ const requestedMaster = readOption("--master");
 await buildLogoFamily({
   sourceMaster: requestedMaster
     ? path.resolve(requestedMaster)
-    : path.join(publicRoot, "logo-master.png"),
+    : steSystemsLogoSource,
+  markCrop: requestedMaster ? undefined : steSystemsMarkCrop,
 });
 await buildSocialCard();

@@ -603,7 +603,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
               <input
                 className={s("input")}
                 data-ui-suffix="input"
-                defaultValue="Interface Systems Lab"
+                defaultValue="STE Systems"
               />
               <span className={s("help-text")} data-ui-suffix="help-text">
                 Semantic fields keep their markup while the selected preset

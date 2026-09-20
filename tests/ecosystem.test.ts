@@ -843,6 +843,7 @@ test("site identity targets the transferred organization", () => {
       description: string;
       github: string;
       image: string;
+      legalName: string;
       logo: string;
       name: string;
       organizationId: string;
@@ -856,34 +857,26 @@ test("site identity targets the transferred organization", () => {
     url: string;
   };
 
-  assert.equal(site.basePath, "/interface-systems-lab");
-  assert.equal(
-    site.origin,
-    "https://sanderson-technology-enterprises.github.io",
-  );
-  assert.equal(
-    site.url,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/",
-  );
+  assert.equal(site.basePath, "");
+  assert.equal(site.origin, "https://stesystems.com");
+  assert.equal(site.url, "https://stesystems.com/");
   assert.equal(
     site.repository,
-    "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab",
+    "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
   );
   assert.equal(
     site.socialImage,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/interface-systems-lab-social-card.png",
+    "https://stesystems.com/ste-systems-social-preview.png",
   );
   assert.equal(
     site.socialImageAlt,
-    "Interface Systems Lab social card with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.",
+    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.",
   );
-  assert.equal(site.brandLogoPath, "android-chrome-512x512.png");
-  assert.equal(
-    site.brandLogo,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/android-chrome-512x512.png",
-  );
+  assert.equal(site.brandLogoPath, "ste-systems-logo.png");
+  assert.equal(site.brandLogo, "https://stesystems.com/ste-systems-logo.png");
   const requiredOwnerIdentity = {
     name: "Sanderson Technology Enterprises",
+    legalName: "Sanderson Technology Enterprises LLC",
     title: "Sanderson Technology Enterprises | Strategic Platform Development",
     slogan: "Strategic Platform Development",
     url: "https://sandersontechnologyenterprises.com/",
@@ -893,7 +886,7 @@ test("site identity targets the transferred organization", () => {
     image:
       "https://sandersontechnologyenterprises.com/assets/social-preview.png",
     description:
-      "Founder-led software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for adult entertainment businesses.",
+      "Software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for specialized businesses.",
   } as const;
   for (const [key, value] of Object.entries(requiredOwnerIdentity)) {
     assert.equal(site.owner[key as keyof typeof site.owner], value, key);
@@ -904,16 +897,13 @@ test("asset helpers distinguish explicit Pages paths from canonical URLs", () =>
   assert.equal(withBasePath("/favicon.ico", ""), "/favicon.ico");
   assert.equal(withBasePath("/favicon.ico", "   "), "/favicon.ico");
   assert.equal(
-    withBasePath("favicon.ico", "/interface-systems-lab"),
-    "/interface-systems-lab/favicon.ico",
+    withBasePath("favicon.ico", "/ste-systems"),
+    "/ste-systems/favicon.ico",
   );
-  assert.equal(
-    withBasePath("/", "/interface-systems-lab/"),
-    "/interface-systems-lab/",
-  );
+  assert.equal(withBasePath("/", "/ste-systems/"), "/ste-systems/");
   assert.equal(
     absoluteSiteAsset("/favicon.ico"),
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/favicon.ico",
+    "https://stesystems.com/favicon.ico",
   );
 
   const mutableEnvironment = process.env as Record<string, string | undefined>;
@@ -962,7 +952,7 @@ test("verification metadata includes only trimmed non-empty values", () => {
   );
 });
 
-test("active shipping surfaces omit the superseded Foscat lab identity", async () => {
+test("active shipping surfaces omit superseded lab identities", async () => {
   const sources = (
     await Promise.all(
       ["../app/", "../scripts/", "../.github/", "../public/"].map(
@@ -981,6 +971,12 @@ test("active shipping surfaces omit the superseded Foscat lab identity", async (
   const staleRepository = shippingSource.match(
     /https:\/\/github\.com\/Foscat\/interface-systems-lab\/?/i,
   );
+  const staleTransferredSite = shippingSource.match(
+    /https:\/\/sanderson-technology-enterprises\.github\.io\/interface-systems-lab\/?/i,
+  );
+  const staleTransferredRepository = shippingSource.match(
+    /https:\/\/github\.com\/Sanderson-Technology-Enterprises\/interface-systems-lab\/?/i,
+  );
 
   assert.equal(
     staleSite?.[0] ?? null,
@@ -991,6 +987,16 @@ test("active shipping surfaces omit the superseded Foscat lab identity", async (
     staleRepository?.[0] ?? null,
     null,
     `stale lab repository: ${staleRepository?.[0]}`,
+  );
+  assert.equal(
+    staleTransferredSite?.[0] ?? null,
+    null,
+    `stale transferred site: ${staleTransferredSite?.[0]}`,
+  );
+  assert.equal(
+    staleTransferredRepository?.[0] ?? null,
+    null,
+    `stale transferred repository: ${staleTransferredRepository?.[0]}`,
   );
 });
 
@@ -1084,8 +1090,8 @@ test("page components expose approved observatory and resource landmarks", async
   assert.doesNotMatch(homePage, /^"use client";/);
   assert.match(siteHeader, /brand-logo/);
   assert.match(siteHeader, /SITE\.productLine/);
-  assert.match(siteHeader, /favicon-48x48\.png/);
-  assert.match(siteFooter, /android-chrome-192x192\.png/);
+  assert.match(siteHeader, /SITE\.brandLogoPath/);
+  assert.match(siteFooter, /SITE\.brandLogoPath/);
   assert.doesNotMatch(observatory, />\s*Inspect\s*</);
 });
 

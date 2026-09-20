@@ -17,7 +17,7 @@ import {
 } from "../lib/structured-data";
 
 const atlasDescription =
-  "Explore every published layout, UI, native-element, and interaction contract in the three Interface Systems Lab CSS libraries.";
+  "Explore every published layout, UI, native-element, and interaction contract in the three STE Systems CSS libraries.";
 
 export const metadata: Metadata = {
   title: "Component Atlas",

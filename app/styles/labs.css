@@ -14,9 +14,23 @@
 }
 
 .configuration-shell {
-  /* The full control deck remains in flow so it cannot obscure showcase destinations. */
-  position: static;
+  /* Keep the bounded control deck available without letting it cover the viewport. */
+  position: sticky;
+  z-index: calc(var(--ly-z-header, 20) - 1);
+  inset-block-start: calc(var(--ly-header-height) + var(--ly-space-2));
+  max-block-size: min(
+    32rem,
+    calc(100dvh - var(--ly-header-height) - var(--ly-space-4))
+  );
   margin-block-end: var(--ly-space-6);
+  overflow-y: auto;
+  overscroll-behavior-block: contain;
+  scrollbar-gutter: stable;
+}
+
+/* Keep navigation targets visible below both persistent Lab regions. */
+.configuration-shell ~ section[id] {
+  scroll-margin-block-start: calc(var(--ly-header-height) + 32rem + 3.25rem);
 }
 
 .control-deck {

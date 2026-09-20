@@ -153,8 +153,8 @@ function CompanySection() {
             Built in the open, backed by a focused software studio.
           </h2>
           <p>
-            Interface Systems Lab is maintained by Sanderson Technology
-            Enterprises as an open developer resource.
+            STE Systems is maintained by Sanderson Technology Enterprises LLC as
+            an open developer resource.
           </p>
         </div>
         <article className="conversion-path ly-stack ly-gap-4 ly-items-start">
@@ -172,7 +172,7 @@ function CompanySection() {
             target="_blank"
             rel="noreferrer noopener"
           >
-            Discover Sanderson Technology Enterprises
+            Discover {SITE.owner.legalName}
             <ExternalLinkIcon />
             <span className="ly-visually-hidden"> (opens in a new tab)</span>
           </a>
@@ -198,7 +198,7 @@ function CompanySection() {
  * Renders the spacious-density overview route for the three-library interface
  * system and its adoption paths.
  *
- * @returns The exported Interface Systems Lab homepage.
+ * @returns The exported STE Systems homepage.
  */
 export default function Home() {
   return (

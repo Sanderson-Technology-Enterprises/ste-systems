@@ -18,15 +18,14 @@ const resourceUrls = [
 const configurationStorageKey = "interface-systems-lab:configuration:v1";
 const companyUrl = "https://sandersontechnologyenterprises.com/";
 const customizedPlatformsUrl = "https://customizedplatforms.com/";
-const canonicalUrl =
-  "https://sanderson-technology-enterprises.github.io/interface-systems-lab/";
+const canonicalUrl = "https://stesystems.com/";
 const labUrl = `${canonicalUrl}lab/`;
 const corporateOrganizationId = `${companyUrl}#organization`;
 const repositoryUrl =
-  "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab";
-const socialImageUrl = `${canonicalUrl}interface-systems-lab-social-card.png`;
+  "https://github.com/Sanderson-Technology-Enterprises/ste-systems";
+const socialImageUrl = `${canonicalUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "Interface Systems Lab social card with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
 const websiteId = `${canonicalUrl}#website`;
 const webpageId = `${canonicalUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
@@ -182,7 +181,7 @@ test("exported 404 retains branded ecosystem paint @cross-engine", async ({
   await expect(root).toHaveAttribute("data-mode", defaultConfiguration.mode);
 
   const returnAction = page.getByRole("link", {
-    name: "Return to Interface Systems Lab",
+    name: "Return to STE Systems",
   });
   const paint = await root.evaluate((element) => {
     const action = element.querySelector<HTMLElement>("a");
@@ -204,7 +203,7 @@ test("exported 404 retains branded ecosystem paint @cross-engine", async ({
     };
   });
 
-  await expect(returnAction).toHaveAttribute("href", "/interface-systems-lab/");
+  await expect(returnAction).toHaveAttribute("href", "/ste-systems/");
   expect(paint.themeToken).not.toBe("");
   expect(paint.rootBackground).not.toBe("rgba(0, 0, 0, 0)");
   expect(paint.actionBackground).not.toBe("rgba(0, 0, 0, 0)");
@@ -301,8 +300,8 @@ test("lab shell scopes the complete experience and preserves every section", asy
   ).toHaveAttribute("href", customizedPlatformsUrl);
 
   for (const [selector, asset] of [
-    [".brand-logo", "favicon-48x48.png"],
-    [".footer-logo", "android-chrome-192x192.png"],
+    [".brand-logo", "ste-systems-logo.png"],
+    [".footer-logo", "ste-systems-logo.png"],
   ] as const) {
     const image = page.locator(selector);
     await expect(image).toHaveAttribute("src", new RegExp(`${asset}$`));
@@ -547,7 +546,7 @@ test("shell keeps anchored content clear of persistent regions", async ({
         .locator(".configuration-shell")
         .evaluate((element) => getComputedStyle(element).position),
     )
-    .toBe("static");
+    .toBe("sticky");
 
   await page.locator("#layouts").scrollIntoViewIfNeeded();
   const desktopFlowGeometry = await page.evaluate(() => {
@@ -565,10 +564,19 @@ test("shell keeps anchored content clear of persistent regions", async ({
     return {
       consoleBottom: consoleBounds.bottom,
       headerBottom: headerBounds.bottom,
+      shellBottom: shell.getBoundingClientRect().bottom,
+      shellTop: shell.getBoundingClientRect().top,
+      viewportHeight: window.innerHeight,
     };
   });
-  expect(desktopFlowGeometry.consoleBottom).toBeLessThanOrEqual(
+  expect(desktopFlowGeometry.shellTop).toBeGreaterThanOrEqual(
     desktopFlowGeometry.headerBottom,
+  );
+  expect(desktopFlowGeometry.shellBottom).toBeLessThan(
+    desktopFlowGeometry.viewportHeight,
+  );
+  expect(desktopFlowGeometry.consoleBottom).toBeGreaterThan(
+    desktopFlowGeometry.shellTop,
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -588,6 +596,7 @@ test("shell keeps anchored content clear of persistent regions", async ({
     .toBe("#workbench");
   await expect(menu).toHaveAttribute("aria-expanded", "false");
   await expect(navigation).toBeHidden();
+  await page.locator("#workbench").scrollIntoViewIfNeeded();
 
   const mobileGeometry = await page.evaluate(() => {
     const header = document.querySelector<HTMLElement>(".site-header");
@@ -627,6 +636,7 @@ test("shell keeps anchored content clear of persistent regions", async ({
         getComputedStyle(brandTitle).fontSize,
       ),
       consolePosition: getComputedStyle(console).position,
+      consoleShellBottom: consoleShell.getBoundingClientRect().bottom,
       consoleShellPosition: getComputedStyle(consoleShell).position,
       headerHeight: headerBounds.height,
       headerBottom: headerBounds.bottom,
@@ -636,6 +646,7 @@ test("shell keeps anchored content clear of persistent regions", async ({
       pageHasNoInlineOverflow:
         document.documentElement.scrollWidth <=
         document.documentElement.clientWidth,
+      viewportHeight: window.innerHeight,
     };
   });
 
@@ -645,14 +656,17 @@ test("shell keeps anchored content clear of persistent regions", async ({
   expect(mobileGeometry.menuHeight).toBeGreaterThanOrEqual(44);
   expect(mobileGeometry.pageHasNoInlineOverflow).toBe(true);
   expect(["fixed", "sticky"]).not.toContain(mobileGeometry.consolePosition);
-  expect(mobileGeometry.consoleShellPosition).toBe("static");
+  expect(mobileGeometry.consoleShellPosition).toBe("sticky");
+  expect(mobileGeometry.consoleShellBottom).toBeLessThanOrEqual(
+    mobileGeometry.viewportHeight,
+  );
   expect(mobileGeometry.headerPosition).toBe("static");
   expect(mobileGeometry.headingTop).toBeGreaterThanOrEqual(
     Math.max(0, mobileGeometry.headerBottom),
   );
 });
 
-test("configuration console yields scroll space in short desktop viewports @cross-engine", async ({
+test("configuration console stays bounded in short desktop viewports @cross-engine", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
@@ -661,26 +675,26 @@ test("configuration console yields scroll space in short desktop viewports @cros
   const shell = page.locator(".configuration-shell");
   await expect
     .poll(() => shell.evaluate((element) => getComputedStyle(element).position))
-    .toBe("static");
+    .toBe("sticky");
 
   await page.locator("#interactions").scrollIntoViewIfNeeded();
   const geometry = await page.evaluate(() => {
-    const console = document.querySelector<HTMLElement>(
-      ".configuration-console",
-    );
+    const shell = document.querySelector<HTMLElement>(".configuration-shell");
     const target = document.querySelector<HTMLElement>("#interactions");
-    if (console === null || target === null) {
+    if (shell === null || target === null) {
       throw new Error("Expected short-viewport landmarks are missing.");
     }
 
     return {
-      consoleBottom: console.getBoundingClientRect().bottom,
+      shellBottom: shell.getBoundingClientRect().bottom,
+      shellTop: shell.getBoundingClientRect().top,
       targetBottom: target.getBoundingClientRect().bottom,
       targetTop: target.getBoundingClientRect().top,
       viewportHeight: window.innerHeight,
     };
   });
-  expect(geometry.consoleBottom).toBeLessThanOrEqual(0);
+  expect(geometry.shellTop).toBeGreaterThanOrEqual(0);
+  expect(geometry.shellBottom).toBeLessThan(geometry.viewportHeight);
   expect(geometry.targetBottom).toBeGreaterThan(0);
   expect(geometry.targetTop).toBeLessThan(geometry.viewportHeight);
 });
@@ -777,7 +791,7 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
       expect(geometry.targetTop).toBeGreaterThanOrEqual(
         geometry.consoleBottom + 16,
       );
-      expect(geometry.shellPosition).toBe("static");
+      expect(geometry.shellPosition).toBe("sticky");
     });
   }
 });
@@ -822,9 +836,7 @@ test("compact header tab order follows the disclosed navigation", async ({
   expect(geometry.headerHeight).toBeLessThanOrEqual(80);
 
   // Starting on the brand isolates header traversal from the independent skip-link contract.
-  await header
-    .getByRole("link", { name: "Interface Systems Lab home" })
-    .focus();
+  await header.getByRole("link", { name: "STE Systems home" }).focus();
   await page.keyboard.press("Tab");
   await expect(menu).toBeFocused();
   await page.keyboard.press("Enter");
@@ -849,8 +861,8 @@ test("compact header tab order follows the disclosed navigation", async ({
     "#integrate",
     "#install",
     "#libraries",
-    "/interface-systems-lab/components/",
-    "/interface-systems-lab/",
+    "/ste-systems/components/",
+    "/ste-systems/",
     repositoryUrl,
   ]);
 
@@ -940,12 +952,12 @@ test("renders the production metadata and complete resource directory", async ({
   page.on("pageerror", (error) => runtimeErrors.push(error.message));
 
   await page.goto("./");
-  await expect(page).toHaveTitle(/Interface Systems Lab/);
+  await expect(page).toHaveTitle(/STE Systems/);
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator(".brand-logo")).toBeVisible();
   await expect(page.locator(".brand-logo")).toHaveAttribute(
     "src",
-    /favicon-48x48\.png$/,
+    /ste-systems-logo\.png$/,
   );
   await expect
     .poll(() =>
@@ -958,7 +970,7 @@ test("renders the production metadata and complete resource directory", async ({
     )
     .toBe(true);
   await expect(
-    page.getByText("A Sanderson Technology Enterprises product").first(),
+    page.getByText("A product of Sanderson Technology Enterprises LLC").first(),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: /Design every layer/i }),
@@ -1028,10 +1040,10 @@ test("renders the production metadata and complete resource directory", async ({
   expect(organization).toMatchObject({
     "@id": corporateOrganizationId,
     description:
-      "Founder-led software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for adult entertainment businesses.",
+      "Software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for specialized businesses.",
     image:
       "https://sandersontechnologyenterprises.com/assets/social-preview.png",
-    legalName: "Sanderson Technology Enterprises",
+    legalName: "Sanderson Technology Enterprises LLC",
     logo: "https://sandersontechnologyenterprises.com/assets/icon-512.png",
     name: "Sanderson Technology Enterprises",
     sameAs: ["https://github.com/Sanderson-Technology-Enterprises"],
@@ -1106,7 +1118,7 @@ test("renders the production metadata and complete resource directory", async ({
     "@id": applicationId,
     codeRepository: repositoryUrl,
     isAccessibleForFree: true,
-    logo: `${canonicalUrl}android-chrome-512x512.png`,
+    logo: `${canonicalUrl}ste-systems-logo.png`,
     operatingSystem: "Any",
     publisher: { "@id": corporateOrganizationId },
     url: labUrl,

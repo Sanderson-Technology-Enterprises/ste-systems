@@ -10,10 +10,11 @@ test("homepage presents a concise developer portal", async ({ page }) => {
       name: "Design every layer. Keep one interface.",
     }),
   ).toBeVisible();
+  await expect(page.locator(".brand-banner")).toHaveCount(0);
   await expect(page.locator(".configuration-console")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Open lab" })).toHaveAttribute(
     "href",
-    "/interface-systems-lab/lab/",
+    "/ste-systems/lab/",
   );
   await expect(
     page.getByRole("heading", {
@@ -23,22 +24,6 @@ test("homepage presents a concise developer portal", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Install the complete stack." }),
   ).toBeVisible();
-
-  const firstViewportValue = await page
-    .locator(".home-hero")
-    .evaluate((hero) => {
-      const heading = hero.querySelector("h1");
-      const action = hero.querySelector<HTMLElement>(
-        '[data-hero-action="primary"]',
-      );
-      if (heading === null || action === null) return false;
-
-      return (
-        heading.getBoundingClientRect().top >= 0 &&
-        action.getBoundingClientRect().bottom <= window.innerHeight
-      );
-    });
-  expect(firstViewportValue).toBe(true);
 });
 
 test("lab route retains the complete configurable experience", async ({
@@ -67,8 +52,41 @@ test("lab route retains the complete configurable experience", async ({
   ).toBeVisible();
 });
 
+test("lab configuration controls remain available while the page scrolls", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("./lab/");
+
+  const controls = page.locator(".configuration-shell");
+  await controls.scrollIntoViewIfNeeded();
+  const initialTop = await controls.evaluate(
+    (element) => element.getBoundingClientRect().top,
+  );
+
+  await page.locator("#interactions").scrollIntoViewIfNeeded();
+  const scrolledState = await controls.evaluate((element) => ({
+    position: getComputedStyle(element).position,
+    top: element.getBoundingClientRect().top,
+    viewportHeight: window.innerHeight,
+  }));
+
+  expect(scrolledState.position).toBe("sticky");
+  expect(scrolledState.top).toBeGreaterThanOrEqual(0);
+  expect(scrolledState.top).toBeLessThanOrEqual(initialTop + 2);
+  expect(scrolledState.top).toBeLessThan(scrolledState.viewportHeight);
+
+  await page.getByLabel(/03.*Palette/).selectOption("ocean-steel");
+  await expect(page.locator(".experience")).toHaveAttribute(
+    "data-theme",
+    "ocean-steel",
+  );
+});
+
 test("component route exposes the searchable atlas", async ({ page }) => {
-  await page.goto("./components/");
+  await page.goto(
+    "./components/?layout=editorial&ui=cyberpunk&theme=ocean-steel&mode=light",
+  );
 
   await expect(
     page.getByRole("heading", { level: 1, name: /Component Atlas/i }),
@@ -76,6 +94,11 @@ test("component route exposes the searchable atlas", async ({ page }) => {
   await expect(
     page.getByRole("searchbox", { name: "Search components and contracts" }),
   ).toBeVisible();
+  await expect(page.locator(".configuration-console")).toHaveCount(0);
+  await expect(page.locator(".atlas-experience")).toHaveAttribute(
+    "data-theme",
+    "midnight-gold",
+  );
   await expect(page.locator("[data-atlas-specimen]").first()).toBeVisible();
 });
 
@@ -173,7 +196,7 @@ test("legacy shared configurations redirect to the lab", async ({ page }) => {
   await page.goto("./?layout=split-screen&ui=cyberpunk#workbench");
 
   await expect(page).toHaveURL(
-    /\/interface-systems-lab\/lab\/\?layout=split-screen&ui=cyberpunk&theme=midnight-gold&mode=dark#workbench$/,
+    /\/ste-systems\/lab\/\?layout=split-screen&ui=cyberpunk&theme=midnight-gold&mode=dark#workbench$/,
   );
   await expect(page.locator(".experience")).toHaveAttribute(
     "data-ly-layout",

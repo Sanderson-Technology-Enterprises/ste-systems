@@ -28,14 +28,8 @@ test("homepage structured data describes the overview and package list", async (
   const webPage = graph.find((node) => node["@type"] === "WebPage");
   const packages = graph.find((node) => node["@type"] === "ItemList");
 
-  assert.equal(
-    webPage?.url,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/",
-  );
-  assert.equal(
-    packages?.url,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/#libraries",
-  );
+  assert.equal(webPage?.url, "https://stesystems.com/");
+  assert.equal(packages?.url, "https://stesystems.com/#libraries");
   assert.equal(packages?.numberOfItems, 3);
 });
 
@@ -51,8 +45,7 @@ test("atlas structured data assigns the application to the component route", asy
     (node) => node["@type"] === "SoftwareApplication",
   );
 
-  const expectedUrl =
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/components/";
+  const expectedUrl = "https://stesystems.com/components/";
   assert.equal(webPage?.url, expectedUrl);
   assert.equal(application?.url, expectedUrl);
 });
@@ -69,17 +62,11 @@ test("lab structured data assigns the application to the lab route", async () =>
     (node) => node["@type"] === "SoftwareApplication",
   );
 
-  assert.equal(
-    webPage?.url,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/lab/",
-  );
-  assert.equal(
-    application?.url,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/lab/",
-  );
+  assert.equal(webPage?.url, "https://stesystems.com/lab/");
+  assert.equal(application?.url, "https://stesystems.com/lab/");
   assert.equal(
     application?.codeRepository,
-    "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab",
+    "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
   );
 });
 

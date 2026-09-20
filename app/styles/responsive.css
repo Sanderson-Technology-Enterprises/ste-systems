@@ -113,8 +113,18 @@
   }
 
   .brand-logo {
-    inline-size: 2rem;
+    inline-size: 2.67rem;
     block-size: 2rem;
+  }
+
+  .configuration-shell {
+    inset-block-start: var(--ly-space-2);
+    max-block-size: min(55dvh, 32rem);
+  }
+
+  /* The static mobile header leaves only the bounded sticky deck to offset. */
+  .configuration-shell ~ section[id] {
+    scroll-margin-block-start: calc(min(55dvh, 32rem) + 3.25rem);
   }
 
   .brand-owner {

@@ -231,7 +231,7 @@ function fixtureMarkup(fixture, assets) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
-    <title>${escapeHtml(fixture.title)} | Interface Systems Lab integration proof</title>
+    <title>${escapeHtml(fixture.title)} | STE Systems integration proof</title>
 ${stylesheetMarkup}
   </head>
   <body

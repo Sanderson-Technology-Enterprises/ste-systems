@@ -109,7 +109,7 @@ function sameConfiguration(
  *
  * @param props Component properties.
  * @param props.children Laboratory sections rendered inside the shared root.
- * @returns The configured Interface Systems Lab experience.
+ * @returns The configured STE Systems Lab experience.
  */
 export function LabExperience({ children }: LabExperienceProps) {
   const [configuration, setConfiguration] = useState<LabConfiguration>(() => ({

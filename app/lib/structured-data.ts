@@ -32,7 +32,7 @@ export function buildHomeStructuredData() {
       {
         "@type": "ItemList",
         "@id": `${SITE.url}#packages`,
-        name: "Interface Systems Lab packages",
+        name: "STE Systems packages",
         url: `${SITE.url}#libraries`,
         numberOfItems: ECOSYSTEM_PACKAGES.length,
         itemListElement: packageItems,
@@ -51,7 +51,7 @@ export function buildLabStructuredData() {
         name: `Live interface lab | ${SITE.name}`,
         url: SITE.labUrl,
         description:
-          "Configure and inspect all three Interface Systems Lab CSS libraries on one semantic interface.",
+          "Configure and inspect all three STE Systems CSS libraries on one semantic interface.",
         isPartOf: { "@id": `${SITE.url}#website` },
         publisher: { "@id": SITE.owner.organizationId },
         inLanguage: "en-US",
@@ -85,7 +85,7 @@ export function buildAtlasStructuredData() {
         name: `Component Atlas | ${SITE.name}`,
         url: SITE.componentsUrl,
         description:
-          "An exhaustive atlas of the layout, visual, native-element, and interaction contracts published by the three Interface Systems Lab CSS libraries.",
+          "An exhaustive atlas of the layout, visual, native-element, and interaction contracts published by the three STE Systems CSS libraries.",
         isPartOf: { "@id": `${SITE.url}#website` },
         publisher: { "@id": SITE.owner.organizationId },
         inLanguage: "en-US",

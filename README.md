@@ -1,12 +1,12 @@
-# Interface Systems Lab
+# STE Systems
 
-[Interface Systems Lab](https://sanderson-technology-enterprises.github.io/interface-systems-lab/) is an interactive observatory for three coordinated, independently useful CSS libraries. It demonstrates how structure, visual identity, and interaction can share one semantic HTML contract.
+[STE Systems](https://stesystems.com/) is the accessible three-library design system from Sanderson Technology Enterprises LLC. It demonstrates how structure, visual identity, and interaction can share one semantic HTML contract.
 
-- Product owner: [Sanderson Technology Enterprises](https://sandersontechnologyenterprises.com/)
+- Product owner: [Sanderson Technology Enterprises LLC](https://sandersontechnologyenterprises.com/)
 - Custom platform work: [Customized Platforms](https://customizedplatforms.com/)
-- Live site: [sanderson-technology-enterprises.github.io/interface-systems-lab](https://sanderson-technology-enterprises.github.io/interface-systems-lab/)
-- Source: [Sanderson-Technology-Enterprises/interface-systems-lab](https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab)
-- Deployment target: GitHub Pages
+- Live site: [stesystems.com](https://stesystems.com/)
+- Source: [Sanderson-Technology-Enterprises/ste-systems](https://github.com/Sanderson-Technology-Enterprises/ste-systems)
+- Deployment target: Render Static Site
 
 ## Ecosystem resources
 
@@ -148,21 +148,18 @@ server-owned `GOOGLE_SITE_VERIFICATION` and `BING_SITE_VERIFICATION` variables.
 Both values are blank by default in `.env.example`; the export omits each meta
 tag until a real, non-empty token is supplied. Never commit production tokens.
 
-GitHub Pages project sites cannot publish the organization host's root
-`/robots.txt` from an individual repository. After the separately approved
-Pages-source handoff, submit the canonical sitemap directly in Google Search
-Console and Bing Webmaster Tools instead of relying only on project-scoped
-robots discovery:
+After the Render custom-domain deployment is live, submit the canonical sitemap
+directly in Google Search Console and Bing Webmaster Tools:
 
 ```text
-https://sanderson-technology-enterprises.github.io/interface-systems-lab/sitemap.xml
+https://stesystems.com/sitemap.xml
 ```
 
 ## Company and privacy
 
 The developer path leads directly to the source, package resources, and exact
 adoption recipes. Organizations can work with
-[Sanderson Technology Enterprises](https://sandersontechnologyenterprises.com/)
+[Sanderson Technology Enterprises LLC](https://sandersontechnologyenterprises.com/)
 on creator-owned platforms, private systems, admin tools, and operational
 workflows, or visit [Customized Platforms](https://customizedplatforms.com/)
 for tailored platform delivery.

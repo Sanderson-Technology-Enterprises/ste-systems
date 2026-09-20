@@ -34,7 +34,7 @@ test("homepage navigation keeps the focused portal concise", async () => {
       ["Open lab", "/lab/"],
       [
         "GitHub",
-        "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab",
+        "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
       ],
     ],
   );
@@ -65,7 +65,7 @@ test("lab navigation exposes every retained deep-link section", async () => {
       ["Back to overview", "/"],
       [
         "GitHub",
-        "https://github.com/Sanderson-Technology-Enterprises/interface-systems-lab",
+        "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
       ],
     ],
   );

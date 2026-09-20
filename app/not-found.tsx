@@ -5,7 +5,7 @@ import { withBasePath } from "./lib/site";
 
 export const metadata: Metadata = {
   title: "Page not found",
-  description: "The requested Interface Systems Lab page does not exist.",
+  description: "The requested STE Systems page does not exist.",
   robots: { index: false, follow: false },
   alternates: { canonical: null },
   openGraph: null,
@@ -34,7 +34,7 @@ export default function NotFound() {
           data-surface-level="2"
           href={withBasePath("/")}
         >
-          Return to Interface Systems Lab
+          Return to STE Systems
         </a>
       </div>
     </main>

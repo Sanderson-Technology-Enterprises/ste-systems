@@ -5,22 +5,13 @@ import { SITE, withBasePath } from "../app/lib/site";
 
 test("site URLs expose the Pages-safe lab and component routes", () => {
   assert.equal(SITE.labPath, "/lab/");
-  assert.equal(
-    SITE.labUrl,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/lab/",
-  );
-  assert.equal(
-    withBasePath(SITE.labPath, "interface-systems-lab"),
-    "/interface-systems-lab/lab/",
-  );
+  assert.equal(SITE.labUrl, "https://stesystems.com/lab/");
+  assert.equal(withBasePath(SITE.labPath, "ste-systems"), "/ste-systems/lab/");
   assert.equal(SITE.componentsPath, "/components/");
+  assert.equal(SITE.componentsUrl, "https://stesystems.com/components/");
   assert.equal(
-    SITE.componentsUrl,
-    "https://sanderson-technology-enterprises.github.io/interface-systems-lab/components/",
-  );
-  assert.equal(
-    withBasePath(SITE.componentsPath, "interface-systems-lab"),
-    "/interface-systems-lab/components/",
+    withBasePath(SITE.componentsPath, "ste-systems"),
+    "/ste-systems/components/",
   );
 });
 
@@ -49,8 +40,8 @@ test("legacy configuration and lab anchors move to the lab route", async () => {
     "/lab/?ui=cyberpunk&layout=split-screen&utm_source=release#workbench",
   );
   assert.equal(
-    destination("", "#layouts", "interface-systems-lab"),
-    "/interface-systems-lab/lab/#layouts",
+    destination("", "#layouts", "ste-systems"),
+    "/ste-systems/lab/#layouts",
   );
   assert.equal(
     destination("?utm_source=release", "#layouts"),

@@ -14,20 +14,22 @@ const exportedFontBudgetBytes = 2560 * 1024;
 const googleVerificationFile = "google5abb0289b99a9f42.html";
 const googleVerificationText =
   "google-site-verification: google5abb0289b99a9f42.html";
-const basePath = "/interface-systems-lab";
-const siteUrl =
-  "https://sanderson-technology-enterprises.github.io/interface-systems-lab/";
+const basePath = "/ste-systems";
+const siteUrl = "https://stesystems.com/";
 const labUrl = `${siteUrl}lab/`;
 const componentsUrl = `${siteUrl}components/`;
 const corporateUrl = "https://sandersontechnologyenterprises.com/";
 const customizedPlatformsUrl = "https://customizedplatforms.com/";
 const corporateOrganizationId = `${corporateUrl}#organization`;
 const corporateGithub = "https://github.com/Sanderson-Technology-Enterprises";
-const repositoryUrl = `${corporateGithub}/interface-systems-lab`;
-const socialImageUrl = `${siteUrl}interface-systems-lab-social-card.png`;
+const repositoryUrl = `${corporateGithub}/ste-systems`;
+const siteTitle = "STE Systems | Accessible Three-Library Design System";
+const siteDescription =
+  "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.";
+const socialImageUrl = `${siteUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "Interface Systems Lab social card with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
-const labLogoUrl = `${siteUrl}android-chrome-512x512.png`;
+  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 176,400 possibilities\u201d over layout, identity, and interaction.";
+const labLogoUrl = `${siteUrl}ste-systems-logo.png`;
 const websiteId = `${siteUrl}#website`;
 const webpageId = `${siteUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
@@ -36,10 +38,15 @@ const atlasWebpageId = `${componentsUrl}#webpage`;
 const atlasApplicationId = `${componentsUrl}#application`;
 const packagesId = `${siteUrl}#packages`;
 const corporateDescription =
-  "Founder-led software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for adult entertainment businesses.";
+  "Software studio building creator-owned web platforms, private content systems, admin dashboards, and operational workflows for specialized businesses.";
 const staleLabUrls = [
   ["https://foscat.github.io", "/interface-systems-lab/"].join(""),
   ["https://github.com/Foscat", "/interface-systems-lab"].join(""),
+  [
+    "https://sanderson-technology-enterprises.github.io",
+    "/interface-systems-lab/",
+  ].join(""),
+  [corporateGithub, "/interface-systems-lab"].join(""),
 ];
 
 const resourceUrls = [
@@ -270,7 +277,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
     );
     requireExact(
       organization.legalName,
-      "Sanderson Technology Enterprises",
+      "Sanderson Technology Enterprises LLC",
       "Organization legalName",
       issues,
     );
@@ -485,7 +492,7 @@ export async function collectExportIssues() {
     await readExportFile("browserconfig.xml", issues)
   ).toString("utf8");
   const socialImage = await readExportFile(
-    "interface-systems-lab-social-card.png",
+    "ste-systems-social-preview.png",
     issues,
   );
   const googleVerification = (
@@ -550,6 +557,25 @@ export async function collectExportIssues() {
   );
 
   requireText(index, '<html lang="en">', "document language", issues);
+  requireText(index, `<title>${siteTitle}</title>`, "document title", issues);
+  requireText(
+    index,
+    `<meta name="description" content="${siteDescription}"`,
+    "meta description",
+    issues,
+  );
+  requireText(
+    index,
+    '<meta name="author" content="Sanderson Technology Enterprises LLC"',
+    "author metadata",
+    issues,
+  );
+  requireText(
+    index,
+    '<meta name="publisher" content="Sanderson Technology Enterprises LLC"',
+    "publisher metadata",
+    issues,
+  );
   requireText(
     index,
     `<link rel="canonical" href="${siteUrl}"`,
@@ -818,8 +844,8 @@ export async function collectExportIssues() {
 
   requireText(
     browserConfig,
-    `${basePath}/mstile-150x150.png`,
-    "Pages-aware Microsoft tile",
+    `${siteUrl}mstile-150x150.png`,
+    "canonical Microsoft tile",
     issues,
   );
   requireText(

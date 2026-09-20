@@ -1442,24 +1442,15 @@ test("native laboratory exercises native controls, exposed parts, and validation
   await expect(page.locator("#ui-native output")).toContainText(/\d+/);
 
   const activeButton = page.locator('[data-native-state="active"]');
+  await activeButton.hover();
   const baseFilter = await activeButton.evaluate(
     (element) => getComputedStyle(element).filter,
   );
-  const bounds = await activeButton.boundingBox();
-  expect(bounds).not.toBeNull();
-  if (bounds !== null) {
-    await page.mouse.move(
-      bounds.x + bounds.width / 2,
-      bounds.y + bounds.height / 2,
-    );
-    await page.mouse.down();
-    expect(
-      await activeButton.evaluate(
-        (element) => getComputedStyle(element).filter,
-      ),
-    ).not.toBe(baseFilter);
-    await page.mouse.up();
-  }
+  await page.mouse.down();
+  expect(
+    await activeButton.evaluate((element) => getComputedStyle(element).filter),
+  ).not.toBe(baseFilter);
+  await page.mouse.up();
 });
 
 test("native laboratory uses a real modal dialog and restores opener focus", async ({
@@ -2093,6 +2084,17 @@ test("review contract proves active over persistent and busy over active paint",
     .toBeGreaterThan(base.layerOpacity);
   const pressed = await readInteractionSignature(target);
 
+  await target.evaluate((element) => {
+    const shell = document.querySelector<HTMLElement>(".configuration-shell");
+    const shellBottom = shell?.getBoundingClientRect().bottom ?? 0;
+    const targetTop = element.getBoundingClientRect().top;
+
+    // Position the held pointer below the sticky configuration deck.
+    window.scrollBy({
+      behavior: "instant",
+      top: targetTop - shellBottom - 24,
+    });
+  });
   const bounds = await target.boundingBox();
   expect(bounds).not.toBeNull();
   if (bounds !== null) {
@@ -2260,7 +2262,7 @@ test("integration laboratory progressively discloses exactly seven isolated fixt
     integrationFixtureDomOrder.map((id) => ({
       id,
       loading: "lazy",
-      src: `/interface-systems-lab/fixtures/generated/${id}.html`,
+      src: `/ste-systems/fixtures/generated/${id}.html`,
       title: expect.stringMatching(/integration proof/i),
     })),
   );
@@ -2289,17 +2291,17 @@ test("integration laboratory progressively discloses exactly seven isolated fixt
   ).toEqual([
     {
       fixture: "layout-only",
-      href: "/interface-systems-lab/fixtures/generated/layout-only.html",
+      href: "/ste-systems/fixtures/generated/layout-only.html",
       packageName: "layout-style-css",
     },
     {
       fixture: "ui-only",
-      href: "/interface-systems-lab/fixtures/generated/ui-only.html",
+      href: "/ste-systems/fixtures/generated/ui-only.html",
       packageName: "ui-style-kit-css",
     },
     {
       fixture: "interactive-only",
-      href: "/interface-systems-lab/fixtures/generated/interactive-only.html",
+      href: "/ste-systems/fixtures/generated/interactive-only.html",
       packageName: "interactive-surface-css",
     },
   ]);

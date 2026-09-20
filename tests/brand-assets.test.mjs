@@ -61,7 +61,7 @@ const legacyHashes = new Map([
     "03e7f7a9cf8355e3b092d1d7d0e36e55cf1f042f89bb3b45b2921d0936a3c1f4",
   ],
   [
-    "public/interface-systems-lab-social-card.png",
+    "public/ste-systems-social-preview.png",
     "7c088b8f919d68b55e60248ad61c688a3b2aa6b86e630d6bd430628c2a8b9f59",
   ],
 ]);
@@ -78,7 +78,9 @@ const pngDimensions = new Map([
   ["public/android-chrome-512x512.png", [512, 512]],
   ["public/maskable-icon-512x512.png", [512, 512]],
   ["public/mstile-150x150.png", [150, 150]],
-  ["public/interface-systems-lab-social-card.png", [1200, 630]],
+  ["public/ste-systems-banner.png", [2172, 724]],
+  ["public/ste-systems-logo.png", [1448, 1086]],
+  ["public/ste-systems-social-preview.png", [1200, 630]],
 ]);
 
 function sha256(buffer) {
@@ -124,11 +126,11 @@ test("brand PNG outputs retain their public dimensions", async () => {
 test("generated social card preserves the supplied artwork without overlays", async () => {
   const sourcePath = path.join(
     repositoryRoot,
-    "assets/brand/interface-systems-lab-social-card-source.png",
+    "assets/brand/ste-systems-social-preview-source.png",
   );
   const outputPath = path.join(
     repositoryRoot,
-    "public/interface-systems-lab-social-card.png",
+    "public/ste-systems-social-preview.png",
   );
   const expected = await sharp(sourcePath)
     .resize(1200, 630, { fit: "cover", position: "centre" })
@@ -153,6 +155,45 @@ test("logo source files preserve transparent and chroma-ready formats", async ()
   );
   assert.equal(master.colorType, 6, "master must remain RGBA");
   assert.equal(chroma.colorType, 2, "chroma source must remain RGB");
+});
+
+test("favicon master derives from the approved STE Systems mark", async () => {
+  const sourcePath = path.join(repositoryRoot, "public/ste-systems-logo.png");
+  const masterPath = path.join(repositoryRoot, "public/logo-master.png");
+  const croppedMark = await sharp(sourcePath)
+    .extract({ left: 0, top: 0, width: 1448, height: 724 })
+    .png()
+    .toBuffer();
+  const { data, info } = await sharp(croppedMark)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  for (let offset = 3; offset < data.length; offset += info.channels) {
+    if (data[offset] <= 5) {
+      data[offset] = 0;
+    }
+  }
+  const cleanedMark = await sharp(data, { raw: info }).png().toBuffer();
+  const expected = await sharp(cleanedMark)
+    .trim({
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+      threshold: 16,
+    })
+    .resize(1254, 1254, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+      kernel: sharp.kernel.lanczos3,
+    })
+    .ensureAlpha()
+    .raw()
+    .toBuffer();
+  const actual = await sharp(masterPath).ensureAlpha().raw().toBuffer();
+
+  assert.equal(
+    actual.equals(expected),
+    true,
+    "favicon master must use the supplied STE Systems emblem",
+  );
 });
 
 test("favicon.ico contains 16, 32, and 48 pixel 32-bit entries", async () => {
