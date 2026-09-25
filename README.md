@@ -10,11 +10,11 @@
 
 ## Ecosystem resources
 
-| Layer     | Package                              | Repository                                                      | Wiki                                                           | npm                                                          | Demo                                                           |
-| --------- | ------------------------------------ | --------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
-| Structure | `layout-style-css@3.2.0`             | [Repository](https://github.com/Foscat/Layout-Style-CSS)        | [Wiki](https://github.com/Foscat/Layout-Style-CSS/wiki)        | [npm](https://www.npmjs.com/package/layout-style-css)        | [Live demo](https://foscat.github.io/Layout-Style-CSS/)        |
-| Identity  | `ui-style-kit-css@2.4.0` (`4b97e37`) | [Repository](https://github.com/Foscat/ui-style-kit-css)        | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)        | [npm](https://www.npmjs.com/package/ui-style-kit-css)        | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
-| Behavior  | `interactive-surface-css@1.7.0`      | [Repository](https://github.com/Foscat/Interactive-Surface-CSS) | [Wiki](https://github.com/Foscat/Interactive-Surface-CSS/wiki) | [npm](https://www.npmjs.com/package/interactive-surface-css) | [Live demo](https://foscat.github.io/Interactive-Surface-CSS/) |
+| Layer     | Package                         | Repository                                                      | Wiki                                                           | npm                                                          | Demo                                                           |
+| --------- | ------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
+| Structure | `layout-style-css@3.2.0`        | [Repository](https://github.com/Foscat/Layout-Style-CSS)        | [Wiki](https://github.com/Foscat/Layout-Style-CSS/wiki)        | [npm](https://www.npmjs.com/package/layout-style-css)        | [Live demo](https://foscat.github.io/Layout-Style-CSS/)        |
+| Identity  | `ui-style-kit-css@2.4.1`        | [Repository](https://github.com/Foscat/ui-style-kit-css)        | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)        | [npm](https://www.npmjs.com/package/ui-style-kit-css)        | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
+| Behavior  | `interactive-surface-css@1.7.0` | [Repository](https://github.com/Foscat/Interactive-Surface-CSS) | [Wiki](https://github.com/Foscat/Interactive-Surface-CSS/wiki) | [npm](https://www.npmjs.com/package/interactive-surface-css) | [Live demo](https://foscat.github.io/Interactive-Surface-CSS/) |
 
 ## Adoption matrix
 
@@ -37,7 +37,7 @@ layers without changing ownership boundaries.
 Install the exact aligned releases:
 
 ```bash
-npm install ui-style-kit-css@https://codeload.github.com/Foscat/ui-style-kit-css/tar.gz/4b97e379657c99767263347823f2808fb466ecf9 layout-style-css@3.2.0 interactive-surface-css@1.7.0
+npm install ui-style-kit-css@2.4.1 layout-style-css@3.2.0 interactive-surface-css@1.7.0
 ```
 
 Then load the package entry points in ownership order. UI Style Kit establishes

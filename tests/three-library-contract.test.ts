@@ -20,7 +20,7 @@ test("the public ecosystem contains exactly the three CSS libraries", () => {
     ECOSYSTEM_PACKAGES.map(({ name, version }) => ({ name, version })),
     [
       { name: "layout-style-css", version: "3.2.0" },
-      { name: "ui-style-kit-css", version: "2.4.0" },
+      { name: "ui-style-kit-css", version: "2.4.1" },
       { name: "interactive-surface-css", version: "1.7.0" },
     ],
   );
@@ -31,6 +31,8 @@ test("the public ecosystem contains exactly the three CSS libraries", () => {
     NPM_INSTALL.split(" ").filter((word) => word.includes("@")).length,
     3,
   );
+  assert.match(NPM_INSTALL, /ui-style-kit-css@2\.4\.1(?:\s|$)/);
+  assert.doesNotMatch(NPM_INSTALL, /codeload\.github\.com|tar\.gz/);
   assert.equal(ADOPTION_PATHS.length, 7);
 });
 

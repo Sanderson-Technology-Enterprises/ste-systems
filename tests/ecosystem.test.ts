@@ -15,7 +15,6 @@ import {
   ECOSYSTEM_PACKAGES,
   NPM_INSTALL,
   UI_STYLE_KIT_INSTALL_SPEC,
-  UI_STYLE_KIT_THEME_COMMIT,
 } from "../app/data/ecosystem";
 import {
   UI_SEMANTIC_CLASS_BY_SUFFIX,
@@ -101,7 +100,7 @@ test("registry exposes every package and resource in ecosystem order", () => {
   );
   assert.deepEqual(
     ECOSYSTEM_PACKAGES.map(({ version }) => version),
-    ["3.2.0", "2.4.0", "1.7.0"],
+    ["3.2.0", "2.4.1", "1.7.0"],
   );
   assert.equal(ECOSYSTEM_PACKAGES[0]?.version, "3.2.0");
   assert.equal(ECOSYSTEM_PACKAGES[2]?.version, "1.7.0");
@@ -129,7 +128,7 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
     UI_SEMANTIC_COMPONENT_API.selectorsByRole,
   ).flat();
 
-  assert.equal((uiManifest as { readonly version: string }).version, "2.4.0");
+  assert.equal((uiManifest as { readonly version: string }).version, "2.4.1");
   assert.equal(selectors.length, 29);
   assert.deepEqual(
     selectors.map(({ selector }) => selector),
@@ -182,7 +181,8 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
 });
 
 test("installation examples pin approved versions and cascade order", () => {
-  const uiStyleKitCdnRoot = `https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@${UI_STYLE_KIT_THEME_COMMIT}`;
+  const uiStyleKitCdnRoot =
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.1";
 
   assert.equal(
     NPM_INSTALL,
@@ -254,7 +254,8 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
     { one: 3, pair: 3, all: 1 },
   );
 
-  const uiStyleKitCdnRoot = `https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@${UI_STYLE_KIT_THEME_COMMIT}`;
+  const uiStyleKitCdnRoot =
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.1";
   const uiVisualCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css">`;
   const uiThemeCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css">`;
   const interactionCoreCdn =
@@ -843,10 +844,7 @@ test("documented package versions match the pinned CDN URLs", () => {
 
     assert.notEqual(cdn.length, 0);
     for (const { href } of cdn) {
-      const expectedPin =
-        pkg.name === "ui-style-kit-css"
-          ? `${pkg.name}@${UI_STYLE_KIT_THEME_COMMIT}`
-          : `${pkg.name}@${pkg.version}`;
+      const expectedPin = `${pkg.name}@${pkg.version}`;
       assert.ok(href.includes(expectedPin), pkg.name);
     }
   }
