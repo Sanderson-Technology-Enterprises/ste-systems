@@ -424,6 +424,30 @@ test("shell keeps observatory controls clear of the interface core", async ({
 
         const stageBounds = stage.getBoundingClientRect();
         const coreBounds = core.getBoundingClientRect();
+        const controlBounds = controls.map((control) => ({
+          bounds: control.getBoundingClientRect(),
+          label: control.textContent?.trim() ?? "",
+        }));
+        const overlappingPairs: string[] = [];
+
+        for (let index = 0; index < controlBounds.length; index += 1) {
+          for (
+            let siblingIndex = index + 1;
+            siblingIndex < controlBounds.length;
+            siblingIndex += 1
+          ) {
+            const current = controlBounds[index];
+            const sibling = controlBounds[siblingIndex];
+            const overlaps =
+              current.bounds.left < sibling.bounds.right &&
+              current.bounds.right > sibling.bounds.left &&
+              current.bounds.top < sibling.bounds.bottom &&
+              current.bounds.bottom > sibling.bounds.top;
+            if (overlaps)
+              overlappingPairs.push(`${current.label}/${sibling.label}`);
+          }
+        }
+
         return {
           controls: controls.map((control) => {
             const bounds = control.getBoundingClientRect();
@@ -444,6 +468,7 @@ test("shell keeps observatory controls clear of the interface core", async ({
                 bounds.bottom <= stageBounds.bottom,
             };
           }),
+          overlappingPairs,
           stage: {
             height: stageBounds.height,
             width: stageBounds.width,
@@ -471,6 +496,7 @@ test("shell keeps observatory controls clear of the interface core", async ({
         withinStage: true,
       },
     ]);
+    expect(geometry.overlappingPairs).toEqual([]);
     expect(geometry.stage.height).toBeCloseTo(geometry.stage.width, 0);
     expect(geometry.stage.height).toBeLessThanOrEqual(
       Math.min(viewport.width, 480),
@@ -1080,7 +1106,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.4.0",
+          version: "2.4.1",
         },
       },
       {
@@ -1126,7 +1152,7 @@ test("renders the production metadata and complete resource directory", async ({
 
   for (const [name, version] of [
     ["layout-style-css", "3.2.0"],
-    ["ui-style-kit-css", "2.4.0"],
+    ["ui-style-kit-css", "2.4.1"],
     ["interactive-surface-css", "1.7.0"],
   ]) {
     const packageEntry = page.locator(`[data-package="${name}"]`);

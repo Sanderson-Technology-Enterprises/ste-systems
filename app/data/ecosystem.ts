@@ -12,18 +12,11 @@ export type EcosystemPackage = {
   links: Record<ResourceLink, string>;
 };
 
-/**
- * Immutable UI Style Kit revision that adds the five themes used by the Lab.
- * The package remains version 2.4.0 until its next npm release is published.
- */
-export const UI_STYLE_KIT_THEME_COMMIT =
-  "4b97e379657c99767263347823f2808fb466ecf9";
+/** Exact registry version used by installation examples and package contracts. */
+export const UI_STYLE_KIT_INSTALL_SPEC = "2.4.1";
 
-/** Reproducible, credential-free npm source for the expanded 25-theme package. */
-export const UI_STYLE_KIT_INSTALL_SPEC = `https://codeload.github.com/Foscat/ui-style-kit-css/tar.gz/${UI_STYLE_KIT_THEME_COMMIT}`;
-
-/** Immutable jsDelivr root for the expanded 25-theme package. */
-const UI_STYLE_KIT_CDN_ROOT = `https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@${UI_STYLE_KIT_THEME_COMMIT}`;
+/** Version-pinned jsDelivr root for the published UI Style Kit package. */
+const UI_STYLE_KIT_CDN_ROOT = `https://cdn.jsdelivr.net/npm/ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`;
 
 export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   {
@@ -46,7 +39,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   {
     name: "ui-style-kit-css",
     displayName: "UI Style Kit CSS",
-    version: "2.4.0",
+    version: "2.4.1",
     layer: "Identity",
     summary:
       "Visual systems, palettes, native-element coverage, and display modes.",

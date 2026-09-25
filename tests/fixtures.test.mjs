@@ -44,7 +44,7 @@ test("fixture ownership contains only the three pinned CSS libraries", () => {
   assert.deepEqual(EXPECTED_PACKAGE_VERSIONS, {
     "interactive-surface-css": "1.7.0",
     "layout-style-css": "3.2.0",
-    "ui-style-kit-css": "2.4.0",
+    "ui-style-kit-css": "2.4.1",
   });
   assert.deepEqual(Object.keys(FIXTURE_ASSETS).sort(), [
     "interaction-core",
