@@ -22,7 +22,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   {
     name: "layout-style-css",
     displayName: "Layout Style CSS",
-    version: "3.2.0",
+    version: "3.2.3",
     layer: "Structure",
     summary:
       "Responsive shells, wrappers, grids, panes, and switchable layout personalities.",
@@ -56,7 +56,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   {
     name: "interactive-surface-css",
     displayName: "Interactive Surface CSS",
-    version: "1.7.0",
+    version: "1.7.3",
     layer: "Behavior",
     summary:
       "Consistent hover, focus-visible, active, pressed, and disabled states.",
@@ -72,7 +72,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   },
 ] as const;
 
-export const NPM_INSTALL = `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC} layout-style-css@3.2.0 interactive-surface-css@1.7.0`;
+export const NPM_INSTALL = `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC} layout-style-css@3.2.3 interactive-surface-css@1.7.3`;
 
 export const BUNDLER_IMPORTS = [
   'import "ui-style-kit-css/visual.css";',
@@ -101,12 +101,12 @@ export const CDN_LINKS = [
   {
     packageName: "interactive-surface-css",
     kind: "style",
-    href: "https://cdn.jsdelivr.net/npm/interactive-surface-css@1.7.0/state-core.css",
+    href: "https://cdn.jsdelivr.net/npm/interactive-surface-css@1.7.3/state-core.css",
   },
   {
     packageName: "layout-style-css",
     kind: "style",
-    href: "https://cdn.jsdelivr.net/npm/layout-style-css@3.2.0/dist/layout-style-css.min.css",
+    href: "https://cdn.jsdelivr.net/npm/layout-style-css@3.2.3/dist/layout-style-css.min.css",
   },
 ] as const satisfies readonly CdnAsset[];
 
@@ -159,7 +159,7 @@ const layoutCdn = CDN_LINKS[3];
 const interactionStandaloneCdn: CdnAsset = {
   packageName: "interactive-surface-css",
   kind: "style",
-  href: "https://cdn.jsdelivr.net/npm/interactive-surface-css@1.7.0/standalone-preset.css",
+  href: "https://cdn.jsdelivr.net/npm/interactive-surface-css@1.7.3/standalone-preset.css",
 };
 
 function adoptionSnippets(
@@ -205,7 +205,7 @@ export const ADOPTION_PATHS = [
     deprecated: false,
     snippets: adoptionSnippets(
       "layout-only",
-      "npm install layout-style-css@3.2.0",
+      "npm install layout-style-css@3.2.3",
       ['import "layout-style-css";'],
       [layoutCdn],
       "Install Layout Style CSS",
@@ -237,7 +237,7 @@ export const ADOPTION_PATHS = [
     deprecated: false,
     snippets: adoptionSnippets(
       "interactive-only",
-      "npm install interactive-surface-css@1.7.0",
+      "npm install interactive-surface-css@1.7.3",
       ['import "interactive-surface-css/standalone-preset.css";'],
       [interactionStandaloneCdn],
       "Install Interactive Surface CSS",
@@ -253,7 +253,7 @@ export const ADOPTION_PATHS = [
     deprecated: false,
     snippets: adoptionSnippets(
       "layout-ui",
-      `npm install layout-style-css@3.2.0 ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`,
+      `npm install layout-style-css@3.2.3 ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`,
       ['import "ui-style-kit-css/visual.css";', 'import "layout-style-css";'],
       [uiVisualCdn, layoutCdn],
       "Install Layout and UI",
@@ -269,7 +269,7 @@ export const ADOPTION_PATHS = [
     deprecated: false,
     snippets: adoptionSnippets(
       "layout-interactive",
-      "npm install layout-style-css@3.2.0 interactive-surface-css@1.7.0",
+      "npm install layout-style-css@3.2.3 interactive-surface-css@1.7.3",
       [
         'import "interactive-surface-css/standalone-preset.css";',
         'import "layout-style-css";',
@@ -288,7 +288,7 @@ export const ADOPTION_PATHS = [
     deprecated: false,
     snippets: adoptionSnippets(
       "ui-interactive",
-      `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC} interactive-surface-css@1.7.0`,
+      `npm install ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC} interactive-surface-css@1.7.3`,
       [
         'import "ui-style-kit-css/visual.css";',
         'import "ui-style-kit-css/interactive-surface-theme.css";',

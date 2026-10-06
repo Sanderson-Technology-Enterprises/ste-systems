@@ -4,6 +4,10 @@
   --lab-rule-soft: rgb(var(--usk-border-rgb) / 0.34);
 
   min-block-size: 100svh;
+}
+
+/** Preserve the site-owned presentation on routes outside the configurable Lab. */
+.experience:not(.lab-experience) {
   background: rgb(var(--usk-bg-rgb));
   color: rgb(var(--usk-text-rgb));
   font-family: var(--font-copy);
@@ -30,11 +34,12 @@
     auto;
 }
 
-.experience :where(h1, h2, h3, h4, p, figure, pre, dl, dd) {
+.experience:not(.lab-experience)
+  :where(h1, h2, h3, h4, p, figure, pre, dl, dd) {
   margin-block: 0;
 }
 
-.experience :where(code, pre) {
+.experience:not(.lab-experience) :where(code, pre) {
   font-family: var(--font-code);
 }
 
@@ -42,6 +47,13 @@
   inline-size: 1.1em;
   block-size: 1.1em;
   flex: 0 0 auto;
+}
+
+/** Keep the compact site navigation usable without changing library paint. */
+.lab-experience
+  .site-header
+  :is(.navigation-toggle, .lab-configuration-toggle) {
+  min-block-size: 44px;
 }
 
 /**
@@ -82,7 +94,7 @@
   scroll-margin-block-start: calc(var(--ly-header-height) + 1px + 1rem);
 }
 
-.site-action {
+.experience:not(.lab-experience) .site-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -132,25 +144,31 @@
   padding-block: 0.7rem;
 }
 
-.brand,
-.navigation-toggle,
-.lab-configuration-toggle,
-.primary-nav a,
-.navigation-actions a,
-.site-footer a,
-.section-label,
-.eyebrow,
-.meta-line,
-.workbench-mode,
-.workbench-kicker,
-.library-index,
-.copy-button {
+.experience:not(.lab-experience)
+  :is(
+    .brand,
+    .navigation-toggle,
+    .lab-configuration-toggle,
+    .primary-nav a,
+    .navigation-actions a,
+    .site-footer a,
+    .section-label,
+    .eyebrow,
+    .meta-line,
+    .workbench-mode,
+    .workbench-kicker,
+    .library-index,
+    .copy-button
+  ) {
   font-family: var(--font-code);
 }
 
 .brand {
   color: inherit;
   font-weight: 800;
+  justify-self: start;
+  inline-size: fit-content;
+  max-inline-size: 100%;
   min-inline-size: 0;
   text-decoration: none;
 }
@@ -225,6 +243,20 @@
   display: none;
 }
 
+/* Keep the responsive trigger out of the inline desktop navigation. */
+.site-navigation[data-presentation="responsive"] .navigation-toggle {
+  display: none;
+  inline-size: 44px;
+  min-block-size: 44px;
+  padding-inline: 0;
+}
+
+/* Header glyphs fill their 44px targets without changing library paint. */
+.site-header :is(.navigation-toggle, .lab-configuration-toggle) svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
 .navigation-panel {
   display: flex;
   align-items: center;
@@ -253,6 +285,8 @@
 }
 
 .navigation-actions .site-action {
+  /** Keep disclosure-menu actions at the site navigation's 44px target size. */
+  min-block-size: 44px;
   padding-inline: clamp(0.45rem, 0.65vw, 0.75rem);
 }
 
@@ -267,7 +301,7 @@
 .site-navigation[data-presentation="disclosure"] .navigation-toggle {
   display: inline-flex;
   inline-size: 44px;
-  padding-inline: 0.7rem;
+  padding-inline: 0;
 }
 
 .site-navigation[data-presentation="disclosure"] .navigation-panel {
@@ -362,11 +396,14 @@
   display: inline-flex;
   align-items: center;
   min-block-size: 44px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.experience:not(.lab-experience) :is(.primary-nav a, .site-footer a) {
   color: rgb(var(--usk-text-muted-rgb));
   font-size: 0.78rem;
   font-weight: 750;
-  text-decoration: none;
-  white-space: nowrap;
 }
 
 .home-hero .hero-actions > [data-hero-action] {
@@ -377,31 +414,26 @@
   min-inline-size: 0;
 }
 
-.hero h1 {
+.hero.home-hero h1 {
   max-inline-size: 11ch;
   font-family: var(--font-display);
-  font-size: clamp(3.1rem, 7.2vw, 6.6rem);
+  font-size: clamp(3rem, 6.2vw, 4.4rem);
   font-weight: 680;
   line-height: 0.96;
   text-wrap: balance;
-}
-
-.hero.home-hero h1 {
-  font-size: clamp(3rem, 6.2vw, 4.4rem);
 }
 
 .hero.home-hero .hero-copy {
   gap: 1.25rem;
 }
 
-.hero h1 em {
+.hero.home-hero h1 em {
   color: rgb(var(--usk-primary-rgb));
   font-style: normal;
 }
 
 .lab-hero h1 {
   max-inline-size: 16ch;
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
 }
 
 .lab-hero {
@@ -417,6 +449,15 @@
 .capability-preview-panel > p:last-child,
 .conversion-path > p:not(.section-label) {
   max-inline-size: 64ch;
+}
+
+.experience:not(.lab-experience)
+  :is(
+    .lede,
+    .section-heading > p,
+    .capability-preview-panel > p:last-child,
+    .conversion-path > p:not(.section-label)
+  ) {
   color: rgb(var(--usk-text-muted-rgb));
   line-height: 1.65;
 }
@@ -429,7 +470,7 @@
   margin-block-end: clamp(1.75rem, 4vw, 3rem);
 }
 
-.section-heading h2,
+.experience:not(.lab-experience) .section-heading h2,
 .company-section h2 {
   font-family: var(--font-display);
   font-size: clamp(2.25rem, 5vw, 4rem);
@@ -438,14 +479,14 @@
   text-wrap: balance;
 }
 
-.section-label {
+.experience:not(.lab-experience) .section-label {
   color: rgb(var(--usk-primary-rgb));
   font-size: 0.7rem;
   font-weight: 850;
   text-transform: uppercase;
 }
 
-.eyebrow {
+.experience:not(.lab-experience) .eyebrow {
   color: rgb(var(--usk-primary-rgb));
   font-family: var(--font-code);
   font-size: 0.7rem;
@@ -453,7 +494,7 @@
   text-transform: uppercase;
 }
 
-.muted-copy {
+.experience:not(.lab-experience) .muted-copy {
   color: rgb(var(--usk-text-muted-rgb));
   line-height: 1.6;
 }
@@ -511,7 +552,7 @@
   min-inline-size: 0;
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--lab-rule-soft);
-  background: rgb(var(--usk-surface-rgb) / 0.46);
+  background: rgb(var(--usk-surface-rgb) / 0.84);
   transition:
     transform 180ms ease,
     border-color 180ms ease,
@@ -549,7 +590,7 @@
   min-inline-size: 0;
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--lab-rule);
-  background: rgb(var(--usk-surface-rgb) / 0.62);
+  background: rgb(var(--usk-surface-rgb) / 0.84);
 }
 
 .quick-start-command pre {
@@ -605,8 +646,11 @@
 }
 
 .library-list code {
-  color: rgb(var(--usk-link-rgb));
   overflow-wrap: anywhere;
+}
+
+.experience:not(.lab-experience) .library-list code {
+  color: rgb(var(--usk-link-rgb));
 }
 
 .site-footer {
@@ -648,5 +692,8 @@
 
 .footer-brand small {
   display: block;
+}
+
+.experience:not(.lab-experience) .footer-brand small {
   color: rgb(var(--usk-text-muted-rgb));
 }

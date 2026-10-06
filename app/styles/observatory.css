@@ -128,7 +128,8 @@
 }
 
 .observatory-core small {
-  max-inline-size: 7ch;
+  /** Keep both words intact in this site-owned orbit illustration. */
+  max-inline-size: 12ch;
   color: rgb(var(--usk-text-muted-rgb));
   font-size: 0.68rem;
   line-height: 1.35;
@@ -147,6 +148,12 @@
   min-inline-size: 0;
 }
 
+/* Let long package names shrink beside their numbers in this orbit legend. */
+.observatory-legend li > div {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
 .observatory-legend strong,
 .observatory-legend small {
   display: block;
@@ -161,7 +168,6 @@
 }
 
 .observatory-detail code {
-  color: rgb(var(--usk-link-rgb));
   overflow-wrap: anywhere;
 }
 
@@ -213,7 +219,7 @@
 .home-orbit-ring {
   position: absolute;
   display: block;
-  border: 1px solid rgb(57 211 198 / 38%);
+  border: 1px solid rgb(57 211 198 / 68%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -224,12 +230,12 @@
 
 .home-orbit-ring-2 {
   inset: 18%;
-  border-color: rgb(255 202 102 / 45%);
+  border-color: rgb(255 202 102 / 68%);
 }
 
 .home-orbit-ring-3 {
   inset: 34%;
-  border-color: rgb(var(--usk-success-rgb) / 52%);
+  border-color: rgb(var(--usk-success-rgb) / 68%);
 }
 
 .home-orbit-runner {

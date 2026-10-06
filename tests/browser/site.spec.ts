@@ -179,6 +179,113 @@ test.beforeEach(async ({ page }) => {
   await page.goto("./lab/");
 });
 
+/** Keeps Lab hero actions on the UI kit's padded, centered button contract. */
+test("Lab hero links inherit button geometry from the UI kit", async ({
+  page,
+}) => {
+  for (const action of ["primary", "secondary"]) {
+    const link = page.locator(`.lab-hero [data-hero-action="${action}"]`);
+    const geometry = await link.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        hasUiButton: element.classList.contains("usk-button"),
+        inlinePadding: Number.parseFloat(style.paddingInlineStart),
+        justifyContent: style.justifyContent,
+      };
+    });
+
+    expect(geometry.hasUiButton).toBe(true);
+    expect(geometry.inlinePadding).toBeGreaterThanOrEqual(8);
+    expect(geometry.justifyContent).toBe("center");
+  }
+});
+
+/** Keeps the three site-owned orbit captions on one aligned row at desktop. */
+test("observatory legend labels align beside their numbers", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const offsets = await page
+    .locator(".observatory-legend li")
+    .evaluateAll((cards) =>
+      cards.map((card) => {
+        const number = card.querySelector(".layer-number");
+        const title = card.querySelector("strong");
+        if (!number || !title) throw new Error("Missing orbit legend label.");
+        return Math.abs(
+          number.getBoundingClientRect().top -
+            title.getBoundingClientRect().top,
+        );
+      }),
+    );
+
+  expect(offsets).toHaveLength(3);
+  for (const offset of offsets) expect(offset).toBeLessThan(10);
+});
+
+/**
+ * Guards package-owned heading typography against Lab-specific CSS overrides.
+ * A plain heading in the same configured root supplies the library baseline.
+ */
+test("Lab headings use the selected UI kit typography", async ({ page }) => {
+  const typography = await page.locator(".experience").evaluate((root) => {
+    const readHeading = (selector: string, tagName: "h1" | "h3") => {
+      const heading = root.querySelector(selector);
+      if (heading === null) {
+        throw new Error(`Missing Lab heading: ${selector}`);
+      }
+
+      const reference = document.createElement(tagName);
+      reference.textContent = "Library heading reference";
+      root.append(reference);
+
+      const read = (element: Element) => {
+        const style = getComputedStyle(element);
+        return {
+          fontFamily: style.fontFamily,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          lineHeight: style.lineHeight,
+        };
+      };
+
+      const result = { actual: read(heading), library: read(reference) };
+      reference.remove();
+      return result;
+    };
+
+    return {
+      hero: readHeading(".lab-hero h1", "h1"),
+      workbench: readHeading(".workbench-main h3", "h3"),
+    };
+  });
+
+  expect(typography.hero.actual).toEqual(typography.hero.library);
+  expect(typography.workbench.actual).toEqual(typography.workbench.library);
+});
+
+/** Verifies the compact Lab navigation keeps usable hit areas and visible icons. */
+test("Lab header controls expose visible icons and touch targets", async ({
+  page,
+}) => {
+  const navigation = page.getByRole("button", { name: "Open lab sections" });
+  const configuration = page.getByRole("button", {
+    name: "Open lab configuration",
+  });
+
+  for (const control of [navigation, configuration]) {
+    const box = await control.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  }
+
+  const icon = await configuration.locator("svg").boundingBox();
+  expect(icon).not.toBeNull();
+  expect(icon?.width).toBeGreaterThanOrEqual(16);
+  expect(icon?.height).toBeGreaterThanOrEqual(16);
+});
+
 async function expectNoHorizontalOverflow(page: Page) {
   const dimensions = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
@@ -534,6 +641,139 @@ test("lab configuration opens from a bounded icon control in the primary header"
       await expect(trigger).toHaveAttribute("aria-expanded", "false");
     });
   }
+});
+
+test("header branding alone links home and both menu controls use their full hit area", async ({
+  page,
+}) => {
+  for (const width of [390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("./lab/");
+
+    const headerContract = await page.evaluate(() => {
+      const brand = document.querySelector<HTMLElement>(".site-header .brand");
+      const copy = document.querySelector<HTMLElement>(".brand-copy");
+      const tools = document.querySelector<HTMLElement>(".site-header-tools");
+      const menu = document.querySelector<HTMLElement>(".navigation-toggle");
+      const configuration = document.querySelector<HTMLElement>(
+        ".lab-configuration-toggle",
+      );
+      if (!brand || !copy || !tools || !menu || !configuration) {
+        throw new Error("Expected the complete Lab header.");
+      }
+      const brandBounds = brand.getBoundingClientRect();
+      const copyBounds = copy.getBoundingClientRect();
+      const toolsBounds = tools.getBoundingClientRect();
+      const gapCenter = (copyBounds.right + toolsBounds.left) / 2;
+      const menuIcon = menu.querySelector("svg")?.getBoundingClientRect();
+      const configurationIcon = configuration
+        .querySelector("svg")
+        ?.getBoundingClientRect();
+      return {
+        brandRight: brandBounds.right,
+        copyRight: copyBounds.right,
+        gapTarget:
+          gapCenter > copyBounds.right + 8
+            ? (document
+                .elementFromPoint(gapCenter, brandBounds.top + 12)
+                ?.closest("a")?.className ?? null)
+            : null,
+        menuIconWidth: menuIcon?.width ?? 0,
+        configurationIconWidth: configurationIcon?.width ?? 0,
+      };
+    });
+    expect(headerContract.brandRight).toBeLessThanOrEqual(
+      headerContract.copyRight + 8,
+    );
+    expect(headerContract.gapTarget).toBeNull();
+    expect(headerContract.menuIconWidth).toBeGreaterThanOrEqual(22);
+    expect(headerContract.configurationIconWidth).toBeGreaterThanOrEqual(22);
+
+    const trigger = page.locator(".lab-configuration-toggle");
+    const bounds = await trigger.boundingBox();
+    if (!bounds) throw new Error("Configuration button has no hit area.");
+    await page.mouse.click(bounds.x + 3, bounds.y + bounds.height / 2);
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await page.mouse.click(
+      bounds.x + bounds.width - 3,
+      bounds.y + bounds.height / 2,
+    );
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  }
+});
+
+test("featured three-library proof follows the active Lab configuration", async ({
+  page,
+}) => {
+  await page.goto(
+    "./lab/?layout=industrial-hmi&ui=neo-noir&theme=newsprint-crimson&mode=dark",
+  );
+  const iframe = page.locator('[data-integration-fixture="all-canonical"]');
+  await iframe.scrollIntoViewIfNeeded();
+  const proof = page
+    .frameLocator('[data-integration-fixture="all-canonical"]')
+    .locator("[data-fixture-root]");
+  await expect(proof).toHaveAttribute("data-ly-layout", "industrial-hmi");
+  await expect(proof).toHaveAttribute("data-ui", "neo-noir");
+  await expect(proof).toHaveAttribute("data-theme", "newsprint-crimson");
+  await expect(proof).toHaveAttribute("data-mode", "dark");
+  await expect(proof.locator(".usk-card")).toHaveCount(1);
+  await expect(proof.locator(".usk-button")).toHaveCount(1);
+  const initialCardPaint = await proof
+    .locator(".usk-card")
+    .evaluate((card) => getComputedStyle(card).backgroundColor);
+
+  await page.locator(".lab-configuration-toggle").click();
+  await page.getByLabel("03 / Palette").selectOption("ocean-steel");
+  await expect(proof).toHaveAttribute("data-theme", "ocean-steel");
+  await expect
+    .poll(() =>
+      proof
+        .locator(".usk-card")
+        .evaluate((card) => getComputedStyle(card).backgroundColor),
+    )
+    .not.toBe(initialCardPaint);
+});
+
+test("dark home accents and cards keep their intended visual strength", async ({
+  page,
+}) => {
+  await page.goto("./");
+  const paint = await page.evaluate(() => {
+    const alpha = (
+      selector: string,
+      property: "backgroundColor" | "borderTopColor",
+    ) => {
+      const element = document.querySelector<HTMLElement>(selector);
+      if (!element) throw new Error(`Missing ${selector} dark-mode surface.`);
+      const value = getComputedStyle(element)[property];
+      return Number(value.match(/rgba?\([^)]*,\s*([\d.]+)\)$/)?.[1] ?? 1);
+    };
+    return {
+      card: alpha(".package-overview-card", "backgroundColor"),
+      ring: alpha(".home-orbit-ring-1", "borderTopColor"),
+    };
+  });
+  expect(paint.card).toBeGreaterThanOrEqual(0.8);
+  expect(paint.ring).toBeGreaterThanOrEqual(0.6);
+});
+
+test("responsive navigation shows its menu trigger only below the desktop breakpoint", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("./");
+  await expect(
+    page.locator(
+      '.site-navigation[data-presentation="responsive"] .navigation-toggle',
+    ),
+  ).toBeHidden();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page.locator(
+      '.site-navigation[data-presentation="responsive"] .navigation-toggle',
+    ),
+  ).toBeVisible();
 });
 
 test("shell keeps observatory controls clear of the interface core", async ({
@@ -1182,7 +1422,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "layout-style-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/layout-style-css",
-          version: "3.2.0",
+          version: "3.2.3",
         },
       },
       {
@@ -1200,7 +1440,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "interactive-surface-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/interactive-surface-css",
-          version: "1.7.0",
+          version: "1.7.3",
         },
       },
     ],
@@ -1236,9 +1476,9 @@ test("renders the production metadata and complete resource directory", async ({
   });
 
   for (const [name, version] of [
-    ["layout-style-css", "3.2.0"],
+    ["layout-style-css", "3.2.3"],
     ["ui-style-kit-css", "2.6.1"],
-    ["interactive-surface-css", "1.7.0"],
+    ["interactive-surface-css", "1.7.3"],
   ]) {
     const packageEntry = page.locator(`[data-package="${name}"]`);
     await expect(packageEntry.getByRole("heading", { name })).toBeAttached();

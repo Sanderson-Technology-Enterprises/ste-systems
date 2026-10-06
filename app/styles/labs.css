@@ -88,9 +88,7 @@
   overflow-wrap: anywhere;
 }
 
-.workbench-kicker,
-.workbench-region small,
-.workbench-region dt {
+.workbench-kicker {
   color: rgb(var(--usk-text-muted-rgb));
   font-size: 0.74rem;
   font-weight: 750;
@@ -100,12 +98,6 @@
   margin-block-start: 1rem;
 }
 
-.workbench-main h3 {
-  font-family: var(--font-display);
-  font-size: clamp(1.7rem, 4vw, 2.8rem);
-  line-height: 1.05;
-}
-
 .workbench-mode {
   justify-self: end;
   color: rgb(var(--usk-primary-rgb));
@@ -113,22 +105,9 @@
   font-weight: 800;
 }
 
-.workbench-metrics,
-.workbench-config {
-  margin: 0;
-}
-
 .workbench-metrics > div,
 .workbench-config > div {
   min-inline-size: 0;
-}
-
-.workbench-metrics dd {
-  margin-block-start: 0.35rem;
-  color: rgb(var(--usk-primary-rgb));
-  font-family: var(--font-display);
-  font-size: 1.65rem;
-  font-weight: 750;
 }
 
 .workbench-deliverables article,
@@ -143,7 +122,6 @@
 }
 
 .workbench-config dd {
-  margin-block-start: 0.2rem;
   overflow-wrap: anywhere;
 }
 
@@ -161,21 +139,6 @@
   overflow-wrap: anywhere;
 }
 
-.specimen-intro {
-  color: rgb(var(--usk-text-muted-rgb));
-}
-
-.specimen-intro strong,
-.layout-grid-cell strong {
-  color: rgb(var(--usk-text-rgb));
-}
-
-/* Semantic alert paint owns its foreground over native strong-element defaults. */
-[data-ui][data-theme][data-mode] .usk-alert > strong {
-  color: inherit;
-}
-
-.layout-grid-cell small,
 .specimen-label {
   color: rgb(var(--usk-primary-rgb));
   font-family: var(--font-code);
@@ -190,9 +153,6 @@
 
 .layout-disclosures summary {
   min-block-size: 44px;
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
-  font-weight: 750;
 }
 
 .recipe-atlas,

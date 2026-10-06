@@ -25,8 +25,8 @@ const defaultGeneratedRoot = path.join(
 );
 
 export const EXPECTED_PACKAGE_VERSIONS = Object.freeze({
-  "interactive-surface-css": "1.7.0",
-  "layout-style-css": "3.2.0",
+  "interactive-surface-css": "1.7.3",
+  "layout-style-css": "3.2.3",
   "ui-style-kit-css": "2.6.1",
 });
 
@@ -41,15 +41,15 @@ export const FIXTURE_ASSETS = Object.freeze({
   }),
   "interaction-core": Object.freeze({
     export: "interactive-surface-css/state-core.css",
-    target: "assets/interactive-surface-css/1.7.0/state-core.css",
+    target: "assets/interactive-surface-css/1.7.3/state-core.css",
   }),
   "interaction-standalone": Object.freeze({
     export: "interactive-surface-css/standalone-preset.css",
-    target: "assets/interactive-surface-css/1.7.0/standalone-preset.css",
+    target: "assets/interactive-surface-css/1.7.3/standalone-preset.css",
   }),
   "layout-core": Object.freeze({
     export: "layout-style-css",
-    target: "assets/layout-style-css/3.2.0/layout-style-css.css",
+    target: "assets/layout-style-css/3.2.3/layout-style-css.css",
   }),
 });
 
@@ -216,6 +216,13 @@ export async function assertSafeGeneratedPath(
   return resolvedOutput;
 }
 
+/**
+ * Builds an isolated fixture with semantic UI hooks that survive preset swaps.
+ *
+ * @param {object} fixture Validated fixture catalog entry.
+ * @param {object} assets Pinned local stylesheet definitions.
+ * @returns {string} Standalone HTML using only its selected package assets.
+ */
 function fixtureMarkup(fixture, assets) {
   const stylesheetMarkup = fixture.styles
     .map(
@@ -235,7 +242,7 @@ function fixtureMarkup(fixture, assets) {
 ${stylesheetMarkup}
   </head>
   <body
-    class="ly-root"
+    class="ly-root ly-page"
     data-ly-layout="bento"
     data-ui="minimal-saas"
     data-theme="midnight-gold"
@@ -250,13 +257,13 @@ ${stylesheetMarkup}
         <p>${escapeHtml(fixture.summary)}</p>
       </header>
       <section class="ly-grid" data-proof-layout aria-label="Layout proof">
-        <article class="ui-card ly-stack ly-gap-4" data-proof-paint>
-          <h2 class="saas-heading">Shared semantic specimen</h2>
-          <label class="ui-field" for="fixture-field">
-            <span class="ui-label">Project name</span>
-            <input class="ui-input" id="fixture-field" type="text" placeholder="Interface system">
+        <article class="usk-card ly-stack ly-gap-4" data-proof-paint>
+          <h2>Shared semantic specimen</h2>
+          <label class="usk-field" for="fixture-field">
+            <span class="usk-label">Project name</span>
+            <input class="usk-input" id="fixture-field" type="text" placeholder="Interface system">
           </label>
-          <button class="ui-button" type="button" data-ui-variant="primary" data-proof-ui-control>
+          <button class="usk-button" type="button" data-ui-variant="primary" data-proof-ui-control>
             UI-owned control
           </button>
         </article>

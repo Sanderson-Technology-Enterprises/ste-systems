@@ -1,9 +1,60 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 import fixtureCatalog from "../../data/integration-fixtures.json";
+import type { LabConfiguration } from "../../lib/configuration";
 import { withBasePath } from "../../lib/site";
+import { useLabConfiguration } from "../LabExperience";
 
 type FixtureDefinition = (typeof fixtureCatalog)[number];
 
-function FixtureCard({ fixture }: { fixture: FixtureDefinition }) {
+/**
+ * Applies the active menu selection to the same-origin complete-stack proof.
+ * Standalone fixture URLs retain their fixed baseline for isolated comparisons.
+ *
+ * @param frame Loaded iframe owned by this site.
+ * @param configuration Current Lab configuration.
+ * @returns Nothing; the fixture root receives the four published attributes.
+ */
+function synchronizeCanonicalFixture(
+  frame: HTMLIFrameElement,
+  configuration: LabConfiguration,
+): void {
+  const root = frame.contentDocument?.querySelector<HTMLElement>(
+    "[data-fixture-root]",
+  );
+  if (!root) return;
+
+  root.dataset.lyLayout = configuration.layout;
+  root.dataset.ui = configuration.ui;
+  root.dataset.theme = configuration.theme;
+  root.dataset.mode = configuration.mode;
+}
+
+/**
+ * Renders a package-isolated proof and optionally mirrors the active menu.
+ *
+ * @param props Fixture card properties.
+ * @param props.fixture Package combination and fixture URL.
+ * @param props.configuration Active menu selection for the featured proof only.
+ * @returns An integration card with a same-origin fixture frame.
+ */
+function FixtureCard({
+  fixture,
+  configuration,
+}: {
+  fixture: FixtureDefinition;
+  configuration?: LabConfiguration;
+}) {
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (configuration && frameRef.current) {
+      synchronizeCanonicalFixture(frameRef.current, configuration);
+    }
+  }, [configuration]);
+
   return (
     <article
       className="integration-card ly-stack ly-gap-4"
@@ -19,12 +70,18 @@ function FixtureCard({ fixture }: { fixture: FixtureDefinition }) {
         <p className="muted-copy">{fixture.summary}</p>
       </header>
       <iframe
+        ref={frameRef}
         className="integration-frame"
         data-integration-fixture={fixture.id}
         loading="lazy"
         referrerPolicy="no-referrer"
         src={withBasePath(`/fixtures/generated/${fixture.id}.html`)}
         title={`${fixture.title} integration proof`}
+        onLoad={(event) => {
+          if (configuration) {
+            synchronizeCanonicalFixture(event.currentTarget, configuration);
+          }
+        }}
       />
     </article>
   );
@@ -51,7 +108,13 @@ function FixtureGroup({
   );
 }
 
+/**
+ * Presents the featured live stack beside fixed standalone comparison proofs.
+ *
+ * @returns The integration laboratory and adoption links.
+ */
 export function IntegrationLab() {
+  const { configuration } = useLabConfiguration();
   const canonical = fixtureCatalog.find(
     (fixture) => fixture.id === "all-canonical",
   );
@@ -77,15 +140,14 @@ export function IntegrationLab() {
             </h2>
           </div>
           <p>
-            Each iframe uses a fixed baseline configuration and local CSS copied
-            from the pinned packages. That isolation keeps comparisons stable
-            while the surrounding showcase changes personality, preset, theme,
-            and mode.
+            The complete-stack proof follows the active menu selection. The
+            single- and two-package fixtures retain a fixed baseline so their
+            isolated CSS comparisons stay stable.
           </p>
         </div>
 
         <div data-integration-group="all">
-          <FixtureCard fixture={canonical} />
+          <FixtureCard configuration={configuration} fixture={canonical} />
         </div>
 
         <div className="integration-disclosures ly-stack ly-gap-4">

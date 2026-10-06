@@ -34,9 +34,9 @@
   },
   "dependencies": {
     "@sanderson-technology-enterprises/ste-usk-react": "2.1.0",
-    "interactive-surface-css": "1.7.0",
-    "layout-style-css": "3.2.0",
-    "next": "16.3.4",
+    "interactive-surface-css": "1.7.3",
+    "layout-style-css": "3.2.3",
+    "next": "16.3.8",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "ui-style-kit-css": "2.6.1"
@@ -52,7 +52,7 @@
     "@types/react-dom": "19.2.3",
     "cross-env": "10.1.0",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "16.3.8",
     "prettier": "3.9.5",
     "sharp": "0.35.4",
     "tsx": "4.23.1",

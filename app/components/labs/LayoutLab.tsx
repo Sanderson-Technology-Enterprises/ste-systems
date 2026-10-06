@@ -68,7 +68,7 @@ export function LayoutLab() {
             Change the global personality above. The same semantic recipe and
             primitive hooks recompute their geometry without moving a single
             node in reading or keyboard order. This laboratory targets Layout
-            Style CSS 3.2.0 with intrinsic grids, resilient panes, Mosaic and
+            Style CSS 3.2.3 with intrinsic grids, resilient panes, Mosaic and
             Action Bar compositions, and canonical attribute recipes.
           </p>
         </div>
@@ -200,7 +200,7 @@ export function LayoutLab() {
                       className={`${surfaceClass} ly-pad-4`}
                       data-ly-area="footer"
                     >
-                      Version 3.2.0
+                      Version 3.2.3
                     </footer>
                   </section>
                 </div>
