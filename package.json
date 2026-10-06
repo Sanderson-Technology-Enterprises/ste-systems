@@ -4,7 +4,7 @@
   "private": true,
   "author": "Sanderson Technology Enterprises LLC",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.14.0"
   },
   "scripts": {
     "predev": "npm run assets:build",
@@ -33,12 +33,13 @@
     "quality": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run test:fixtures && npm run test:brand && npm run test:dev-hydration && npm run build:pages && npm run test:export && npm run test:browser"
   },
   "dependencies": {
+    "@sanderson-technology-enterprises/ste-usk-react": "2.1.0",
     "interactive-surface-css": "1.7.0",
     "layout-style-css": "3.2.0",
     "next": "16.3.4",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "ui-style-kit-css": "2.4.1"
+    "ui-style-kit-css": "2.6.1"
   },
   "overrides": {
     "postcss": "8.5.25"

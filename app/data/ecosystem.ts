@@ -13,7 +13,7 @@ export type EcosystemPackage = {
 };
 
 /** Exact registry version used by installation examples and package contracts. */
-export const UI_STYLE_KIT_INSTALL_SPEC = "2.4.1";
+export const UI_STYLE_KIT_INSTALL_SPEC = "2.6.1";
 
 /** Version-pinned jsDelivr root for the published UI Style Kit package. */
 const UI_STYLE_KIT_CDN_ROOT = `https://cdn.jsdelivr.net/npm/ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`;
@@ -39,7 +39,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   {
     name: "ui-style-kit-css",
     displayName: "UI Style Kit CSS",
-    version: "2.4.1",
+    version: UI_STYLE_KIT_INSTALL_SPEC,
     layer: "Identity",
     summary:
       "Visual systems, palettes, native-element coverage, and display modes.",

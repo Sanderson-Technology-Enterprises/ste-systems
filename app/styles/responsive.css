@@ -93,16 +93,6 @@
 }
 
 @media (max-width: 46rem) {
-  /* The tall narrow-screen header yields to anchored content. */
-  .site-header {
-    position: static;
-  }
-
-  /* Static narrow-screen regions do not need the wrapped-header surcharge. */
-  .experience :where(section[id]) {
-    scroll-margin-block-start: calc(var(--ly-header-height) + 1rem);
-  }
-
   .site-header-inner {
     align-items: center;
   }
@@ -117,21 +107,15 @@
     block-size: 2rem;
   }
 
-  .configuration-shell {
-    inset-block-start: var(--ly-space-2);
-    max-block-size: min(55dvh, 32rem);
-  }
-
-  /* The static mobile header leaves only the bounded sticky deck to offset. */
-  .configuration-shell ~ section[id] {
-    scroll-margin-block-start: calc(min(55dvh, 32rem) + 3.25rem);
+  .brand-copy {
+    gap: 0;
   }
 
   .brand-owner {
     display: block;
     overflow: visible;
     font-size: 0.5rem;
-    line-height: 1.2;
+    line-height: 1.1;
     text-overflow: clip;
     white-space: normal;
   }
@@ -204,7 +188,7 @@
 }
 
 @media print {
-  .configuration-shell,
+  .lab-configuration-menu,
   .orbit-runner,
   .site-navigation {
     display: none;

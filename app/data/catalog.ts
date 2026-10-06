@@ -91,7 +91,12 @@ export type UiTheme =
   | "newsprint-crimson"
   | "foundry-amber"
   | "soft-orchid"
-  | "electric-noir";
+  | "electric-noir"
+  | "signal-yellow"
+  | "botanical-green"
+  | "cobalt-electric"
+  | "stone-graphite"
+  | "walnut-clay";
 
 export type UiMode = "light" | "dark" | "contrast";
 
@@ -127,8 +132,8 @@ export type UiSemanticComponentSuffix =
   | "tooltip";
 
 type UiSemanticSelectorEntry = {
-  readonly selector: `.ui-${string}`;
-  readonly sourceSuffix: UiSemanticComponentSuffix;
+  readonly selector: `.usk-${string}`;
+  readonly sourceSuffix: string;
 };
 
 export type UiSemanticComponentApi = {
@@ -140,7 +145,7 @@ export type UiSemanticComponentApi = {
     readonly name: "data-ui-variant";
     readonly neutral: "omitted";
     readonly valuesBySelector: Readonly<
-      Record<`.ui-${string}`, readonly string[]>
+      Record<`.usk-${string}`, readonly string[]>
     >;
   };
 };
@@ -182,22 +187,31 @@ export const UI_MODES = Object.freeze([
   ...publishedUiManifest.modes,
 ]) as readonly UiMode[];
 
+/** Semantic component contract from the pinned UI Style Kit manifest. */
 export const UI_SEMANTIC_COMPONENT_API =
   publishedUiManifest.semanticComponentApi;
 
-// Stable semantic selectors own cross-preset component paint. Preset-prefixed
-// classes remain available for advanced typography, geometry, and extras.
+/**
+ * Maps core semantic suffixes to published usk-* classes across all presets.
+ * Preset-prefixed classes remain available for advanced visual treatments.
+ */
 export const UI_SEMANTIC_CLASS_BY_SUFFIX = Object.freeze(
   Object.fromEntries(
     Object.values(UI_SEMANTIC_COMPONENT_API.selectorsByRole)
       .flat()
       .map(({ selector, sourceSuffix }) => [sourceSuffix, selector.slice(1)]),
   ),
-) as Readonly<Record<UiSemanticComponentSuffix, `ui-${string}`>>;
+) as Readonly<Record<UiSemanticComponentSuffix, `usk-${string}`>>;
 
+/**
+ * Resolves a core semantic component class from the published manifest.
+ *
+ * @param suffix Stable component role shared by every UI preset.
+ * @returns The corresponding usk-* class without its selector dot.
+ */
 export function getUiSemanticClass(
   suffix: UiSemanticComponentSuffix,
-): `ui-${string}` {
+): `usk-${string}` {
   return UI_SEMANTIC_CLASS_BY_SUFFIX[suffix];
 }
 

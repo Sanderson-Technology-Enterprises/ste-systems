@@ -37,7 +37,11 @@ test("lab route retains the complete configurable experience", async ({
       name: "Configure the system. Inspect every layer.",
     }),
   ).toBeVisible();
+  await expect(page.locator(".configuration-console")).toBeHidden();
+
+  await page.getByRole("button", { name: "Open lab configuration" }).click();
   await expect(page.locator(".configuration-console")).toBeVisible();
+  await page.getByRole("button", { name: "Close lab configuration" }).click();
 
   const menu = page.getByRole("button", { name: "Open lab sections" });
   await expect(menu).toBeVisible();
@@ -58,24 +62,24 @@ test("lab configuration controls remain available while the page scrolls", async
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("./lab/");
 
-  const controls = page.locator(".configuration-shell");
-  await controls.scrollIntoViewIfNeeded();
-  const initialTop = await controls.evaluate(
+  const trigger = page.getByRole("button", {
+    name: "Open lab configuration",
+  });
+  const initialTop = await trigger.evaluate(
     (element) => element.getBoundingClientRect().top,
   );
 
   await page.locator("#interactions").scrollIntoViewIfNeeded();
-  const scrolledState = await controls.evaluate((element) => ({
-    position: getComputedStyle(element).position,
+  const scrolledState = await trigger.evaluate((element) => ({
     top: element.getBoundingClientRect().top,
     viewportHeight: window.innerHeight,
   }));
 
-  expect(scrolledState.position).toBe("sticky");
   expect(scrolledState.top).toBeGreaterThanOrEqual(0);
   expect(scrolledState.top).toBeLessThanOrEqual(initialTop + 2);
   expect(scrolledState.top).toBeLessThan(scrolledState.viewportHeight);
 
+  await trigger.click();
   await page.getByLabel(/03.*Palette/).selectOption("ocean-steel");
   await expect(page.locator(".experience")).toHaveAttribute(
     "data-theme",

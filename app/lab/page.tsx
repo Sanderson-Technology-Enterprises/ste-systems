@@ -4,7 +4,7 @@ import { CombinedWorkbench } from "../components/CombinedWorkbench";
 import { LabHeroActions } from "../components/HeroActions";
 import { InstallGuide } from "../components/InstallGuide";
 import { InterfaceObservatory } from "../components/InterfaceObservatory";
-import { LabControls } from "../components/LabControls";
+import { LabConfigurationMenu } from "../components/LabConfigurationMenu";
 import { LabExperience } from "../components/LabExperience";
 import { InteractionLab } from "../components/labs/InteractionLab";
 import { IntegrationLab } from "../components/labs/IntegrationLab";
@@ -81,6 +81,7 @@ export default function Lab() {
         menuLabel="Lab sections"
         navigationItems={LAB_NAVIGATION_ITEMS}
         presentation="disclosure"
+        tools={<LabConfigurationMenu />}
       />
 
       {/* A programmatic focus target lets the skip link transfer focus reliably. */}
@@ -102,13 +103,6 @@ export default function Lab() {
 
           <InterfaceObservatory />
         </section>
-
-        <div
-          className="configuration-shell ly-wrapper ly-wrapper--workspace"
-          data-ly-density="compact"
-        >
-          <LabControls />
-        </div>
 
         <CombinedWorkbench />
         <LayoutLab />
