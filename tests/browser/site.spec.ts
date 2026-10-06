@@ -68,7 +68,9 @@ type RgbColor = {
   blue: number;
 };
 
-function parseComputedRgb(value: string): RgbColor {
+type RgbaColor = RgbColor & { alpha: number };
+
+function parseComputedRgb(value: string): RgbaColor {
   const components = value.match(/[\d.]+/g)?.map(Number);
   if (components === undefined || components.length < 3) {
     throw new Error(`Unable to parse computed color: ${value}`);
@@ -79,9 +81,10 @@ function parseComputedRgb(value: string): RgbColor {
     rawRed === undefined ||
     rawGreen === undefined ||
     rawBlue === undefined ||
-    alpha !== 1
+    alpha < 0 ||
+    alpha > 1
   ) {
-    throw new Error(`Expected an opaque computed color, received: ${value}`);
+    throw new Error(`Invalid computed color, received: ${value}`);
   }
 
   // Chromium serializes color-mix() results as normalized color(srgb) channels.
@@ -90,7 +93,16 @@ function parseComputedRgb(value: string): RgbColor {
   const green = rawGreen * channelScale;
   const blue = rawBlue * channelScale;
 
-  return { red, green, blue };
+  return { red, green, blue, alpha };
+}
+
+/** Composites a computed CSS color over an opaque rendered backdrop. */
+function compositeColor(color: RgbaColor, backdrop: RgbColor): RgbColor {
+  return {
+    red: color.red * color.alpha + backdrop.red * (1 - color.alpha),
+    green: color.green * color.alpha + backdrop.green * (1 - color.alpha),
+    blue: color.blue * color.alpha + backdrop.blue * (1 - color.alpha),
+  };
 }
 
 function relativeLuminance(color: RgbColor): number {
@@ -108,9 +120,25 @@ function relativeLuminance(color: RgbColor): number {
   );
 }
 
-function contrastRatio(foreground: string, background: string): number {
-  const foregroundLuminance = relativeLuminance(parseComputedRgb(foreground));
-  const backgroundLuminance = relativeLuminance(parseComputedRgb(background));
+function contrastRatio(
+  foreground: string,
+  background: string | readonly string[],
+): number {
+  const backgroundLayers = Array.isArray(background)
+    ? background
+    : [background];
+  const effectiveBackground = [...backgroundLayers]
+    .reverse()
+    .reduce<RgbColor>(
+      (backdrop, layer) => compositeColor(parseComputedRgb(layer), backdrop),
+      { red: 255, green: 255, blue: 255 },
+    );
+  const effectiveForeground = compositeColor(
+    parseComputedRgb(foreground),
+    effectiveBackground,
+  );
+  const foregroundLuminance = relativeLuminance(effectiveForeground);
+  const backgroundLuminance = relativeLuminance(effectiveBackground);
   const lighter = Math.max(foregroundLuminance, backgroundLuminance);
   const darker = Math.min(foregroundLuminance, backgroundLuminance);
 
@@ -1687,8 +1715,16 @@ test("semantic surfaces declare documented levels and maintain AA contrast", asy
         })
         .map((element) => {
           const style = getComputedStyle(element);
+          const backgroundLayers: string[] = [];
+          for (
+            let ancestor: Element | null = element;
+            ancestor;
+            ancestor = ancestor.parentElement
+          ) {
+            backgroundLayers.push(getComputedStyle(ancestor).backgroundColor);
+          }
           return {
-            background: style.backgroundColor,
+            backgroundLayers,
             foreground: style.color,
             label:
               element.getAttribute("aria-label") ??
@@ -1720,9 +1756,9 @@ test("semantic surfaces declare documented levels and maintain AA contrast", asy
     })
     .map(({ label, level, variant }) => ({ label, level, variant }));
   const contrastViolations = actions
-    .map(({ background, foreground, label, variant }) => ({
+    .map(({ backgroundLayers, foreground, label, variant }) => ({
       label,
-      ratio: contrastRatio(foreground, background),
+      ratio: contrastRatio(foreground, backgroundLayers),
       variant,
     }))
     .filter(({ ratio }) => ratio < 4.5);

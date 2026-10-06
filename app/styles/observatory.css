@@ -402,6 +402,12 @@
   }
 }
 
+@media (max-width: 22rem) {
+  .observatory-orbit-behavior {
+    inset-block-start: 66%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-observatory-stage,
   .home-orbit-runner {

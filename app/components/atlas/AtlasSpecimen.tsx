@@ -115,7 +115,7 @@ export function AtlasSpecimen({
     const elements = [root, ...root.querySelectorAll("*")].filter(
       (element) => !element.closest("[data-atlas-chrome]"),
     );
-    const occupiedPositions = new Map<string, number>();
+    const occupiedMarkers: Array<{ left: number; top: number }> = [];
     const nextNodes = elements.map((element, index) => {
       const rect = element.getBoundingClientRect();
       const hasLayoutBox =
@@ -125,16 +125,35 @@ export function AtlasSpecimen({
       element.setAttribute("data-atlas-node", id);
       const baseLeft = Math.max(0, rect.left - stageRect.left - 14);
       const baseTop = Math.max(0, rect.top - stageRect.top - 14);
-      const positionKey = `${Math.round(baseLeft / 8)}:${Math.round(baseTop / 8)}`;
-      const collisionIndex = occupiedPositions.get(positionKey) ?? 0;
-      occupiedPositions.set(positionKey, collisionIndex + 1);
+      let left = baseLeft;
+      if (hasLayoutBox) {
+        /** Reserve the full touch target, not just an approximate anchor cell. */
+        let collision = occupiedMarkers.find(
+          (marker) =>
+            left < marker.left + markerTargetSize &&
+            left + markerTargetSize > marker.left &&
+            baseTop < marker.top + markerTargetSize &&
+            baseTop + markerTargetSize > marker.top,
+        );
+        while (collision) {
+          left = collision.left + markerTargetSize;
+          collision = occupiedMarkers.find(
+            (marker) =>
+              left < marker.left + markerTargetSize &&
+              left + markerTargetSize > marker.left &&
+              baseTop < marker.top + markerTargetSize &&
+              baseTop + markerTargetSize > marker.top,
+          );
+        }
+        occupiedMarkers.push({ left, top: baseTop });
+      }
 
       return {
         hasLayoutBox,
         html: serializeConsumerMarkup(element),
         id,
         label: describeNode(element, index),
-        left: baseLeft + collisionIndex * markerTargetSize,
+        left,
         top: baseTop,
       };
     });

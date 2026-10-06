@@ -25,6 +25,21 @@ test("every rendered specimen node exposes clean consumer markup", async ({
   });
   await expect(codeControls.first()).toBeVisible();
 
+  /** Marker centers must remain independently clickable when nested nodes cluster. */
+  const obstructedMarkers = await codeControls.evaluateAll((markers) =>
+    markers.slice(0, 2).flatMap((marker) => {
+      const bounds = marker.getBoundingClientRect();
+      const topmost = document.elementFromPoint(
+        bounds.left + bounds.width / 2,
+        bounds.top + bounds.height / 2,
+      );
+      return topmost === marker || marker.contains(topmost)
+        ? []
+        : [marker.getAttribute("aria-label")];
+    }),
+  );
+  expect(obstructedMarkers).toEqual([]);
+
   await expect
     .poll(
       async () =>
