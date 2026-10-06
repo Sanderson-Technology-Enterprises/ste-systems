@@ -16,9 +16,9 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-/** Expected CSS ceiling for the complete ui-style-kit-css 2.4 preset matrix. */
-const nextCssBudgetBytes = 2304 * 1024;
-/** Expected font ceiling for all ui-style-kit-css 2.4 identities. */
+/** Expected CSS ceiling for UI Style Kit 2.6 and its React composition layer. */
+const nextCssBudgetBytes = 2688 * 1024;
+/** Expected font ceiling for all ui-style-kit-css 2.6 identities. */
 const exportedFontBudgetBytes = 2560 * 1024;
 const outRoot = path.join(repositoryRoot, "out");
 const googleVerificationFile = "google5abb0289b99a9f42.html";
@@ -285,7 +285,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         name: "ui-style-kit-css",
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/ui-style-kit-css",
-        version: "2.4.0",
+        version: "2.6.1",
       },
       {
         codeRepository: "https://github.com/Foscat/Interactive-Surface-CSS",

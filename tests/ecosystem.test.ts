@@ -100,7 +100,7 @@ test("registry exposes every package and resource in ecosystem order", () => {
   );
   assert.deepEqual(
     ECOSYSTEM_PACKAGES.map(({ version }) => version),
-    ["3.2.0", "2.4.1", "1.7.0"],
+    ["3.2.0", "2.6.1", "1.7.0"],
   );
   assert.equal(ECOSYSTEM_PACKAGES[0]?.version, "3.2.0");
   assert.equal(ECOSYSTEM_PACKAGES[2]?.version, "1.7.0");
@@ -128,40 +128,40 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
     UI_SEMANTIC_COMPONENT_API.selectorsByRole,
   ).flat();
 
-  assert.equal((uiManifest as { readonly version: string }).version, "2.4.1");
-  assert.equal(selectors.length, 29);
+  assert.equal((uiManifest as { readonly version: string }).version, "2.6.1");
+  assert.equal(selectors.length, 75);
   assert.deepEqual(
-    selectors.map(({ selector }) => selector),
+    selectors.slice(0, 29).map(({ selector }) => selector),
     [
-      ".ui-button",
-      ".ui-icon-button",
-      ".ui-card",
-      ".ui-field",
-      ".ui-label",
-      ".ui-help-text",
-      ".ui-input",
-      ".ui-select",
-      ".ui-textarea",
-      ".ui-check",
-      ".ui-check-control",
-      ".ui-radio",
-      ".ui-radio-control",
-      ".ui-switch",
-      ".ui-switch-track",
-      ".ui-switch-thumb",
-      ".ui-badge",
-      ".ui-alert",
-      ".ui-alert-title",
-      ".ui-alert-body",
-      ".ui-nav",
-      ".ui-nav-link",
-      ".ui-table",
-      ".ui-table-wrap",
-      ".ui-progress",
-      ".ui-progress-bar",
-      ".ui-toolbar",
-      ".ui-spinner",
-      ".ui-tooltip",
+      ".usk-button",
+      ".usk-icon-button",
+      ".usk-card",
+      ".usk-field",
+      ".usk-label",
+      ".usk-help-text",
+      ".usk-input",
+      ".usk-select",
+      ".usk-textarea",
+      ".usk-check",
+      ".usk-check-control",
+      ".usk-radio",
+      ".usk-radio-control",
+      ".usk-switch",
+      ".usk-switch-track",
+      ".usk-switch-thumb",
+      ".usk-badge",
+      ".usk-alert",
+      ".usk-alert-title",
+      ".usk-alert-body",
+      ".usk-nav",
+      ".usk-nav-link",
+      ".usk-table",
+      ".usk-table-wrap",
+      ".usk-progress",
+      ".usk-progress-bar",
+      ".usk-toolbar",
+      ".usk-spinner",
+      ".usk-tooltip",
     ],
   );
   assert.equal(
@@ -171,18 +171,24 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
   assert.deepEqual(
     UI_SEMANTIC_COMPONENT_API.variantAttribute.valuesBySelector,
     {
-      ".ui-button": ["primary", "secondary", "warning", "danger", "ghost"],
-      ".ui-badge": ["primary", "secondary", "success", "warning", "danger"],
-      ".ui-alert": ["success", "warning", "danger"],
+      ".usk-button": ["primary", "secondary", "warning", "danger", "ghost"],
+      ".usk-badge": ["primary", "secondary", "success", "warning", "danger"],
+      ".usk-alert": ["success", "warning", "danger"],
+      ".usk-chip": ["primary", "secondary", "success", "warning", "danger"],
+      ".usk-toast": ["info", "success", "warning", "danger"],
     },
   );
-  assert.equal(UI_SEMANTIC_CLASS_BY_SUFFIX.card, "ui-card");
-  assert.equal(UI_SEMANTIC_CLASS_BY_SUFFIX.button, "ui-button");
+  assert.ok(selectors.some(({ selector }) => selector === ".usk-popover"));
+  assert.ok(
+    selectors.some(({ selector }) => selector === ".usk-segmented-control"),
+  );
+  assert.equal(UI_SEMANTIC_CLASS_BY_SUFFIX.card, "usk-card");
+  assert.equal(UI_SEMANTIC_CLASS_BY_SUFFIX.button, "usk-button");
 });
 
 test("installation examples pin approved versions and cascade order", () => {
   const uiStyleKitCdnRoot =
-    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.1";
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1";
 
   assert.equal(
     NPM_INSTALL,
@@ -255,7 +261,7 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
   );
 
   const uiStyleKitCdnRoot =
-    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.4.1";
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1";
   const uiVisualCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css">`;
   const uiThemeCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css">`;
   const interactionCoreCdn =
@@ -420,19 +426,26 @@ test("site consumes the CSS libraries as local dependencies", async () => {
   ]);
   const manifest = JSON.parse(manifestSource) as {
     dependencies: Record<string, string>;
+    engines: Record<string, string>;
     scripts: Record<string, string>;
   };
 
+  assert.equal(manifest.engines.node, ">=22.14.0");
   assert.equal(manifest.dependencies["layout-style-css"], "3.2.0");
   assert.equal(
     manifest.dependencies["ui-style-kit-css"],
     UI_STYLE_KIT_INSTALL_SPEC,
   );
   assert.equal(manifest.dependencies["interactive-surface-css"], "1.7.0");
+  assert.equal(
+    manifest.dependencies["@sanderson-technology-enterprises/ste-usk-react"],
+    "2.1.0",
+  );
   assert.match(
     layoutSource,
-    /import "ui-style-kit-css\/visual\.css";[\s\S]*import "ui-style-kit-css\/interactive-surface-theme\.css";[\s\S]*import "interactive-surface-css\/state-core\.css";[\s\S]*import "layout-style-css";/,
+    /import "@sanderson-technology-enterprises\/ste-usk-react\/styles\.css";/,
   );
+  assert.doesNotMatch(layoutSource, /import "ui-style-kit-css\/visual\.css";/);
   assert.doesNotMatch(
     layoutSource,
     /with-bridge|interactive-surface-css\/interactive-surface\.css|layout-style-css\/bridge\.css/,
@@ -486,6 +499,7 @@ test("Layout 3.2 contexts replace application-owned spacing workarounds", async 
   const [
     homeSource,
     labPageSource,
+    configurationMenuSource,
     experienceSource,
     workbenchSource,
     layoutLabSource,
@@ -494,6 +508,10 @@ test("Layout 3.2 contexts replace application-owned spacing workarounds", async 
   ] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/lab/page.tsx", import.meta.url), "utf8"),
+    readFile(
+      new URL("../app/components/LabConfigurationMenu.tsx", import.meta.url),
+      "utf8",
+    ),
     readFile(
       new URL("../app/components/LabExperience.tsx", import.meta.url),
       "utf8",
@@ -512,11 +530,9 @@ test("Layout 3.2 contexts replace application-owned spacing workarounds", async 
 
   assert.match(homeSource, /data-ly-density="spacious"/);
   assert.match(experienceSource, /data-ly-density="normal"/);
-  assert.match(
-    labPageSource,
-    /configuration-shell ly-wrapper ly-wrapper--workspace/,
-  );
-  assert.match(labPageSource, /data-ly-density="compact"/);
+  assert.match(labPageSource, /tools=\{<LabConfigurationMenu \/>\}/);
+  assert.doesNotMatch(labPageSource, /configuration-shell/);
+  assert.match(configurationMenuSource, /data-ly-density="compact"/);
   assert.match(workbenchSource, /ly-wrapper ly-wrapper--workspace/);
   assert.match(workbenchSource, /data-ly-density="compact"/);
   assert.match(layoutLabSource, /"workspace"/);

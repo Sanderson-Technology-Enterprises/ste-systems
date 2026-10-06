@@ -44,6 +44,39 @@
   flex: 0 0 auto;
 }
 
+/**
+ * Keep header structure flush when UI Style Kit applies its 2px element floor.
+ * App-owned header padding and control hit areas are restored by later rules.
+ */
+.site-header,
+.site-header
+  :where(
+    .brand,
+    .brand-logo,
+    .brand-copy,
+    .brand-title,
+    .brand-owner,
+    .site-header-tools,
+    .site-navigation,
+    .navigation-panel,
+    .primary-nav,
+    .navigation-actions,
+    .lab-configuration-menu
+  ) {
+  margin: 0;
+  padding: 0;
+}
+
+.site-header
+  :where(
+    .site-header-inner,
+    .navigation-toggle,
+    .navigation-link,
+    .lab-configuration-toggle
+  ) {
+  margin: 0;
+}
+
 /* Section anchors include the header rule before adding a readable gap. */
 .experience :where(section[id]) {
   scroll-margin-block-start: calc(var(--ly-header-height) + 1px + 1rem);
@@ -101,6 +134,7 @@
 
 .brand,
 .navigation-toggle,
+.lab-configuration-toggle,
 .primary-nav a,
 .navigation-actions a,
 .site-footer a,
@@ -162,7 +196,9 @@
   block-size: 6rem;
 }
 
+.site-header-tools,
 .site-navigation,
+.lab-configuration-menu,
 .navigation-panel,
 .primary-nav,
 .navigation-actions,
@@ -170,7 +206,17 @@
   min-inline-size: 0;
 }
 
+.site-header-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  justify-self: end;
+  inline-size: 100%;
+  gap: var(--ly-space-2);
+}
+
 .site-navigation {
+  flex: 1 1 auto;
   justify-self: end;
   inline-size: 100%;
 }
@@ -220,6 +266,8 @@
 
 .site-navigation[data-presentation="disclosure"] .navigation-toggle {
   display: inline-flex;
+  inline-size: 44px;
+  padding-inline: 0.7rem;
 }
 
 .site-navigation[data-presentation="disclosure"] .navigation-panel {
@@ -271,6 +319,42 @@
   .site-action {
   inline-size: 100%;
   padding-inline: 1rem;
+}
+
+.lab-configuration-menu {
+  flex: 0 0 auto;
+}
+
+.lab-configuration-toggle {
+  inline-size: 44px;
+  min-block-size: 44px;
+}
+
+.lab-configuration-panel {
+  position: absolute;
+  z-index: calc(var(--ly-z-header, 20) + 2);
+  inset-block-start: calc(100% + 1px);
+  inset-inline-end: var(--ly-wrapper-local-gutter, 1rem);
+  container-name: ly-scope;
+  container-type: inline-size;
+  inline-size: min(
+    52rem,
+    calc(100% - (2 * var(--ly-wrapper-local-gutter, 1rem)))
+  );
+  max-block-size: calc(100dvh - 100% - var(--ly-space-1) - 1px);
+  overflow-x: clip;
+  overflow-y: auto;
+  overscroll-behavior-block: contain;
+  scrollbar-gutter: stable;
+  border: 1px solid var(--lab-rule);
+  background: rgb(var(--usk-bg-rgb) / 0.98);
+  box-shadow: var(--usk-native-shadow-md, 0 1rem 3rem rgb(0 0 0 / 0.24));
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.lab-configuration-panel[hidden] {
+  display: none;
 }
 
 .primary-nav a,

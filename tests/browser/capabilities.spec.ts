@@ -567,6 +567,16 @@ test.beforeEach(async ({ page }) => {
   await page.goto("./lab/");
 });
 
+async function openLabConfiguration(page: Page) {
+  const trigger = page.getByRole("button", {
+    name: "Open lab configuration",
+  });
+  await trigger.click();
+  await expect(
+    page.getByRole("complementary", { name: "Configuration console" }),
+  ).toBeVisible();
+}
+
 test("layout laboratory renders the complete recipe and primitive contracts", async ({
   page,
 }) => {
@@ -719,6 +729,7 @@ test("layout laboratory applies every personality without changing DOM or tab or
 }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("./lab/");
+  await openLabConfiguration(page);
 
   const root = page.locator(".experience.ly-root");
   const layoutSelect = page.getByLabel(/01.*Layout/);
@@ -846,6 +857,7 @@ test("layout laboratory applies every personality without changing DOM or tab or
 test("layout laboratory uses only the active UI prefix for pill actions", async ({
   page,
 }) => {
+  await openLabConfiguration(page);
   const pill = page.getByRole("button", { name: "Approve project direction" });
   await expect(pill).toHaveClass(/\bsaas-button-pill\b/);
   await expect(pill).not.toHaveClass(/\binteractive-surface\b/);
@@ -1069,6 +1081,7 @@ test("UI, native, and interaction laboratories stay overflow-free and error-free
 test("UI laboratory applies every manifest preset, theme, and mode with computed paint", async ({
   page,
 }) => {
+  await openLabConfiguration(page);
   const root = page.locator(".experience.ly-root");
   const uiSelect = page.getByLabel(/02.*Visual style/);
   const themeSelect = page.getByLabel(/03.*Palette/);
@@ -1280,6 +1293,7 @@ test("UI laboratory renders the universal visual categories and standalone butto
 test("UI semantic component classes remain stable while preset paint changes", async ({
   page,
 }) => {
+  await openLabConfiguration(page);
   const root = page.locator(".experience.ly-root");
   const uiSelect = page.getByLabel(/02.*Visual style/);
   const paintSpecimen = page.locator('[data-specimen="ui-paint-signature"]');
@@ -2045,6 +2059,17 @@ test("review contract uses one guarded activation path for enabled and disabled 
   ] as const) {
     const control = page.locator(`[data-guarded-action="${state}"]`);
     await control.scrollIntoViewIfNeeded();
+    await control.evaluate((element) => {
+      const header = document.querySelector<HTMLElement>(".site-header");
+      const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+      const controlTop = element.getBoundingClientRect().top;
+
+      // Keep coordinate clicks below the sticky header on narrow screens.
+      window.scrollBy({
+        behavior: "instant",
+        top: controlTop - headerBottom - 24,
+      });
+    });
     const bounds = await control.boundingBox();
     expect(bounds).not.toBeNull();
     if (bounds !== null) {
@@ -2102,14 +2127,14 @@ test("review contract proves active over persistent and busy over active paint",
   const pressed = await readInteractionSignature(target);
 
   await target.evaluate((element) => {
-    const shell = document.querySelector<HTMLElement>(".configuration-shell");
-    const shellBottom = shell?.getBoundingClientRect().bottom ?? 0;
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
     const targetTop = element.getBoundingClientRect().top;
 
-    // Position the held pointer below the sticky configuration deck.
+    // Position the held pointer below the sticky primary header.
     window.scrollBy({
       behavior: "instant",
-      top: targetTop - shellBottom - 24,
+      top: targetTop - headerBottom - 24,
     });
   });
   const bounds = await target.boundingBox();

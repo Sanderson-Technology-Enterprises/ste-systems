@@ -128,71 +128,71 @@ function LayoutRecipeSpecimen({ name }: { readonly name: string }) {
 function SemanticUiSpecimen() {
   return (
     <div className="atlas-ui-semantic ly-stack ly-gap-4">
-      <div className="ui-toolbar">
-        <button className="ui-button" data-ui-variant="primary" type="button">
+      <div className="usk-toolbar">
+        <button className="usk-button" data-ui-variant="primary" type="button">
           Primary action
         </button>
-        <button className="ui-icon-button" aria-label="Add item" type="button">
+        <button className="usk-icon-button" aria-label="Add item" type="button">
           +
         </button>
-        <span className="ui-badge" data-ui-variant="success">
+        <span className="usk-badge" data-ui-variant="success">
           Stable
         </span>
       </div>
-      <article className="ui-card">
-        <label className="ui-field">
-          <span className="ui-label">Project name</span>
-          <input className="ui-input" defaultValue="Atlas" />
-          <span className="ui-help-text">Consumer-owned semantic markup.</span>
+      <article className="usk-card">
+        <label className="usk-field">
+          <span className="usk-label">Project name</span>
+          <input className="usk-input" defaultValue="Atlas" />
+          <span className="usk-help-text">Consumer-owned semantic markup.</span>
         </label>
-        <label className="ui-field">
-          <span className="ui-label">Release channel</span>
-          <select className="ui-select" defaultValue="stable">
+        <label className="usk-field">
+          <span className="usk-label">Release channel</span>
+          <select className="usk-select" defaultValue="stable">
             <option value="stable">Stable</option>
             <option value="preview">Preview</option>
           </select>
         </label>
-        <label className="ui-field">
-          <span className="ui-label">Notes</span>
-          <textarea className="ui-textarea" defaultValue="Ready for review" />
+        <label className="usk-field">
+          <span className="usk-label">Notes</span>
+          <textarea className="usk-textarea" defaultValue="Ready for review" />
         </label>
-        <label className="ui-check">
-          <input className="ui-check-control" defaultChecked type="checkbox" />
+        <label className="usk-check">
+          <input className="usk-check-control" defaultChecked type="checkbox" />
           <span>Include documentation</span>
         </label>
-        <label className="ui-radio">
+        <label className="usk-radio">
           <input
-            className="ui-radio-control"
+            className="usk-radio-control"
             defaultChecked
             name="atlas-channel"
             type="radio"
           />
           <span>Use stable channel</span>
         </label>
-        <label className="ui-switch">
+        <label className="usk-switch">
           <input defaultChecked type="checkbox" />
-          <span className="ui-switch-track">
-            <span className="ui-switch-thumb" />
+          <span className="usk-switch-track">
+            <span className="usk-switch-thumb" />
           </span>
           <span>Animate changes</span>
         </label>
       </article>
-      <aside className="ui-alert" data-ui-variant="success">
-        <strong className="ui-alert-title">Contract verified</strong>
-        <span className="ui-alert-body">
+      <aside className="usk-alert" data-ui-variant="success">
+        <strong className="usk-alert-title">Contract verified</strong>
+        <span className="usk-alert-body">
           All semantic selectors are present.
         </span>
       </aside>
-      <nav className="ui-nav" aria-label="Semantic selector example">
-        <a className="ui-nav-link" href="#atlas-top">
+      <nav className="usk-nav" aria-label="Semantic selector example">
+        <a className="usk-nav-link" href="#atlas-top">
           Overview
         </a>
-        <a className="ui-nav-link" href="#atlas-results">
+        <a className="usk-nav-link" href="#atlas-results">
           Results
         </a>
       </nav>
-      <div className="ui-table-wrap">
-        <table className="ui-table">
+      <div className="usk-table-wrap">
+        <table className="usk-table">
           <thead>
             <tr>
               <th>Contract</th>
@@ -208,17 +208,21 @@ function SemanticUiSpecimen() {
         </table>
       </div>
       <div
-        className="ui-progress"
+        className="usk-progress"
         aria-label="Atlas coverage"
         aria-valuemax={100}
         aria-valuemin={0}
         aria-valuenow={88}
         role="progressbar"
       >
-        <span className="ui-progress-bar" style={{ width: "88%" }} />
+        <span className="usk-progress-bar" style={{ width: "88%" }} />
       </div>
-      <span className="ui-spinner" aria-label="Loading preview" role="status" />
-      <span className="ui-tooltip" role="tooltip">
+      <span
+        className="usk-spinner"
+        aria-label="Loading preview"
+        role="status"
+      />
+      <span className="usk-tooltip" role="tooltip">
         Semantic tooltip
       </span>
     </div>
@@ -579,8 +583,7 @@ function buildAtlasItems(prefix: string): readonly AtlasItem[] {
   }
 
   items.push({
-    description:
-      "All 29 stable semantic selectors rendered as one coherent interface.",
+    description: `A core specimen from the ${ATLAS_COVERAGE.ui.semanticSelectors.length} published usk-* semantic selectors.`,
     id: "ui-semantic-api",
     keywords: `ui semantic ${ATLAS_COVERAGE.ui.semanticSelectors.map(({ selector }) => selector).join(" ")}`,
     library: "ui",
@@ -953,10 +956,10 @@ export function ComponentAtlas() {
         className="atlas-control-deck ly-stack ly-gap-6"
         aria-label="Atlas controls"
       >
-        <label className="atlas-search ui-field">
-          <span className="ui-label">Search components and contracts</span>
+        <label className="atlas-search usk-field">
+          <span className="usk-label">Search components and contracts</span>
           <input
-            className="ui-input"
+            className="usk-input"
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Try button, sidebar, native, or aria-pressed"
             type="search"
@@ -987,10 +990,10 @@ export function ComponentAtlas() {
         </div>
 
         <div className="atlas-configuration-grid">
-          <label className="ui-field">
-            <span className="ui-label">UI preset</span>
+          <label className="usk-field">
+            <span className="usk-label">UI preset</span>
             <select
-              className="ui-select"
+              className="usk-select"
               onChange={(event) => setPresetId(event.target.value)}
               value={selectedPreset.id}
             >
@@ -1001,10 +1004,10 @@ export function ComponentAtlas() {
               ))}
             </select>
           </label>
-          <label className="ui-field">
-            <span className="ui-label">Theme</span>
+          <label className="usk-field">
+            <span className="usk-label">Theme</span>
             <select
-              className="ui-select"
+              className="usk-select"
               onChange={(event) => setTheme(event.target.value)}
               value={theme}
             >
@@ -1015,10 +1018,10 @@ export function ComponentAtlas() {
               ))}
             </select>
           </label>
-          <label className="ui-field">
-            <span className="ui-label">Built-in mode</span>
+          <label className="usk-field">
+            <span className="usk-label">Built-in mode</span>
             <select
-              className="ui-select"
+              className="usk-select"
               onChange={(event) => setMode(event.target.value)}
               value={mode}
             >

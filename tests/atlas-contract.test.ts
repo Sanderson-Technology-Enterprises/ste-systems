@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   ATLAS_COVERAGE,
@@ -35,8 +37,8 @@ test("atlas coverage mirrors every published library contract", () => {
       nativeNonRendered: 12,
       nativePlatformOwned: 6,
       nativeProgressive: 20,
-      semantic: 29,
-      universal: 95,
+      semantic: 75,
+      universal: 150,
     },
   );
   assert.deepEqual(
@@ -49,6 +51,19 @@ test("atlas coverage mirrors every published library contract", () => {
     },
     { dataHooks: 4, levels: 3, stable: 13, states: 3, variants: 6 },
   );
+});
+
+test("atlas semantic specimen uses the published usk component classes", () => {
+  const atlasSource = readFileSync(
+    fileURLToPath(
+      new URL("../app/components/atlas/ComponentAtlas.tsx", import.meta.url),
+    ),
+    "utf8",
+  );
+
+  assert.match(atlasSource, /className="usk-card"/);
+  assert.match(atlasSource, /className="usk-button"/);
+  assert.doesNotMatch(atlasSource, /className="ui-card"/);
 });
 
 test("possibility count includes densities and native color schemes", () => {

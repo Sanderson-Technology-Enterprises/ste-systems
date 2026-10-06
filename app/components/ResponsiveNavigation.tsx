@@ -122,7 +122,6 @@ export function ResponsiveNavigation({
         onClick={() => setIsOpen((currentState) => !currentState)}
       >
         <MenuIcon />
-        <span>{menuLabel}</span>
       </button>
 
       <div

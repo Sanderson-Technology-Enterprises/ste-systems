@@ -68,6 +68,28 @@ export function MenuIcon({ className }: IconProps) {
   );
 }
 
+/** Renders a decorative control-tuning glyph for configuration actions. */
+export function SettingsIcon({ className }: IconProps) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M4 7h10M18 7h2M4 12h2M10 12h10M4 17h7M15 17h5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+      <circle cx="16" cy="7" fill="currentColor" r="2" />
+      <circle cx="8" cy="12" fill="currentColor" r="2" />
+      <circle cx="13" cy="17" fill="currentColor" r="2" />
+    </svg>
+  );
+}
+
 export function CopyIcon({ className }: IconProps) {
   return (
     <svg

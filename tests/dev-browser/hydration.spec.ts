@@ -35,6 +35,7 @@ test("Turbopack development hydrates the interactive routes cleanly", async ({
       name: "Configure the system. Inspect every layer.",
     }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Open lab configuration" }).click();
   const contrastMode = page.getByRole("radio", { name: "High contrast" });
   await contrastMode.check();
   await expect(contrastMode).toBeChecked();

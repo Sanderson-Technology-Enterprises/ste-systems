@@ -137,6 +137,16 @@ async function readStoredConfiguration(page: Page) {
   }, configurationStorageKey);
 }
 
+async function openLabConfiguration(page: Page) {
+  const trigger = page.getByRole("button", {
+    name: "Open lab configuration",
+  });
+  await trigger.click();
+  await expect(
+    page.getByRole("complementary", { name: "Configuration console" }),
+  ).toBeVisible();
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto("./lab/");
 });
@@ -397,6 +407,107 @@ test("compact header discloses every navigation destination without horizontal o
   expect(["auto", "scroll"]).not.toContain(widthContract.navigationOverflowX);
 });
 
+test("lab configuration opens from a bounded icon control in the primary header", async ({
+  page,
+}) => {
+  const viewports = [
+    { label: "phone portrait", width: 390, height: 844 },
+    { label: "phone landscape", width: 844, height: 390 },
+    { label: "tablet", width: 768, height: 1024 },
+    { label: "laptop", width: 1280, height: 720 },
+    { label: "desktop", width: 1440, height: 900 },
+    { label: "wide desktop", width: 1920, height: 1080 },
+  ] as const;
+
+  for (const viewport of viewports) {
+    await test.step(viewport.label, async () => {
+      await page.setViewportSize(viewport);
+      await page.goto("./lab/");
+
+      const header = page.locator(".site-header");
+      const trigger = header.locator(".lab-configuration-toggle");
+      const console = page.getByRole("complementary", {
+        name: "Configuration console",
+      });
+
+      await expect(page.locator(".configuration-shell")).toHaveCount(0);
+      await expect(trigger).toBeVisible();
+      await expect(trigger).toHaveClass(/\busk-icon-button\b/);
+      await expect(trigger).toHaveAccessibleName("Open lab configuration");
+      await expect(trigger).toHaveAttribute(
+        "aria-controls",
+        "lab-configuration-panel",
+      );
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      await expect(trigger.locator("svg")).toBeVisible();
+      await expect(console).toBeHidden();
+
+      const closedGeometry = await trigger.evaluate((button) => {
+        const bounds = button.getBoundingClientRect();
+        return {
+          height: bounds.height,
+          visibleText: button.textContent?.trim() ?? "",
+          width: bounds.width,
+        };
+      });
+      expect(closedGeometry.height).toBeGreaterThanOrEqual(44);
+      expect(closedGeometry.visibleText).toBe("");
+      expect(closedGeometry.width).toBeGreaterThanOrEqual(44);
+      expect(closedGeometry.width).toBeLessThanOrEqual(56);
+
+      await trigger.click();
+
+      await expect(trigger).toHaveAccessibleName("Close lab configuration");
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(console).toBeVisible();
+
+      const openGeometry = await page.evaluate(() => {
+        const headerElement =
+          document.querySelector<HTMLElement>(".site-header");
+        const panel = document.querySelector<HTMLElement>(
+          "#lab-configuration-panel",
+        );
+        if (headerElement === null || panel === null) {
+          throw new Error("Expected Lab header configuration landmarks.");
+        }
+
+        const headerBounds = headerElement.getBoundingClientRect();
+        const panelBounds = panel.getBoundingClientRect();
+        return {
+          headerBottom: headerBounds.bottom,
+          noInlineOverflow:
+            document.documentElement.scrollWidth <=
+            document.documentElement.clientWidth,
+          panelBottom: panelBounds.bottom,
+          panelLeft: panelBounds.left,
+          panelRight: panelBounds.right,
+          panelTop: panelBounds.top,
+          viewportHeight: window.innerHeight,
+          viewportWidth: window.innerWidth,
+        };
+      });
+
+      expect(openGeometry.noInlineOverflow).toBe(true);
+      expect(openGeometry.panelLeft).toBeGreaterThanOrEqual(8);
+      expect(openGeometry.panelRight).toBeLessThanOrEqual(
+        openGeometry.viewportWidth,
+      );
+      expect(openGeometry.panelTop).toBeGreaterThanOrEqual(
+        openGeometry.headerBottom,
+      );
+      expect(openGeometry.panelBottom).toBeLessThanOrEqual(
+        openGeometry.viewportHeight,
+      );
+
+      await page.keyboard.press("Escape");
+      await expect(console).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(trigger).toHaveAccessibleName("Open lab configuration");
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    });
+  }
+});
+
 test("shell keeps observatory controls clear of the interface core", async ({
   page,
 }) => {
@@ -566,43 +677,26 @@ test("shell keeps anchored content clear of persistent regions", async ({
         .evaluate((element) => getComputedStyle(element).position),
     )
     .toBe("sticky");
-  await expect
-    .poll(() =>
-      page
-        .locator(".configuration-shell")
-        .evaluate((element) => getComputedStyle(element).position),
-    )
-    .toBe("sticky");
+  await expect(page.locator(".configuration-shell")).toHaveCount(0);
+  await expect(
+    page.getByRole("complementary", { name: "Configuration console" }),
+  ).toBeHidden();
 
   await page.locator("#layouts").scrollIntoViewIfNeeded();
   const desktopFlowGeometry = await page.evaluate(() => {
     const header = document.querySelector<HTMLElement>(".site-header");
-    const shell = document.querySelector<HTMLElement>(".configuration-shell");
-    const console = document.querySelector<HTMLElement>(
-      ".configuration-console",
-    );
-    if (header === null || shell === null || console === null) {
-      throw new Error("Expected sticky configuration landmarks are missing.");
+    const target = document.querySelector<HTMLElement>("#layouts");
+    if (header === null || target === null) {
+      throw new Error("Expected sticky header landmarks are missing.");
     }
 
-    const headerBounds = header.getBoundingClientRect();
-    const consoleBounds = console.getBoundingClientRect();
     return {
-      consoleBottom: consoleBounds.bottom,
-      headerBottom: headerBounds.bottom,
-      shellBottom: shell.getBoundingClientRect().bottom,
-      shellTop: shell.getBoundingClientRect().top,
-      viewportHeight: window.innerHeight,
+      headerBottom: header.getBoundingClientRect().bottom,
+      targetTop: target.getBoundingClientRect().top,
     };
   });
-  expect(desktopFlowGeometry.shellTop).toBeGreaterThanOrEqual(
+  expect(desktopFlowGeometry.targetTop).toBeGreaterThanOrEqual(
     desktopFlowGeometry.headerBottom,
-  );
-  expect(desktopFlowGeometry.shellBottom).toBeLessThan(
-    desktopFlowGeometry.viewportHeight,
-  );
-  expect(desktopFlowGeometry.consoleBottom).toBeGreaterThan(
-    desktopFlowGeometry.shellTop,
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -626,12 +720,6 @@ test("shell keeps anchored content clear of persistent regions", async ({
 
   const mobileGeometry = await page.evaluate(() => {
     const header = document.querySelector<HTMLElement>(".site-header");
-    const console = document.querySelector<HTMLElement>(
-      ".configuration-console",
-    );
-    const consoleShell = document.querySelector<HTMLElement>(
-      ".configuration-shell",
-    );
     const heading = document.querySelector<HTMLElement>("#workbench-title");
     const brandOwner = document.querySelector<HTMLElement>(".brand-owner");
     const brandTitle = document.querySelector<HTMLElement>(".brand-title");
@@ -639,8 +727,6 @@ test("shell keeps anchored content clear of persistent regions", async ({
       document.querySelector<HTMLButtonElement>(".navigation-toggle");
     if (
       header === null ||
-      console === null ||
-      consoleShell === null ||
       heading === null ||
       brandOwner === null ||
       brandTitle === null ||
@@ -661,9 +747,6 @@ test("shell keeps anchored content clear of persistent regions", async ({
       brandTitleFontSize: Number.parseFloat(
         getComputedStyle(brandTitle).fontSize,
       ),
-      consolePosition: getComputedStyle(console).position,
-      consoleShellBottom: consoleShell.getBoundingClientRect().bottom,
-      consoleShellPosition: getComputedStyle(consoleShell).position,
       headerHeight: headerBounds.height,
       headerBottom: headerBounds.bottom,
       headerPosition: getComputedStyle(header).position,
@@ -672,7 +755,6 @@ test("shell keeps anchored content clear of persistent regions", async ({
       pageHasNoInlineOverflow:
         document.documentElement.scrollWidth <=
         document.documentElement.clientWidth,
-      viewportHeight: window.innerHeight,
     };
   });
 
@@ -681,48 +763,40 @@ test("shell keeps anchored content clear of persistent regions", async ({
   expect(mobileGeometry.headerHeight).toBeLessThanOrEqual(80);
   expect(mobileGeometry.menuHeight).toBeGreaterThanOrEqual(44);
   expect(mobileGeometry.pageHasNoInlineOverflow).toBe(true);
-  expect(["fixed", "sticky"]).not.toContain(mobileGeometry.consolePosition);
-  expect(mobileGeometry.consoleShellPosition).toBe("sticky");
-  expect(mobileGeometry.consoleShellBottom).toBeLessThanOrEqual(
-    mobileGeometry.viewportHeight,
-  );
-  expect(mobileGeometry.headerPosition).toBe("static");
+  expect(mobileGeometry.headerPosition).toBe("sticky");
   expect(mobileGeometry.headingTop).toBeGreaterThanOrEqual(
     Math.max(0, mobileGeometry.headerBottom),
   );
 });
 
-test("configuration console stays bounded in short desktop viewports @cross-engine", async ({
+test("configuration popover stays bounded in short desktop viewports @cross-engine", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("./lab/");
 
-  const shell = page.locator(".configuration-shell");
-  await expect
-    .poll(() => shell.evaluate((element) => getComputedStyle(element).position))
-    .toBe("sticky");
+  await page.locator(".lab-configuration-toggle").click();
+  const panel = page.locator("#lab-configuration-panel");
+  await expect(panel).toBeVisible();
 
-  await page.locator("#interactions").scrollIntoViewIfNeeded();
   const geometry = await page.evaluate(() => {
-    const shell = document.querySelector<HTMLElement>(".configuration-shell");
-    const target = document.querySelector<HTMLElement>("#interactions");
-    if (shell === null || target === null) {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const popover = document.querySelector<HTMLElement>(
+      "#lab-configuration-panel",
+    );
+    if (header === null || popover === null) {
       throw new Error("Expected short-viewport landmarks are missing.");
     }
 
     return {
-      shellBottom: shell.getBoundingClientRect().bottom,
-      shellTop: shell.getBoundingClientRect().top,
-      targetBottom: target.getBoundingClientRect().bottom,
-      targetTop: target.getBoundingClientRect().top,
+      headerBottom: header.getBoundingClientRect().bottom,
+      panelBottom: popover.getBoundingClientRect().bottom,
+      panelTop: popover.getBoundingClientRect().top,
       viewportHeight: window.innerHeight,
     };
   });
-  expect(geometry.shellTop).toBeGreaterThanOrEqual(0);
-  expect(geometry.shellBottom).toBeLessThan(geometry.viewportHeight);
-  expect(geometry.targetBottom).toBeGreaterThan(0);
-  expect(geometry.targetTop).toBeLessThan(geometry.viewportHeight);
+  expect(geometry.panelTop).toBeGreaterThanOrEqual(geometry.headerBottom);
+  expect(geometry.panelBottom).toBeLessThanOrEqual(geometry.viewportHeight);
 });
 
 test("primary navigation keeps anchored sections below the sticky header @cross-engine", async ({
@@ -788,36 +862,19 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
       const geometry = await page.evaluate(() => {
         const header = document.querySelector<HTMLElement>(".site-header");
         const target = document.querySelector<HTMLElement>("#interactions");
-        const shell = document.querySelector<HTMLElement>(
-          ".configuration-shell",
-        );
-        const console = document.querySelector<HTMLElement>(
-          ".configuration-console",
-        );
-        if (
-          header === null ||
-          target === null ||
-          shell === null ||
-          console === null
-        ) {
+        if (header === null || target === null) {
           throw new Error(
-            "Expected sticky shell and anchor landmarks are missing.",
+            "Expected sticky header and anchor landmarks are missing.",
           );
         }
 
         return {
-          consoleBottom: console.getBoundingClientRect().bottom,
           headerBottom: header.getBoundingClientRect().bottom,
-          shellPosition: getComputedStyle(shell).position,
           targetTop: target.getBoundingClientRect().top,
         };
       });
 
       expect(geometry.targetTop).toBeGreaterThanOrEqual(geometry.headerBottom);
-      expect(geometry.targetTop).toBeGreaterThanOrEqual(
-        geometry.consoleBottom + 16,
-      );
-      expect(geometry.shellPosition).toBe("sticky");
     });
   }
 });
@@ -1106,7 +1163,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.4.1",
+          version: "2.6.1",
         },
       },
       {
@@ -1152,7 +1209,7 @@ test("renders the production metadata and complete resource directory", async ({
 
   for (const [name, version] of [
     ["layout-style-css", "3.2.0"],
-    ["ui-style-kit-css", "2.4.1"],
+    ["ui-style-kit-css", "2.6.1"],
     ["interactive-surface-css", "1.7.0"],
   ]) {
     const packageEntry = page.locator(`[data-package="${name}"]`);
@@ -1319,6 +1376,7 @@ test("keeps workbench controls, state, and copy affordances functional", async (
       .getByRole("link", { name: /npm/i }),
   ).toHaveAttribute("href", "https://www.npmjs.com/package/ui-style-kit-css");
 
+  await openLabConfiguration(page);
   const layout = page.getByLabel(/01.*Layout/);
   await layout.selectOption("bauhaus");
   await expect(page.locator(".experience")).toHaveAttribute(
@@ -1326,6 +1384,7 @@ test("keeps workbench controls, state, and copy affordances functional", async (
     "bauhaus",
   );
   await expect(page.getByText("Layout changed to Bauhaus.")).toBeAttached();
+  await page.getByRole("button", { name: "Close lab configuration" }).click();
 
   const save = page.getByRole("button", { name: "Save project to shortlist" });
   await expect(save).toHaveAccessibleName("Save project to shortlist");
@@ -1336,6 +1395,7 @@ test("keeps workbench controls, state, and copy affordances functional", async (
   await expect(saved).toHaveAttribute("aria-pressed", "true");
   await expect(saved).toHaveText("Saved");
 
+  await openLabConfiguration(page);
   const copy = page.getByRole("button", { name: "Copy configuration" });
   await expect(copy).toHaveAccessibleName("Copy configuration");
   await copy.click();
@@ -1354,8 +1414,10 @@ test("one atomic polite region announces configuration, observatory, and install
 
   await expect(liveRegion).toHaveCount(1);
 
+  await openLabConfiguration(page);
   await page.getByLabel(/01.*Layout/).selectOption("bauhaus");
   await expect(liveRegion).toHaveText("Layout changed to Bauhaus.");
+  await page.getByRole("button", { name: "Close lab configuration" }).click();
 
   await page
     .getByRole("group", { name: "Interface layer selector" })
@@ -1378,6 +1440,7 @@ test("one atomic polite region announces configuration, observatory, and install
 test("the polite region re-announces repeated identical feedback", async ({
   page,
 }) => {
+  await openLabConfiguration(page);
   const liveRegion = page.locator(".configuration-status");
   const randomize = page.getByRole("button", {
     name: "Randomize configuration",
@@ -1526,6 +1589,7 @@ test("configuration hydration recovers from invalid query and storage data", asy
   );
 
   await expectRootConfiguration(page, defaultConfiguration);
+  await openLabConfiguration(page);
   await expect(page.locator(".configuration-console")).toBeVisible();
   await expect(page.getByLabel(/01.*Layout/)).toHaveValue("bento");
   await expect(page.getByLabel(/02.*Visual style/)).toHaveValue("minimal-saas");
@@ -1536,6 +1600,7 @@ test("configuration hydration recovers from invalid query and storage data", asy
 test("configuration controls update URL and storage, while reset removes both", async ({
   page,
 }) => {
+  await openLabConfiguration(page);
   await page.getByLabel(/01.*Layout/).selectOption("split-screen");
   await page.getByLabel(/02.*Visual style/).selectOption("y2k");
   await page.getByLabel(/03.*Palette/).selectOption("arctic-indigo");
@@ -1569,6 +1634,7 @@ test("configuration randomize persists a catalog-valid combination", async ({
     Math.random = () => 0.999_999;
   });
   await page.reload();
+  await openLabConfiguration(page);
 
   const randomize = page.getByRole("button", {
     name: "Randomize configuration",
@@ -1578,13 +1644,13 @@ test("configuration randomize persists a catalog-valid combination", async ({
   const configured: ExpectedConfiguration = {
     layout: "editorial",
     ui: "neo-noir",
-    theme: "electric-noir",
+    theme: "walnut-clay",
     mode: "contrast",
   };
   await expectRootConfiguration(page, configured);
   await expect.poll(() => readStoredConfiguration(page)).toEqual(configured);
   expect(new URL(page.url()).search).toBe(
-    "?layout=editorial&ui=neo-noir&theme=electric-noir&mode=contrast",
+    "?layout=editorial&ui=neo-noir&theme=walnut-clay&mode=contrast",
   );
 });
 
@@ -1601,6 +1667,7 @@ test("semantic surfaces declare documented levels and maintain AA contrast", asy
     theme: "arctic-indigo",
     mode: "contrast",
   });
+  await openLabConfiguration(page);
 
   const actions = await page
     .locator(
@@ -1683,6 +1750,7 @@ test("configuration copy and share announce success and clear transient labels",
     "./lab/?layout=mondrian&ui=retro-glass&theme=rose-quartz&mode=contrast",
   );
   await page.clock.install();
+  await openLabConfiguration(page);
 
   const copy = page.getByRole("button", { name: "Copy configuration" });
   await copy.click();
@@ -1739,6 +1807,7 @@ test("configuration copy and share expose selected fallback text on clipboard fa
   await page.goto(
     "./lab/?layout=mondrian&ui=retro-glass&theme=rose-quartz&mode=contrast",
   );
+  await openLabConfiguration(page);
 
   await page.getByRole("button", { name: "Copy configuration" }).click();
   const fallback = page.getByLabel("Configuration text for manual copy");

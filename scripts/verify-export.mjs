@@ -7,9 +7,9 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const exportRoot = path.join(repositoryRoot, "out");
-/** Maximum CSS payload for the complete ui-style-kit-css 2.4 preset matrix. */
-const nextCssBudgetBytes = 2304 * 1024;
-/** Maximum bundled font payload for all ui-style-kit-css 2.4 identities. */
+/** Maximum CSS payload for UI Style Kit 2.6 and its React composition layer. */
+const nextCssBudgetBytes = 2688 * 1024;
+/** Maximum bundled font payload for all ui-style-kit-css 2.6 identities. */
 const exportedFontBudgetBytes = 2560 * 1024;
 const googleVerificationFile = "google5abb0289b99a9f42.html";
 const googleVerificationText =
@@ -445,7 +445,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.4.0",
+          version: "2.6.1",
         },
         {
           codeRepository: "https://github.com/Foscat/Interactive-Surface-CSS",

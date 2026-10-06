@@ -13,7 +13,7 @@
 | Layer     | Package                         | Repository                                                      | Wiki                                                           | npm                                                          | Demo                                                           |
 | --------- | ------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
 | Structure | `layout-style-css@3.2.0`        | [Repository](https://github.com/Foscat/Layout-Style-CSS)        | [Wiki](https://github.com/Foscat/Layout-Style-CSS/wiki)        | [npm](https://www.npmjs.com/package/layout-style-css)        | [Live demo](https://foscat.github.io/Layout-Style-CSS/)        |
-| Identity  | `ui-style-kit-css@2.4.1`        | [Repository](https://github.com/Foscat/ui-style-kit-css)        | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)        | [npm](https://www.npmjs.com/package/ui-style-kit-css)        | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
+| Identity  | `ui-style-kit-css@2.6.1`        | [Repository](https://github.com/Foscat/ui-style-kit-css)        | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)        | [npm](https://www.npmjs.com/package/ui-style-kit-css)        | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
 | Behavior  | `interactive-surface-css@1.7.0` | [Repository](https://github.com/Foscat/Interactive-Surface-CSS) | [Wiki](https://github.com/Foscat/Interactive-Surface-CSS/wiki) | [npm](https://www.npmjs.com/package/interactive-surface-css) | [Live demo](https://foscat.github.io/Interactive-Surface-CSS/) |
 
 ## Adoption matrix
@@ -37,7 +37,7 @@ layers without changing ownership boundaries.
 Install the exact aligned releases:
 
 ```bash
-npm install ui-style-kit-css@2.4.1 layout-style-css@3.2.0 interactive-surface-css@1.7.0
+npm install ui-style-kit-css@2.6.1 layout-style-css@3.2.0 interactive-surface-css@1.7.0
 ```
 
 Then load the package entry points in ownership order. UI Style Kit establishes
@@ -55,9 +55,10 @@ import "interactive-surface-css/state-core.css";
 import "layout-style-css";
 ```
 
-UI Style Kit 2.4 exposes 20 visual systems and 20 themes through stable
-semantic classes such as `.ui-card`,
-`.ui-field`, `.ui-input`, and `.ui-button`. Set `data-ui-variant` on semantic
+UI Style Kit 2.6 exposes 20 visual systems and 25 themes through stable
+semantic classes such as `.usk-card`,
+`.usk-field`, `.usk-input`, and `.usk-button`. The earlier `.ui-*` component
+classes remain compatibility aliases. Set `data-ui-variant` on semantic
 buttons, badges, and alerts when a contextual treatment is required. Keep
 preset-prefixed classes for advanced typography, placement, sizing, and
 preset-only extras; switching `data-ui` should not require renaming semantic
@@ -72,14 +73,13 @@ through visible status text or an `aria-live` region.
 
 ## Use the libraries locally
 
-The site itself installs the libraries as direct dependencies. Global CSS entry
-points load from `app/layout.tsx`.
+The site itself installs the libraries and the matching React component package
+as direct dependencies. Global CSS entry points load from `app/layout.tsx`.
+The React package stylesheet composes the CSS libraries once in ownership order
+and adds the shared `usk-*` component styles.
 
 ```ts
-import "ui-style-kit-css/visual.css";
-import "ui-style-kit-css/interactive-surface-theme.css";
-import "interactive-surface-css/state-core.css";
-import "layout-style-css";
+import "@sanderson-technology-enterprises/ste-usk-react/styles.css";
 ```
 
 ## Use the CDN
@@ -89,11 +89,11 @@ For static HTML consumers, keep this exact order in the document head:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@4b97e379657c99767263347823f2808fb466ecf9/dist/ui-style-kit.visual.min.css"
+  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1/dist/ui-style-kit.visual.min.css"
 />
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/Foscat/ui-style-kit-css@4b97e379657c99767263347823f2808fb466ecf9/styles/interactive-surface-theme.css"
+  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1/styles/interactive-surface-theme.css"
 />
 <link
   rel="stylesheet"

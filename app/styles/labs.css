@@ -1,4 +1,3 @@
-.configuration-shell,
 .configuration-console,
 .control-deck,
 .active-config,
@@ -11,26 +10,6 @@
 .primitive-atlas,
 .wrapper-atlas {
   min-inline-size: 0;
-}
-
-.configuration-shell {
-  /* Keep the bounded control deck available without letting it cover the viewport. */
-  position: sticky;
-  z-index: calc(var(--ly-z-header, 20) - 1);
-  inset-block-start: calc(var(--ly-header-height) + var(--ly-space-2));
-  max-block-size: min(
-    32rem,
-    calc(100dvh - var(--ly-header-height) - var(--ly-space-4))
-  );
-  margin-block-end: var(--ly-space-6);
-  overflow-y: auto;
-  overscroll-behavior-block: contain;
-  scrollbar-gutter: stable;
-}
-
-/* Keep navigation targets visible below both persistent Lab regions. */
-.configuration-shell ~ section[id] {
-  scroll-margin-block-start: calc(var(--ly-header-height) + 32rem + 3.25rem);
 }
 
 .control-deck {
@@ -192,7 +171,7 @@
 }
 
 /* Semantic alert paint owns its foreground over native strong-element defaults. */
-[data-ui][data-theme][data-mode] .ui-alert > strong {
+[data-ui][data-theme][data-mode] .usk-alert > strong {
   color: inherit;
 }
 
