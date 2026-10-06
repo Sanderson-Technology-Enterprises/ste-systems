@@ -19,9 +19,9 @@ test("the public ecosystem contains exactly the three CSS libraries", () => {
   assert.deepEqual(
     ECOSYSTEM_PACKAGES.map(({ name, version }) => ({ name, version })),
     [
-      { name: "layout-style-css", version: "3.2.0" },
+      { name: "layout-style-css", version: "3.2.3" },
       { name: "ui-style-kit-css", version: "2.6.1" },
-      { name: "interactive-surface-css", version: "1.7.0" },
+      { name: "interactive-surface-css", version: "1.7.3" },
     ],
   );
 

@@ -278,7 +278,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         name: "layout-style-css",
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/layout-style-css",
-        version: "3.2.0",
+        version: "3.2.3",
       },
       {
         codeRepository: "https://github.com/Foscat/ui-style-kit-css",
@@ -292,7 +292,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         name: "interactive-surface-css",
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/interactive-surface-css",
-        version: "1.7.0",
+        version: "1.7.3",
       },
     ],
   );
@@ -520,7 +520,7 @@ test("the Pages artifact stages the pinned Layout v3 core", async () => {
     exportFixtureRoot,
     "assets",
     "layout-style-css",
-    "3.2.0",
+    "3.2.3",
     "layout-style-css.css",
   );
   const layoutCore = await readFile(layoutCorePath, "utf8");

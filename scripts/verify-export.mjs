@@ -438,7 +438,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           name: "layout-style-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/layout-style-css",
-          version: "3.2.0",
+          version: "3.2.3",
         },
         {
           codeRepository: "https://github.com/Foscat/ui-style-kit-css",
@@ -452,7 +452,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           name: "interactive-surface-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/interactive-surface-css",
-          version: "1.7.0",
+          version: "1.7.3",
         },
       ]),
       "ItemList package contracts",
