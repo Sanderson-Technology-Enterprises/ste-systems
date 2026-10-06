@@ -94,7 +94,9 @@
   scroll-margin-block-start: calc(var(--ly-header-height) + 1px + 1rem);
 }
 
-.experience:not(.lab-experience) .site-action {
+/* Site-owned actions keep a full hit area outside the UI-kit-owned Lab shell. */
+.experience:not(.lab-experience) .site-action,
+.not-found .site-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;

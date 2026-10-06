@@ -536,24 +536,30 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
               data-ui-suffix="alert-success"
               data-ui-variant="success"
             >
-              <strong>Success</strong>
-              <span>All interface layers agree.</span>
+              <strong className={s("alert-title")}>Success</strong>
+              <span className={s("alert-body")}>
+                All interface layers agree.
+              </span>
             </article>
             <article
               className={s("alert")}
               data-ui-suffix="alert-warning"
               data-ui-variant="warning"
             >
-              <strong>Warning</strong>
-              <span>Review platform-owned behavior.</span>
+              <strong className={s("alert-title")}>Warning</strong>
+              <span className={s("alert-body")}>
+                Review platform-owned behavior.
+              </span>
             </article>
             <article
               className={s("alert")}
               data-ui-suffix="alert-danger"
               data-ui-variant="danger"
             >
-              <strong>Danger</strong>
-              <span>Invalid state needs correction.</span>
+              <strong className={s("alert-title")}>Danger</strong>
+              <span className={s("alert-body")}>
+                Invalid state needs correction.
+              </span>
             </article>
           </section>
 
@@ -1410,6 +1416,11 @@ function NativeInventory() {
   );
 }
 
+/**
+ * Presents the UI-kit and native-element specimens for the active preset.
+ *
+ * @returns The visual and native-control laboratory sections.
+ */
 export function UiNativeLab() {
   const { configuration } = useLabConfiguration();
   const prefix = getUiPrefix(configuration.ui);

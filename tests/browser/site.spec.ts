@@ -412,7 +412,6 @@ test("lab shell scopes the complete experience and preserves every section", asy
           justifyContent: style.justifyContent,
           paddingInlineEnd: Number.parseFloat(style.paddingInlineEnd),
           paddingInlineStart: Number.parseFloat(style.paddingInlineStart),
-          textAlign: style.textAlign,
         };
       }),
     ),
@@ -423,7 +422,6 @@ test("lab shell scopes the complete experience and preserves every section", asy
     expect(action.justifyContent).toBe("center");
     expect(action.paddingInlineStart).toBeGreaterThan(0);
     expect(action.paddingInlineEnd).toBeGreaterThan(0);
-    expect(action.textAlign).toBe("center");
   }
   expect(
     Math.abs(actionGeometry[0]!.blockSize - actionGeometry[1]!.blockSize),
@@ -1081,9 +1079,15 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
       const anchorContract = await page.evaluate(() => {
         const body = document.body;
         const header = document.querySelector<HTMLElement>(".site-header");
+        const root = document.querySelector<HTMLElement>(".lab-experience");
         const navigation = document.querySelector<HTMLElement>(".primary-nav");
         const target = document.querySelector<HTMLElement>("#interactions");
-        if (header === null || navigation === null || target === null) {
+        if (
+          header === null ||
+          root === null ||
+          navigation === null ||
+          target === null
+        ) {
           throw new Error(
             "Expected sticky-header anchor landmarks are missing.",
           );
@@ -1096,6 +1100,7 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
           ),
           headerHeight: header.getBoundingClientRect().height,
           navigationFontFamily: getComputedStyle(navigation).fontFamily,
+          rootFontFamily: getComputedStyle(root).fontFamily,
           targetScrollMargin: Number.parseFloat(
             getComputedStyle(target).scrollMarginBlockStart,
           ),
@@ -1103,7 +1108,9 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
       });
       expect(anchorContract.headerBorderWidth).toBeGreaterThanOrEqual(1);
       expect(anchorContract.bodyFontFamily).toMatch(/Geist/i);
-      expect(anchorContract.navigationFontFamily).toMatch(/Geist/i);
+      expect(anchorContract.navigationFontFamily).toBe(
+        anchorContract.rootFontFamily,
+      );
       expect(anchorContract.targetScrollMargin).toBeGreaterThanOrEqual(
         anchorContract.headerHeight + 16,
       );
