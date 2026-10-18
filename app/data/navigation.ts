@@ -36,7 +36,7 @@ export const LAB_NAVIGATION_ITEMS = [
 ] as const satisfies readonly NavigationItem[];
 
 export const LAB_NAVIGATION_ACTIONS = [
-  { label: "Component atlas", href: "/components/", variant: "subtle" },
+  { label: "Component guides", href: "/components/", variant: "subtle" },
   { label: "Back to overview", href: "/", variant: "accent" },
   {
     label: "GitHub",
@@ -51,6 +51,7 @@ export const ATLAS_NAVIGATION_ITEMS = [
   { label: "Layout", href: "#atlas-layout" },
   { label: "UI & native", href: "#atlas-ui" },
   { label: "Interactions", href: "#atlas-interaction" },
+  { label: "React", href: "#atlas-react" },
 ] as const satisfies readonly NavigationItem[];
 
 export const ATLAS_NAVIGATION_ACTIONS = [

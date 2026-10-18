@@ -74,7 +74,7 @@ export function buildLabStructuredData() {
   };
 }
 
-/** Builds schema metadata for the exhaustive, manifest-backed component route. */
+/** Builds schema metadata for the four curated CSS and React library guides. */
 export function buildAtlasStructuredData() {
   return {
     "@context": "https://schema.org",
@@ -82,10 +82,10 @@ export function buildAtlasStructuredData() {
       {
         "@type": "WebPage",
         "@id": `${SITE.componentsUrl}#webpage`,
-        name: `Component Atlas | ${SITE.name}`,
+        name: `Components & library guides | ${SITE.name}`,
         url: SITE.componentsUrl,
         description:
-          "An exhaustive atlas of the layout, visual, native-element, and interaction contracts published by the three STE Systems CSS libraries.",
+          "Concise documentation and working examples for Layout Style CSS, UI Style Kit CSS, Interactive Surface CSS, and STE USK React.",
         isPartOf: { "@id": `${SITE.url}#website` },
         publisher: { "@id": SITE.owner.organizationId },
         inLanguage: "en-US",
@@ -93,7 +93,7 @@ export function buildAtlasStructuredData() {
       {
         "@type": "SoftwareApplication",
         "@id": `${SITE.componentsUrl}#application`,
-        name: `${SITE.name} Component Atlas`,
+        name: `${SITE.name} Components & library guides`,
         url: SITE.componentsUrl,
         applicationCategory: "DeveloperApplication",
         operatingSystem: "Any",

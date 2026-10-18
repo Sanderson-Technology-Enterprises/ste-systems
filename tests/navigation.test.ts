@@ -61,7 +61,7 @@ test("lab navigation exposes every retained deep-link section", async () => {
   assert.deepEqual(
     navigation.LAB_NAVIGATION_ACTIONS.map(({ label, href }) => [label, href]),
     [
-      ["Component atlas", "/components/"],
+      ["Component guides", "/components/"],
       ["Back to overview", "/"],
       [
         "GitHub",
@@ -71,7 +71,7 @@ test("lab navigation exposes every retained deep-link section", async () => {
   );
 });
 
-test("atlas navigation exposes the three library sections", async () => {
+test("atlas navigation exposes the four library guides", async () => {
   const navigation = await loadNavigationModule();
 
   assert.ok(navigation.ATLAS_NAVIGATION_ITEMS);
@@ -83,6 +83,7 @@ test("atlas navigation exposes the three library sections", async () => {
       ["Layout", "#atlas-layout"],
       ["UI & native", "#atlas-ui"],
       ["Interactions", "#atlas-interaction"],
+      ["React", "#atlas-react"],
     ],
   );
   assert.deepEqual(

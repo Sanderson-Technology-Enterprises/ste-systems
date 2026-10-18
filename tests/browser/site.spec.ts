@@ -502,7 +502,7 @@ test("compact header discloses every navigation destination without horizontal o
   await expect(
     page
       .locator("#primary-navigation-panel")
-      .getByRole("link", { name: /Component atlas/i }),
+      .getByRole("link", { name: /Component guides/i }),
   ).toBeVisible();
   await expect(
     page

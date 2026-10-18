@@ -42,12 +42,10 @@ test("Turbopack development hydrates the interactive routes cleanly", async ({
   await expect(page.locator('[data-mode="contrast"]').first()).toBeVisible();
 
   await page.goto("/components/");
-  const search = page.getByRole("searchbox", {
-    name: "Search components and contracts",
-  });
-  await expect(search).toBeVisible();
-  await search.fill("button");
-  await expect(page.locator("[data-atlas-specimen]").first()).toBeVisible();
+  await page.getByRole("tab", { name: "STE USK React", exact: true }).click();
+  await expect(
+    page.getByRole("tabpanel").getByLabel("Project name"),
+  ).toBeVisible();
 
   expect(hydrationDiagnostics).toEqual([]);
   expect(pageErrors).toEqual([]);

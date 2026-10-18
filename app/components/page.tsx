@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
-import { ComponentAtlas } from "../components/atlas/ComponentAtlas";
-import { ExternalLinkIcon } from "../components/Icons";
+import { LibraryGuides } from "../components/guides/LibraryGuides";
+import { ArrowRightIcon } from "../components/Icons";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
-import { ATLAS_COVERAGE } from "../data/atlas";
-import { ECOSYSTEM_PACKAGES } from "../data/ecosystem";
 import {
   ATLAS_NAVIGATION_ACTIONS,
   ATLAS_NAVIGATION_ITEMS,
 } from "../data/navigation";
-import { SITE } from "../lib/site";
+import { SITE, withBasePath } from "../lib/site";
 import {
   buildAtlasStructuredData,
   serializeStructuredData,
 } from "../lib/structured-data";
 
 const atlasDescription =
-  "Explore every published layout, UI, native-element, and interaction contract in the three STE Systems CSS libraries.";
+  "Learn Layout Style CSS, UI Style Kit CSS, Interactive Surface CSS, and STE USK React with concise guides, examples, and copyable code.";
 
 export const metadata: Metadata = {
-  title: "Component Atlas",
+  title: "Components & library guides",
   description: atlasDescription,
   alternates: { canonical: SITE.componentsUrl },
   openGraph: {
     type: "website",
     url: SITE.componentsUrl,
-    title: `Component Atlas | ${SITE.name}`,
+    title: `Components & library guides | ${SITE.name}`,
     description: atlasDescription,
     siteName: SITE.name,
     locale: SITE.locale,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Component Atlas | ${SITE.name}`,
+    title: `Components & library guides | ${SITE.name}`,
     description: atlasDescription,
     images: [{ url: SITE.socialImage, alt: SITE.socialImageAlt }],
   },
@@ -52,15 +52,21 @@ const serializedAtlasStructuredData = serializeStructuredData(
 );
 
 /**
- * Renders the exhaustive Component Atlas route and direct library resources.
+ * Renders four focused library guides and a handoff to the configurable Lab.
  *
- * @returns The statically exported Component Atlas page.
+ * @returns The statically exported Components & library guides page.
  */
 export default function ComponentsPage() {
+  /** Read the actual compiled example at build time so displayed JSX cannot drift. */
+  const reactSource = readFileSync(
+    path.join(process.cwd(), "app/components/guides/ReactProjectExample.tsx"),
+    "utf8",
+  ).trim();
+  const labHref = withBasePath(SITE.labPath);
   return (
     <div
       className="experience atlas-experience ly-root ly-page"
-      data-ly-layout="synthwave"
+      data-ly-layout="minimal-saas"
       data-mode="dark"
       data-theme="midnight-gold"
       data-ui="minimal-saas"
@@ -76,7 +82,7 @@ export default function ComponentsPage() {
       <SiteHeader
         actionItems={ATLAS_NAVIGATION_ACTIONS}
         brandHref="/"
-        menuLabel="Atlas sections"
+        menuLabel="Library guides"
         navigationItems={ATLAS_NAVIGATION_ITEMS}
         presentation="disclosure"
       />
@@ -84,88 +90,51 @@ export default function ComponentsPage() {
       <main id="main-content" tabIndex={-1}>
         <section
           aria-labelledby="atlas-title"
-          className="atlas-hero ly-wrapper ly-section ly-stack ly-gap-8"
+          className="guide-hero ly-wrapper ly-stack ly-gap-6"
           id="atlas-top"
         >
-          <div className="atlas-hero-copy ly-stack ly-gap-4">
-            <p className="section-label">Exhaustive component reference</p>
-            <h1 id="atlas-title">
-              Component Atlas
-              <span>Every contract. Live, inspectable, and ready to copy.</span>
-            </h1>
-            <p className="lede">
-              Search the complete published surface of all three libraries,
-              inspect the consumer HTML for any rendered element, and copy a
-              clean subtree without lab-only attributes.
-            </p>
-          </div>
-
-          <dl className="atlas-hero-metrics">
-            <div>
-              <dt>Layout contracts</dt>
-              <dd>
-                {ATLAS_COVERAGE.layout.wrappers.length +
-                  ATLAS_COVERAGE.layout.primitives.length +
-                  ATLAS_COVERAGE.layout.recipes.length +
-                  ATLAS_COVERAGE.layout.areas.length +
-                  ATLAS_COVERAGE.layout.personalities.length}
-              </dd>
-            </div>
-            <div>
-              <dt>UI visual classes</dt>
-              <dd>
-                {ATLAS_COVERAGE.ui.semanticSelectors.length +
-                  ATLAS_COVERAGE.ui.universalVisualSuffixes.length}
-              </dd>
-            </div>
-            <div>
-              <dt>Native elements</dt>
-              <dd>
-                {Object.values(ATLAS_COVERAGE.ui.nativeElements).flat().length}
-              </dd>
-            </div>
-          </dl>
-
-          <nav
-            className="atlas-package-rail"
-            aria-label="Library package and demo links"
+          <p className="section-label">The ecosystem, explained</p>
+          <h1 id="atlas-title">Components &amp; library guides</h1>
+          <p className="lede">
+            Three CSS libraries for structure, appearance, and interaction. One
+            React library that brings them together. Learn the essentials here,
+            then explore the complete system in the Lab.
+          </p>
+          <a
+            className="usk-button interactive-surface guide-lab-cta"
+            data-ui-variant="primary"
+            data-surface-variant="accent"
+            data-surface-level="2"
+            href={labHref}
           >
-            {ECOSYSTEM_PACKAGES.map((pkg) => (
-              <article key={pkg.name}>
-                <span>{pkg.layer}</span>
-                <strong>{pkg.name}</strong>
-                <div>
-                  <a
-                    href={pkg.links.npm}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    npm <ExternalLinkIcon />
-                    <span className="ly-visually-hidden">
-                      {" "}
-                      (opens in a new tab)
-                    </span>
-                  </a>
-                  <a
-                    href={pkg.links.demo}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    Demo <ExternalLinkIcon />
-                    <span className="ly-visually-hidden">
-                      {" "}
-                      (opens in a new tab)
-                    </span>
-                  </a>
-                </div>
-              </article>
-            ))}
-          </nav>
+            View full Lab <ArrowRightIcon />
+          </a>
         </section>
-
-        <div className="ly-wrapper atlas-workspace">
-          <ComponentAtlas />
+        <div className="ly-wrapper guide-workspace">
+          <LibraryGuides reactSource={reactSource} />
         </div>
+        <section
+          className="ly-wrapper guide-lab-banner"
+          aria-labelledby="guide-lab-title"
+        >
+          <div className="usk-card guide-lab-banner-inner ly-stack ly-gap-4">
+            <p className="section-label">Go from reference to exploration</p>
+            <h2 id="guide-lab-title">See the whole system in action</h2>
+            <p>
+              Try layout personalities, visual presets, themes, and interaction
+              states together in the full STE Systems Lab.
+            </p>
+            <a
+              className="usk-button interactive-surface guide-lab-cta"
+              data-ui-variant="primary"
+              data-surface-variant="accent"
+              data-surface-level="2"
+              href={labHref}
+            >
+              View full Lab <ArrowRightIcon />
+            </a>
+          </div>
+        </section>
       </main>
 
       <SiteFooter companyUrl={SITE.owner.url} />

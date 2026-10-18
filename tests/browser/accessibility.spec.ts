@@ -113,22 +113,22 @@ test(
   },
 );
 
-test("axe finds no violations in the component atlas", async ({
+test("axe finds no violations in all four library guides", async ({
   page,
 }, testInfo) => {
   await page.goto("./components/");
-  await expect(page.locator("[data-atlas-specimen]").first()).toBeVisible();
-
-  /**
-   * The atlas intentionally renders multiple nested `<main>` specimens to
-   * demonstrate the package's real element contract outside document context.
-   */
-  const results = await new AxeBuilder({ page })
-    .disableRules([
-      "landmark-main-is-top-level",
-      "landmark-no-duplicate-main",
-      "landmark-unique",
-    ])
-    .analyze();
-  await expectNoAxeViolations(results, testInfo, "axe-component-atlas.json");
+  for (const name of [
+    "Layout Style CSS",
+    "UI Style Kit CSS",
+    "Interactive Surface CSS",
+    "STE USK React",
+  ]) {
+    await page.getByRole("tab", { name, exact: true }).click();
+    const results = await new AxeBuilder({ page }).analyze();
+    await expectNoAxeViolations(
+      results,
+      testInfo,
+      `axe-guide-${name.replaceAll(" ", "-")}.json`,
+    );
+  }
 });
