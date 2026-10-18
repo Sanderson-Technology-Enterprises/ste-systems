@@ -87,23 +87,26 @@ test("lab configuration controls remain available while the page scrolls", async
   );
 });
 
-test("component route exposes the searchable atlas", async ({ page }) => {
+test("component route exposes fixed library guides", async ({ page }) => {
   await page.goto(
     "./components/?layout=editorial&ui=cyberpunk&theme=ocean-steel&mode=light",
   );
 
   await expect(
-    page.getByRole("heading", { level: 1, name: /Component Atlas/i }),
+    page.getByRole("heading", {
+      level: 1,
+      name: /Components & library guides/i,
+    }),
   ).toBeVisible();
   await expect(
-    page.getByRole("searchbox", { name: "Search components and contracts" }),
+    page.getByRole("tab", { name: "STE USK React", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".configuration-console")).toHaveCount(0);
   await expect(page.locator(".atlas-experience")).toHaveAttribute(
     "data-theme",
     "midnight-gold",
   );
-  await expect(page.locator("[data-atlas-specimen]").first()).toBeVisible();
+  await expect(page.getByRole("tabpanel")).toBeVisible();
 });
 
 test("homepage and lab remain collision-free across the responsive matrix", async ({

@@ -670,7 +670,7 @@ export async function collectExportIssues() {
   );
   requireText(
     components,
-    "Every contract. Live, inspectable, and ready to copy.",
+    "Components &amp; library guides",
     "component atlas primary content",
     issues,
   );

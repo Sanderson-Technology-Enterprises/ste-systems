@@ -24,7 +24,7 @@ export function HomeHeroActions() {
         href={withBasePath(SITE.componentsPath)}
         tabIndex={0}
       >
-        Explore every component
+        Read component guides
       </a>
     </div>
   );

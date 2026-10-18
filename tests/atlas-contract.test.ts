@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
-import { fileURLToPath } from "node:url";
+import { CSS_GUIDE_EXAMPLES, LIBRARY_GUIDES } from "../app/data/library-guides";
+import { ECOSYSTEM_PACKAGES } from "../app/data/ecosystem";
 
 import {
   ATLAS_COVERAGE,
@@ -53,17 +53,24 @@ test("atlas coverage mirrors every published library contract", () => {
   );
 });
 
-test("atlas semantic specimen uses the published usk component classes", () => {
-  const atlasSource = readFileSync(
-    fileURLToPath(
-      new URL("../app/components/atlas/ComponentAtlas.tsx", import.meta.url),
-    ),
-    "utf8",
+test("four guides preserve the three-package CSS inventory and documented examples", () => {
+  assert.equal(ECOSYSTEM_PACKAGES.length, 3);
+  assert.deepEqual(
+    LIBRARY_GUIDES.map((guide) => guide.id),
+    ["layout", "ui", "interaction", "react"],
   );
-
-  assert.match(atlasSource, /className="usk-card"/);
-  assert.match(atlasSource, /className="usk-button"/);
-  assert.doesNotMatch(atlasSource, /className="ui-card"/);
+  assert.equal(
+    LIBRARY_GUIDES[3].packageName,
+    "@sanderson-technology-enterprises/ste-usk-react",
+  );
+  assert.equal(LIBRARY_GUIDES[3].version, "2.1.0");
+  assert.match(CSS_GUIDE_EXAMPLES.ui[0].html, /class="usk-card /);
+  assert.match(CSS_GUIDE_EXAMPLES.layout[0].html, /class="ly-grid /);
+  for (const guide of LIBRARY_GUIDES) {
+    assert.ok(guide.install.includes(guide.packageName));
+    assert.ok(guide.links.some((link) => link.label === "Full documentation"));
+    assert.ok(guide.links.some((link) => link.label === "npm package"));
+  }
 });
 
 test("possibility count includes densities and native color schemes", () => {
