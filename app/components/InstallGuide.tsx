@@ -9,6 +9,7 @@ import {
   type AdoptionScope,
 } from "../data/ecosystem";
 import { CopyIcon } from "./Icons";
+import { SITE, withBasePath } from "../lib/site";
 import { useLabConfiguration } from "./LabExperience";
 
 type SnippetId = (typeof ADOPTION_PATHS)[number]["snippets"][number]["id"];
@@ -208,8 +209,18 @@ export function InstallGuide() {
           <p>
             Each option uses exact package versions and includes npm, bundler,
             and CDN instructions. Choose the libraries your application needs.
+            Use one CSS library, combine two, or compose all three. The React
+            guide shows how the component integration connects these same CSS
+            responsibilities without taking ownership of their styling.
           </p>
         </div>
+
+        <p>
+          <a href={withBasePath(`${SITE.componentsPath}#atlas-react`)}>
+            Read the React integration guide
+          </a>{" "}
+          for installed exports, props, and a working example.
+        </p>
 
         <div data-adoption-group="all">
           <AdoptionCard
