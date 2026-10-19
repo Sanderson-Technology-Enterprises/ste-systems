@@ -102,6 +102,7 @@ function effectiveCollisionState(
   return "base";
 }
 
+/** Demonstrates documented interaction states, feedback, and state precedence. */
 export function InteractionLab() {
   const [guardedActivationCount, setGuardedActivationCount] = useState(0);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -175,9 +176,10 @@ export function InteractionLab() {
             </h2>
           </div>
           <p>
-            Hover, focus-visible, active, persistent, busy, and disabled states
-            stay semantic while UI Style Kit supplies paint and Layout Style
-            supplies composition.
+            Try hover, keyboard focus, pressed, busy, and disabled states.
+            Compare which state takes precedence when several apply. UI Style
+            Kit CSS supplies the appearance, and Layout Style CSS arranges the
+            examples.
           </p>
         </div>
 

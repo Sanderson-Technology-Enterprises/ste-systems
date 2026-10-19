@@ -1060,7 +1060,10 @@ test("UI, native, and interaction laboratories stay overflow-free and error-free
       }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /native laboratory/i }),
+      page.getByRole("heading", {
+        name: "Native controls with theme styling",
+        exact: true,
+      }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", {
@@ -1110,7 +1113,7 @@ test("UI laboratory applies every manifest preset, theme, and mode with computed
           options.map((option) => (option as HTMLOptionElement).value),
         ),
     )
-    .toEqual(uiManifest.themes);
+    .toEqual(["native", ...uiManifest.themes]);
 
   const presetSignatures = new Map<string, string>();
   for (const preset of uiManifest.presets) {
@@ -1405,7 +1408,10 @@ test("native laboratory exercises native controls, exposed parts, and validation
     for (const detail of details) (detail as HTMLDetailsElement).open = true;
   });
   await expect(
-    page.getByRole("heading", { name: /native laboratory/i }),
+    page.getByRole("heading", {
+      name: "Native controls with theme styling",
+      exact: true,
+    }),
   ).toBeVisible();
 
   const renderedInputTypes = await page
@@ -2287,7 +2293,7 @@ test("integration laboratory progressively discloses exactly seven isolated fixt
   page,
 }) => {
   await expect(page.locator("#integrate")).toHaveCount(1);
-  await expect(page.locator("#integrate")).toContainText(/fixed baseline/i);
+  await expect(page.locator("#integrate")).toContainText(/use fixed settings/i);
   await expect(page.locator("#integrate details > summary")).toHaveCount(2);
   await expect(
     page.locator('[data-integration-fixture="all-canonical"]'),
@@ -2508,6 +2514,26 @@ test("installation guidance renders all current adoption paths", async ({
   expect(accessibleNames).toHaveLength(integrationFixtures.length * 3);
   expect(accessibleNames.every((name) => Boolean(name))).toBe(true);
   expect(new Set(accessibleNames).size).toBe(accessibleNames.length);
+});
+
+/** Native inputs must fit even when a standalone preview has no UI-kit geometry. */
+test("standalone fixture inputs fit their narrow preview containers", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 180, height: 600 });
+  for (const fixture of ["layout-only", "interactive-only"]) {
+    await page.goto(`./fixtures/generated/${fixture}.html`);
+    const input = page.locator("#fixture-field");
+    await input.fill("Customer portal");
+    const bounds = await input.evaluate((element) => ({
+      inputRight: element.getBoundingClientRect().right,
+      parentRight: element.parentElement!.getBoundingClientRect().right,
+      pageWidth: document.documentElement.clientWidth,
+      pageScroll: document.documentElement.scrollWidth,
+    }));
+    expect(bounds.inputRight, fixture).toBeLessThanOrEqual(bounds.parentRight);
+    expect(bounds.pageScroll, fixture).toBeLessThanOrEqual(bounds.pageWidth);
+  }
 });
 
 test("integration fixtures load locally without errors or overflow", async ({

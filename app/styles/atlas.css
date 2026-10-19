@@ -41,6 +41,21 @@
 .guide-workspace {
   padding-block: 1rem 4rem;
 }
+
+/** Native reference navigation and source blocks remain usable without JavaScript. */
+.guide-reference-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  text-underline-offset: 0.25rem;
+}
+.guide-reference-page {
+  padding-block-end: 4rem;
+}
+.guide-reference-definitions dd {
+  margin: 0.5rem 0 0;
+  line-height: 1.65;
+}
 .library-guides {
   min-inline-size: 0;
 }
@@ -247,8 +262,16 @@
   .guide-columns {
     grid-template-columns: minmax(0, 1fr);
   }
+  .guide-tabs-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
   .guide-tabs-list > button {
-    flex-grow: 0;
+    min-inline-size: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
   }
 }
 @media (max-width: 30rem) {

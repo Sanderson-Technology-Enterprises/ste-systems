@@ -65,11 +65,10 @@ export function LayoutLab() {
             <h2 id="layouts-title">Test responsive layout recipes.</h2>
           </div>
           <p>
-            Change the global personality above. The same semantic recipe and
-            primitive hooks recompute their geometry without moving a single
-            node in reading or keyboard order. This laboratory targets Layout
-            Style CSS 3.2.3 with intrinsic grids, resilient panes, Mosaic and
-            Action Bar compositions, and canonical attribute recipes.
+            Choose a layout preset in the configuration menu to rearrange these
+            examples. Reading and keyboard order stay the same. Explore the
+            grids, panes, page recipes, Mosaic, and Action Bar layouts available
+            in Layout Style CSS 3.2.3.
           </p>
         </div>
 

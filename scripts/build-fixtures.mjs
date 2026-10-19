@@ -261,7 +261,8 @@ ${stylesheetMarkup}
           <h2>Shared semantic specimen</h2>
           <label class="usk-field" for="fixture-field">
             <span class="usk-label">Project name</span>
-            <input class="usk-input" id="fixture-field" type="text" placeholder="Interface system">
+            <!-- Keep the native field's intrinsic width usable when UI-kit geometry is absent. -->
+            <input class="usk-input" id="fixture-field" type="text" size="12" placeholder="Interface system">
           </label>
           <button class="usk-button" type="button" data-ui-variant="primary" data-proof-ui-control>
             UI-owned control

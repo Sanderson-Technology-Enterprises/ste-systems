@@ -67,13 +67,13 @@ export default function HealthPage() {
             <p className="section-label">Render service health</p>
             <h1 id="health-title">STE Systems is online.</h1>
             <p>
-              The production static export is responding and ready to serve the
-              three-library design system.
+              This static page is available. It provides a stable URL for
+              deployment checks and uptime monitoring.
             </p>
           </div>
 
           <article
-            className="conversion-path ly-stack ly-gap-4 ly-items-start"
+            className="conversion-path ly-stack ly-gap-4 ly-items-start ly-pad-4"
             aria-label="Deployment status"
           >
             <p className="section-label">Current status</p>

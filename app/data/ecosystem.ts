@@ -25,7 +25,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
     version: "3.2.3",
     layer: "Structure",
     summary:
-      "Responsive shells, wrappers, grids, panes, and switchable layout personalities.",
+      "Responsive page layouts, content wrappers, grids, and panes with interchangeable layout presets.",
     attribute: 'data-ly-layout="bento"',
     recommendedEntryPoint: "layout-style-css",
     fixture: "layout-only",
@@ -42,7 +42,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
     version: UI_STYLE_KIT_INSTALL_SPEC,
     layer: "Identity",
     summary:
-      "Visual systems, palettes, native-element coverage, and display modes.",
+      "Component themes, color palettes, typography, and native HTML styling with light, dark, and high-contrast modes.",
     attribute: 'data-ui="minimal-saas"',
     recommendedEntryPoint: "ui-style-kit-css/visual.css",
     fixture: "ui-only",
@@ -181,14 +181,14 @@ function adoptionSnippets(
       id: `${id}-bundler`,
       format: "bundler",
       label: "Imports",
-      title: "Load the ownership-separated stack",
+      title: "Import the stylesheets",
       code: bundler.join("\n"),
     },
     {
       id: `${id}-cdn`,
       format: "cdn",
       label: "CDN",
-      title: "Use immutable CDN links",
+      title: "Load exact versions from a CDN",
       code: cdnMarkup(cdn),
     },
   ];
@@ -200,7 +200,7 @@ export const ADOPTION_PATHS = [
     scope: "one",
     title: "Layout Style CSS",
     summary:
-      "Adopt responsive structure without changing component paint or state behavior.",
+      "Add responsive layouts while keeping your existing component appearance and interaction styling.",
     packages: ["layout-style-css"],
     deprecated: false,
     snippets: adoptionSnippets(
@@ -216,7 +216,7 @@ export const ADOPTION_PATHS = [
     scope: "one",
     title: "UI Style Kit CSS",
     summary:
-      "Adopt themes, component paint, and native-control styling without a layout dependency.",
+      "Add themes and styling for components and native controls. No layout library is required.",
     packages: ["ui-style-kit-css"],
     deprecated: false,
     snippets: adoptionSnippets(
@@ -232,7 +232,7 @@ export const ADOPTION_PATHS = [
     scope: "one",
     title: "Interactive Surface CSS",
     summary:
-      "Adopt portable state mechanics with the package's neutral standalone presentation.",
+      "Style hover, focus, pressed, and disabled states with the package’s neutral standalone preset.",
     packages: ["interactive-surface-css"],
     deprecated: false,
     snippets: adoptionSnippets(
@@ -283,7 +283,7 @@ export const ADOPTION_PATHS = [
     scope: "pair",
     title: "UI plus interaction",
     summary:
-      "Feed UI theme paint into the canonical state engine without adopting layout structure.",
+      "Combine UI themes with interaction styling while keeping your existing layout system.",
     packages: ["ui-style-kit-css", "interactive-surface-css"],
     deprecated: false,
     snippets: adoptionSnippets(
@@ -303,7 +303,7 @@ export const ADOPTION_PATHS = [
     scope: "all",
     title: "The canonical three-library stack",
     summary:
-      "Use the complete ownership-separated stack demonstrated by the flagship page.",
+      "Install the three CSS libraries used together in this Lab: layout, visual styling, and interaction states.",
     packages: [
       "layout-style-css",
       "ui-style-kit-css",

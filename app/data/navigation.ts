@@ -10,6 +10,7 @@ export type NavigationItem = {
 export const HOME_NAVIGATION_ITEMS = [
   { label: "Packages", href: "#libraries" },
   { label: "Components", href: "/components/" },
+  { label: "Client systems", href: "#client-systems" },
   { label: "Get started", href: "#get-started" },
   { label: "About", href: "#company" },
 ] as const satisfies readonly NavigationItem[];

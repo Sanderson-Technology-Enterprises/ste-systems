@@ -109,6 +109,12 @@ export default function ComponentsPage() {
           >
             View full Lab <ArrowRightIcon />
           </a>
+          <a
+            className="guide-reference-link"
+            href={withBasePath("/components/reference/")}
+          >
+            Read all guides without interactive previews
+          </a>
         </section>
         <div className="ly-wrapper guide-workspace">
           <LibraryGuides reactSource={reactSource} />

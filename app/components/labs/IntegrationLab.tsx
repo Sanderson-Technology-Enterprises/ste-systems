@@ -28,7 +28,8 @@ function synchronizeCanonicalFixture(
 
   root.dataset.lyLayout = configuration.layout;
   root.dataset.ui = configuration.ui;
-  root.dataset.theme = configuration.theme;
+  if (configuration.theme === "native") delete root.dataset.theme;
+  else root.dataset.theme = configuration.theme;
   root.dataset.mode = configuration.mode;
 }
 
@@ -57,7 +58,7 @@ function FixtureCard({
 
   return (
     <article
-      className="integration-card ly-stack ly-gap-4"
+      className="integration-card ly-stack ly-gap-4 ly-pad-4"
       id={`fixture-${fixture.id}`}
       data-fixture-card={fixture.id}
     >
@@ -140,9 +141,9 @@ export function IntegrationLab() {
             </h2>
           </div>
           <p>
-            The complete-stack proof follows the active menu selection. The
-            single- and two-package fixtures retain a fixed baseline so their
-            isolated CSS comparisons stay stable.
+            The three-library example follows your current Lab settings. Single-
+            and two-library examples use fixed settings so you can compare what
+            each combination provides.
           </p>
         </div>
 

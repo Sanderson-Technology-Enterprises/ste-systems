@@ -55,7 +55,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
     id: "layout",
     role: "01 / Structure",
     summary:
-      "Give content a clear place to live. Build responsive grids, readable pages, and application shells without choosing a visual theme.",
+      "Build responsive grids, readable pages, and application shells. Layout Style CSS handles structure and spacing independently of your visual theme.",
     concepts: [
       {
         api: ".ly-wrapper",
@@ -65,7 +65,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
       {
         api: ".ly-grid · .ly-stack",
         description:
-          "Arrange related content in an intrinsic grid or a vertical flow. Children and available space determine reflow.",
+          "Arrange content in a responsive grid or vertical stack. Items reflow according to their size and the available space.",
       },
       {
         api: ".ly-sidebar",
@@ -80,7 +80,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
       {
         api: "data-ly-density",
         description:
-          "Use compact, normal, or spacious on a layout boundary to change structural rhythm.",
+          "Set compact, normal, or spacious on a container to adjust spacing within that region.",
       },
       {
         api: "data-ly-layout",
@@ -94,7 +94,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
     id: "ui",
     role: "02 / Visual identity",
     summary:
-      "Give the same interface a consistent visual language. Presets, palettes, typography, and semantic components handle the appearance.",
+      "Style components and native HTML with a consistent theme. Presets define typography, colors, and surface treatments; palettes and display modes let you adjust them.",
     concepts: [
       {
         api: "data-ui",
@@ -138,7 +138,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
       {
         api: ".interactive-surface",
         description:
-          "Attach the interaction contract to a native button or link. Use the standalone preset when consuming this library alone.",
+          "Add consistent interaction styling to a native button or link. Use the standalone preset when installing this library on its own.",
       },
       {
         api: "data-surface-variant",
@@ -174,14 +174,14 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
     version: reactPackage.version,
     role: "04 / React composition",
     summary:
-      "Bring the three CSS libraries together through accessible React components. Compose typed APIs and local state while each library keeps its own responsibility.",
+      "Bring the three CSS libraries together through accessible React components. Use typed props, events, and local state while the CSS libraries handle structure, appearance, and interaction styling.",
     install: `npm install ${reactPackage.name}@${reactPackage.version} react@19.2.6 react-dom@19.2.6 ${ECOSYSTEM_PACKAGES.map((pkg) => `${pkg.name}@${pkg.version}`).join(" ")}`,
     imports: `// Import once at your application entry point.\nimport "${reactPackage.name}/styles.css";`,
     concepts: [
       {
         api: "InterfaceRoot",
         description:
-          "Set preset, theme, mode, and density for a component subtree. The root activates the CSS contracts together.",
+          "Set preset, theme, mode, and density for a group of components. These settings apply to components nested inside the root.",
       },
       {
         api: "Layout.Grid · Layout.Stack",
@@ -210,24 +210,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
           .join("; "),
       },
     ],
-    links: [
-      {
-        label: "Full documentation",
-        href: "https://github.com/Sanderson-Technology-Enterprises/STE-USK-React/blob/HEAD/docs/README.md",
-      },
-      {
-        label: "Component API",
-        href: "https://github.com/Sanderson-Technology-Enterprises/STE-USK-React/blob/HEAD/docs/api/index.md",
-      },
-      {
-        label: "Repository",
-        href: "https://github.com/Sanderson-Technology-Enterprises/STE-USK-React",
-      },
-      {
-        label: "npm package",
-        href: `https://www.npmjs.com/package/${reactPackage.name}`,
-      },
-    ],
+    links: [],
   },
 ];
 
@@ -238,9 +221,9 @@ export const CSS_GUIDE_EXAMPLES: Readonly<
   layout: [
     {
       id: "layout-grid",
-      title: "A project grid that makes room",
+      title: "A responsive project grid",
       description:
-        "Cards share the available width and wrap naturally. The UI classes add paint; ly-grid owns the arrangement.",
+        "Cards share the available width and wrap as space changes. UI classes style the cards; ly-grid arranges them.",
       html: `<div class="ly-grid ly-gap-4" style="--ly-grid-min: 12rem">
   <article class="usk-card ly-stack ly-gap-3 ly-pad-4">
     <span class="usk-badge">In review</span>

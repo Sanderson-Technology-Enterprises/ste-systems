@@ -15,7 +15,14 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="footer-logo"
-            src={withBasePath(`/${SITE.brandLogoPath}`)}
+            src={withBasePath("/ste-systems-logo-128.webp")}
+            srcSet={[128, 256, 384]
+              .map(
+                (width) =>
+                  `${withBasePath(`/ste-systems-logo-${width}.webp`)} ${width}w`,
+              )
+              .join(", ")}
+            sizes="128px"
             width="144"
             height="108"
             alt=""

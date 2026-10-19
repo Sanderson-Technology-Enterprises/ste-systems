@@ -25,10 +25,11 @@ type AdoptionCardProps = {
   ) => void;
 };
 
+/** Presents one installation option with readable insets inside its native article border. */
 function AdoptionCard({ path, prefix, copyLabels, onCopy }: AdoptionCardProps) {
   return (
     <article
-      className="adoption-path ly-stack ly-gap-4"
+      className="adoption-path ly-stack ly-gap-4 ly-pad-4"
       data-adoption-path={path.id}
     >
       <header className="ly-stack ly-gap-2">
@@ -119,6 +120,7 @@ function AdoptionGroup({
   );
 }
 
+/** Presents version-pinned installation options and accessible clipboard feedback. */
 export function InstallGuide() {
   const { announce, configuration } = useLabConfiguration();
   const prefix = getUiPrefix(configuration.ui);
@@ -204,8 +206,8 @@ export function InstallGuide() {
             </h2>
           </div>
           <p>
-            Every path pins the aligned releases and preserves ownership across
-            identity, behavior, and structure.
+            Each option uses exact package versions and includes npm, bundler,
+            and CDN instructions. Choose the libraries your application needs.
           </p>
         </div>
 

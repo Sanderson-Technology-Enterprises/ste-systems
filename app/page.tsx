@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { ClientSystems } from "./components/ClientSystems";
 import { FeatureShowcase } from "./components/FeatureShowcase";
 import { HomeHeroActions } from "./components/HeroActions";
 import { HomeObservatory } from "./components/HomeObservatory";
@@ -78,6 +79,7 @@ const serializedHomeStructuredData = serializeStructuredData(
   buildHomeStructuredData(),
 );
 
+/** Introduces the exact CSS package versions used by the site. */
 function QuickStartSection() {
   return (
     <section
@@ -90,8 +92,8 @@ function QuickStartSection() {
           <p className="section-label">Quick start</p>
           <h2 id="get-started-title">Install the complete stack.</h2>
           <p>
-            Start with the pinned package set used by this site, then choose the
-            imports that match your adoption path.
+            Install the exact CSS package versions used by this site. Choose the
+            imports for the libraries your application needs.
           </p>
           <a
             className="interactive-surface site-action ly-self-start"
@@ -108,6 +110,7 @@ function QuickStartSection() {
   );
 }
 
+/** Directs readers to the configurable Lab from the fixed homepage. */
 function LabInvitationSection() {
   return (
     <section
@@ -121,9 +124,9 @@ function LabInvitationSection() {
           <h2 id="lab-title">Configure once. Inspect every layer.</h2>
           <p>
             Explore {SUPPORTED_COMBINATIONS_LABEL} supported combinations across
-            layout personalities, recipes, spacing densities, visual styles, and
-            shared or style-native color schemes. Built-in display modes are not
-            counted.
+            layout presets, page structures, spacing, visual styles, and color
+            schemes. Light, dark, and high-contrast modes are available in
+            addition to these combinations.
           </p>
         </div>
         <a
@@ -139,6 +142,7 @@ function LabInvitationSection() {
   );
 }
 
+/** Connects the public library examples with the studio's application services. */
 function CompanySection() {
   return (
     <section
@@ -149,17 +153,16 @@ function CompanySection() {
       <div className="ly-wrapper company-overview ly-split ly-gap-8 ly-items-start">
         <div className="section-heading ly-stack ly-gap-4">
           <p className="section-label">About the studio</p>
-          <h2 id="company-title">
-            Built in the open, backed by a focused software studio.
-          </h2>
+          <h2 id="company-title">Software built around your business.</h2>
           <p>
-            STE Systems is maintained by Sanderson Technology Enterprises LLC as
-            an open developer resource.
+            Sanderson Technology Enterprises LLC builds custom applications and
+            the reusable systems behind them. STE Systems introduces its public
+            CSS libraries and private application toolkit.
           </p>
         </div>
-        <article className="conversion-path ly-stack ly-gap-4 ly-items-start">
-          <p className="section-label">Secondary path</p>
-          <h3>Need a specialized delivery partner?</h3>
+        <article className="conversion-path ly-stack ly-gap-4 ly-items-start ly-pad-4">
+          <p className="section-label">Custom application development</p>
+          <h3>Build tools around the way you work.</h3>
           <p>
             STE builds creator-owned platforms, private systems, admin tools,
             and operational workflows for specialized businesses.
@@ -243,7 +246,8 @@ export default function Home() {
             </h1>
             <p className="lede">
               Build accessible interfaces with independent libraries for layout,
-              visual styling, and interaction states.
+              visual styling, and interaction states. Explore the wider toolkit
+              behind custom applications for clients.
             </p>
             <HomeHeroActions />
           </div>
@@ -252,6 +256,7 @@ export default function Home() {
         </section>
 
         <FeatureShowcase />
+        <ClientSystems />
         <QuickStartSection />
         <LabInvitationSection />
         <CompanySection />

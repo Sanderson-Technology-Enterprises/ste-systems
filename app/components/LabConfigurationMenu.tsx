@@ -57,7 +57,6 @@ export function LabConfigurationMenu() {
         type="button"
         aria-controls={LAB_CONFIGURATION_PANEL_ID}
         aria-expanded={isOpen}
-        aria-haspopup="true"
         aria-label={triggerLabel}
         onClick={() => setIsOpen((currentState) => !currentState)}
       />

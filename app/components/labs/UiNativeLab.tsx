@@ -1079,8 +1079,8 @@ function NativeInventory() {
         <div className="specimen-heading ly-stack ly-gap-2">
           <h4 id="native-inputs-title">Input type atlas</h4>
           <p>
-            Every control below is classless. The active root configuration
-            supplies native paint while the browser retains semantics.
+            These inputs use native HTML without component classes. The active
+            theme styles them, and the browser supplies their built-in behavior.
           </p>
         </div>
         <div className="native-input-grid">
@@ -1440,9 +1440,10 @@ export function UiNativeLab() {
             </h2>
           </div>
           <p>
-            Every visual class is constructed from the active manifest prefix.
-            Themes, modes, components, and native controls change without
-            loading inactive preset classes into the specimen DOM.
+            Choose a visual style, palette, and display mode in the
+            configuration menu. These examples use the selected preset’s
+            component classes to show how it styles surfaces, text, and native
+            HTML controls.
           </p>
         </div>
 
@@ -1454,15 +1455,15 @@ export function UiNativeLab() {
         >
           <div className="section-heading ly-split ly-gap-6 ly-items-end">
             <div className="ly-stack ly-gap-2">
-              <p className="section-label">Hybrid native coverage</p>
+              <p className="section-label">Native HTML controls</p>
               <h3 id="native-laboratory-title">
-                Native laboratory: platform semantics, exposed paint
+                Native controls with theme styling
               </h3>
             </div>
             <p>
-              Safe boxes and supported subparts inherit the active identity;
-              inaccessible pickers, popups, and operating-system surfaces stay
-              platform-owned.
+              The theme styles the parts of native controls that browsers expose
+              to CSS. System pickers and some popups retain their browser or
+              operating-system appearance.
             </p>
           </div>
 

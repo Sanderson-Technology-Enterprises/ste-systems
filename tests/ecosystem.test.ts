@@ -1122,9 +1122,10 @@ test("page components expose approved observatory and resource landmarks", async
   assert.match(labPage, /<LabExperience>/);
   assert.doesNotMatch(homePage, /^"use client";/);
   assert.match(siteHeader, /brand-logo/);
-  assert.match(siteHeader, /SITE\.productLine/);
-  assert.match(siteHeader, /SITE\.brandLogoPath/);
-  assert.match(siteFooter, /SITE\.brandLogoPath/);
+  assert.match(siteHeader, /Sanderson Technology/);
+  assert.match(siteHeader, /ste-systems-logo-128\.webp/);
+  assert.match(siteFooter, /ste-systems-logo-128\.webp/);
+  assert.match(siteFooter, /SITE\.productLine/);
   assert.doesNotMatch(observatory, />\s*Inspect\s*</);
 });
 

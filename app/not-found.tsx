@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   twitter: null,
 };
 
+/** Provides a clear recovery path for an unavailable route. */
 export default function NotFound() {
   return (
     <main
@@ -23,10 +24,10 @@ export default function NotFound() {
     >
       <div className="saas-surface saas-surface-lg ly-wrapper ly-wrapper--prose ly-section ly-stack">
         <p className="not-found-code saas-kicker">404</p>
-        <h1 className="saas-title">This interface is outside the system.</h1>
+        <h1 className="saas-title">Page not found.</h1>
         <p className="saas-copy">
-          The requested page does not exist. Return to the lab to explore the
-          live CSS ecosystem.
+          Return to the homepage to explore the libraries, guides, and
+          interactive Lab.
         </p>
         <a
           className="saas-button-pill interactive-surface site-action"

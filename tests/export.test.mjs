@@ -35,7 +35,7 @@ const repositoryUrl =
   "https://github.com/Sanderson-Technology-Enterprises/ste-systems";
 const siteTitle = "STE Systems | Accessible Three-Library Design System";
 const siteDescription =
-  "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.";
+  "Explore the CSS libraries, STE USK React components, and private STE-Core and STE-SDK toolkit built by Sanderson Technology Enterprises LLC for custom client applications.";
 const socialImageUrl = `${canonicalUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
   "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";

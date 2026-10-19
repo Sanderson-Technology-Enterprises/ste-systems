@@ -11,7 +11,8 @@
   }
 }
 
-@media (max-width: 64rem) {
+/** Keep the full navigation in a disclosure until its labels have room beside the brand. */
+@media (max-width: 84rem) {
   .site-header-inner {
     grid-template-columns: minmax(0, 1fr) auto;
   }
@@ -114,7 +115,7 @@
   .brand-owner {
     display: block;
     overflow: visible;
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     line-height: 1.1;
     text-overflow: clip;
     white-space: normal;
