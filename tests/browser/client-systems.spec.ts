@@ -27,9 +27,16 @@ test("client systems showcase private foundations with public company links", as
     await expect(link).toHaveAttribute("href", href);
     await expect(link).toHaveAttribute("rel", /noopener/);
   }
+  /** Open the responsive disclosure before looking up links excluded from the accessibility tree. */
+  const navigationToggle = page.getByRole("button", {
+    name: "Open menu",
+    exact: true,
+  });
+  if (await navigationToggle.isVisible()) await navigationToggle.click();
   await expect(
     page.getByRole("link", { name: "Client systems", exact: true }),
   ).toHaveAttribute("href", "#client-systems");
+  await page.keyboard.press("Escape");
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     const cards = await section.locator("article").evaluateAll((nodes) =>

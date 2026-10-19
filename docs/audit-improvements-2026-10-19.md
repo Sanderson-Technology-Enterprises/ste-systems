@@ -46,6 +46,11 @@ The native palette diagnostic reads the package's `--usk-native-primary` token. 
 
 Browser evidence uses Chromium. Live-region DOM changes were verified; actual speech output with a screen reader was not tested. This delivery does not claim a fresh cross-browser or live-production audit.
 
+During PR verification, the client-systems check was also run with the Pixel 7
+browser profile. Its navigation assertion now opens the mobile disclosure before
+querying its links, then closes it before measuring the content. The focused
+mobile check passed; application navigation behavior did not require a change.
+
 ## Review artifacts
 
 - [Phone homepage](../output/audit-improvements/home390.png)
