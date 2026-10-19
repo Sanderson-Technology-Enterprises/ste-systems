@@ -1315,7 +1315,7 @@ test("renders the production metadata and complete resource directory", async ({
   await expect(page.locator(".brand-logo")).toBeVisible();
   await expect(page.locator(".brand-logo")).toHaveAttribute(
     "src",
-    /ste-systems-logo\.png$/,
+    /ste-systems-logo-128\.webp$/,
   );
   await expect
     .poll(() =>

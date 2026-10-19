@@ -51,6 +51,16 @@ browser profile. Its navigation assertion now opens the mobile disclosure before
 querying its links, then closes it before measuring the content. The focused
 mobile check passed; application navigation behavior did not require a change.
 
+The first completed PR workflow passed 184 browser checks and exposed six checks
+that failed in both desktop and mobile profiles. Five used stale expectations for
+the revised headings, palette choices, or optimized logo. Those assertions now
+match the authored content and retain the complete published theme inventory.
+The remaining failure came from a native text input's default intrinsic width in
+the layout-only fixture. The shared generator now specifies `size="12"`, allowing
+the standalone field to fit narrow embedded previews without importing UI paint
+or hiding overflow. A focused 180px preview check verifies the input remains
+inside its parent and accepts text.
+
 ## Review artifacts
 
 - [Phone homepage](../output/audit-improvements/home390.png)
