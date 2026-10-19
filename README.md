@@ -208,3 +208,10 @@ When changing this component, keep the orbit controls as real buttons with
 visible focus states and `aria-pressed` state. If the visual treatment changes
 back toward pure decoration, remove button affordances instead of leaving
 non-functional clickable-looking dots.
+
+## Website roadmap reference
+
+The stable technical counting destination is https://stesystems.com/#configuration-reference.
+It explains installed-manifest factors, excluded display modes, and verification boundaries.
+The public React overview remains https://stesystems.com/components/#atlas-react.
+See [the three-site roadmap implementation record](docs/website-roadmap-2026-10-19.md) for scope, review captures, and release status.

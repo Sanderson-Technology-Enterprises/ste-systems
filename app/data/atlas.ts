@@ -79,21 +79,29 @@ export const ATLAS_COVERAGE = Object.freeze({
 });
 
 /**
- * Number of valid preset and color-scheme pairings. Each preset supports every
- * shared theme plus its own native color scheme.
+ * Manifest-derived factors shared by the public explanation and total.
+ * Each preset supports the shared themes plus one native color scheme.
  */
-const UI_COLOR_SCHEME_PAIRINGS =
-  ATLAS_COVERAGE.ui.presets.length * (ATLAS_COVERAGE.ui.themes.length + 1);
+export const COMBINATION_FACTORS = Object.freeze({
+  layouts: ATLAS_COVERAGE.layout.personalities.length,
+  recipes: ATLAS_COVERAGE.layout.recipes.length,
+  densities: LAYOUT_DENSITIES.length,
+  presets: ATLAS_COVERAGE.ui.presets.length,
+  sharedThemes: ATLAS_COVERAGE.ui.themes.length,
+  nativeSchemesPerPreset: 1,
+});
 
 /**
  * Number of layout, recipe, density, visual-preset, and color-scheme
  * combinations.
  */
 export const SUPPORTED_COMBINATIONS =
-  ATLAS_COVERAGE.layout.personalities.length *
-  ATLAS_COVERAGE.layout.recipes.length *
-  LAYOUT_DENSITIES.length *
-  UI_COLOR_SCHEME_PAIRINGS;
+  COMBINATION_FACTORS.layouts *
+  COMBINATION_FACTORS.recipes *
+  COMBINATION_FACTORS.densities *
+  COMBINATION_FACTORS.presets *
+  (COMBINATION_FACTORS.sharedThemes +
+    COMBINATION_FACTORS.nativeSchemesPerPreset);
 
 /** Locale-formatted combination count used in public product copy. */
 export const SUPPORTED_COMBINATIONS_LABEL =

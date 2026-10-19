@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ClientSystems } from "./components/ClientSystems";
+import { ConfigurationReference } from "./components/ConfigurationReference";
 import { FeatureShowcase } from "./components/FeatureShowcase";
 import { HomeHeroActions } from "./components/HeroActions";
 import { HomeObservatory } from "./components/HomeObservatory";
@@ -245,9 +246,9 @@ export default function Home() {
               <em>Keep one interface.</em>
             </h1>
             <p className="lede">
-              Build accessible interfaces with independent libraries for layout,
-              visual styling, and interaction states. Explore the wider toolkit
-              behind custom applications for clients.
+              Reusable rules keep related screens consistent while layout and
+              appearance change independently. Inspect structure, visual
+              styling, and interaction states in a working interface.
             </p>
             <HomeHeroActions />
           </div>
@@ -256,6 +257,7 @@ export default function Home() {
         </section>
 
         <FeatureShowcase />
+        <ConfigurationReference />
         <ClientSystems />
         <QuickStartSection />
         <LabInvitationSection />

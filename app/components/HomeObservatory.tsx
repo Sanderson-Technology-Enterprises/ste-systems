@@ -59,6 +59,8 @@ export function HomeObservatory() {
         </span>
       </div>
 
+      <a href="#configuration-reference">How this count is calculated</a>
+
       <article
         className="home-observatory-detail ly-stack ly-gap-4"
         id="home-observatory-detail"

@@ -104,6 +104,33 @@ export default function Lab() {
           <InterfaceObservatory />
         </section>
 
+        <section
+          className="ly-wrapper ly-section ly-stack ly-gap-4"
+          aria-labelledby="try-lab-title"
+        >
+          <h2 id="try-lab-title">Try this in the Lab</h2>
+          <ol className="ly-stack ly-gap-3">
+            <li>
+              Open lab configuration and change <strong>Layout</strong>. Follow
+              the same Northstar project cards as the workspace rearranges.
+            </li>
+            <li>
+              Change <strong>Visual style</strong> and <strong>Palette</strong>.
+              The content and controls stay in place while their appearance
+              changes.
+            </li>
+            <li>
+              Use Tab to inspect keyboard focus, then visit the interaction
+              examples to compare pressed and disabled controls.
+            </li>
+          </ol>
+          <p>
+            The client workspace shows one set of project information across
+            configurations. Focused demos isolate each library; component guides
+            explain the APIs and copyable examples for adoption.
+          </p>
+        </section>
+
         <CombinedWorkbench />
         <LayoutLab />
         <UiNativeLab />
