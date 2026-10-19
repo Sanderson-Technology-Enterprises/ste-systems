@@ -19,7 +19,6 @@ import {
   type LayoutPersonality,
   type UiMode,
   type UiPreset,
-  type UiTheme,
 } from "../data/catalog";
 import {
   CONFIGURATION_STORAGE_KEY,
@@ -27,6 +26,8 @@ import {
   parseConfiguration,
   parseStoredConfiguration,
   serializeConfiguration,
+  formatThemeLabel,
+  type LabTheme,
   type LabConfiguration,
 } from "../lib/configuration";
 
@@ -39,7 +40,7 @@ type LabConfigurationContextValue = {
   resetConfiguration: () => void;
   setLayout: (layout: LayoutPersonality) => void;
   setMode: (mode: UiMode) => void;
-  setTheme: (theme: UiTheme) => void;
+  setTheme: (theme: LabTheme) => void;
   setUi: (ui: UiPreset) => void;
 };
 
@@ -198,9 +199,9 @@ export function LabExperience({ children }: LabExperienceProps) {
   );
 
   const setTheme = useCallback(
-    (theme: UiTheme) => {
+    (theme: LabTheme) => {
       commitConfiguration({ ...configurationRef.current, theme });
-      announce(`Palette changed to ${formatCatalogLabel(theme)}.`);
+      announce(`Palette changed to ${formatThemeLabel(theme)}.`);
     },
     [announce, commitConfiguration],
   );
@@ -265,7 +266,9 @@ export function LabExperience({ children }: LabExperienceProps) {
         data-ly-density="normal"
         data-ly-layout={configuration.layout}
         data-ui={configuration.ui}
-        data-theme={configuration.theme}
+        data-theme={
+          configuration.theme === "native" ? undefined : configuration.theme
+        }
         data-mode={configuration.mode}
       >
         {children}

@@ -9,10 +9,23 @@ import {
   type UiTheme,
 } from "../data/catalog";
 
+/** The native sentinel selects a preset palette without changing the package theme inventory. */
+export type LabTheme = UiTheme | "native";
+
+/** Returns the user-facing name of the optional palette override. */
+export function formatThemeLabel(theme: LabTheme): string {
+  return theme === "native"
+    ? "Preset default"
+    : theme
+        .split("-")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+}
+
 export type LabConfiguration = {
   layout: LayoutPersonality;
   ui: UiPreset;
-  theme: UiTheme;
+  theme: LabTheme;
   mode: UiMode;
 };
 
@@ -42,9 +55,11 @@ function isUiPreset(value: unknown): value is UiPreset {
   );
 }
 
-function isUiTheme(value: unknown): value is UiTheme {
+/** Accepts the native sentinel or a named theme from the installed package catalog. */
+export function isLabTheme(value: unknown): value is LabTheme {
   return (
-    typeof value === "string" && UI_THEMES.some((theme) => theme === value)
+    value === "native" ||
+    (typeof value === "string" && UI_THEMES.some((theme) => theme === value))
   );
 }
 
@@ -83,7 +98,7 @@ export function parseStoredConfiguration(
       configuration.layout = parsed.layout;
     }
     if (isUiPreset(parsed.ui)) configuration.ui = parsed.ui;
-    if (isUiTheme(parsed.theme)) configuration.theme = parsed.theme;
+    if (isLabTheme(parsed.theme)) configuration.theme = parsed.theme;
     if (isUiMode(parsed.mode)) configuration.mode = parsed.mode;
     return configuration;
   } catch {
@@ -112,7 +127,7 @@ export function parseConfiguration(
       search.get("theme"),
       stored?.theme,
       DEFAULT_CONFIGURATION.theme,
-      isUiTheme,
+      isLabTheme,
     ),
     mode: resolveValue(
       search.get("mode"),
@@ -134,12 +149,12 @@ export function serializeConfiguration(
   return search;
 }
 
+/** Emits the selected library attributes, omitting the optional native-palette override. */
 export function configurationMarkup(configuration: LabConfiguration): string {
   return `<main
   class="ly-root"
   data-ly-layout="${configuration.layout}"
-  data-ui="${configuration.ui}"
-  data-theme="${configuration.theme}"
+  data-ui="${configuration.ui}"${configuration.theme === "native" ? "" : `\n  data-theme="${configuration.theme}"`}
   data-mode="${configuration.mode}"
 ></main>`;
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { getUiPrefix } from "../data/catalog";
 import { useLabConfiguration } from "./LabExperience";
+import { formatThemeLabel } from "../lib/configuration";
 
 function formatLabel(value: string): string {
   return value
@@ -39,13 +40,13 @@ export function CombinedWorkbench() {
       <div className="ly-wrapper ly-wrapper--workspace">
         <div className="section-heading ly-split ly-gap-6 ly-items-end">
           <div className="ly-stack ly-gap-2">
-            <p className="section-label">Live client outcome</p>
+            <p className="section-label">Example client workspace</p>
             <h2 id="workbench-title">See all three layers in one workspace.</h2>
           </div>
           <p>
-            A realistic delivery workspace doubles as a developer proof: the
-            recipe owns its geometry, the active UI preset paints every rich
-            surface, and interaction state remains independent.
+            Explore a sample project workspace built with all three libraries.
+            Layout Style CSS arranges the content, UI Style Kit CSS controls its
+            appearance, and Interactive Surface CSS styles control states.
           </p>
         </div>
 
@@ -227,7 +228,7 @@ export function CombinedWorkbench() {
                 </div>
                 <div>
                   <dt>Palette</dt>
-                  <dd>{formatLabel(configuration.theme)}</dd>
+                  <dd>{formatThemeLabel(configuration.theme)}</dd>
                 </div>
                 <div>
                   <dt>Mode</dt>

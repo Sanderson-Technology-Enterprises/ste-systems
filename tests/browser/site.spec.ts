@@ -443,8 +443,8 @@ test("lab shell scopes the complete experience and preserves every section", asy
   ).toHaveAttribute("href", customizedPlatformsUrl);
 
   for (const [selector, asset] of [
-    [".brand-logo", "ste-systems-logo.png"],
-    [".footer-logo", "ste-systems-logo.png"],
+    [".brand-logo", "ste-systems-logo-128.webp"],
+    [".footer-logo", "ste-systems-logo-128.webp"],
   ] as const) {
     const image = page.locator(selector);
     await expect(image).toHaveAttribute("src", new RegExp(`${asset}$`));
@@ -1643,7 +1643,7 @@ test("keeps workbench controls, state, and copy affordances functional", async (
   await identityOrbit.click();
   await expect(identityOrbit).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#observatory-active-package")).toContainText(
-    "Visual systems, palettes, native-element coverage, and display modes.",
+    "Component themes, color palettes, typography, and native HTML styling with light, dark, and high-contrast modes.",
   );
   await expect(
     page

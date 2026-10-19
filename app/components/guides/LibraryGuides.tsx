@@ -170,6 +170,12 @@ export function LibraryGuides({
                       semantic HTML.
                     </p>
                     <p>
+                      STE USK React is part of the wider toolkit built for
+                      client applications. STE-Core and STE-SDK provide private
+                      application foundations and developer tooling alongside
+                      the interface libraries.
+                    </p>
+                    <p>
                       React supplies component APIs and accessible behavior.
                       Layout Style CSS owns structure, UI Style Kit CSS owns
                       appearance, and Interactive Surface CSS owns interaction
@@ -188,33 +194,35 @@ export function LibraryGuides({
                     classes to keep their content readable.
                   </p>
                 )}
-                <nav
-                  className="guide-resource-links ly-cluster ly-gap-3"
-                  aria-label={`${guide.name} resources`}
-                >
-                  {guide.links.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      {link.label}
-                      <span className="ly-visually-hidden">
-                        {" "}
-                        (opens in a new tab)
-                      </span>
-                      <span aria-hidden="true"> ↗</span>
-                    </a>
-                  ))}
-                </nav>
+                {guide.links.length > 0 && (
+                  <nav
+                    className="guide-resource-links ly-cluster ly-gap-3"
+                    aria-label={`${guide.name} resources`}
+                  >
+                    {guide.links.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        {link.label}
+                        <span className="ly-visually-hidden">
+                          {" "}
+                          (opens in a new tab)
+                        </span>
+                        <span aria-hidden="true"> ↗</span>
+                      </a>
+                    ))}
+                  </nav>
+                )}
               </div>
               <div className="guide-examples ly-stack ly-gap-6">
                 <p className="section-label">See it in context</p>
                 {guide.id === "layout" || guide.id === "ui" ? (
                   CSS_GUIDE_EXAMPLES[guide.id].map((example) => (
                     <article
-                      className="guide-example ly-stack ly-gap-4"
+                      className="guide-example ly-stack ly-gap-4 ly-pad-4"
                       key={example.id}
                     >
                       <header>
@@ -234,7 +242,7 @@ export function LibraryGuides({
                     </article>
                   ))
                 ) : guide.id === "interaction" ? (
-                  <article className="guide-example ly-stack ly-gap-4">
+                  <article className="guide-example ly-stack ly-gap-4 ly-pad-4">
                     <header>
                       <h3>States that explain themselves</h3>
                       <p>
@@ -258,7 +266,7 @@ export function LibraryGuides({
                     </p>
                   </article>
                 ) : (
-                  <article className="guide-example ly-stack ly-gap-4">
+                  <article className="guide-example ly-stack ly-gap-4 ly-pad-4">
                     <header>
                       <h3>A working React composition</h3>
                       <p>

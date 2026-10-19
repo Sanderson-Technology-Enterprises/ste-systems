@@ -10,7 +10,7 @@ export const SITE = {
   name: "STE Systems",
   title: "STE Systems | Accessible Three-Library Design System",
   description:
-    "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.",
+    "Explore the CSS libraries, STE USK React components, and private STE-Core and STE-SDK toolkit built by Sanderson Technology Enterprises LLC for custom client applications.",
   url: productionUrl,
   labPath,
   labUrl: new URL(labPath.replace(/^\/+/, ""), productionUrl).href,

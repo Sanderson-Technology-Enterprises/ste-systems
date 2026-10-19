@@ -68,9 +68,17 @@ test("four guides preserve the three-package CSS inventory and documented exampl
   assert.match(CSS_GUIDE_EXAMPLES.layout[0].html, /class="ly-grid /);
   for (const guide of LIBRARY_GUIDES) {
     assert.ok(guide.install.includes(guide.packageName));
+    if (guide.id === "react") continue;
     assert.ok(guide.links.some((link) => link.label === "Full documentation"));
     assert.ok(guide.links.some((link) => link.label === "npm package"));
   }
+});
+
+test("React remains documented without outbound resource links", () => {
+  const guide = LIBRARY_GUIDES.find((item) => item.id === "react")!;
+  assert.deepEqual(guide.links, []);
+  assert.ok(guide.summary.includes("React"));
+  assert.ok(guide.concepts.length > 0);
 });
 
 test("possibility count includes densities and native color schemes", () => {

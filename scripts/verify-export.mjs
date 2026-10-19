@@ -25,7 +25,7 @@ const corporateGithub = "https://github.com/Sanderson-Technology-Enterprises";
 const repositoryUrl = `${corporateGithub}/ste-systems`;
 const siteTitle = "STE Systems | Accessible Three-Library Design System";
 const siteDescription =
-  "STE Systems is the accessible three-library design system from Sanderson Technology Enterprises LLC, combining layout, visual identity, and interaction primitives in one interface.";
+  "Explore the CSS libraries, STE USK React components, and private STE-Core and STE-SDK toolkit built by Sanderson Technology Enterprises LLC for custom client applications.";
 const socialImageUrl = `${siteUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
   "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";
@@ -674,12 +674,7 @@ export async function collectExportIssues() {
     "component atlas primary content",
     issues,
   );
-  requireText(
-    notFound,
-    "This interface is outside the system.",
-    "custom 404 content",
-    issues,
-  );
+  requireText(notFound, "Page not found.", "custom 404 content", issues);
 
   const companyLinkCount = (
     index.match(new RegExp(`href="${corporateUrl}"`, "g")) ?? []

@@ -13,6 +13,8 @@ import {
 import {
   configurationMarkup,
   serializeConfiguration,
+  formatThemeLabel,
+  isLabTheme,
 } from "../lib/configuration";
 import { CopyIcon, ExternalLinkIcon, SparkIcon } from "./Icons";
 import { useLabConfiguration } from "./LabExperience";
@@ -185,12 +187,11 @@ export function LabControls() {
           <select
             value={configuration.theme}
             onChange={(event) => {
-              const theme = UI_THEMES.find(
-                (value) => value === event.target.value,
-              );
-              if (theme !== undefined) setTheme(theme);
+              const theme = event.target.value;
+              if (isLabTheme(theme)) setTheme(theme);
             }}
           >
+            <option value="native">Preset default</option>
             {UI_THEMES.map((theme) => (
               <option value={theme} key={theme}>
                 {formatCatalogLabel(theme)}
@@ -280,7 +281,7 @@ export function LabControls() {
         </span>
         <span>
           <b>Palette</b>
-          {formatCatalogLabel(configuration.theme)}
+          {formatThemeLabel(configuration.theme)}
         </span>
         <span>
           <b>Mode</b>
@@ -291,7 +292,7 @@ export function LabControls() {
 
       <div className={`code-strip ${prefix}-surface ly-surface ly-pad-4`}>
         <div>
-          <small>Four attributes. One shared contract.</small>
+          <small>One shared contract. The palette override is optional.</small>
           <code tabIndex={0}>{markup}</code>
         </div>
       </div>

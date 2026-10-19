@@ -6,7 +6,8 @@ import type { NavigationItem } from "../data/navigation";
 import { withBasePath } from "../lib/site";
 import { ExternalLinkIcon, MenuIcon } from "./Icons";
 
-const DESKTOP_NAVIGATION_QUERY = "(min-width: 64.0625rem)";
+/** Matches the responsive stylesheet once the full navigation fits beside the brand. */
+const DESKTOP_NAVIGATION_QUERY = "(min-width: 84.0625rem)";
 const PRIMARY_NAVIGATION_PANEL_ID = "primary-navigation-panel";
 
 type ResponsiveNavigationProps = {

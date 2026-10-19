@@ -24,6 +24,7 @@ test("homepage navigation keeps the focused portal concise", async () => {
     [
       ["Packages", "#libraries"],
       ["Components", "/components/"],
+      ["Client systems", "#client-systems"],
       ["Get started", "#get-started"],
       ["About", "#company"],
     ],
