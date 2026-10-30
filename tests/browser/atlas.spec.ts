@@ -4,18 +4,19 @@ const guideNames = [
   "Layout Style CSS",
   "UI Style Kit CSS",
   "Interactive Surface CSS",
+  "Motion Style CSS",
   "STE USK React",
 ];
 
-/** Exercises the four-guide contract and base-path-aware handoff to the Lab. */
-test("component guides expose four tabs and two full Lab links", async ({
+/** Exercises the five-guide contract and base-path-aware handoff to the Lab. */
+test("component guides expose five tabs and two full Lab links", async ({
   page,
 }) => {
   await page.goto("./components/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Components & library guides",
   );
-  await expect(page.getByRole("tab")).toHaveCount(4);
+  await expect(page.getByRole("tab")).toHaveCount(5);
   await expect(
     page.getByRole("tab", { name: guideNames[0], exact: true }),
   ).toHaveAttribute("aria-selected", "true");
@@ -155,7 +156,7 @@ test("guide code copies HTML and JSX and explains clipboard failures", async ({
 });
 
 /** Measures the actual columns and touch targets rather than relying on screenshots alone. */
-test("four guides reflow without overlap across responsive widths", async ({
+test("five guides reflow without overlap across responsive widths", async ({
   page,
 }) => {
   await page.goto("./components/");

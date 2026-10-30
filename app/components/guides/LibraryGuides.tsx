@@ -9,6 +9,7 @@ import {
   type LibraryGuideId,
 } from "../../data/library-guides";
 import { GuideCode } from "./GuideCode";
+import { MotionLab } from "../labs/MotionLab";
 import { ReactProjectExample } from "./ReactProjectExample";
 
 /** Subscribes to both browser history and in-page fragment navigation. */
@@ -68,7 +69,7 @@ function InteractionExample() {
   );
 }
 
-/** Renders four focused learning paths while retaining the original library fragment URLs. */
+/** Renders five focused learning paths while retaining the original library fragment URLs. */
 export function LibraryGuides({
   reactSource,
 }: {
@@ -264,6 +265,10 @@ export function LibraryGuides({
                       updates aria-pressed when the toggle is activated; CSS
                       alone does not change application state.
                     </p>
+                  </article>
+                ) : guide.id === "motion" ? (
+                  <article className="guide-example ly-stack ly-gap-4 ly-pad-4">
+                    <MotionLab embedded />
                   </article>
                 ) : (
                   <article className="guide-example ly-stack ly-gap-4 ly-pad-4">

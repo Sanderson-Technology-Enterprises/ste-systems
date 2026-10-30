@@ -65,5 +65,34 @@
     ],
     "styles": ["ui-visual", "ui-theme", "interaction-core", "layout-core"],
     "deprecated": false
+  },
+  {
+    "id": "motion-only",
+    "title": "Motion Style CSS standalone",
+    "group": "one",
+    "summary": "Lifecycle effects on dedicated shells without layout, component paint, or interaction dependencies.",
+    "packages": ["@sanderson-technology-enterprises/motion-style-css"],
+    "styles": ["motion-style"],
+    "deprecated": false
+  },
+  {
+    "id": "all-motion",
+    "title": "Four CSS layers with motion",
+    "group": "all",
+    "summary": "Structure, appearance, and interaction remain inside dedicated lifecycle motion shells.",
+    "packages": [
+      "ui-style-kit-css",
+      "interactive-surface-css",
+      "layout-style-css",
+      "@sanderson-technology-enterprises/motion-style-css"
+    ],
+    "styles": [
+      "ui-visual",
+      "ui-theme",
+      "interaction-core",
+      "layout-core",
+      "motion-style"
+    ],
+    "deprecated": false
   }
 ]

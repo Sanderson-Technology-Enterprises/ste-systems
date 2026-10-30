@@ -9,6 +9,7 @@ const packageLabAnchors: Record<
   "layout-style-css": "layouts",
   "ui-style-kit-css": "ui-native",
   "interactive-surface-css": "interactions",
+  "@sanderson-technology-enterprises/motion-style-css": "motion",
 };
 
 export function FeatureShowcase() {
@@ -20,15 +21,15 @@ export function FeatureShowcase() {
     >
       <div className="ly-wrapper">
         <div className="section-heading ly-stack ly-gap-4">
-          <p className="section-label">Three focused CSS libraries</p>
-          <h2 id="libraries-title">Use one library or combine all three.</h2>
+          <p className="section-label">Four focused CSS libraries</p>
+          <h2 id="libraries-title">Use one layer or compose all four.</h2>
           <p>
             Each package owns one interface layer and remains useful on its own.
             Combine them when you need the complete system.
           </p>
         </div>
 
-        <ol className="package-overview-grid">
+        <ol className="package-overview-grid ly-grid ly-gap-6">
           {ECOSYSTEM_PACKAGES.map((pkg, index) => (
             <li
               className="package-overview-card ly-stack ly-gap-4"

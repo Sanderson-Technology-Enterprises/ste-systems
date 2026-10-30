@@ -17,7 +17,7 @@ const clientSystems = [
     role: "Interface composition",
     access: "Private source · Public npm distribution",
     description:
-      "Accessible React components that bring the three CSS libraries together. They power parts of this website and provide reusable interface building blocks for client applications. Version 2.1.0 is publicly distributed through npm; that does not make its source repository public.",
+      "Accessible React components that compose the foundational CSS libraries and optional Motion Style CSS. They power parts of this website and provide reusable interface building blocks for client applications. Version 2.3.0 is publicly distributed through npm; that does not make its source repository public.",
   },
   {
     name: "STE-Core",

@@ -51,7 +51,7 @@ export function buildLabStructuredData() {
         name: `Live interface lab | ${SITE.name}`,
         url: SITE.labUrl,
         description:
-          "Configure and inspect all three STE Systems CSS libraries on one semantic interface.",
+          "Configure and inspect the four STE Systems CSS layers on one semantic interface.",
         isPartOf: { "@id": `${SITE.url}#website` },
         publisher: { "@id": SITE.owner.organizationId },
         inLanguage: "en-US",

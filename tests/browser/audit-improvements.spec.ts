@@ -42,14 +42,14 @@ test("successive copy results each update the live region", async ({
   await expect(status).not.toHaveAttribute("data-updates", "0");
 });
 
-test("phone users can see all four guide choices and select them with the keyboard", async ({
+test("phone users can see all five guide choices and select them with the keyboard", async ({
   page,
 }) => {
   for (const width of [320, 390, 768]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("components/");
     const tabs = page.getByRole("tab");
-    await expect(tabs).toHaveCount(4);
+    await expect(tabs).toHaveCount(5);
     for (const tab of await tabs.all()) {
       const box = await tab.boundingBox();
       expect(box).not.toBeNull();
@@ -157,7 +157,7 @@ test("the home page offers a client path, readable attribution, and compact bran
   expect(gap).toBeLessThanOrEqual(80);
 });
 
-test("all four reference guides remain readable without JavaScript", async ({
+test("all five reference guides remain readable without JavaScript", async ({
   browser,
   baseURL,
 }) => {
@@ -174,6 +174,7 @@ test("all four reference guides remain readable without JavaScript", async ({
     "Layout Style CSS",
     "UI Style Kit CSS",
     "Interactive Surface CSS",
+    "Motion Style CSS",
     "STE USK React",
   ]) {
     await expect(

@@ -8,7 +8,7 @@ export const SITE = {
   basePath,
   origin,
   name: "STE Systems",
-  title: "STE Systems | Accessible Three-Library Design System",
+  title: "STE Systems | Accessible Four-Library Design System",
   description:
     "Explore the CSS libraries, STE USK React components, and private STE-Core and STE-SDK toolkit built by Sanderson Technology Enterprises LLC for custom client applications.",
   url: productionUrl,
@@ -20,7 +20,7 @@ export const SITE = {
   repository: "https://github.com/Sanderson-Technology-Enterprises/ste-systems",
   socialImage: `${productionUrl}ste-systems-social-preview.png`,
   socialImageAlt:
-    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.",
+    "STE Systems: four CSS layers for structure, appearance, interaction, and motion. Motion Style CSS is the newest addition.",
   brandLogoPath: "ste-systems-logo.png",
   brandLogo: `${productionUrl}ste-systems-logo.png`,
   brandLogoAlt: "STE Systems logo",

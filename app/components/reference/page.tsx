@@ -12,7 +12,7 @@ import { SiteFooter } from "../SiteFooter";
 export const metadata: Metadata = {
   title: "Library reference",
   description:
-    "Read all four library guides, API references, and examples without interactive previews.",
+    "Read all five library guides, API references, and examples without interactive previews.",
   alternates: { canonical: SITE.componentsUrl },
 };
 
@@ -61,7 +61,7 @@ export default function LibraryReferencePage() {
           </a>
           <h1>Library reference</h1>
           <p>
-            All four guides in one readable page. Select code to copy it
+            All five guides in one readable page. Select code to copy it
             manually; interactive previews are available in the main guides.
           </p>
           <nav

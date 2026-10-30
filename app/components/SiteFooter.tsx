@@ -33,7 +33,7 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
           <p className="ly-stack ly-gap-2">
             <strong>{SITE.name}</strong>
             <small>{SITE.productLine}</small>
-            <small>One semantic interface. Three focused CSS libraries.</small>
+            <small>One semantic interface. Four focused CSS libraries.</small>
           </p>
         </div>
 

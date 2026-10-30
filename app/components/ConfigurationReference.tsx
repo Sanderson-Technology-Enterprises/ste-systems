@@ -20,7 +20,9 @@ export function ConfigurationReference() {
           </h2>
           <p>
             {SUPPORTED_COMBINATIONS_LABEL} combinations describe the choices
-            supported by this showcase’s installed libraries.
+            supported by this showcase’s installed libraries. Motion presets are
+            documented separately and do not multiply the design-configuration
+            count.
           </p>
         </div>
         <p className="ly-stack ly-gap-2">

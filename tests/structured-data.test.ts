@@ -30,7 +30,7 @@ test("homepage structured data describes the overview and package list", async (
 
   assert.equal(webPage?.url, "https://stesystems.com/");
   assert.equal(packages?.url, "https://stesystems.com/#libraries");
-  assert.equal(packages?.numberOfItems, 3);
+  assert.equal(packages?.numberOfItems, 4);
 });
 
 test("atlas structured data assigns the application to the component route", async () => {

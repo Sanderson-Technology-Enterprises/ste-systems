@@ -7,9 +7,9 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const exportRoot = path.join(repositoryRoot, "out");
-/** Maximum CSS payload for UI Style Kit 2.6 and its React composition layer. */
+/** Maximum CSS payload for UI Style Kit 2.7.1 and its React composition layer. */
 const nextCssBudgetBytes = 2688 * 1024;
-/** Maximum bundled font payload for all ui-style-kit-css 2.6 identities. */
+/** Maximum bundled font payload for all ui-style-kit-css 2.7.1 identities. */
 const exportedFontBudgetBytes = 2560 * 1024;
 const googleVerificationFile = "google5abb0289b99a9f42.html";
 const googleVerificationText =
@@ -23,12 +23,12 @@ const customizedPlatformsUrl = "https://customizedplatforms.com/";
 const corporateOrganizationId = `${corporateUrl}#organization`;
 const corporateGithub = "https://github.com/Sanderson-Technology-Enterprises";
 const repositoryUrl = `${corporateGithub}/ste-systems`;
-const siteTitle = "STE Systems | Accessible Three-Library Design System";
+const siteTitle = "STE Systems | Accessible Four-Library Design System";
 const siteDescription =
   "Explore the CSS libraries, STE USK React components, and private STE-Core and STE-SDK toolkit built by Sanderson Technology Enterprises LLC for custom client applications.";
 const socialImageUrl = `${siteUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems: four CSS layers for structure, appearance, interaction, and motion. Motion Style CSS is the newest addition.";
 const labLogoUrl = `${siteUrl}ste-systems-logo.png`;
 const websiteId = `${siteUrl}#website`;
 const webpageId = `${siteUrl}#webpage`;
@@ -422,7 +422,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
   if (packages) {
     requireExact(packages["@id"], packagesId, "ItemList @id", issues);
     requireExact(packages.url, `${siteUrl}#libraries`, "ItemList URL", issues);
-    requireExact(packages.numberOfItems, 3, "ItemList count", issues);
+    requireExact(packages.numberOfItems, 4, "ItemList count", issues);
     const packageContracts = (packages.itemListElement ?? []).map((entry) => ({
       codeRepository: entry.item?.codeRepository,
       name: entry.item?.name,
@@ -445,7 +445,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.6.1",
+          version: "2.7.1",
         },
         {
           codeRepository: "https://github.com/Foscat/Interactive-Surface-CSS",
@@ -453,6 +453,14 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/interactive-surface-css",
           version: "1.7.3",
+        },
+        {
+          codeRepository:
+            "https://github.com/Sanderson-Technology-Enterprises/motion-style-css",
+          name: "@sanderson-technology-enterprises/motion-style-css",
+          programmingLanguage: "CSS",
+          url: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
+          version: "1.0.0",
         },
       ]),
       "ItemList package contracts",

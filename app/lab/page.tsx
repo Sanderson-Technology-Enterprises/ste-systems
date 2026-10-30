@@ -8,6 +8,7 @@ import { LabConfigurationMenu } from "../components/LabConfigurationMenu";
 import { LabExperience } from "../components/LabExperience";
 import { InteractionLab } from "../components/labs/InteractionLab";
 import { IntegrationLab } from "../components/labs/IntegrationLab";
+import { MotionLab } from "../components/labs/MotionLab";
 import { LayoutLab } from "../components/labs/LayoutLab";
 import { UiNativeLab } from "../components/labs/UiNativeLab";
 import { LibraryDirectory } from "../components/LibraryDirectory";
@@ -24,7 +25,7 @@ import {
 } from "../lib/structured-data";
 
 const labDescription =
-  "Configure layout, visual style, palette, and mode, then inspect all three STE Systems CSS libraries on shared semantic markup.";
+  "Configure layout, visual style, palette, and mode, then inspect the four STE Systems CSS layers on shared semantic markup.";
 
 export const metadata: Metadata = {
   title: "Configurable CSS workbench",
@@ -96,7 +97,8 @@ export default function Lab() {
             <h1 id="lab-title">Configure the system. Inspect every layer.</h1>
             <p className="lede">
               Change layout, visual style, palette, and mode, then inspect how
-              all three libraries behave on the same semantic markup.
+              the foundational layers behave on the same semantic markup, then
+              try lifecycle motion on separate shells.
             </p>
             <LabHeroActions />
           </div>
@@ -135,6 +137,7 @@ export default function Lab() {
         <LayoutLab />
         <UiNativeLab />
         <InteractionLab />
+        <MotionLab />
         <IntegrationLab />
         <InstallGuide />
         <LibraryDirectory />

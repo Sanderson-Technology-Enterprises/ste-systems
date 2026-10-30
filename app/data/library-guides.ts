@@ -2,9 +2,10 @@ import reactPackage from "@sanderson-technology-enterprises/ste-usk-react/packag
 import { ADOPTION_PATHS, ECOSYSTEM_PACKAGES } from "./ecosystem";
 
 /** Stable identifiers also preserve the original CSS-library fragment links. */
-export type LibraryGuideId = "layout" | "ui" | "interaction" | "react";
+export type LibraryGuideId =
+  "layout" | "ui" | "interaction" | "motion" | "react";
 
-/** Curated documentation content; the CSS ecosystem inventory remains three packages. */
+/** Curated documentation content; the CSS ecosystem inventory contains four packages. */
 export type LibraryGuide = {
   readonly id: LibraryGuideId;
   readonly name: string;
@@ -28,7 +29,7 @@ export type GuideExample = {
 
 /** Reuses the verified standalone setup for a CSS library instead of duplicating imports. */
 function cssSetup(
-  id: "layout-only" | "ui-only" | "interactive-only",
+  id: "layout-only" | "ui-only" | "interactive-only" | "motion-only",
   index: number,
 ) {
   const pkg = ECOSYSTEM_PACKAGES[index];
@@ -48,7 +49,7 @@ function cssSetup(
   };
 }
 
-/** Four learning paths through structure, visual identity, behavior, and React composition. */
+/** Five learning paths through structure, visual identity, behavior, and React composition. */
 export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
   {
     ...cssSetup("layout-only", 0),
@@ -168,13 +169,47 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
     ],
   },
   {
+    ...cssSetup("motion-only", 3),
+    id: "motion",
+    role: "04 / Lifecycle motion",
+    summary:
+      "Motion Style CSS is the newest addition to STE's web development system. Use ten paired entrance/exit presets and coordinated movement while leaving layout, paint, and control feedback with their existing owners.",
+    concepts: [
+      {
+        api: "presets / enter / exit",
+        description:
+          "Choose an exported preset and animate a dedicated shell after mount. Motion never removes DOM or moves focus for you.",
+      },
+      {
+        api: "stagger / replace / cancel",
+        description:
+          "Coordinate repeated shells, sequence a content replacement, and cancel superseded effects during cleanup.",
+      },
+      {
+        api: "direction / duration / delay",
+        description:
+          "Slide and curtain support left, right, up, and down. Timing values are in milliseconds.",
+      },
+      {
+        api: "Reduced motion",
+        description:
+          "User preferences remain enabled by default. Content stays usable when effects are skipped.",
+      },
+      {
+        api: "React /motion adapter",
+        description:
+          "Use the optional STE USK React Motion shell for controlled presence, retained exits, and effect cleanup. Import the motion stylesheet once.",
+      },
+    ],
+  },
+  {
     id: "react",
     name: "STE USK React",
     packageName: reactPackage.name,
     version: reactPackage.version,
-    role: "04 / React composition",
+    role: "05 / React composition",
     summary:
-      "Bring the three CSS libraries together through accessible React components. Use typed props, events, and local state while the CSS libraries handle structure, appearance, and interaction styling.",
+      "Bring the foundational CSS libraries together through accessible React components and opt into lifecycle motion through the separate /motion entry. Use typed props, events, and local state while the CSS libraries handle structure, appearance, and interaction styling.",
     install: `npm install ${reactPackage.name}@${reactPackage.version} react@19.2.6 react-dom@19.2.6 ${ECOSYSTEM_PACKAGES.map((pkg) => `${pkg.name}@${pkg.version}`).join(" ")}`,
     imports: `// Import once at your application entry point.\nimport "${reactPackage.name}/styles.css";`,
     concepts: [

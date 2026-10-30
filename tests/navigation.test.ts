@@ -54,6 +54,7 @@ test("lab navigation exposes every retained deep-link section", async () => {
       ["Layout", "#layouts"],
       ["UI & native", "#ui-native"],
       ["Interactions", "#interactions"],
+      ["Motion", "#motion"],
       ["Integration", "#integrate"],
       ["Install", "#install"],
       ["Packages", "#libraries"],
@@ -72,7 +73,7 @@ test("lab navigation exposes every retained deep-link section", async () => {
   );
 });
 
-test("atlas navigation exposes the four library guides", async () => {
+test("atlas navigation exposes the five library guides", async () => {
   const navigation = await loadNavigationModule();
 
   assert.ok(navigation.ATLAS_NAVIGATION_ITEMS);
@@ -84,6 +85,7 @@ test("atlas navigation exposes the four library guides", async () => {
       ["Layout", "#atlas-layout"],
       ["UI & native", "#atlas-ui"],
       ["Interactions", "#atlas-interaction"],
+      ["Motion", "#atlas-motion"],
       ["React", "#atlas-react"],
     ],
   );

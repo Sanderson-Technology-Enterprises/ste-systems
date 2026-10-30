@@ -91,6 +91,7 @@ const expectedNames = [
   "layout-style-css",
   "ui-style-kit-css",
   "interactive-surface-css",
+  "@sanderson-technology-enterprises/motion-style-css",
 ];
 
 test("registry exposes every package and resource in ecosystem order", () => {
@@ -100,7 +101,7 @@ test("registry exposes every package and resource in ecosystem order", () => {
   );
   assert.deepEqual(
     ECOSYSTEM_PACKAGES.map(({ version }) => version),
-    ["3.2.3", "2.6.1", "1.7.3"],
+    ["3.2.3", "2.7.1", "1.7.3", "1.0.0"],
   );
   assert.equal(ECOSYSTEM_PACKAGES[0]?.version, "3.2.3");
   assert.equal(ECOSYSTEM_PACKAGES[2]?.version, "1.7.3");
@@ -128,7 +129,7 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
     UI_SEMANTIC_COMPONENT_API.selectorsByRole,
   ).flat();
 
-  assert.equal((uiManifest as { readonly version: string }).version, "2.6.1");
+  assert.equal((uiManifest as { readonly version: string }).version, "2.7.1");
   assert.equal(selectors.length, 75);
   assert.deepEqual(
     selectors.slice(0, 29).map(({ selector }) => selector),
@@ -176,6 +177,7 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
       ".usk-alert": ["success", "warning", "danger"],
       ".usk-chip": ["primary", "secondary", "success", "warning", "danger"],
       ".usk-toast": ["info", "success", "warning", "danger"],
+      ".usk-tooltip": ["primary", "secondary", "accent"],
     },
   );
   assert.ok(selectors.some(({ selector }) => selector === ".usk-popover"));
@@ -188,7 +190,7 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
 
 test("installation examples pin approved versions and cascade order", () => {
   const uiStyleKitCdnRoot =
-    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1";
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1";
 
   assert.equal(
     NPM_INSTALL,
@@ -237,6 +239,8 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
   assert.deepEqual(
     ADOPTION_PATHS.map(({ id }) => id),
     [
+      "motion-only",
+      "all-motion",
       "layout-only",
       "ui-only",
       "interactive-only",
@@ -257,11 +261,11 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
       counts[path.scope] = (counts[path.scope] ?? 0) + 1;
       return counts;
     }, {}),
-    { one: 3, pair: 3, all: 1 },
+    { one: 4, pair: 3, all: 2 },
   );
 
   const uiStyleKitCdnRoot =
-    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1";
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1";
   const uiVisualCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css">`;
   const uiThemeCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css">`;
   const interactionCoreCdn =
@@ -340,6 +344,20 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
   } as const;
 
   for (const path of ADOPTION_PATHS) {
+    if (path.id === "motion-only" || path.id === "all-motion") {
+      assert.ok(
+        path.packages.includes(
+          "@sanderson-technology-enterprises/motion-style-css",
+        ),
+      );
+      assert.deepEqual(
+        path.snippets.map(({ format }) => format),
+        ["npm", "bundler", "cdn"],
+      );
+      for (const snippet of path.snippets)
+        assert.match(snippet.code, /motion-style-css@1\.0\.0|motion-style-css/);
+      continue;
+    }
     const expected = expectedMatrix[path.id];
     assert.deepEqual(path.packages, expected.packages, path.id);
     assert.deepEqual(
@@ -415,6 +433,12 @@ test("package directory exposes independent entrypoints and fixture anchors", ()
         name: "interactive-surface-css",
         recommendedEntryPoint: "interactive-surface-css/standalone-preset.css",
       },
+      {
+        fixture: "motion-only",
+        name: "@sanderson-technology-enterprises/motion-style-css",
+        recommendedEntryPoint:
+          "@sanderson-technology-enterprises/motion-style-css/styles.css",
+      },
     ],
   );
 });
@@ -439,7 +463,7 @@ test("site consumes the CSS libraries as local dependencies", async () => {
   assert.equal(manifest.dependencies["interactive-surface-css"], "1.7.3");
   assert.equal(
     manifest.dependencies["@sanderson-technology-enterprises/ste-usk-react"],
-    "2.1.0",
+    "2.3.0",
   );
   assert.match(
     layoutSource,
@@ -464,7 +488,7 @@ test("local README guidance documents the global CSS entry points", async () => 
     readme,
     /Global CSS entry\s+points load from `app\/layout\.tsx`/,
   );
-  assert.equal(ECOSYSTEM_PACKAGES.length, 3);
+  assert.equal(ECOSYSTEM_PACKAGES.length, 4);
   assert.doesNotMatch(layoutSource, /custom-element runtime/);
 });
 
@@ -858,6 +882,18 @@ test("documented package versions match the pinned CDN URLs", () => {
   for (const pkg of ECOSYSTEM_PACKAGES) {
     const cdn = CDN_LINKS.filter(({ packageName }) => packageName === pkg.name);
 
+    if (pkg.name === "@sanderson-technology-enterprises/motion-style-css") {
+      const snippet = ADOPTION_PATHS.find(
+        (path) => path.id === "motion-only",
+      )!.snippets.find((entry) => entry.format === "cdn")!;
+      assert.ok(
+        snippet.code.includes(`${pkg.name}@${pkg.version}/src/motion.css`),
+      );
+      assert.ok(
+        snippet.code.includes(`${pkg.name}@${pkg.version}/src/index.js`),
+      );
+      continue;
+    }
     assert.notEqual(cdn.length, 0);
     for (const { href } of cdn) {
       const expectedPin = `${pkg.name}@${pkg.version}`;
@@ -903,7 +939,7 @@ test("site identity targets the transferred organization", () => {
   );
   assert.equal(
     site.socialImageAlt,
-    "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.",
+    "STE Systems: four CSS layers for structure, appearance, interaction, and motion. Motion Style CSS is the newest addition.",
   );
   assert.equal(site.brandLogoPath, "ste-systems-logo.png");
   assert.equal(site.brandLogo, "https://stesystems.com/ste-systems-logo.png");

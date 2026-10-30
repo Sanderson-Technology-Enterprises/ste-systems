@@ -21,7 +21,7 @@ const resourceOrder: readonly ResourceLink[] = [
   "demo",
 ];
 
-const orbitVariants = ["primary", "accent", "secondary"] as const;
+const orbitVariants = ["primary", "accent", "secondary", "subtle"] as const;
 
 export function InterfaceObservatory() {
   const { announce, configuration } = useLabConfiguration();
@@ -59,7 +59,7 @@ export function InterfaceObservatory() {
           <button
             className={`observatory-orbit observatory-orbit-${pkg.layer.toLowerCase()} interactive-surface site-action`}
             data-surface-variant={orbitVariants[index]}
-            data-surface-level="2"
+            data-surface-level={orbitVariants[index] === "subtle" ? 1 : 2}
             type="button"
             key={pkg.name}
             aria-pressed={selectedIndex === index}

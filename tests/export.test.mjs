@@ -33,12 +33,12 @@ const corporateUrl = "https://sandersontechnologyenterprises.com/";
 const corporateOrganizationId = `${corporateUrl}#organization`;
 const repositoryUrl =
   "https://github.com/Sanderson-Technology-Enterprises/ste-systems";
-const siteTitle = "STE Systems | Accessible Three-Library Design System";
+const siteTitle = "STE Systems | Accessible Four-Library Design System";
 const siteDescription =
   "Explore the CSS libraries, STE USK React components, and private STE-Core and STE-SDK toolkit built by Sanderson Technology Enterprises LLC for custom client applications.";
 const socialImageUrl = `${canonicalUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems: four CSS layers for structure, appearance, interaction, and motion. Motion Style CSS is the newest addition.";
 const websiteId = `${canonicalUrl}#website`;
 const webpageId = `${canonicalUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
@@ -263,7 +263,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
   const packages = nodesOfType(nodes, "ItemList")[0];
   assert.equal(packages["@id"], packagesId);
   assert.equal(packages.url, `${canonicalUrl}#libraries`);
-  assert.equal(packages.numberOfItems, 3);
+  assert.equal(packages.numberOfItems, 4);
   assert.deepEqual(
     packages.itemListElement.map((entry) => ({
       codeRepository: entry.item.codeRepository,
@@ -285,7 +285,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         name: "ui-style-kit-css",
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/ui-style-kit-css",
-        version: "2.6.1",
+        version: "2.7.1",
       },
       {
         codeRepository: "https://github.com/Foscat/Interactive-Surface-CSS",
@@ -293,6 +293,14 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/interactive-surface-css",
         version: "1.7.3",
+      },
+      {
+        codeRepository:
+          "https://github.com/Sanderson-Technology-Enterprises/motion-style-css",
+        name: "@sanderson-technology-enterprises/motion-style-css",
+        programmingLanguage: "CSS",
+        url: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
+        version: "1.0.0",
       },
     ],
   );
@@ -470,6 +478,8 @@ const fixtureIds = [
   "layout-interactive",
   "ui-interactive",
   "all-canonical",
+  "motion-only",
+  "all-motion",
 ];
 
 test("the Pages artifact contains every isolated integration fixture", async () => {

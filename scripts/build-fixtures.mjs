@@ -27,17 +27,26 @@ const defaultGeneratedRoot = path.join(
 export const EXPECTED_PACKAGE_VERSIONS = Object.freeze({
   "interactive-surface-css": "1.7.3",
   "layout-style-css": "3.2.3",
-  "ui-style-kit-css": "2.6.1",
+  "ui-style-kit-css": "2.7.1",
+  "@sanderson-technology-enterprises/motion-style-css": "1.0.0",
 });
 
 export const FIXTURE_ASSETS = Object.freeze({
+  "motion-style": Object.freeze({
+    export: "@sanderson-technology-enterprises/motion-style-css/styles.css",
+    target: "assets/motion-style-css/1.0.0/motion.css",
+  }),
+  "motion-controller": Object.freeze({
+    export: "@sanderson-technology-enterprises/motion-style-css",
+    target: "assets/motion-style-css/1.0.0/index.js",
+  }),
   "ui-visual": Object.freeze({
     export: "ui-style-kit-css/visual.css",
-    target: "assets/ui-style-kit-css/2.6.1/ui-style-kit.visual.css",
+    target: "assets/ui-style-kit-css/2.7.1/ui-style-kit.visual.css",
   }),
   "ui-theme": Object.freeze({
     export: "ui-style-kit-css/interactive-surface-theme.css",
-    target: "assets/ui-style-kit-css/2.6.1/interactive-surface-theme.css",
+    target: "assets/ui-style-kit-css/2.7.1/interactive-surface-theme.css",
   }),
   "interaction-core": Object.freeze({
     export: "interactive-surface-css/state-core.css",
@@ -224,6 +233,7 @@ export async function assertSafeGeneratedPath(
  * @returns {string} Standalone HTML using only its selected package assets.
  */
 function fixtureMarkup(fixture, assets) {
+  const hasMotion = fixture.styles.includes("motion-style");
   const stylesheetMarkup = fixture.styles
     .map(
       (key) =>
@@ -256,6 +266,7 @@ ${stylesheetMarkup}
         <h1>${escapeHtml(fixture.title)}</h1>
         <p>${escapeHtml(fixture.summary)}</p>
       </header>
+      ${hasMotion ? '<button id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
       <section class="ly-grid" data-proof-layout aria-label="Layout proof">
         <article class="usk-card ly-stack ly-gap-4" data-proof-paint>
           <h2>Shared semantic specimen</h2>
@@ -293,7 +304,17 @@ ${stylesheetMarkup}
           </div>
         </article>
       </section>
+      ${hasMotion ? "</div>" : ""}
     </main>
+    ${
+      hasMotion
+        ? `<script type="module">
+      import { enter } from "./${assets["motion-controller"].target}";
+      const shell = document.querySelector("[data-proof-motion]");
+      document.querySelector("#motion-replay").addEventListener("click", () => { void enter(shell, { preset: "cascade", duration: 420 }); });
+    </script>`
+        : ""
+    }
   </body>
 </html>
 `;
