@@ -31,6 +31,7 @@ export const LAB_NAVIGATION_ITEMS = [
   { label: "Layout", href: "#layouts" },
   { label: "UI & native", href: "#ui-native" },
   { label: "Interactions", href: "#interactions" },
+  { label: "Motion", href: "#motion" },
   { label: "Integration", href: "#integrate" },
   { label: "Install", href: "#install" },
   { label: "Packages", href: "#libraries" },
@@ -52,6 +53,7 @@ export const ATLAS_NAVIGATION_ITEMS = [
   { label: "Layout", href: "#atlas-layout" },
   { label: "UI & native", href: "#atlas-ui" },
   { label: "Interactions", href: "#atlas-interaction" },
+  { label: "Motion", href: "#atlas-motion" },
   { label: "React", href: "#atlas-react" },
 ] as const satisfies readonly NavigationItem[];
 

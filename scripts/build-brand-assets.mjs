@@ -12,7 +12,7 @@ const socialCardSource = path.join(
   repositoryRoot,
   "assets",
   "brand",
-  "ste-systems-social-preview-source.png",
+  "ste-systems-social-preview-motion-source.png",
 );
 const socialCardOutput = path.join(
   publicRoot,

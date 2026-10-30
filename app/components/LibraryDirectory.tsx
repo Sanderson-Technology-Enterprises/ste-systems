@@ -30,8 +30,8 @@ export function LibraryDirectory() {
             <h2 id="libraries-title">Package resources.</h2>
           </div>
           <p>
-            Adopt one layer or all three. Every library remains independently
-            useful, documented, and versioned.
+            Adopt one layer or combine the four. Every library remains
+            independently useful, documented, and versioned.
           </p>
         </div>
 

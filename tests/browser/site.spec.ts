@@ -25,7 +25,7 @@ const repositoryUrl =
   "https://github.com/Sanderson-Technology-Enterprises/ste-systems";
 const socialImageUrl = `${canonicalUrl}ste-systems-social-preview.png`;
 const socialImageAlt =
-  "STE Systems social preview with the text \u201c3 libraries, 1 interface, and 218,400 possibilities\u201d over layout, identity, and interaction.";
+  "STE Systems: four CSS layers for structure, appearance, interaction, and motion. Motion Style CSS is the newest addition.";
 const websiteId = `${canonicalUrl}#website`;
 const webpageId = `${canonicalUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
@@ -200,7 +200,7 @@ test("Lab hero links inherit button geometry from the UI kit", async ({
   }
 });
 
-/** Keeps the three site-owned orbit captions on one aligned row at desktop. */
+/** Keeps the four site-owned orbit captions on one aligned row at desktop. */
 test("observatory legend labels align beside their numbers", async ({
   page,
 }) => {
@@ -219,7 +219,7 @@ test("observatory legend labels align beside their numbers", async ({
       }),
     );
 
-  expect(offsets).toHaveLength(3);
+  expect(offsets).toHaveLength(4);
   for (const offset of offsets) expect(offset).toBeLessThan(10);
 });
 
@@ -493,6 +493,7 @@ test("compact header discloses every navigation destination without horizontal o
     "Layout",
     "UI & native",
     "Interactions",
+    "Motion",
     "Integration",
     "Install",
     "Packages",
@@ -516,7 +517,7 @@ test("compact header discloses every navigation destination without horizontal o
   ).toBeVisible();
   await expect(
     page.locator("#primary-navigation-panel a.interactive-surface.site-action"),
-  ).toHaveCount(11);
+  ).toHaveCount(12);
 
   const widthContract = await page.evaluate(() => {
     const primaryNavigation =
@@ -872,6 +873,12 @@ test("shell keeps observatory controls clear of the interface core", async ({
         variant: "secondary",
         withinStage: true,
       },
+      {
+        label: "Motion",
+        overlapsCore: false,
+        variant: "subtle",
+        withinStage: true,
+      },
     ]);
     expect(geometry.overlappingPairs).toEqual([]);
     expect(geometry.stage.height).toBeCloseTo(geometry.stage.width, 0);
@@ -923,11 +930,11 @@ test("workbench keeps the Layout v3 app-shell bounded on mobile", async ({
   expect(geometry.mainHeight).toBeLessThan(1_800);
 });
 
-test("footer closes with the complete three-library ecosystem", async ({
+test("footer closes with the complete four-library ecosystem", async ({
   page,
 }) => {
   await expect(page.locator(".site-footer")).toContainText(
-    "One semantic interface. Three focused CSS libraries.",
+    "One semantic interface. Four focused CSS libraries.",
   );
 });
 
@@ -1201,7 +1208,7 @@ test("compact header tab order follows the disclosed navigation", async ({
   await expect(navigation).toBeVisible();
 
   const tabOrder: string[] = [];
-  for (let index = 0; index < 11; index += 1) {
+  for (let index = 0; index < 12; index += 1) {
     await page.keyboard.press("Tab");
     tabOrder.push(
       await page.evaluate(
@@ -1216,6 +1223,7 @@ test("compact header tab order follows the disclosed navigation", async ({
     "#layouts",
     "#ui-native",
     "#interactions",
+    "#motion",
     "#integrate",
     "#install",
     "#libraries",
@@ -1236,7 +1244,7 @@ test("compact header tab order follows the disclosed navigation", async ({
         };
       }),
     );
-  expect(targetContract).toHaveLength(11);
+  expect(targetContract).toHaveLength(12);
   expect(
     targetContract.every(
       ({ height, textFits, width }) => height >= 44 && textFits && width > 0,
@@ -1335,7 +1343,7 @@ test("renders the production metadata and complete resource directory", async ({
   ).toBeVisible();
   await expect(
     page.getByRole("heading", {
-      name: "Use one library or combine all three.",
+      name: "Use one layer or compose all four.",
     }),
   ).toBeVisible();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -1438,7 +1446,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.6.1",
+          version: "2.7.1",
         },
       },
       {
@@ -1450,8 +1458,18 @@ test("renders the production metadata and complete resource directory", async ({
           version: "1.7.3",
         },
       },
+      {
+        item: {
+          codeRepository:
+            "https://github.com/Sanderson-Technology-Enterprises/motion-style-css",
+          name: "@sanderson-technology-enterprises/motion-style-css",
+          programmingLanguage: "CSS",
+          url: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
+          version: "1.0.0",
+        },
+      },
     ],
-    numberOfItems: 3,
+    numberOfItems: 4,
   });
 
   await page.goto("./lab/");
@@ -1484,8 +1502,9 @@ test("renders the production metadata and complete resource directory", async ({
 
   for (const [name, version] of [
     ["layout-style-css", "3.2.3"],
-    ["ui-style-kit-css", "2.6.1"],
+    ["ui-style-kit-css", "2.7.1"],
     ["interactive-surface-css", "1.7.3"],
+    ["@sanderson-technology-enterprises/motion-style-css", "1.0.0"],
   ]) {
     const packageEntry = page.locator(`[data-package="${name}"]`);
     await expect(packageEntry.getByRole("heading", { name })).toBeAttached();

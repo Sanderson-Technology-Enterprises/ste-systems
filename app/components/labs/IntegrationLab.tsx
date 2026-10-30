@@ -141,14 +141,20 @@ export function IntegrationLab() {
             </h2>
           </div>
           <p>
-            The three-library example follows your current Lab settings. Single-
-            and two-library examples use fixed settings so you can compare what
-            each combination provides.
+            The complete-stack examples follow your current Lab settings.
+            Single- and two-library examples use fixed settings so you can
+            compare what each combination provides.
           </p>
         </div>
 
-        <div data-integration-group="all">
-          <FixtureCard configuration={configuration} fixture={canonical} />
+        <div data-integration-group="all" className="ly-stack ly-gap-6">
+          {fixturesFor("all").map((fixture) => (
+            <FixtureCard
+              key={fixture.id}
+              configuration={configuration}
+              fixture={fixture}
+            />
+          ))}
         </div>
 
         <div className="integration-disclosures ly-stack ly-gap-4">

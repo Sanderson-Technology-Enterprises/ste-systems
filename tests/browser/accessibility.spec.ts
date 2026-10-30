@@ -113,7 +113,7 @@ test(
   },
 );
 
-test("axe finds no violations in all four library guides", async ({
+test("axe finds no violations in all five library guides", async ({
   page,
 }, testInfo) => {
   await page.goto("./components/");
@@ -121,6 +121,7 @@ test("axe finds no violations in all four library guides", async ({
     "Layout Style CSS",
     "UI Style Kit CSS",
     "Interactive Surface CSS",
+    "Motion Style CSS",
     "STE USK React",
   ]) {
     await page.getByRole("tab", { name, exact: true }).click();

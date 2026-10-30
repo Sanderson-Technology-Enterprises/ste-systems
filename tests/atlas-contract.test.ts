@@ -38,7 +38,7 @@ test("atlas coverage mirrors every published library contract", () => {
       nativePlatformOwned: 6,
       nativeProgressive: 20,
       semantic: 75,
-      universal: 150,
+      universal: 153,
     },
   );
   assert.deepEqual(
@@ -53,17 +53,17 @@ test("atlas coverage mirrors every published library contract", () => {
   );
 });
 
-test("four guides preserve the three-package CSS inventory and documented examples", () => {
-  assert.equal(ECOSYSTEM_PACKAGES.length, 3);
+test("five guides preserve the four-package CSS inventory and documented examples", () => {
+  assert.equal(ECOSYSTEM_PACKAGES.length, 4);
   assert.deepEqual(
     LIBRARY_GUIDES.map((guide) => guide.id),
-    ["layout", "ui", "interaction", "react"],
+    ["layout", "ui", "interaction", "motion", "react"],
   );
   assert.equal(
-    LIBRARY_GUIDES[3].packageName,
+    LIBRARY_GUIDES[4].packageName,
     "@sanderson-technology-enterprises/ste-usk-react",
   );
-  assert.equal(LIBRARY_GUIDES[3].version, "2.1.0");
+  assert.equal(LIBRARY_GUIDES[4].version, "2.3.0");
   assert.match(CSS_GUIDE_EXAMPLES.ui[0].html, /class="usk-card /);
   assert.match(CSS_GUIDE_EXAMPLES.layout[0].html, /class="ly-grid /);
   for (const guide of LIBRARY_GUIDES) {

@@ -199,7 +199,7 @@ function CompanySection() {
 }
 
 /**
- * Renders the spacious-density overview route for the three-library interface
+ * Renders the spacious-density overview route for the four-library interface
  * system and its adoption paths.
  *
  * @returns The exported STE Systems homepage.
@@ -239,7 +239,7 @@ export default function Home() {
           aria-labelledby="home-title"
         >
           <div className="hero-copy ly-stack ly-gap-6">
-            <p className="section-label">Three focused CSS libraries</p>
+            <p className="section-label">Four focused CSS libraries</p>
             <h1 id="home-title">
               Design every layer.
               <br />

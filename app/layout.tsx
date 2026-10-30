@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "@sanderson-technology-enterprises/ste-usk-react/styles.css";
+import "@sanderson-technology-enterprises/motion-style-css/styles.css";
 
 import {
   absoluteSiteAsset,
@@ -12,6 +13,7 @@ import {
 import "./globals.css";
 import "./styles/shell.css";
 import "./styles/observatory.css";
+import "./styles/motion.css";
 import "./styles/labs.css";
 import "./styles/atlas.css";
 import "./styles/responsive.css";

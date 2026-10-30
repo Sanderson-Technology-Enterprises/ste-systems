@@ -18,7 +18,7 @@ test("homepage presents a concise developer portal", async ({ page }) => {
   );
   await expect(
     page.getByRole("heading", {
-      name: "Use one library or combine all three.",
+      name: "Use one layer or compose all four.",
     }),
   ).toBeVisible();
   await expect(

@@ -52,7 +52,7 @@ const serializedAtlasStructuredData = serializeStructuredData(
 );
 
 /**
- * Renders four focused library guides and a handoff to the configurable Lab.
+ * Renders five focused library guides and a handoff to the configurable Lab.
  *
  * @returns The statically exported Components & library guides page.
  */
@@ -96,9 +96,9 @@ export default function ComponentsPage() {
           <p className="section-label">The ecosystem, explained</p>
           <h1 id="atlas-title">Components &amp; library guides</h1>
           <p className="lede">
-            Three CSS libraries for structure, appearance, and interaction. One
-            React library that brings them together. Learn the essentials here,
-            then explore the complete system in the Lab.
+            Four CSS libraries for structure, appearance, interaction, and
+            motion. One React library that brings them together. Learn the
+            essentials here, then explore the complete system in the Lab.
           </p>
           <a
             className="usk-button interactive-surface guide-lab-cta"

@@ -40,16 +40,19 @@ async function collectGeneratedFiles(root, relativeDirectory = "") {
   return files;
 }
 
-test("fixture ownership contains only the three pinned CSS libraries", () => {
+test("fixture ownership contains the four pinned CSS libraries", () => {
   assert.deepEqual(EXPECTED_PACKAGE_VERSIONS, {
     "interactive-surface-css": "1.7.3",
     "layout-style-css": "3.2.3",
-    "ui-style-kit-css": "2.6.1",
+    "ui-style-kit-css": "2.7.1",
+    "@sanderson-technology-enterprises/motion-style-css": "1.0.0",
   });
   assert.deepEqual(Object.keys(FIXTURE_ASSETS).sort(), [
     "interaction-core",
     "interaction-standalone",
     "layout-core",
+    "motion-controller",
+    "motion-style",
     "ui-theme",
     "ui-visual",
   ]);
@@ -69,6 +72,8 @@ test("fixture catalog covers singles, pairs, and the complete stack", async () =
       "layout-interactive",
       "ui-interactive",
       "all-canonical",
+      "motion-only",
+      "all-motion",
     ],
   );
   assert.deepEqual(
@@ -76,11 +81,12 @@ test("fixture catalog covers singles, pairs, and the complete stack", async () =
       counts[fixture.group] = (counts[fixture.group] ?? 0) + 1;
       return counts;
     }, {}),
-    { all: 1, one: 3, pair: 3 },
+    { all: 2, one: 4, pair: 3 },
   );
 
   const declaredPackages = new Set(catalog.flatMap(({ packages }) => packages));
   assert.deepEqual([...declaredPackages].sort(), [
+    "@sanderson-technology-enterprises/motion-style-css",
     "interactive-surface-css",
     "layout-style-css",
     "ui-style-kit-css",
@@ -132,7 +138,7 @@ test("fixture build emits deterministic local-only integration proofs", async ()
     await collectGeneratedFiles(secondBuild.generatedRoot)
   ).sort();
 
-  assert.equal(firstBuild.fixtureCount, 7);
+  assert.equal(firstBuild.fixtureCount, 9);
   assert.deepEqual(secondFiles, firstFiles);
 
   for (const [relativePath, firstContent] of firstContents) {

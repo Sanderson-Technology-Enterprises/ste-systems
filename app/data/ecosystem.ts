@@ -1,19 +1,23 @@
 export type ResourceLink = "repository" | "wiki" | "npm" | "demo";
 
 export type EcosystemPackage = {
-  name: "layout-style-css" | "ui-style-kit-css" | "interactive-surface-css";
+  name:
+    | "layout-style-css"
+    | "ui-style-kit-css"
+    | "interactive-surface-css"
+    | "@sanderson-technology-enterprises/motion-style-css";
   displayName: string;
   version: string;
   layer: string;
   summary: string;
   attribute: string;
   recommendedEntryPoint: string;
-  fixture: "layout-only" | "ui-only" | "interactive-only";
+  fixture: "layout-only" | "ui-only" | "interactive-only" | "motion-only";
   links: Record<ResourceLink, string>;
 };
 
 /** Exact registry version used by installation examples and package contracts. */
-export const UI_STYLE_KIT_INSTALL_SPEC = "2.6.1";
+export const UI_STYLE_KIT_INSTALL_SPEC = "2.7.1";
 
 /** Version-pinned jsDelivr root for the published UI Style Kit package. */
 const UI_STYLE_KIT_CDN_ROOT = `https://cdn.jsdelivr.net/npm/ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`;
@@ -68,6 +72,25 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
       wiki: "https://github.com/Foscat/Interactive-Surface-CSS/wiki",
       npm: "https://www.npmjs.com/package/interactive-surface-css",
       demo: "https://foscat.github.io/Interactive-Surface-CSS/",
+    },
+  },
+  {
+    name: "@sanderson-technology-enterprises/motion-style-css",
+    displayName: "Motion Style CSS",
+    version: "1.0.0",
+    layer: "Motion",
+    summary:
+      "The newest addition to the STE web development system: paired entrances, exits, and choreography on dedicated shells, with reduced-motion support.",
+    attribute: 'data-ms-preset="cascade"',
+    recommendedEntryPoint:
+      "@sanderson-technology-enterprises/motion-style-css/styles.css",
+    fixture: "motion-only",
+    links: {
+      repository:
+        "https://github.com/Sanderson-Technology-Enterprises/motion-style-css",
+      wiki: "https://github.com/Sanderson-Technology-Enterprises/motion-style-css/blob/main/docs/INTEGRATION.md",
+      npm: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
+      demo: "https://stesystems.com/lab/#motion",
     },
   },
 ] as const;
@@ -129,7 +152,9 @@ export type AdoptionPathId =
   | "layout-ui"
   | "layout-interactive"
   | "ui-interactive"
-  | "all-canonical";
+  | "all-canonical"
+  | "motion-only"
+  | "all-motion";
 
 export type AdoptionScope = "one" | "pair" | "all";
 export type AdoptionFormat = "npm" | "bundler" | "cdn";
@@ -194,7 +219,60 @@ function adoptionSnippets(
   ];
 }
 
+const motionStyle: CdnAsset = {
+  packageName: "@sanderson-technology-enterprises/motion-style-css",
+  kind: "style",
+  href: "https://cdn.jsdelivr.net/npm/@sanderson-technology-enterprises/motion-style-css@1.0.0/src/motion.css",
+};
+const motionController: CdnAsset = {
+  packageName: "@sanderson-technology-enterprises/motion-style-css",
+  kind: "module",
+  href: "https://cdn.jsdelivr.net/npm/@sanderson-technology-enterprises/motion-style-css@1.0.0/src/index.js",
+};
+const motionImports = [
+  'import "@sanderson-technology-enterprises/motion-style-css/styles.css";',
+  'import { enter, exit, cancel, stagger } from "@sanderson-technology-enterprises/motion-style-css";',
+  "// Call enter(shell) after mount; cancel(shell) during cleanup.",
+] as const;
+
 export const ADOPTION_PATHS = [
+  {
+    id: "motion-only",
+    scope: "one",
+    title: "Motion Style CSS",
+    deprecated: false,
+    summary:
+      "Add lifecycle effects to a dedicated shell without adopting other CSS libraries.",
+    packages: ["@sanderson-technology-enterprises/motion-style-css"],
+    snippets: adoptionSnippets(
+      "motion-only",
+      "npm install @sanderson-technology-enterprises/motion-style-css@1.0.0",
+      motionImports,
+      [motionStyle, motionController],
+      "Install Motion Style CSS",
+    ),
+  },
+  {
+    id: "all-motion",
+    scope: "all",
+    title: "Four CSS layers with lifecycle motion",
+    deprecated: false,
+    summary:
+      "Compose structure, appearance, and interaction with optional lifecycle motion on separate shells.",
+    packages: [
+      "layout-style-css",
+      "ui-style-kit-css",
+      "interactive-surface-css",
+      "@sanderson-technology-enterprises/motion-style-css",
+    ],
+    snippets: adoptionSnippets(
+      "all-motion",
+      `${NPM_INSTALL} @sanderson-technology-enterprises/motion-style-css@1.0.0`,
+      [...BUNDLER_IMPORTS, ...motionImports],
+      [...CDN_LINKS, motionStyle, motionController],
+      "Install all four CSS libraries",
+    ),
+  },
   {
     id: "layout-only",
     scope: "one",

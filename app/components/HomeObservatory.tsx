@@ -7,7 +7,7 @@ import { ECOSYSTEM_PACKAGES } from "../data/ecosystem";
 import { ExternalLinkIcon } from "./Icons";
 
 /**
- * Renders the three-ring homepage observatory and exposes direct resources for
+ * Renders the four-layer homepage observatory and exposes direct resources for
  * the selected library.
  *
  * @returns The interactive homepage system diagram.
@@ -22,7 +22,7 @@ export function HomeObservatory() {
       aria-labelledby="home-observatory-caption"
     >
       <figcaption className="ly-visually-hidden" id="home-observatory-caption">
-        Three independent CSS libraries orbit one semantic interface. Select a
+        Four independent CSS libraries orbit one semantic interface. Select a
         layer to inspect its package resources.
       </figcaption>
 

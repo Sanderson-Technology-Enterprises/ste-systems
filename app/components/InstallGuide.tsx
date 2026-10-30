@@ -184,9 +184,9 @@ export function InstallGuide() {
     }
   };
 
-  const canonical = ADOPTION_PATHS.find((path) => path.id === "all-canonical");
+  const canonical = ADOPTION_PATHS.find((path) => path.id === "all-motion");
   if (canonical === undefined) {
-    throw new Error("The canonical three-library adoption path is missing.");
+    throw new Error("The four-library motion adoption path is missing.");
   }
 
   const pathsFor = (scope: AdoptionScope) =>
@@ -209,9 +209,10 @@ export function InstallGuide() {
           <p>
             Each option uses exact package versions and includes npm, bundler,
             and CDN instructions. Choose the libraries your application needs.
-            Use one CSS library, combine two, or compose all three. The React
-            guide shows how the component integration connects these same CSS
-            responsibilities without taking ownership of their styling.
+            Use one CSS library, combine the foundational layers, or add
+            lifecycle motion. The React guide shows how the component
+            integration connects these same CSS responsibilities without taking
+            ownership of their styling.
           </p>
         </div>
 
@@ -229,6 +230,17 @@ export function InstallGuide() {
             path={canonical}
             prefix={prefix}
           />
+          {pathsFor("all")
+            .filter((path) => path.id !== canonical.id)
+            .map((path) => (
+              <AdoptionCard
+                key={path.id}
+                copyLabels={copyLabels}
+                onCopy={copySnippet}
+                path={path}
+                prefix={prefix}
+              />
+            ))}
         </div>
 
         <div className="adoption-disclosures ly-stack ly-gap-4">

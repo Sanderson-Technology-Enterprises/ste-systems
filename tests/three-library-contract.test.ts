@@ -15,13 +15,17 @@ import { SITE } from "../app/lib/site";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 
-test("the public ecosystem contains exactly the three CSS libraries", () => {
+test("the public ecosystem contains the four CSS libraries", () => {
   assert.deepEqual(
     ECOSYSTEM_PACKAGES.map(({ name, version }) => ({ name, version })),
     [
       { name: "layout-style-css", version: "3.2.3" },
-      { name: "ui-style-kit-css", version: "2.6.1" },
+      { name: "ui-style-kit-css", version: "2.7.1" },
       { name: "interactive-surface-css", version: "1.7.3" },
+      {
+        name: "@sanderson-technology-enterprises/motion-style-css",
+        version: "1.0.0",
+      },
     ],
   );
 
@@ -31,9 +35,9 @@ test("the public ecosystem contains exactly the three CSS libraries", () => {
     NPM_INSTALL.split(" ").filter((word) => word.includes("@")).length,
     3,
   );
-  assert.match(NPM_INSTALL, /ui-style-kit-css@2\.6\.1(?:\s|$)/);
+  assert.match(NPM_INSTALL, /ui-style-kit-css@2\.7\.1(?:\s|$)/);
   assert.doesNotMatch(NPM_INSTALL, /codeload\.github\.com|tar\.gz/);
-  assert.equal(ADOPTION_PATHS.length, 7);
+  assert.equal(ADOPTION_PATHS.length, 9);
 });
 
 test("the headline count includes densities and native color schemes", () => {
@@ -54,7 +58,7 @@ test("STE Systems identity exposes the approved brand assets and destinations", 
   assert.equal(identity.name, "STE Systems");
   assert.equal(
     identity.title,
-    "STE Systems | Accessible Three-Library Design System",
+    "STE Systems | Accessible Four-Library Design System",
   );
   assert.equal(identity.url, "https://stesystems.com/");
   assert.equal(

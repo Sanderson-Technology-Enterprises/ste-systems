@@ -1,6 +1,6 @@
 # STE Systems
 
-[STE Systems](https://stesystems.com/) is the accessible three-library design system from Sanderson Technology Enterprises LLC. It demonstrates how structure, visual identity, and interaction can share one semantic HTML contract.
+[STE Systems](https://stesystems.com/) is the accessible four-library design system from Sanderson Technology Enterprises LLC. It demonstrates how structure, visual identity, interaction, and lifecycle motion can share one semantic HTML contract.
 
 - Product owner: [Sanderson Technology Enterprises LLC](https://sandersontechnologyenterprises.com/)
 - Custom platform work: [Customized Platforms](https://customizedplatforms.com/)
@@ -10,11 +10,12 @@
 
 ## Ecosystem resources
 
-| Layer     | Package                         | Repository                                                      | Wiki                                                           | npm                                                          | Demo                                                           |
-| --------- | ------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
-| Structure | `layout-style-css@3.2.3`        | [Repository](https://github.com/Foscat/Layout-Style-CSS)        | [Wiki](https://github.com/Foscat/Layout-Style-CSS/wiki)        | [npm](https://www.npmjs.com/package/layout-style-css)        | [Live demo](https://foscat.github.io/Layout-Style-CSS/)        |
-| Identity  | `ui-style-kit-css@2.6.1`        | [Repository](https://github.com/Foscat/ui-style-kit-css)        | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)        | [npm](https://www.npmjs.com/package/ui-style-kit-css)        | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
-| Behavior  | `interactive-surface-css@1.7.3` | [Repository](https://github.com/Foscat/Interactive-Surface-CSS) | [Wiki](https://github.com/Foscat/Interactive-Surface-CSS/wiki) | [npm](https://www.npmjs.com/package/interactive-surface-css) | [Live demo](https://foscat.github.io/Interactive-Surface-CSS/) |
+| Layer     | Package                                                    | Repository                                                                         | Wiki                                                                                                              | npm                                                                                     | Demo                                                           |
+| --------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Structure | `layout-style-css@3.2.3`                                   | [Repository](https://github.com/Foscat/Layout-Style-CSS)                           | [Wiki](https://github.com/Foscat/Layout-Style-CSS/wiki)                                                           | [npm](https://www.npmjs.com/package/layout-style-css)                                   | [Live demo](https://foscat.github.io/Layout-Style-CSS/)        |
+| Identity  | `ui-style-kit-css@2.7.1`                                   | [Repository](https://github.com/Foscat/ui-style-kit-css)                           | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)                                                           | [npm](https://www.npmjs.com/package/ui-style-kit-css)                                   | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
+| Behavior  | `interactive-surface-css@1.7.3`                            | [Repository](https://github.com/Foscat/Interactive-Surface-CSS)                    | [Wiki](https://github.com/Foscat/Interactive-Surface-CSS/wiki)                                                    | [npm](https://www.npmjs.com/package/interactive-surface-css)                            | [Live demo](https://foscat.github.io/Interactive-Surface-CSS/) |
+| Motion    | `@sanderson-technology-enterprises/motion-style-css@1.0.0` | [Repository](https://github.com/Sanderson-Technology-Enterprises/motion-style-css) | [Integration](https://github.com/Sanderson-Technology-Enterprises/motion-style-css/blob/main/docs/INTEGRATION.md) | [npm](https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css) | [Live Lab](https://stesystems.com/lab/#motion)                 |
 
 ## Adoption matrix
 
@@ -22,22 +23,24 @@ Every package is independently useful. The showcase documents and renders all
 supported combinations so teams can begin with one responsibility and add
 layers without changing ownership boundaries.
 
-| Path                 | Libraries               | Recommended entry points                                                                                                                      |
-| -------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Layout only          | Layout                  | `layout-style-css`                                                                                                                            |
-| UI only              | UI                      | `ui-style-kit-css/visual.css`                                                                                                                 |
-| Interaction only     | Interaction             | `interactive-surface-css/standalone-preset.css`                                                                                               |
-| Layout + UI          | Layout, UI              | `ui-style-kit-css/visual.css`, `layout-style-css`                                                                                             |
-| Layout + interaction | Layout, interaction     | `interactive-surface-css/standalone-preset.css`, `layout-style-css`                                                                           |
-| UI + interaction     | UI, interaction         | `ui-style-kit-css/visual.css`, `ui-style-kit-css/interactive-surface-theme.css`, `interactive-surface-css/state-core.css`                     |
-| Complete stack       | Layout, UI, interaction | `ui-style-kit-css/visual.css`, `ui-style-kit-css/interactive-surface-theme.css`, `interactive-surface-css/state-core.css`, `layout-style-css` |
+| Path                   | Libraries                       | Recommended entry points                                                                                                                      |
+| ---------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Layout only            | Layout                          | `layout-style-css`                                                                                                                            |
+| UI only                | UI                              | `ui-style-kit-css/visual.css`                                                                                                                 |
+| Interaction only       | Interaction                     | `interactive-surface-css/standalone-preset.css`                                                                                               |
+| Layout + UI            | Layout, UI                      | `ui-style-kit-css/visual.css`, `layout-style-css`                                                                                             |
+| Layout + interaction   | Layout, interaction             | `interactive-surface-css/standalone-preset.css`, `layout-style-css`                                                                           |
+| UI + interaction       | UI, interaction                 | `ui-style-kit-css/visual.css`, `ui-style-kit-css/interactive-surface-theme.css`, `interactive-surface-css/state-core.css`                     |
+| Complete stack         | Layout, UI, interaction         | `ui-style-kit-css/visual.css`, `ui-style-kit-css/interactive-surface-theme.css`, `interactive-surface-css/state-core.css`, `layout-style-css` |
+| Motion only            | Motion                          | `@sanderson-technology-enterprises/motion-style-css/styles.css` and its public controller                                                     |
+| Full stack with motion | Layout, UI, interaction, motion | Foundational entries above, followed by the motion stylesheet and public controller                                                           |
 
 ## Install with npm
 
-Install the exact aligned releases:
+Install the exact aligned foundational releases:
 
 ```bash
-npm install ui-style-kit-css@2.6.1 layout-style-css@3.2.3 interactive-surface-css@1.7.3
+npm install ui-style-kit-css@2.7.1 layout-style-css@3.2.3 interactive-surface-css@1.7.3
 ```
 
 Then load the package entry points in ownership order. UI Style Kit establishes
@@ -55,7 +58,7 @@ import "interactive-surface-css/state-core.css";
 import "layout-style-css";
 ```
 
-UI Style Kit 2.6 exposes 20 visual systems and 25 themes through stable
+UI Style Kit 2.7.1 exposes 20 visual systems and 25 themes through stable
 semantic classes such as `.usk-card`,
 `.usk-field`, `.usk-input`, and `.usk-button`. The earlier `.ui-*` component
 classes remain compatibility aliases. Set `data-ui-variant` on semantic
@@ -89,11 +92,11 @@ For static HTML consumers, keep this exact order in the document head:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1/dist/ui-style-kit.visual.min.css"
+  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1/dist/ui-style-kit.visual.min.css"
 />
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.6.1/styles/interactive-surface-theme.css"
+  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1/styles/interactive-surface-theme.css"
 />
 <link
   rel="stylesheet"
@@ -173,7 +176,7 @@ transmitted by the site.
 
 ## Local CSS policy
 
-This project exists to demonstrate three CSS libraries, so local CSS should stay
+This project exists to demonstrate four CSS libraries, so local CSS should stay
 small. Prefer library classes such as `ly-wrapper`, `ly-section`, `ly-grid`,
 `ly-card-grid`, `ly-stack`, `ly-cluster`, `ly-surface`, `ly-app-shell`, and
 `interactive-surface` before adding a project-specific class.
@@ -215,3 +218,29 @@ The stable technical counting destination is https://stesystems.com/#configurati
 It explains installed-manifest factors, excluded display modes, and verification boundaries.
 The public React overview remains https://stesystems.com/components/#atlas-react.
 See [the three-site roadmap implementation record](docs/website-roadmap-2026-10-19.md) for scope, review captures, and release status.
+
+## Motion Style CSS
+
+Motion Style CSS is the newest addition to the STE web development system. The fourth CSS layer supplies ten paired presets and choreography on dedicated shells. Try `/lab/#motion`, read `/components/#atlas-motion`, or use the static reference at `/components/reference/#atlas-motion`. Motion presets are separate from the manifest-derived design-configuration count.
+
+The optional STE USK React 2.3.0 `/motion` adapter retains exiting children and cancels superseded effects. The root React stylesheet and motion stylesheet are each imported once in the application layout.
+
+Install the optional React motion integration and its four aligned CSS peers:
+
+```bash
+npm install @sanderson-technology-enterprises/ste-usk-react@2.3.0 @sanderson-technology-enterprises/motion-style-css@1.0.0 ui-style-kit-css@2.7.1 layout-style-css@3.2.3 interactive-surface-css@1.7.3
+```
+
+```tsx
+// Import both stylesheets once at the application entry.
+import "@sanderson-technology-enterprises/ste-usk-react/styles.css";
+import "@sanderson-technology-enterprises/motion-style-css/styles.css";
+import { Motion } from "@sanderson-technology-enterprises/ste-usk-react/motion";
+
+// Keep layout outside this shell and painted components inside it.
+<Motion present={visible} enter={{ preset: "cascade" }}>
+  <p>Content stays mounted while its exit completes.</p>
+</Motion>;
+```
+
+Move focus before hiding interactive content. Keep the default reduced-motion preference enabled. Framework-free consumers can use the same stylesheet with the public `enter`, `exit`, `stagger`, and `cancel` controller exports.

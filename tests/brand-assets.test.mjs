@@ -126,7 +126,7 @@ test("brand PNG outputs retain their public dimensions", async () => {
 test("generated social card preserves the supplied artwork without overlays", async () => {
   const sourcePath = path.join(
     repositoryRoot,
-    "assets/brand/ste-systems-social-preview-source.png",
+    "assets/brand/ste-systems-social-preview-motion-source.png",
   );
   const outputPath = path.join(
     repositoryRoot,

@@ -1,0 +1,17 @@
+/* Product diagram geometry: the fourth layer remains outside the interface core. */
+.home-orbit-ring-4 {
+  inset: 9%;
+  border-color: rgb(var(--usk-link-rgb) / 68%);
+}
+.home-orbit-control-4 {
+  inset-block-end: 8%;
+  inset-inline-end: 0;
+}
+.orbit-ring-motion {
+  inset: 10%;
+  color: rgb(var(--usk-link-rgb));
+}
+.observatory-orbit-motion {
+  inset-block-start: 12%;
+  inset-inline-end: 0;
+}

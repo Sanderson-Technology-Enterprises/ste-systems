@@ -140,20 +140,26 @@ const integrationFixtures = [
   "layout-interactive",
   "ui-interactive",
   "all-canonical",
+  "motion-only",
+  "all-motion",
 ] as const;
 
 const integrationFixtureDomOrder = [
   "all-canonical",
+  "all-motion",
   "layout-only",
   "ui-only",
   "interactive-only",
+  "motion-only",
   "layout-ui",
   "layout-interactive",
   "ui-interactive",
 ] as const;
 
 const adoptionDomOrder = [
+  "all-motion",
   "all-canonical",
+  "motion-only",
   "layout-only",
   "ui-only",
   "interactive-only",
@@ -170,6 +176,8 @@ const integrationTruth = {
   "layout-interactive": { interaction: true, layout: true, ui: false },
   "ui-interactive": { interaction: true, layout: false, ui: true },
   "all-canonical": { interaction: true, layout: true, ui: true },
+  "all-motion": { interaction: true, layout: true, ui: true },
+  "motion-only": { interaction: false, layout: false, ui: false },
 } as const;
 
 const nativeInputTypes = [
@@ -2289,7 +2297,7 @@ test("review contract renders distinct variant and level treatments", async ({
   expect(new Set(levelSignatures).size).toBe(interactionLevels.length);
 });
 
-test("integration laboratory progressively discloses exactly seven isolated fixtures", async ({
+test("integration laboratory progressively discloses exactly nine isolated fixtures", async ({
   page,
 }) => {
   await expect(page.locator("#integrate")).toHaveCount(1);
@@ -2300,7 +2308,7 @@ test("integration laboratory progressively discloses exactly seven isolated fixt
   ).toBeVisible();
   await expect(
     page.locator('[data-integration-group="one"] [data-integration-fixture]'),
-  ).toHaveCount(3);
+  ).toHaveCount(4);
   await expect(
     page.locator('[data-integration-group="pair"] [data-integration-fixture]'),
   ).toHaveCount(3);
@@ -2335,7 +2343,7 @@ test("integration laboratory progressively discloses exactly seven isolated fixt
   const standaloneProofs = page.locator(
     "#libraries [data-package] [data-standalone-fixture]",
   );
-  await expect(standaloneProofs).toHaveCount(3);
+  await expect(standaloneProofs).toHaveCount(4);
   expect(
     await standaloneProofs.evaluateAll((links) =>
       links.map((link) => ({
@@ -2361,6 +2369,11 @@ test("integration laboratory progressively discloses exactly seven isolated fixt
       fixture: "interactive-only",
       href: "/ste-systems/fixtures/generated/interactive-only.html",
       packageName: "interactive-surface-css",
+    },
+    {
+      fixture: "motion-only",
+      href: "/ste-systems/fixtures/generated/motion-only.html",
+      packageName: "@sanderson-technology-enterprises/motion-style-css",
     },
   ]);
   for (const displayName of [

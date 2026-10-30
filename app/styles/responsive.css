@@ -78,7 +78,6 @@
 }
 
 @media (max-width: 62rem) {
-  .package-overview-grid,
   .quick-start-layout,
   .company-overview {
     grid-template-columns: minmax(0, 1fr);
@@ -138,10 +137,6 @@
   }
 
   .site-navigation[data-presentation="disclosure"] .navigation-actions {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .package-overview-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
