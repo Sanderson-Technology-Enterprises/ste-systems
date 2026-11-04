@@ -59,3 +59,19 @@ updated without introducing a generator dependency.
 
 Remote commit, PR checks and merge readiness must be verified against the pushed
 SHA separately. This record does not claim deployment or a merge.
+
+## Remote integration contract follow-up
+
+The first runnable integration job passed formatting, lint and type checking, then
+found four source-contract assertions that still described the previous Lab. Those
+assertions now require the stable editor provider, public density props on their
+owning roots, the single workbench, retained resource landmarks and the concise
+Guides menu. Each affected case passed individually; no test was disabled and no
+application code or styling changed. Existing rendered legacy-anchor coverage
+continues to verify inspector routing and the integration disclosure.
+
+The organization-controlled Actions policy initially rejected the workflow. The
+user approved its four exact action pins and separately approved the sole nested
+upload-artifact pin. Readback verified all five additions while retaining existing
+entries and both broad-action restrictions. Verification runs on the feature
+branch preserve the independently verified main-only deployment guards.

@@ -41,7 +41,8 @@ test("homepage navigation keeps the focused portal concise", async () => {
   );
 });
 
-test("lab navigation exposes every retained deep-link section", async () => {
+/** Keeps the primary menu focused while the inspector handles legacy fragments. */
+test("lab navigation points to the workbench and focused guides", async () => {
   const navigation = await loadNavigationModule();
 
   assert.ok(navigation.LAB_NAVIGATION_ITEMS);
@@ -51,11 +52,7 @@ test("lab navigation exposes every retained deep-link section", async () => {
     [
       ["Top", "#top"],
       ["Workbench", "#workbench"],
-      ["Layout", "#layouts"],
-      ["UI & native", "#ui-native"],
-      ["Interactions", "#interactions"],
-      ["Motion", "#motion"],
-      ["Integration", "#integrate"],
+      ["Guides", "#guides"],
       ["Install", "#install"],
       ["Packages", "#libraries"],
     ],
