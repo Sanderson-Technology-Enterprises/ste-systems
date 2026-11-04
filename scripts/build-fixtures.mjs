@@ -260,14 +260,14 @@ ${stylesheetMarkup}
     data-fixture-id="${escapeHtml(fixture.id)}"
     data-fixture-root
   >
-    <main class="ly-wrapper ly-section ly-stack ly-gap-6">
+    <main class="ly-wrapper ly-section ly-stack ly-gap-6" aria-label="${escapeHtml(fixture.title)}">
       <header class="ly-stack ly-gap-2">
         <p>Isolated package proof</p>
         <h1>${escapeHtml(fixture.title)}</h1>
         <p>${escapeHtml(fixture.summary)}</p>
       </header>
       ${hasMotion ? '<button id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
-      <section class="ly-grid" data-proof-layout aria-label="Layout proof">
+      <section class="ly-grid" data-proof-layout aria-label="${escapeHtml(fixture.title)} layout proof">
         <article class="usk-card ly-stack ly-gap-4" data-proof-paint>
           <h2>Shared semantic specimen</h2>
           <label class="usk-field" for="fixture-field">

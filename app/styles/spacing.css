@@ -1,0 +1,97 @@
+/* Approved site policy extends the library floor to Blueprint and text controls.
+   Preset layers retain larger values; this layer never flattens preset padding. */
+@layer ui-style-kit.components {
+  [data-ui="technical-blueprint"][data-mode]
+    :where(
+      div,
+      aside,
+      main,
+      nav,
+      header,
+      footer,
+      section,
+      article,
+      form,
+      fieldset,
+      details,
+      summary
+    ) {
+    padding: 2px;
+  }
+  /* Exceed the broad element-floor selector within this layer, not preset layers. */
+  [data-ui][data-mode]:is([data-ui][data-mode])
+    :where(
+      button,
+      span,
+      input,
+      select,
+      textarea,
+      a[href],
+      a.usk-button,
+      [role="button"]
+    ) {
+    padding-block: max(2px, var(--usk-compact-padding-block-min, 2px));
+    padding-inline: max(3px, var(--usk-compact-padding-inline-min, 3px));
+  }
+}
+
+/* The public inline-link reset runs after component spacing. Restore the site
+   clearance floor in that same layer while preserving inline prose flow. */
+@layer ui-style-kit.clean_defaults {
+  [data-ui][data-mode]:is([data-ui][data-mode])
+    :where(a:not([class])[href], a[data-link-presentation="inline"][href]) {
+    padding: 2px 3px;
+  }
+}
+
+/* Explicit zero-step layout choices retain the user's content safety floor. */
+[data-ui][data-mode] .ly-pad-0 {
+  padding: 2px;
+}
+[data-ui][data-mode] span.ly-pad-0 {
+  padding: 2px 3px;
+}
+
+/* Document and editor roots are not descendants of their own theme selector. */
+.experience,
+[data-editor-chrome],
+.lab-editor-experience > main,
+.unified-workbench,
+.workbench-split,
+.workbench-panes,
+.inspector-dock,
+.inspector-panel-root {
+  padding: 2px;
+}
+
+/* Reviewed flush composition helpers retain a visible-content safety inset. */
+[data-ui][data-mode] .ly-wrapper--breakout,
+[data-ui][data-mode] .usk-nav {
+  padding: 2px;
+}
+[data-ui][data-mode] .usk-icon-button,
+[data-ui][data-mode] .usk-link__label {
+  padding: 2px 3px;
+}
+
+/* These material presets explicitly zero the block padding of their controls.
+   Restore only that missing axis; preserve their wider horizontal interiors. */
+:is([data-ui="bento"], [data-ui="industrial-utility"])[data-mode]
+  :where(button, input:not(.usk-form-choice-input), select) {
+  padding-block: 2px;
+}
+[data-ui="industrial-utility"][data-mode] input[type="range"] {
+  padding-inline: 3px;
+}
+
+/* These preset table shells are authored flush; site specimens retain clearance. */
+:is(
+    [data-ui="y2k"],
+    [data-ui="organic-modern"],
+    [data-ui="industrial-utility"],
+    [data-ui="paper-editorial"],
+    [data-ui="neo-noir"]
+  )[data-mode]
+  .usk-table-wrap {
+  padding: 2px;
+}

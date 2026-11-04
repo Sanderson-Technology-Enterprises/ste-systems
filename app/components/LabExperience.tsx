@@ -13,10 +13,12 @@ import {
 
 import {
   LAYOUT_PERSONALITIES,
+  LAYOUT_RECIPES,
   UI_MODES,
   UI_PRESETS,
   UI_THEMES,
   type LayoutPersonality,
+  type LayoutRecipe,
   type UiMode,
   type UiPreset,
 } from "../data/catalog";
@@ -30,11 +32,20 @@ import {
   type LabTheme,
   type LabConfiguration,
 } from "../lib/configuration";
+import { useConfigurationMotion } from "./useConfigurationMotion";
 
-const configurationKeys = ["layout", "ui", "theme", "mode"] as const;
+const configurationKeys = [
+  "layout",
+  "ui",
+  "theme",
+  "mode",
+  "recipe",
+  "density",
+] as const;
 
 type LabConfigurationContextValue = {
   configuration: LabConfiguration;
+  requestedConfiguration: LabConfiguration;
   announce: (message: string) => void;
   randomizeConfiguration: () => void;
   resetConfiguration: () => void;
@@ -42,10 +53,16 @@ type LabConfigurationContextValue = {
   setMode: (mode: UiMode) => void;
   setTheme: (theme: LabTheme) => void;
   setUi: (ui: UiPreset) => void;
+  setRecipe: (recipe: LayoutRecipe) => void;
+  setDensity: (density: NonNullable<LabConfiguration["density"]>) => void;
+  configure: (patch: Partial<LabConfiguration>) => void;
+  applyPreviewChange: (apply: () => void) => Promise<void>;
+  interruptPreviewChange: (commitPending?: boolean) => void;
 };
 
 type LabExperienceProps = {
   children: ReactNode;
+  stableEditor?: boolean;
 };
 
 const LabConfigurationContext =
@@ -112,7 +129,10 @@ function sameConfiguration(
  * @param props.children Laboratory sections rendered inside the shared root.
  * @returns The configured STE Systems Lab experience.
  */
-export function LabExperience({ children }: LabExperienceProps) {
+export function LabExperience({
+  children,
+  stableEditor = false,
+}: LabExperienceProps) {
   const [configuration, setConfiguration] = useState<LabConfiguration>(() => ({
     ...DEFAULT_CONFIGURATION,
   }));
@@ -121,6 +141,17 @@ export function LabExperience({ children }: LabExperienceProps) {
     revision: 0,
   });
   const configurationRef = useRef(configuration);
+  const [requestedConfiguration, setRequestedConfiguration] =
+    useState(configuration);
+  const experienceRef = useRef<HTMLDivElement>(null);
+  const getMotionShell = useCallback(
+    () =>
+      experienceRef.current?.querySelector<HTMLElement>(
+        "[data-workbench-motion], [data-lab-configuration-motion]",
+      ) ?? null,
+    [],
+  );
+  const { transition, interrupt } = useConfigurationMotion(getMotionShell);
 
   const announce = useCallback((message: string) => {
     setAnnouncement((current) => ({
@@ -132,11 +163,12 @@ export function LabExperience({ children }: LabExperienceProps) {
   const commitConfiguration = useCallback(
     (nextConfiguration: LabConfiguration) => {
       configurationRef.current = nextConfiguration;
-      setConfiguration(nextConfiguration);
+      setRequestedConfiguration(nextConfiguration);
+      void transition(() => setConfiguration(nextConfiguration));
       persistConfiguration(nextConfiguration);
       replaceConfigurationUrl(nextConfiguration);
     },
-    [],
+    [transition],
   );
 
   useEffect(() => {
@@ -166,6 +198,7 @@ export function LabExperience({ children }: LabExperienceProps) {
 
     if (!sameConfiguration(configurationRef.current, hydratedConfiguration)) {
       setConfiguration(hydratedConfiguration);
+      setRequestedConfiguration(hydratedConfiguration);
     }
     configurationRef.current = hydratedConfiguration;
 
@@ -216,12 +249,30 @@ export function LabExperience({ children }: LabExperienceProps) {
     [announce, commitConfiguration],
   );
 
+  const setRecipe = useCallback(
+    (recipe: LayoutRecipe) => {
+      commitConfiguration({ ...configurationRef.current, recipe });
+      announce(`Recipe changed to ${formatCatalogLabel(recipe)}.`);
+    },
+    [announce, commitConfiguration],
+  );
+
+  const setDensity = useCallback(
+    (density: NonNullable<LabConfiguration["density"]>) => {
+      commitConfiguration({ ...configurationRef.current, density });
+      announce(`Spacing density changed to ${density}.`);
+    },
+    [announce, commitConfiguration],
+  );
+
   const randomizeConfiguration = useCallback(() => {
     const nextConfiguration: LabConfiguration = {
       layout: pickRandom(LAYOUT_PERSONALITIES),
       ui: pickRandom(UI_PRESETS).id,
       theme: pickRandom(UI_THEMES),
       mode: pickRandom(UI_MODES),
+      recipe: pickRandom(LAYOUT_RECIPES),
+      density: pickRandom(["compact", "normal", "spacious"] as const),
     };
     commitConfiguration(nextConfiguration);
     announce("A randomized interface configuration is ready.");
@@ -230,15 +281,17 @@ export function LabExperience({ children }: LabExperienceProps) {
   const resetConfiguration = useCallback(() => {
     const nextConfiguration: LabConfiguration = { ...DEFAULT_CONFIGURATION };
     configurationRef.current = nextConfiguration;
-    setConfiguration(nextConfiguration);
+    setRequestedConfiguration(nextConfiguration);
+    void transition(() => setConfiguration(nextConfiguration));
     removeStoredConfiguration();
     clearConfigurationUrl();
     announce("Configuration reset to the defaults.");
-  }, [announce]);
+  }, [announce, transition]);
 
   const contextValue = useMemo<LabConfigurationContextValue>(
     () => ({
       configuration,
+      requestedConfiguration,
       announce,
       randomizeConfiguration,
       resetConfiguration,
@@ -246,9 +299,16 @@ export function LabExperience({ children }: LabExperienceProps) {
       setMode,
       setTheme,
       setUi,
+      setRecipe,
+      setDensity,
+      configure: (patch) =>
+        commitConfiguration({ ...configurationRef.current, ...patch }),
+      applyPreviewChange: transition,
+      interruptPreviewChange: interrupt,
     }),
     [
       configuration,
+      requestedConfiguration,
       announce,
       randomizeConfiguration,
       resetConfiguration,
@@ -256,20 +316,30 @@ export function LabExperience({ children }: LabExperienceProps) {
       setMode,
       setTheme,
       setUi,
+      setRecipe,
+      setDensity,
+      commitConfiguration,
+      transition,
+      interrupt,
     ],
   );
 
   return (
     <LabConfigurationContext.Provider value={contextValue}>
       <div
-        className="experience lab-experience ly-root ly-page"
-        data-ly-density="normal"
-        data-ly-layout={configuration.layout}
-        data-ui={configuration.ui}
-        data-theme={
-          configuration.theme === "native" ? undefined : configuration.theme
+        ref={experienceRef}
+        className={`experience lab-experience ly-root ly-page${stableEditor ? " lab-editor-experience" : ""}`}
+        data-ly-density={
+          stableEditor ? "normal" : (configuration.density ?? "normal")
         }
-        data-mode={configuration.mode}
+        data-ly-layout={stableEditor ? "minimal-saas" : configuration.layout}
+        data-ui={stableEditor ? undefined : configuration.ui}
+        data-theme={
+          stableEditor || configuration.theme === "native"
+            ? undefined
+            : configuration.theme
+        }
+        data-mode={stableEditor ? undefined : configuration.mode}
       >
         {children}
         <p

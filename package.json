@@ -13,7 +13,7 @@
     "build": "next build",
     "prebuild:pages": "npm run assets:build",
     "build:pages": "cross-env PAGES_BASE_PATH=/ste-systems next build",
-    "start": "next start",
+    "start": "node scripts/serve-preview.mjs out",
     "preview:prepare": "node scripts/prepare-preview.mjs",
     "preview:serve": "node scripts/serve-preview.mjs .preview 4173",
     "format": "prettier --write --ignore-unknown .",
@@ -35,12 +35,18 @@
     "typecheck": "tsc --noEmit",
     "quality": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run test:fixtures && npm run test:brand && npm run test:dev-hydration && npm run build:pages && npm run test:export && npm run test:browser"
   },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.2": true,
+    "fsevents@2.3.3": true,
+    "unrs-resolver@1.11.1": true
+  },
   "dependencies": {
     "@sanderson-technology-enterprises/motion-style-css": "1.0.0",
     "@sanderson-technology-enterprises/ste-usk-react": "2.3.0",
     "interactive-surface-css": "1.7.3",
     "layout-style-css": "3.2.3",
-    "next": "16.3.8",
+    "next": "16.4.5",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "ui-style-kit-css": "2.7.1"
@@ -56,9 +62,9 @@
     "@types/react-dom": "19.2.3",
     "cross-env": "10.1.0",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "16.4.5",
     "prettier": "3.9.5",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "tsx": "4.23.1",
     "typescript": "5.9.3"
   },

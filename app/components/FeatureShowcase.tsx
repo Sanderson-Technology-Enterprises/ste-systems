@@ -12,6 +12,7 @@ const packageLabAnchors: Record<
   "@sanderson-technology-enterprises/motion-style-css": "motion",
 };
 
+/** Present the package comparison with intrinsically readable cards and complete action labels. */
 export function FeatureShowcase() {
   return (
     <section
@@ -46,7 +47,7 @@ export function FeatureShowcase() {
                 </code>
               </header>
               <p className="muted-copy">{pkg.summary}</p>
-              <div className="package-overview-actions ly-cluster ly-gap-2">
+              <div className="package-overview-actions ly-stack ly-items-stretch ly-gap-2">
                 <a
                   className="interactive-surface site-action"
                   data-surface-variant="subtle"

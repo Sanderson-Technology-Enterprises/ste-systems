@@ -1,9 +1,11 @@
 import {
   LAYOUT_PERSONALITIES,
+  LAYOUT_RECIPES,
   UI_MODES,
   UI_PRESETS,
   UI_THEMES,
   type LayoutPersonality,
+  type LayoutRecipe,
   type UiMode,
   type UiPreset,
   type UiTheme,
@@ -27,6 +29,9 @@ export type LabConfiguration = {
   ui: UiPreset;
   theme: LabTheme;
   mode: UiMode;
+  /** Optional additions preserve existing v1 URLs and stored configurations. */
+  recipe?: LayoutRecipe;
+  density?: "compact" | "normal" | "spacious";
 };
 
 export const CONFIGURATION_STORAGE_KEY =
@@ -71,6 +76,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/** Validate new recipe choices against the same catalog rendered by the controls. */
+function isRecipe(value: unknown): value is LayoutRecipe {
+  return (
+    typeof value === "string" &&
+    LAYOUT_RECIPES.some((recipe) => recipe === value)
+  );
+}
+
+/** Validate the library's three supported spacing-density values. */
+function isDensity(
+  value: unknown,
+): value is NonNullable<LabConfiguration["density"]> {
+  return value === "compact" || value === "normal" || value === "spacious";
+}
+
 function resolveValue<T>(
   queryValue: string | null,
   storedValue: unknown,
@@ -100,6 +120,8 @@ export function parseStoredConfiguration(
     if (isUiPreset(parsed.ui)) configuration.ui = parsed.ui;
     if (isLabTheme(parsed.theme)) configuration.theme = parsed.theme;
     if (isUiMode(parsed.mode)) configuration.mode = parsed.mode;
+    if (isRecipe(parsed.recipe)) configuration.recipe = parsed.recipe;
+    if (isDensity(parsed.density)) configuration.density = parsed.density;
     return configuration;
   } catch {
     return null;
@@ -110,7 +132,19 @@ export function parseConfiguration(
   search: URLSearchParams,
   stored: StoredConfiguration | null = null,
 ): LabConfiguration {
+  const recipe = isRecipe(search.get("recipe"))
+    ? (search.get("recipe") as LayoutRecipe)
+    : isRecipe(stored?.recipe)
+      ? stored.recipe
+      : undefined;
+  const density = isDensity(search.get("density"))
+    ? (search.get("density") as LabConfiguration["density"])
+    : isDensity(stored?.density)
+      ? stored.density
+      : undefined;
   return {
+    ...(recipe ? { recipe } : {}),
+    ...(density ? { density } : {}),
     layout: resolveValue(
       search.get("layout"),
       stored?.layout,
@@ -146,6 +180,8 @@ export function serializeConfiguration(
   search.set("ui", configuration.ui);
   search.set("theme", configuration.theme);
   search.set("mode", configuration.mode);
+  if (configuration.recipe) search.set("recipe", configuration.recipe);
+  if (configuration.density) search.set("density", configuration.density);
   return search;
 }
 
@@ -155,6 +191,6 @@ export function configurationMarkup(configuration: LabConfiguration): string {
   class="ly-root"
   data-ly-layout="${configuration.layout}"
   data-ui="${configuration.ui}"${configuration.theme === "native" ? "" : `\n  data-theme="${configuration.theme}"`}
-  data-mode="${configuration.mode}"
+  data-mode="${configuration.mode}"${configuration.recipe ? `\n  data-ly-recipe="${configuration.recipe}"` : ""}${configuration.density ? `\n  data-ly-density="${configuration.density}"` : ""}
 ></main>`;
 }

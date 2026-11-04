@@ -3,6 +3,7 @@ import {
   SUPPORTED_COMBINATIONS_LABEL,
 } from "../data/atlas";
 import { ECOSYSTEM_PACKAGES } from "../data/ecosystem";
+import { withBasePath } from "../lib/site";
 
 /** Publishes the count scope from the same manifest factors used by the total. */
 export function ConfigurationReference() {
@@ -38,6 +39,13 @@ export function ConfigurationReference() {
             narrower count that omits spacing densities and native schemes will
             differ, even with the same layout and preset inventory.
           </span>
+        </p>
+        <p>
+          <a href={withBasePath("/lab/#workbench")}>
+            Explore every configuration
+          </a>{" "}
+          in the client playground, adjust hover intensity and motion, and copy
+          a custom color theme to share with your developer.
         </p>
         <div className="ly-stack ly-gap-3">
           <h3>Versions used by this showcase</h3>

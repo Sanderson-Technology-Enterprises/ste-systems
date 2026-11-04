@@ -53,10 +53,17 @@ type VerificationMetadata = {
   other?: Record<string, string>;
 };
 
-/** Prefixes local export assets only when a Pages base path is explicitly supplied. */
+/**
+ * Prefix local assets with the build-inlined public path, including client-mounted examples.
+ * @param path Site-local route or asset path.
+ * @param requestedBasePath Explicit override for root exports and Node-only callers.
+ * @returns The normalized export-aware path.
+ */
 export function withBasePath(
   path: string,
-  requestedBasePath = process.env.PAGES_BASE_PATH ?? "",
+  requestedBasePath = process.env.NEXT_PUBLIC_PAGES_BASE_PATH ??
+    process.env.PAGES_BASE_PATH ??
+    "",
 ): string {
   const trimmedBasePath = requestedBasePath.trim();
   const normalizedBasePath = trimmedBasePath

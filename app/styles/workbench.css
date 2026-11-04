@@ -1,0 +1,306 @@
+/* The workbench owns its editor shell; selected library paint stays in the preview. */
+.lab-editor-experience {
+  background: #07111f;
+  color: #f7edd7;
+  min-block-size: 100dvh;
+}
+/* The theme boundary, rather than its short-lived child block, owns stickiness. */
+.lab-editor-experience > [data-editor-chrome]:has(> .site-header) {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--ly-z-header, 20);
+}
+.workbench-introduction {
+  padding-block: 1.5rem;
+}
+.workbench-introduction h1 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  margin: 0;
+}
+.workbench-introduction .lede {
+  max-inline-size: 68ch;
+  margin: 0;
+}
+.unified-workbench {
+  inline-size: min(100% - 2rem, 120rem);
+  margin-inline: auto;
+  scroll-margin-block-start: calc(var(--workbench-header-height, 6rem) + 16px);
+}
+/* Document anchors share the measured editor-header clearance, including tablets. */
+.lab-editor-experience :where(section[id]) {
+  scroll-margin-block-start: calc(var(--workbench-header-height, 6rem) + 16px);
+}
+.workbench-split {
+  min-inline-size: 0;
+  min-block-size: 0;
+  block-size: calc(100dvh - var(--workbench-header-height, 6rem) - 32px);
+}
+.workbench-panes {
+  align-items: stretch;
+  block-size: 100%;
+  min-block-size: 0;
+}
+.inspector-dock {
+  display: grid;
+  grid-template-columns: 48px minmax(0, var(--inspector-width)) 8px;
+  align-content: stretch;
+  block-size: 100%;
+  min-block-size: 0;
+  min-inline-size: 0;
+}
+.inspector-rail {
+  inline-size: 48px;
+  min-inline-size: 0;
+  padding: 2px;
+  border: 0;
+  block-size: 100%;
+}
+.inspector-rail button {
+  inline-size: 40px;
+  min-inline-size: 0;
+  min-block-size: 44px;
+  padding: 2px 3px;
+}
+.inspector-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 2px;
+}
+.inspector-panel-root {
+  min-inline-size: 0;
+  min-block-size: 0;
+  block-size: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(185 192 204 / 22%);
+}
+.inspector-panel {
+  padding: 16px;
+  block-size: 100%;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+[data-inspector-open="false"] .inspector-panel-root {
+  visibility: hidden;
+}
+.inspector-scroll {
+  flex: 1 1 0%;
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.inspector-heading {
+  flex: 0 0 auto;
+  padding: 2px;
+  margin-block-end: 16px;
+}
+.inspector-heading h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+.inspector-controls,
+.inspector-group {
+  min-inline-size: 0;
+}
+.inspector-group p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.inspector-group :is(input, select, textarea, button) {
+  max-inline-size: 100%;
+}
+.inspector-group .ly-grid {
+  --ly-grid-min: 100%;
+}
+.inspector-group[hidden],
+.workbench-view[hidden],
+.inspector-panel[hidden],
+.application-specimen .section-heading[hidden] {
+  display: none;
+}
+.inspector-mobile-label,
+.inspector-mobile-toolbar {
+  display: none;
+}
+.inspector-divider {
+  position: relative;
+  min-inline-size: 8px;
+  cursor: col-resize;
+  touch-action: none;
+  padding: 2px;
+  outline-offset: 0;
+  block-size: 100%;
+}
+.inspector-divider::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline: -8px;
+  z-index: 1;
+}
+.inspector-divider:is(:hover, :focus-visible) {
+  background: rgb(221 175 72 / 65%);
+}
+.inspector-divider:focus-visible {
+  outline: 2px solid #ddaf48;
+}
+.workbench-canvas {
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-block-size: 0;
+  overflow: hidden;
+}
+.workbench-toolbar,
+.workbench-status {
+  padding: 16px;
+  flex: 0 0 auto;
+}
+.workbench-toolbar {
+  border-block-end: 1px solid rgb(185 192 204 / 22%);
+}
+.workbench-toolbar p,
+.workbench-status p {
+  margin: 0;
+  font-size: 0.8rem;
+}
+.workbench-view-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block-end: 0.75rem;
+}
+.workbench-view-buttons button {
+  flex: 1 1 9rem;
+}
+.workbench-preview {
+  min-inline-size: 0;
+  min-block-size: 0;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0;
+}
+.workbench-preview > .motion-browser-chrome {
+  flex: 0 0 auto;
+}
+.workbench-preview-scroll {
+  min-block-size: 0;
+  flex: 1 1 0%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+}
+.workbench-preview-content {
+  padding-block: 16px;
+}
+.workbench-preview-content > .ly-wrapper {
+  --ly-wrapper-gutter: 16px;
+}
+.workbench-view {
+  min-inline-size: 0;
+}
+.application-specimen > .ly-wrapper {
+  --ly-wrapper-gutter: 2px;
+}
+.client-workspace {
+  --ly-shell-min: 0px;
+}
+.client-workspace[data-ly-recipe] {
+  align-items: start;
+}
+.workspace-card-flow {
+  /* Public cards retain their 2px outer margins on each side of the grid track. */
+  --ly-card-grid-min: calc(22rem + 4px);
+  --ly-gallery-min: calc(22rem + 4px);
+  align-items: start;
+}
+.workspace-card-flow > * {
+  min-inline-size: 0;
+}
+.workbench-nav a,
+.application-specimen a.site-action {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding: 8px 12px;
+}
+.advanced-lab-examples {
+  padding-block: 16px;
+}
+.advanced-lab-examples > summary {
+  padding: 16px;
+}
+.advanced-lab-examples > [data-advanced-configuration] {
+  padding: 2px;
+}
+
+/* Compact screens retain the document's natural flow instead of a tiny nested viewport. */
+@media (max-width: 1023px), (max-height: 599px) {
+  .workbench-split,
+  .workbench-panes,
+  .workbench-canvas,
+  .inspector-dock,
+  .inspector-rail,
+  .inspector-panel-root,
+  .inspector-panel,
+  .inspector-divider {
+    block-size: auto;
+  }
+  .inspector-dock {
+    align-self: start;
+  }
+  .inspector-scroll {
+    flex: none;
+    overflow: visible;
+  }
+  .workbench-canvas,
+  .workbench-preview {
+    display: block;
+    overflow: visible;
+  }
+  .workbench-preview-scroll {
+    overflow: visible;
+  }
+}
+
+@media (max-width: 1023px) {
+  .unified-workbench {
+    inline-size: calc(100% - 1rem);
+  }
+  .inspector-dock {
+    display: none;
+  }
+  .workbench-panes {
+    display: block;
+  }
+  .inspector-mobile-toolbar {
+    display: block;
+    padding: 8px 16px;
+  }
+  .workbench-canvas {
+    inline-size: 100%;
+  }
+  .inspector-drawer .inspector-groups {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-block-end: 16px;
+  }
+  .inspector-drawer .inspector-groups button {
+    flex: 1 1 7rem;
+  }
+  .inspector-mobile-label {
+    display: inline;
+  }
+  .inspector-drawer .inspector-controls {
+    padding: 16px;
+  }
+  .workbench-toolbar {
+    padding: 16px;
+  }
+}

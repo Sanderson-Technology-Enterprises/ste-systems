@@ -3,6 +3,21 @@ import test from "node:test";
 
 import { SITE, withBasePath } from "../app/lib/site";
 
+test("client-mounted assets use the public Pages base path", () => {
+  const previous = process.env.NEXT_PUBLIC_PAGES_BASE_PATH;
+  try {
+    process.env.NEXT_PUBLIC_PAGES_BASE_PATH = "/ste-systems";
+    assert.equal(
+      withBasePath("/fixtures/generated/all-canonical.html"),
+      "/ste-systems/fixtures/generated/all-canonical.html",
+    );
+    assert.equal(withBasePath("/lab/", ""), "/lab/");
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_PAGES_BASE_PATH;
+    else process.env.NEXT_PUBLIC_PAGES_BASE_PATH = previous;
+  }
+});
+
 test("site URLs expose the Pages-safe lab and component routes", () => {
   assert.equal(SITE.labPath, "/lab/");
   assert.equal(SITE.labUrl, "https://stesystems.com/lab/");

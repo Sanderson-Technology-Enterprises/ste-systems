@@ -4,17 +4,23 @@ test("motion Lab plays real frames, preserves controls, and honors reduced motio
   page,
 }) => {
   await page.goto("./lab/#motion");
-  const lab = page.locator("#motion");
+  const lab = page.locator("[data-workbench]");
+  await expect(lab.getByLabel("Motion preset", { exact: true })).toBeVisible();
   await expect(
     lab.getByRole("heading", {
-      name: "Motion with a clear beginning and end.",
+      name: "Motion",
     }),
   ).toBeVisible();
   await expect(lab.getByLabel("Motion preset").locator("option")).toHaveCount(
-    10,
+    11,
   );
   await lab.getByLabel("Motion preset").selectOption("slide");
   await lab.getByLabel("Motion direction").selectOption("right");
+  for (const name of ["duration", "delay"]) {
+    const control = lab.getByLabel(`Random ${name}`, { exact: true });
+    await control.focus();
+    await control.press("Space");
+  }
   await lab.getByRole("button", { name: "Play entrance", exact: true }).click();
   const shell = lab.locator("[data-motion-preview]");
   await expect(shell).toHaveAttribute("data-ms-phase", "in");
@@ -36,7 +42,7 @@ test("motion Lab plays real frames, preserves controls, and honors reduced motio
   await expect(shell).not.toHaveAttribute("data-ms-exited", "true");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await lab.getByRole("button", { name: "Play entrance", exact: true }).click();
-  await expect(lab.getByRole("status")).toContainText("skipped");
+  await expect(lab.locator("[data-motion-status]")).toContainText("skipped");
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth > innerWidth,
   );
@@ -47,13 +53,14 @@ test("motion surfaces retain three distinct depths and all presets remain playab
   page,
 }) => {
   await page.goto("./lab/#motion");
-  const lab = page.locator("#motion");
+  const lab = page.locator("[data-workbench]");
+  await expect(lab.getByLabel("Motion preset", { exact: true })).toBeVisible();
   const shadows = await lab
-    .locator("[data-motion-item] .interactive-surface")
+    .locator("[data-motion-item] > .interactive-surface")
     .evaluateAll((elements) =>
       elements.map((element) => getComputedStyle(element).boxShadow),
     );
-  expect(shadows).toHaveLength(3);
+  expect(shadows).toHaveLength(6);
   expect(new Set(shadows).size).toBe(3);
   for (const preset of [
     "form",
@@ -80,7 +87,7 @@ test("motion surfaces retain three distinct depths and all presets remain playab
         .locator("[data-motion-preview]")
         .evaluate((element) => element.getAnimations().length),
     ).toBeGreaterThan(0);
-    await expect(lab.getByRole("status")).toContainText("finished");
+    await expect(lab.locator("[data-motion-status]")).toContainText("finished");
   }
   await lab.getByRole("button", { name: "Play stagger", exact: true }).click();
   await expect(lab.locator("[data-motion-item]").last()).toHaveAttribute(
@@ -88,7 +95,7 @@ test("motion surfaces retain three distinct depths and all presets remain playab
     "in",
   );
   await lab.getByRole("button", { name: "Cancel motion", exact: true }).click();
-  await expect(lab.getByRole("status")).toContainText("cancelled");
+  await expect(lab.locator("[data-motion-status]")).toContainText("cancelled");
   await page.goto("./components/#atlas-motion");
   await expect(
     page.getByRole("tab", { name: "Motion Style CSS", exact: true }),
@@ -97,14 +104,14 @@ test("motion surfaces retain three distinct depths and all presets remain playab
     .getByRole("button", { name: "Play entrance", exact: true })
     .click();
   await expect(
-    page.locator("#motion-guide-preview").getByRole("status"),
+    page.locator("#motion-guide-preview [data-motion-status]"),
   ).toContainText("finished");
   await page
     .locator("#motion-guide-preview")
     .screenshot({ path: "output/motion-guide-desktop.png" });
 });
 
-test("embedded motion guide keeps a clear heading hierarchy and compact specimen", async ({
+test("embedded motion guide keeps a clear heading hierarchy and complete specimen", async ({
   page,
 }) => {
   await page.goto("./components/#atlas-motion");
@@ -115,7 +122,7 @@ test("embedded motion guide keeps a clear heading hierarchy and compact specimen
       name: "Motion with a clear beginning and end.",
     }),
   ).toBeVisible();
-  await expect(preview.getByRole("heading", { level: 4 })).toHaveCount(3);
+  await expect(preview.getByRole("heading", { level: 4 })).toHaveCount(6);
   await preview.screenshot({ path: "output/motion-guide-compact.png" });
 });
 

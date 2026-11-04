@@ -1,3 +1,8 @@
+import {
+  openWorkbenchGroup,
+  setDockedViewport,
+  showAdvancedExamples,
+} from "./workbench-helpers";
 import { createRequire } from "node:module";
 import path from "node:path";
 
@@ -354,6 +359,7 @@ async function hoverPointerSpecimen(page: Page, target: Locator) {
 }
 
 async function openTask4Details(page: Page) {
+  await showAdvancedExamples(page);
   await page
     .locator("#ui-native details, #interactions details")
     .evaluateAll((details) => {
@@ -362,6 +368,7 @@ async function openTask4Details(page: Page) {
 }
 
 async function openIntegrationDetails(page: Page) {
+  await showAdvancedExamples(page, "Package integration proofs");
   await page.locator("#integrate details").evaluateAll((details) => {
     for (const detail of details) (detail as HTMLDetailsElement).open = true;
   });
@@ -572,28 +579,33 @@ async function readUnthemedPseudoProperty(
 }
 
 test.beforeEach(async ({ page }) => {
+  await setDockedViewport({ page });
   await page.goto("./lab/");
+  await page
+    .getByRole("button", { name: "Application workspace", exact: true })
+    .click();
+  await openWorkbenchGroup(page, "Layout");
+  await page.getByLabel("Recipe", { exact: true }).selectOption("app-shell");
+  const drawer = page.getByRole("dialog", { name: "Workbench settings" });
+  if (await drawer.isVisible()) await page.keyboard.press("Escape");
+  await showAdvancedExamples(page);
 });
 
-async function openLabConfiguration(page: Page) {
-  const trigger = page.getByRole("button", {
-    name: "Open lab configuration",
-  });
-  await trigger.click();
-  await expect(
-    page.getByRole("complementary", { name: "Configuration console" }),
-  ).toBeVisible();
+async function openLabConfiguration(page: Page, group = "Appearance") {
+  await openWorkbenchGroup(page, group);
+  await showAdvancedExamples(page);
 }
 
 test("layout laboratory renders the complete recipe and primitive contracts", async ({
   page,
 }) => {
   const renderedRecipes = await page
-    .locator("[data-layout-recipe]")
+    .locator("#layouts [data-layout-recipe]")
     .evaluateAll((elements) =>
       elements.map((element) => element.getAttribute("data-layout-recipe")),
     );
-  expect(renderedRecipes).toEqual(layoutRecipes);
+  // The application owns the app-shell specimen; the advanced atlas owns six others.
+  expect(["app-shell", ...renderedRecipes]).toEqual(layoutRecipes);
 
   for (const recipe of layoutRecipes) {
     const specimen = page.locator(
@@ -737,10 +749,13 @@ test("layout laboratory applies every personality without changing DOM or tab or
 }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("./lab/");
-  await openLabConfiguration(page);
+  await page
+    .getByRole("button", { name: "Application workspace", exact: true })
+    .click();
+  await openLabConfiguration(page, "Layout");
 
-  const root = page.locator(".experience.ly-root");
-  const layoutSelect = page.getByLabel(/01.*Layout/);
+  const root = page.locator("[data-advanced-configuration]").first();
+  const layoutSelect = page.getByLabel("Layout personality", { exact: true });
   await expect(layoutSelect.locator("option")).toHaveCount(
     layoutPersonalities.length,
   );
@@ -753,7 +768,9 @@ test("layout laboratory applies every personality without changing DOM or tab or
         ),
     )
     .toEqual(layoutPersonalities);
-  await expect(page.locator("[data-ly-layout]")).toHaveCount(1);
+  await expect(
+    page.locator("[data-advanced-configuration][data-ly-layout]"),
+  ).toHaveCount(1);
 
   const shell = page.locator('[data-layout-recipe="app-shell"]');
   const baseGrid = page.locator('[data-layout-primitive="grid"]');
@@ -838,7 +855,9 @@ test("layout laboratory applies every personality without changing DOM or tab or
   for (const personality of layoutPersonalities) {
     await layoutSelect.selectOption(personality);
     await expect(root).toHaveAttribute("data-ly-layout", personality);
-    await expect(page.locator("[data-ly-layout]")).toHaveCount(1);
+    await expect(
+      page.locator("[data-advanced-configuration][data-ly-layout]"),
+    ).toHaveCount(1);
 
     const geometry = await readGeometry();
     geometryByPersonality[personality] = geometry;
@@ -893,7 +912,9 @@ test("layout laboratory uses only the active UI prefix for pill actions", async 
   expect(initialGeometry.paddingInlineStart).toBeGreaterThan(0);
   expect(initialGeometry.paddingInlineEnd).toBeGreaterThan(0);
 
-  await page.getByLabel(/02.*Visual style/).selectOption("retro-glass");
+  await page
+    .getByLabel("Visual style", { exact: true })
+    .selectOption("retro-glass");
   await expect(pill).toHaveClass(/\brg-button-pill\b/);
   await expect(pill).not.toHaveClass(/\bsaas-button-pill\b/);
   const prefixedPillClasses = (await pill.getAttribute("class"))
@@ -1055,6 +1076,7 @@ test("UI, native, and interaction laboratories stay overflow-free and error-free
   ]) {
     await page.setViewportSize(viewport);
     await page.goto("./lab/");
+    await showAdvancedExamples(page);
     await page
       .locator("#ui-native details, #interactions details")
       .evaluateAll((details) => {
@@ -1093,9 +1115,9 @@ test("UI laboratory applies every manifest preset, theme, and mode with computed
   page,
 }) => {
   await openLabConfiguration(page);
-  const root = page.locator(".experience.ly-root");
-  const uiSelect = page.getByLabel(/02.*Visual style/);
-  const themeSelect = page.getByLabel(/03.*Palette/);
+  const root = page.locator("[data-advanced-configuration]").first();
+  const uiSelect = page.getByLabel("Visual style", { exact: true });
+  const themeSelect = page.getByLabel("Color scheme", { exact: true });
   const paintSpecimen = page.locator('[data-specimen="ui-paint-signature"]');
   const prefixes = uiManifest.presets.map(({ prefix }) => prefix);
 
@@ -1189,8 +1211,7 @@ test("UI laboratory applies every manifest preset, theme, and mode with computed
   await themeSelect.selectOption("arctic-indigo");
   const modeSignatures = new Map<string, string>();
   for (const mode of uiManifest.modes) {
-    const label = mode === "contrast" ? "High contrast" : mode;
-    await page.getByRole("radio", { name: label, exact: false }).check();
+    await page.getByLabel("Display mode", { exact: true }).selectOption(mode);
     await expect(root).toHaveAttribute("data-mode", mode);
     await page.waitForTimeout(180);
     modeSignatures.set(mode, await readPaintSignature(paintSpecimen));
@@ -1315,8 +1336,8 @@ test("UI semantic component classes remain stable while preset paint changes", a
   page,
 }) => {
   await openLabConfiguration(page);
-  const root = page.locator(".experience.ly-root");
-  const uiSelect = page.getByLabel(/02.*Visual style/);
+  const root = page.locator("[data-advanced-configuration]").first();
+  const uiSelect = page.getByLabel("Visual style", { exact: true });
   const paintSpecimen = page.locator('[data-specimen="ui-paint-signature"]');
   const stableSuffixes = [
     "card",
@@ -2300,6 +2321,7 @@ test("review contract renders distinct variant and level treatments", async ({
 test("integration laboratory progressively discloses exactly nine isolated fixtures", async ({
   page,
 }) => {
+  await showAdvancedExamples(page, "Package integration proofs");
   await expect(page.locator("#integrate")).toHaveCount(1);
   await expect(page.locator("#integrate")).toContainText(/use fixed settings/i);
   await expect(page.locator("#integrate details > summary")).toHaveCount(2);
@@ -2392,6 +2414,7 @@ test("integration laboratory progressively discloses exactly nine isolated fixtu
 test("isolated fixtures resolve only their declared ownership layers", async ({
   page,
 }) => {
+  await showAdvancedExamples(page, "Package integration proofs");
   await openIntegrationDetails(page);
 
   for (const id of integrationFixtures) {
@@ -2405,6 +2428,7 @@ test("isolated fixtures resolve only their declared ownership layers", async ({
 test("canonical integration preserves geometry and paint through real hover and keyboard focus", async ({
   page,
 }) => {
+  await showAdvancedExamples(page, "Package integration proofs");
   const frame = await integrationFrame(page, "all-canonical");
   const layout = frame.locator("[data-proof-layout]");
   const paint = frame.locator("[data-proof-paint]");
@@ -2533,6 +2557,7 @@ test("installation guidance renders all current adoption paths", async ({
 test("standalone fixture inputs fit their narrow preview containers", async ({
   page,
 }) => {
+  await showAdvancedExamples(page, "Package integration proofs");
   await page.setViewportSize({ width: 180, height: 600 });
   for (const fixture of ["layout-only", "interactive-only"]) {
     await page.goto(`./fixtures/generated/${fixture}.html`);
@@ -2552,6 +2577,7 @@ test("standalone fixture inputs fit their narrow preview containers", async ({
 test("integration fixtures load locally without errors or overflow", async ({
   page,
 }) => {
+  await showAdvancedExamples(page, "Package integration proofs");
   const consoleErrors: string[] = [];
   const pageErrors: string[] = [];
   const failedStylesheets: string[] = [];

@@ -15,3 +15,67 @@
   inset-block-start: 12%;
   inset-inline-end: 0;
 }
+
+/* Browser chrome is application artwork; the public components own specimen paint. */
+.motion-browser {
+  min-inline-size: 0;
+  padding: 2px;
+  container-type: inline-size;
+  border: 1px solid var(--usk-native-border, rgb(var(--usk-text-rgb) / 22%));
+  border-radius: 0.75rem;
+  background: var(--usk-native-bg, rgb(var(--usk-bg-rgb)));
+  color: var(--usk-native-text, rgb(var(--usk-text-rgb)));
+}
+.motion-browser-chrome {
+  border-block-end: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  background: color-mix(in srgb, currentColor 5%, transparent);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.75rem;
+}
+.motion-browser-dots {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+.motion-browser-dots i {
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+}
+.motion-browser-address {
+  overflow-wrap: anywhere;
+}
+.motion-browser-page,
+.motion-browser-page [data-motion-item] {
+  min-inline-size: 0;
+}
+.motion-browser-page h3,
+.motion-browser-page h4 {
+  margin: 0;
+}
+.motion-browser-page p {
+  margin-block: 0;
+}
+/* The adapter exposes no vertical orientation; size stacked stages by their content. */
+.showcase-stage {
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+}
+/* The installed Blueprint danger badge misses AA on light paper (4.26:1).
+   A small mix of its own body ink restores contrast without changing geometry. */
+.motion-browser[data-ui="technical-blueprint"][data-mode="light"]
+  .usk-badge[data-ui-variant="danger"] {
+  color: color-mix(
+    in srgb,
+    var(--usk-native-danger) 90%,
+    var(--usk-native-text)
+  );
+}
+@container (max-width: 35rem) {
+  .motion-browser-caption {
+    display: none;
+  }
+}

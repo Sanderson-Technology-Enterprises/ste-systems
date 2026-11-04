@@ -45,9 +45,9 @@ export function HomeHeroActions() {
 }
 
 /**
- * Renders the Lab's two in-page calls to action with UI-kit-owned geometry.
+ * Renders the Lab's in-page calls to action with UI-kit-owned geometry.
  *
- * @returns Padded, centered links into the workbench and installation guide.
+ * @returns Links into the workbench, client playground, and installation guide.
  */
 export function LabHeroActions() {
   return (
@@ -64,6 +64,14 @@ export function LabHeroActions() {
       >
         Jump to the workbench
         <ArrowRightIcon />
+      </a>
+      <a
+        className="usk-button interactive-surface site-action"
+        data-ui-variant="secondary"
+        data-surface-level="1"
+        href="#motion"
+      >
+        Open client playground
       </a>
       <a
         className="usk-button interactive-surface site-action"

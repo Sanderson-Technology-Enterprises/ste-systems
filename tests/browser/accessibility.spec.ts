@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type TestInfo } from "@playwright/test";
+import { showAdvancedExamples } from "./workbench-helpers";
 
 type AxeResults = Awaited<ReturnType<AxeBuilder["analyze"]>>;
 
@@ -31,7 +32,8 @@ test(
   "axe finds no violations across the complete default experience",
   { tag: "@cross-engine" },
   async ({ page }, testInfo) => {
-    await page.getByRole("button", { name: "Open lab sections" }).click();
+    await showAdvancedExamples(page);
+    await showAdvancedExamples(page, "Package integration proofs");
     await page
       .locator(
         "#ui-native details, #interactions details, #integrate details, #install details",
@@ -49,6 +51,7 @@ test(
     await expect(page.locator("#integrate")).toBeVisible();
     await expect(page.locator("#install")).toBeVisible();
     await expect(page.locator("#libraries")).toBeVisible();
+    await page.getByRole("button", { name: "Open lab sections" }).click();
     const results = await new AxeBuilder({ page }).analyze();
     await expectNoAxeViolations(
       results,
@@ -67,6 +70,7 @@ test(
     await page.goto(
       "./lab/?layout=split-screen&ui=maximalist&theme=cyber-lime&mode=contrast",
     );
+    await showAdvancedExamples(page);
     await page
       .locator("#ui-native details, #interactions details")
       .evaluateAll((details) => {

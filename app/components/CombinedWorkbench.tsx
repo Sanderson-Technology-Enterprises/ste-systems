@@ -1,263 +1,273 @@
 "use client";
 
-import { useState } from "react";
-
-import { getUiPrefix } from "../data/catalog";
+import { useRef, useState, type MouseEvent } from "react";
+import {
+  Button,
+  Card,
+  Layout,
+} from "@sanderson-technology-enterprises/ste-usk-react";
 import { useLabConfiguration } from "./LabExperience";
-import { formatThemeLabel } from "../lib/configuration";
-
-function formatLabel(value: string): string {
-  return value
-    .split("-")
-    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
-    .join(" ");
-}
+import { recipeAreas } from "../lib/playground-options";
+import { useRecipeFit } from "./useRecipeFit";
+import {
+  WorkspaceActivity,
+  WorkspaceConfiguration,
+  WorkspaceDeliverable,
+  WorkspaceMetrics,
+  WorkspaceOverview,
+  workspaceLabel,
+} from "./WorkspaceSections";
 
 /**
- * Renders the task-oriented client workspace using the active interface
- * configuration and Layout Style CSS workspace contracts.
- *
- * @returns The combined three-library workbench section.
+ * Apply the selected recipe to content suited to its topology.
+ * Parent-owned sample state survives every presentation change.
+ * Explicit zero-step padding uses the site's reviewed 2px safety floor.
+ * @param props Whether the workspace is inside the unified live preview.
+ * @returns Canonical named regions or five independent content cards.
  */
-export function CombinedWorkbench() {
+export function CombinedWorkbench({
+  embedded = false,
+}: {
+  embedded?: boolean;
+}) {
   const { configuration, announce } = useLabConfiguration();
   const [saved, setSaved] = useState(false);
-  const prefix = getUiPrefix(configuration.ui);
-  const surfaceClass = `${prefix}-surface ly-surface`;
-  const cardClass = `${prefix}-card ly-surface`;
-  const panelClass = `${prefix}-panel ly-surface`;
+  const recipe = configuration.recipe ?? (embedded ? "card-grid" : "app-shell");
+  const cards = recipe === "card-grid" || recipe === "gallery";
+  const recipeRoot = useRef<HTMLElement>(null);
+  useRecipeFit(recipeRoot, JSON.stringify(configuration), !cards);
+  const areas = recipeAreas(recipe);
   const modeLabel =
     configuration.mode === "contrast"
       ? "High contrast"
-      : formatLabel(configuration.mode);
+      : workspaceLabel(configuration.mode);
 
+  /** Keep fragment navigation in the bounded preview; compact page flow stays native. */
+  function navigateToSection(event: MouseEvent<HTMLAnchorElement>, id: string) {
+    const host = recipeRoot.current?.closest<HTMLElement>(
+      ".workbench-preview-scroll",
+    );
+    const target = recipeRoot.current?.querySelector<HTMLElement>(`#${id}`);
+    if (!host || !target || getComputedStyle(host).overflowY !== "auto") return;
+    event.preventDefault();
+    const top =
+      target.getBoundingClientRect().top -
+      host.getBoundingClientRect().top +
+      host.scrollTop -
+      16;
+    host.scrollTo({ top, behavior: "auto" });
+    target.focus({ preventScroll: true });
+    const url = new URL(location.href);
+    url.hash = id;
+    history.replaceState(history.state, "", url);
+  }
+  const overview = <WorkspaceOverview modeLabel={modeLabel} />;
+  const metrics = <WorkspaceMetrics />;
+  const deliverable = (
+    <WorkspaceDeliverable
+      saved={saved}
+      onOpen={() => announce("Project details opened in the demonstration.")}
+      onSave={() => {
+        setSaved((value) => !value);
+        announce(
+          saved
+            ? "Project removed from shortlist."
+            : "Project saved to shortlist.",
+        );
+      }}
+    />
+  );
+  const activity = <WorkspaceActivity />;
+  const configurationContent = (
+    <WorkspaceConfiguration
+      configuration={configuration}
+      modeLabel={modeLabel}
+      onRisk={() => announce("Risk review opened.")}
+    />
+  );
+  const projectHeader = (
+    <Layout.Header
+      surface="card"
+      padding={4}
+      className="workbench-region"
+      data-ly-area={areas.header}
+    >
+      <Layout.Cluster
+        gap={4}
+        align="stretch"
+        justify="between"
+        className="workspace-toolbar"
+      >
+        <div className="ly-stack ly-gap-2">
+          <small>Northstar rebrand</small>
+          <strong>Delivery command center</strong>
+        </div>
+        <Button
+          onClick={() => announce("Northstar project direction approved.")}
+        >
+          Approve project direction
+        </Button>
+      </Layout.Cluster>
+    </Layout.Header>
+  );
+  const navigation = (
+    <Layout.Surface
+      as="nav"
+      surface="card"
+      padding={4}
+      className="workbench-region workspace-navigation"
+      data-ly-area={areas.navigation}
+      aria-label="Northstar workspace"
+    >
+      <p className="workbench-kicker">Atelier One</p>
+      <div
+        className={`workbench-nav ${cards ? "ly-cluster" : "ly-stack"} ly-gap-2`}
+      >
+        {[
+          ["workspace-summary", "Project pulse"],
+          ["workspace-deliverables", "Deliverables"],
+          ["workspace-activity", "Activity"],
+        ].map(([target, label], index) => (
+          <a
+            key={target}
+            className="interactive-surface site-action"
+            data-surface-variant="subtle"
+            data-surface-level="1"
+            aria-current={index === 0 ? "page" : undefined}
+            href={`#${target}`}
+            onClick={(event) => navigateToSection(event, target)}
+          >
+            {label}
+          </a>
+        ))}
+      </div>
+    </Layout.Surface>
+  );
+  const footer = (
+    <Layout.Footer
+      surface="card"
+      padding={4}
+      className="workbench-region"
+      data-ly-area={areas.footer}
+    >
+      <Layout.Cluster justify="between" gap={4}>
+        <small>Semantic DOM order remains the mobile order.</small>
+        <strong>Last synchronized today</strong>
+      </Layout.Cluster>
+    </Layout.Footer>
+  );
+  const primaryOnly = !cards && !areas.header;
+  const content = (
+    <>
+      {!primaryOnly && projectHeader}
+      {!primaryOnly && navigation}
+      {cards ? (
+        <Layout.Recipe
+          recipe={recipe}
+          className="workspace-card-flow"
+          data-workspace-cards
+        >
+          <Card as="section" className="ly-stack ly-gap-4" data-workspace-card>
+            {overview}
+          </Card>
+          <Card as="section" className="ly-stack ly-gap-4" data-workspace-card>
+            <h4>Delivery metrics</h4>
+            {metrics}
+          </Card>
+          <Card as="article" data-workspace-card>
+            {deliverable}
+          </Card>
+          <Card as="article" data-workspace-card>
+            {activity}
+          </Card>
+          <Card
+            as="section"
+            data-workspace-card
+            aria-label="Workspace inspector"
+          >
+            {configurationContent}
+          </Card>
+        </Layout.Recipe>
+      ) : (
+        <>
+          <Card
+            as="section"
+            className="workbench-region workbench-main ly-stack ly-gap-6"
+            data-ly-area={areas.main}
+          >
+            {primaryOnly && projectHeader}
+            {primaryOnly && navigation}
+            {overview}
+            {metrics}
+            <Layout.Grid
+              minColumnWidth="22rem"
+              gap={4}
+              className="workbench-deliverables"
+            >
+              <Card as="article">{deliverable}</Card>
+              <Card as="article">{activity}</Card>
+            </Layout.Grid>
+          </Card>
+          <Layout.Surface
+            as="aside"
+            surface="card"
+            padding={4}
+            className="workbench-region"
+            data-ly-area={areas.aside}
+            aria-label="Workspace inspector"
+          >
+            {configurationContent}
+          </Layout.Surface>
+        </>
+      )}
+      {footer}
+    </>
+  );
+  const attributes = {
+    className: "client-workspace",
+    "data-layout-recipe": recipe,
+    "data-ly-density": configuration.density ?? "normal",
+    "aria-label": "Northstar client delivery workspace",
+  };
   return (
     <section
-      className="section-band ly-section"
-      id="workbench"
-      aria-labelledby="workbench-title"
+      className={embedded ? "application-specimen" : "section-band ly-section"}
+      id={embedded ? undefined : "workbench"}
+      aria-label="Example client workspace"
     >
-      <div className="ly-wrapper ly-wrapper--workspace">
-        <div className="section-heading ly-split ly-gap-6 ly-items-end">
-          <div className="ly-stack ly-gap-2">
-            <p className="section-label">Example client workspace</p>
-            <h2 id="workbench-title">See all three layers in one workspace.</h2>
+      <Layout.Wrapper measure="workspace">
+        {!embedded && (
+          <div className="section-heading">
+            <h2>See all three layers in one workspace.</h2>
+            <p>
+              Explore a sample project workspace built with all three libraries.
+            </p>
           </div>
-          <p>
-            Explore a sample project workspace built with all three libraries.
-            Layout Style CSS arranges the content, UI Style Kit CSS controls its
-            appearance, and Interactive Surface CSS styles control states.
-          </p>
-        </div>
-
+        )}
         <div className="workbench-frame">
-          <article
-            className="client-workspace"
-            data-layout-recipe="app-shell"
-            data-ly-density="compact"
-            data-ly-recipe="app-shell"
-            aria-label="Northstar client delivery workspace"
-          >
-            <header
-              className={`${surfaceClass} workbench-region ly-pad-4`}
-              data-ly-area="header"
+          {cards ? (
+            <Layout.Stack
+              ref={recipeRoot}
+              as="article"
+              gap={4}
+              padding={0}
+              {...attributes}
             >
-              <div className="workbench-toolbar ly-cluster ly-gap-4 ly-items-stretch ly-justify-between">
-                <div className="ly-stack ly-gap-2">
-                  <small>Northstar rebrand</small>
-                  <strong>Delivery command center</strong>
-                </div>
-                <button
-                  className={`${prefix}-button-pill`}
-                  type="button"
-                  onClick={() =>
-                    announce("Northstar project direction approved.")
-                  }
-                >
-                  Approve project direction
-                </button>
-              </div>
-            </header>
-
-            <nav
-              className={`${panelClass} workbench-region ly-pad-4`}
-              data-ly-area="sidebar"
-              aria-label="Northstar workspace"
+              {content}
+            </Layout.Stack>
+          ) : (
+            <Layout.Recipe
+              ref={recipeRoot}
+              as="article"
+              recipe={recipe}
+              padding={0}
+              {...attributes}
             >
-              <p className="workbench-kicker">Atelier One</p>
-              <div className="workbench-nav ly-stack ly-gap-2">
-                <a
-                  className="interactive-surface site-action"
-                  data-surface-variant="subtle"
-                  data-surface-level="1"
-                  aria-current="page"
-                  href="#workspace-summary"
-                >
-                  Project pulse
-                </a>
-                <a
-                  className="interactive-surface site-action"
-                  data-surface-variant="subtle"
-                  data-surface-level="1"
-                  href="#workspace-deliverables"
-                >
-                  Deliverables
-                </a>
-                <a
-                  className="interactive-surface site-action"
-                  data-surface-variant="subtle"
-                  data-surface-level="1"
-                  href="#workspace-activity"
-                >
-                  Activity
-                </a>
-              </div>
-            </nav>
-
-            <section
-              className={`${surfaceClass} workbench-region workbench-main ly-pad-6 ly-stack ly-gap-6`}
-              data-ly-area="main"
-              id="workspace-summary"
-              aria-labelledby="workspace-title"
-            >
-              <header className="workbench-main-heading ly-split ly-gap-4 ly-items-start">
-                <div className="ly-stack ly-gap-2">
-                  <small>Client workspace</small>
-                  <h3 id="workspace-title">A confident path to launch</h3>
-                </div>
-                <span className="workbench-mode">{modeLabel} mode</span>
-              </header>
-
-              <dl className="workbench-metrics ly-grid ly-gap-4">
-                <div className={`${cardClass} ly-pad-4`}>
-                  <dt>Delivery health</dt>
-                  <dd>On track</dd>
-                </div>
-                <div className={`${cardClass} ly-pad-4`}>
-                  <dt>Approved milestones</dt>
-                  <dd>06 / 08</dd>
-                </div>
-                <div className={`${cardClass} ly-pad-4`}>
-                  <dt>Launch window</dt>
-                  <dd>18 days</dd>
-                </div>
-              </dl>
-
-              <div
-                className="workbench-deliverables ly-grid ly-gap-4"
-                id="workspace-deliverables"
-              >
-                <article className={`${cardClass} ly-pad-6 ly-stack ly-gap-4`}>
-                  <div className="meta-line ly-cluster ly-justify-between ly-gap-2">
-                    <span>Design system</span>
-                    <strong>72%</strong>
-                  </div>
-                  <h4>Northstar interface language</h4>
-                  <p>
-                    Responsive structure, accessible visual identity, and state
-                    mechanics prepared as one maintainable system.
-                  </p>
-                  <progress value="72" max="100">
-                    72%
-                  </progress>
-                  <div className="ly-cluster ly-gap-2">
-                    <button
-                      className="interactive-surface site-action"
-                      data-surface-variant="primary"
-                      data-surface-level="2"
-                      type="button"
-                      onClick={() =>
-                        announce("Project details opened in the demonstration.")
-                      }
-                    >
-                      View project
-                    </button>
-                    <button
-                      className="interactive-surface site-action"
-                      data-surface-variant="secondary"
-                      data-surface-level="2"
-                      type="button"
-                      aria-label={
-                        saved
-                          ? "Remove project from shortlist"
-                          : "Save project to shortlist"
-                      }
-                      aria-pressed={saved}
-                      onClick={() => {
-                        setSaved((value) => !value);
-                        announce(
-                          saved
-                            ? "Project removed from shortlist."
-                            : "Project saved to shortlist.",
-                        );
-                      }}
-                    >
-                      {saved ? "Saved" : "Save"}
-                    </button>
-                  </div>
-                </article>
-
-                <article
-                  className={`${cardClass} ly-pad-6 ly-stack ly-gap-4`}
-                  id="workspace-activity"
-                >
-                  <small>Latest activity</small>
-                  <h4>Decisions stay visible</h4>
-                  <ul className="workbench-activity ly-stack ly-gap-4">
-                    <li>Navigation model approved by the client team.</li>
-                    <li>High-contrast interface review completed.</li>
-                    <li>Responsive content model ready for handoff.</li>
-                  </ul>
-                </article>
-              </div>
-            </section>
-
-            <aside
-              className={`${panelClass} workbench-region ly-pad-4 ly-stack ly-gap-4`}
-              data-ly-area="aside"
-              aria-label="Workspace inspector"
-            >
-              <div className="ly-stack ly-gap-2">
-                <small>Configuration proof</small>
-                <strong>{formatLabel(configuration.layout)}</strong>
-              </div>
-              <dl className="workbench-config ly-stack ly-gap-4">
-                <div>
-                  <dt>UI preset</dt>
-                  <dd>{formatLabel(configuration.ui)}</dd>
-                </div>
-                <div>
-                  <dt>Palette</dt>
-                  <dd>{formatThemeLabel(configuration.theme)}</dd>
-                </div>
-                <div>
-                  <dt>Mode</dt>
-                  <dd>{modeLabel}</dd>
-                </div>
-              </dl>
-              <button
-                className="interactive-surface site-action"
-                data-surface-variant="warning"
-                data-surface-level="2"
-                type="button"
-                onClick={() => announce("Risk review opened.")}
-              >
-                Review launch risks
-              </button>
-            </aside>
-
-            <footer
-              className={`${surfaceClass} workbench-region ly-pad-4`}
-              data-ly-area="footer"
-            >
-              <div className="ly-cluster ly-justify-between ly-gap-4">
-                <small>Semantic DOM order remains the mobile order.</small>
-                <strong>Last synchronized today</strong>
-              </div>
-            </footer>
-          </article>
+              {content}
+            </Layout.Recipe>
+          )}
         </div>
-      </div>
+      </Layout.Wrapper>
     </section>
   );
 }

@@ -5,6 +5,7 @@ import { ConfigurationReference } from "./components/ConfigurationReference";
 import { FeatureShowcase } from "./components/FeatureShowcase";
 import { HomeHeroActions } from "./components/HeroActions";
 import { HomeObservatory } from "./components/HomeObservatory";
+import { HomeExperience } from "./components/HomeExperience";
 import { ExternalLinkIcon } from "./components/Icons";
 import { LegacyLabRedirect } from "./components/LegacyLabRedirect";
 import { QuickStartCopy } from "./components/QuickStartCopy";
@@ -16,7 +17,6 @@ import {
 } from "./data/navigation";
 import { SUPPORTED_COMBINATIONS_LABEL } from "./data/atlas";
 import { NPM_INSTALL } from "./data/ecosystem";
-import { DEFAULT_CONFIGURATION } from "./lib/configuration";
 import { SITE, withBasePath } from "./lib/site";
 import {
   buildHomeStructuredData,
@@ -206,14 +206,7 @@ function CompanySection() {
  */
 export default function Home() {
   return (
-    <div
-      className="experience home-experience ly-root ly-page"
-      data-ly-density="spacious"
-      data-ly-layout={DEFAULT_CONFIGURATION.layout}
-      data-ui={DEFAULT_CONFIGURATION.ui}
-      data-theme={DEFAULT_CONFIGURATION.theme}
-      data-mode={DEFAULT_CONFIGURATION.mode}
-    >
+    <HomeExperience>
       <LegacyLabRedirect />
       <script
         type="application/ld+json"
@@ -265,6 +258,6 @@ export default function Home() {
       </main>
 
       <SiteFooter companyUrl={companyUrl} />
-    </div>
+    </HomeExperience>
   );
 }

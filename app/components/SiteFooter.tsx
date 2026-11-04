@@ -6,30 +6,33 @@ type SiteFooterProps = {
   companyUrl: string;
 };
 
+/** Render shared resources and a logo surface that preserves silver artwork in light mode. */
 export function SiteFooter({ companyUrl }: SiteFooterProps) {
   return (
     <footer className="site-footer">
       <div className="site-footer-inner ly-wrapper ly-stack ly-gap-6">
         <div className="footer-brand ly-cluster ly-gap-4">
-          {/* The explicit helper keeps this rendered asset correct in local and Pages builds. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="footer-logo"
-            src={withBasePath("/ste-systems-logo-128.webp")}
-            srcSet={[128, 256, 384]
-              .map(
-                (width) =>
-                  `${withBasePath(`/ste-systems-logo-${width}.webp`)} ${width}w`,
-              )
-              .join(", ")}
-            sizes="128px"
-            width="144"
-            height="108"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-          />
+          <span className="brand-logo-backing">
+            {/* The explicit helper keeps this asset correct in local and Pages builds. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="footer-logo"
+              src={withBasePath("/ste-systems-logo-128.webp")}
+              srcSet={[128, 256, 384]
+                .map(
+                  (width) =>
+                    `${withBasePath(`/ste-systems-logo-${width}.webp`)} ${width}w`,
+                )
+                .join(", ")}
+              sizes="128px"
+              width="144"
+              height="108"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+            />
+          </span>
           <p className="ly-stack ly-gap-2">
             <strong>{SITE.name}</strong>
             <small>{SITE.productLine}</small>

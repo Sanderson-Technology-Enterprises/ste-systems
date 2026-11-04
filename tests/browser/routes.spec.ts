@@ -29,30 +29,23 @@ test("homepage presents a concise developer portal", async ({ page }) => {
 test("lab route retains the complete configurable experience", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("./lab/");
-
   await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "Configure the system. Inspect every layer.",
-    }),
+    page.getByRole("heading", { level: 1, name: "Find your interface." }),
   ).toBeVisible();
-  await expect(page.locator(".configuration-console")).toBeHidden();
-
-  await page.getByRole("button", { name: "Open lab configuration" }).click();
-  await expect(page.locator(".configuration-console")).toBeVisible();
-  await page.getByRole("button", { name: "Close lab configuration" }).click();
-
+  await expect(page.locator("[data-inspector-panel]")).toBeVisible();
+  await expect(page.locator("#lab-configuration-panel")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Collapse settings panel", exact: true })
+    .click();
+  await expect(page.locator("[data-inspector-panel]")).toBeHidden();
   const menu = page.getByRole("button", { name: "Open lab sections" });
-  await expect(menu).toBeVisible();
-  await expect(
-    page.getByRole("navigation", { name: "Primary navigation" }),
-  ).toBeHidden();
   await menu.click();
   await expect(
     page
       .getByRole("navigation", { name: "Primary navigation" })
-      .getByRole("link", { name: "Integration" }),
+      .getByRole("link", { name: "Guides", exact: true }),
   ).toBeVisible();
 });
 
@@ -61,27 +54,21 @@ test("lab configuration controls remain available while the page scrolls", async
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("./lab/");
-
-  const trigger = page.getByRole("button", {
-    name: "Open lab configuration",
+  await page
+    .locator("[data-workbench-preview] [data-motion-item]")
+    .last()
+    .scrollIntoViewIfNeeded();
+  const toggle = page.getByRole("button", {
+    name: "Collapse settings panel",
+    exact: true,
   });
-  const initialTop = await trigger.evaluate(
-    (element) => element.getBoundingClientRect().top,
-  );
-
-  await page.locator("#interactions").scrollIntoViewIfNeeded();
-  const scrolledState = await trigger.evaluate((element) => ({
-    top: element.getBoundingClientRect().top,
-    viewportHeight: window.innerHeight,
-  }));
-
-  expect(scrolledState.top).toBeGreaterThanOrEqual(0);
-  expect(scrolledState.top).toBeLessThanOrEqual(initialTop + 2);
-  expect(scrolledState.top).toBeLessThan(scrolledState.viewportHeight);
-
-  await trigger.click();
-  await page.getByLabel(/03.*Palette/).selectOption("ocean-steel");
-  await expect(page.locator(".experience")).toHaveAttribute(
+  const box = (await toggle.boundingBox())!;
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y).toBeLessThan(900);
+  await page
+    .getByLabel("Color scheme", { exact: true })
+    .selectOption("ocean-steel");
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
     "data-theme",
     "ocean-steel",
   );
@@ -208,7 +195,7 @@ test("homepage and lab remain collision-free across the responsive matrix", asyn
 
       if (route === "./lab/" && viewport.width === 768) {
         const labHeroColumnCount = await page
-          .locator(".lab-hero")
+          .locator(".workbench-introduction")
           .evaluate(
             (hero) =>
               getComputedStyle(hero)
@@ -229,7 +216,7 @@ test("legacy shared configurations redirect to the lab", async ({ page }) => {
   await expect(page).toHaveURL(
     /\/ste-systems\/lab\/\?layout=split-screen&ui=cyberpunk&theme=midnight-gold&mode=dark#workbench$/,
   );
-  await expect(page.locator(".experience")).toHaveAttribute(
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
     "data-ly-layout",
     "split-screen",
   );

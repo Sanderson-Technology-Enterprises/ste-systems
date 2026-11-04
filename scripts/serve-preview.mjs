@@ -1,19 +1,49 @@
 import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
+import { parseArgs } from "node:util";
 
 import { streamFileResponse } from "./preview-response.mjs";
 
-const previewRoot = path.resolve(process.argv[2] ?? ".preview");
-const requestedPort = Number.parseInt(process.argv[3] ?? "4173", 10);
-const host = "127.0.0.1";
+const { values, positionals } = parseArgs({
+  allowPositionals: true,
+  options: {
+    port: { type: "string", short: "p" },
+    hostname: { type: "string", short: "H" },
+  },
+});
+const directory = positionals[0] ?? ".preview";
+const previewRoot = path.resolve(directory);
+const isExport = path.basename(previewRoot) === "out";
+const portValue =
+  values.port ??
+  positionals[1] ??
+  (process.env.PORT?.trim() || (isExport ? "3000" : "4173"));
+const requestedPort = Number(portValue);
+const host = values.hostname ?? "127.0.0.1";
 
 if (
+  !/^\d+$/.test(portValue) ||
   !Number.isInteger(requestedPort) ||
   requestedPort < 1 ||
   requestedPort > 65_535
 ) {
-  throw new Error(`Invalid preview port: ${process.argv[3] ?? ""}`);
+  throw new Error(`Invalid server port: ${portValue}`);
+}
+
+try {
+  const entry = isExport ? path.join(previewRoot, "index.html") : previewRoot;
+  const entryStatus = await stat(entry);
+  if (isExport ? !entryStatus.isFile() : !entryStatus.isDirectory()) {
+    throw new Error("Invalid static export directory");
+  }
+} catch {
+  console.error(
+    isExport
+      ? 'Static export not found. Run "npm run build" before "npm start".'
+      : `Preview directory not found: ${previewRoot}. Run "npm run preview:prepare" first.`,
+  );
+  process.exit(1);
 }
 
 const contentTypes = new Map([
@@ -29,6 +59,11 @@ const contentTypes = new Map([
   [".xml", "application/xml; charset=utf-8"],
 ]);
 
+/**
+ * Resolve a request beneath the selected static root without allowing traversal.
+ * @param {string} requestUrl Incoming request URL.
+ * @returns {string | null} Confined filesystem path, or null for traversal.
+ */
 function resolvePreviewPath(requestUrl) {
   const pathname = decodeURIComponent(
     new URL(requestUrl, `http://${host}`).pathname,
@@ -41,6 +76,11 @@ function resolvePreviewPath(requestUrl) {
     : null;
 }
 
+/**
+ * Find an exported file or the site's 404 document while preserving its status.
+ * @param {string} requestUrl Incoming request URL.
+ * @returns {Promise<{filePath: string | null, statusCode: number}>} Response file.
+ */
 async function resolveResponse(requestUrl) {
   const candidate = resolvePreviewPath(requestUrl);
 
@@ -109,8 +149,10 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(requestedPort, host, () => {
+  const label = isExport ? "static export" : "Pages preview";
+  const pathname = isExport ? "/" : "/ste-systems/";
   console.log(
-    `Serving the Pages preview at http://${host}:${requestedPort}/ste-systems/.`,
+    `Serving the ${label} at http://${host}:${requestedPort}${pathname}`,
   );
 });
 

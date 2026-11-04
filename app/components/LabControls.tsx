@@ -18,6 +18,9 @@ import {
 } from "../lib/configuration";
 import { CopyIcon, ExternalLinkIcon, SparkIcon } from "./Icons";
 import { useLabConfiguration } from "./LabExperience";
+import { MotionSettings } from "./MotionSettings";
+import { Form } from "@sanderson-technology-enterprises/ste-usk-react";
+import { LAYOUT_RECIPES, type LayoutRecipe } from "../data/catalog";
 
 const modeLabels: Record<UiMode, string> = {
   light: "Light",
@@ -34,7 +37,7 @@ function formatCatalogLabel(value: string): string {
 
 export function LabControls() {
   const {
-    configuration,
+    requestedConfiguration: configuration,
     announce,
     randomizeConfiguration,
     resetConfiguration,
@@ -42,6 +45,8 @@ export function LabControls() {
     setMode,
     setTheme,
     setUi,
+    setRecipe,
+    setDensity,
   } = useLabConfiguration();
   const prefix = getUiPrefix(configuration.ui);
   const [copyLabel, setCopyLabel] = useState("Copy configuration");
@@ -223,6 +228,30 @@ export function LabControls() {
           </div>
         </fieldset>
 
+        <Form.Select
+          label="05 / Page recipe"
+          value={configuration.recipe ?? "app-shell"}
+          onChange={(event) => setRecipe(event.target.value as LayoutRecipe)}
+        >
+          {LAYOUT_RECIPES.map((recipe) => (
+            <option key={recipe} value={recipe}>
+              {formatCatalogLabel(recipe)}
+            </option>
+          ))}
+        </Form.Select>
+        <Form.Select
+          label="06 / Spacing density"
+          value={configuration.density ?? "normal"}
+          onChange={(event) =>
+            setDensity(event.target.value as "compact" | "normal" | "spacious")
+          }
+        >
+          {["compact", "normal", "spacious"].map((density) => (
+            <option key={density} value={density}>
+              {formatCatalogLabel(density)}
+            </option>
+          ))}
+        </Form.Select>
         <div className="control-actions ly-cluster ly-gap-2 ly-span-full ly-items-stretch">
           <button
             className="interactive-surface site-action"
@@ -269,6 +298,7 @@ export function LabControls() {
           </button>
         </div>
       </form>
+      <MotionSettings />
 
       <div className="active-config" aria-label="Active configuration">
         <span>

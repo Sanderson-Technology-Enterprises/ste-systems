@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "scope": "substantial-ui",
+  "packages": [
+    {
+      "name": "layout-style-css",
+      "version": "3.2.3",
+      "state": "Available",
+      "evidence": [
+        "node_modules/layout-style-css/package.json",
+        "sha256:c3c6a70f01ac73feb681aaf8a79a981ebf5800a99b97f3394e155838cb908fc0"
+      ]
+    },
+    {
+      "name": "ui-style-kit-css",
+      "version": "2.7.1",
+      "state": "Available",
+      "evidence": [
+        "node_modules/ui-style-kit-css/package.json",
+        "sha256:f48904398140e56807175cff2bbd640807308c10d36789063a3571a7ae1b6b92"
+      ]
+    },
+    {
+      "name": "interactive-surface-css",
+      "version": "1.7.3",
+      "state": "Available",
+      "evidence": [
+        "node_modules/interactive-surface-css/package.json",
+        "sha256:831026e695808599eda9016149e44ca91c87c7b90fa5b8607295c4e22b87ed16"
+      ]
+    },
+    {
+      "name": "@sanderson-technology-enterprises/motion-style-css",
+      "version": "1.0.0",
+      "state": "Available",
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/motion-style-css/package.json",
+        "sha256:4b4f61a751cd0f2dd129bfeb9745e777adf0295f8919ed97d090308235eca54a"
+      ]
+    },
+    {
+      "name": "@sanderson-technology-enterprises/ste-usk-react",
+      "version": "2.3.0",
+      "state": "Available",
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/package.json",
+        "sha256:632b6d8f12a5b938ae527010fe765646777c6677ca0b37db577afe4abc9e4ca9"
+      ]
+    }
+  ],
+  "layout": [
+    {
+      "need": "Every counted layout factor, wrapper measure, and installed primitive",
+      "hook": "InterfaceRoot layout/density, Layout.Recipe/Wrapper, and all 22 public primitive adapters",
+      "evidence": [
+        "app/data/atlas.ts",
+        "node_modules/layout-style-css/manifest.json",
+        "app/components/labs/LayoutExplorer.tsx",
+        "app/components/labs/ShowcaseRecipe.tsx"
+      ],
+      "check": "All catalog factors and real main-workbench recipe/density geometry passed focused browser checks; responsive 320-1440px and narrow embedded guide passed"
+    }
+  ],
+  "components": [
+    {
+      "need": "Six varied working specimen panels, client colors and animated overlays",
+      "hook": "Public Button, Card, Form, Table, Badge, Alert, Slider, ProgressBar, Stepper, SegmentedControl, Modal, Tooltip and Motion adapters",
+      "evidence": [
+        "app/components/labs/MotionShowcase.tsx",
+        "app/components/CustomThemeEditor.tsx",
+        "app/components/AnimatedOverlays.tsx"
+      ],
+      "check": "Local form/filter/confirmation flows; actual named/native RGB exports and clipboard fallback; sampled modal frames and retained tooltip exit"
+    }
+  ],
+  "elevation": [
+    {
+      "target": "Preview cards at level 1",
+      "level": 1,
+      "reason": "Quiet supporting content",
+      "check": "Three distinct computed shadows"
+    },
+    {
+      "target": "Preview cards at level 2",
+      "level": 2,
+      "reason": "Primary editable content",
+      "check": "Three distinct computed shadows"
+    },
+    {
+      "target": "Preview cards at level 3",
+      "level": 3,
+      "reason": "Featured confirmation specimen",
+      "check": "Three distinct computed shadows"
+    }
+  ],
+  "motion": {
+    "policy": "expressive",
+    "respectReducedMotion": true,
+    "decisions": [
+      {
+        "target": "Workspace, featured panel and six-panel group",
+        "trigger": "Entrance, exit, stagger, cancel and reset",
+        "owner": "Motion Style CSS dedicated shells",
+        "effect": "All ten installed presets; random defaults with fixed entrance/exit/direction/easing and timing overrides",
+        "check": "Existing focused motion cases passed sampled frames, all ten presets, focus, cancellation and reduced motion"
+      },
+      {
+        "target": "Main Lab, preview appearance/geometry, and primitive shell",
+        "trigger": "Configuration changes",
+        "owner": "useConfigurationMotion using public Motion Style CSS controller",
+        "effect": "Independent exit/entrance settings; latest request wins; initial hydration skips animation; off/reduced-motion applies immediately",
+        "check": "configuration-motion.spec.ts: both contexts, fixed/random timing, rapid requests, off/reduced motion and control focus"
+      },
+      {
+        "target": "Public native modal and dedicated tooltip content shell",
+        "trigger": "Show/hide, focus/hover and dismissal",
+        "owner": "Modal/Tooltip semantics and Motion Style CSS lifecycle",
+        "effect": "Retained exits and shared settings without overriding tooltip positioning",
+        "check": "client-playground.spec.ts: actual modal frames, exit retention, focus restoration and tooltip in/out"
+      },
+      {
+        "target": "Interactive controls",
+        "trigger": "Hover/press and explicit success/error/attention feedback",
+        "owner": "Interactive Surface CSS public tokens and feedback attribute",
+        "effect": "None/subtle/balanced/strong hover; repeat-safe reflex triggers",
+        "check": "Rendered feedback animation present; hover translates -8px and -2px for strong/subtle"
+      }
+    ]
+  },
+  "localCss": {
+    "beforeBytes": 409,
+    "afterBytes": 2249,
+    "unapproved": 0,
+    "exceptions": [
+      {
+        "id": "blueprint-light-danger-ink",
+        "file": "app/styles/motion.css",
+        "selector": ".motion-browser[data-ui=\"technical-blueprint\"][data-mode=\"light\"] .usk-badge[data-ui-variant=\"danger\"]",
+        "property": "color",
+        "value": "color-mix(in srgb,var(--usk-native-danger) 90%,var(--usk-native-text))",
+        "owner": "ui-style-kit-css",
+        "reason": "Rendered axe evidence found 4.26:1 contrast on Blueprint light paper. Mixing its own body ink restores AA; this is a scoped consumer repair.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "vertical-workflow-flex",
+        "file": "app/styles/motion.css",
+        "selector": ".showcase-stage",
+        "property": "flex",
+        "value": "0 0 auto",
+        "owner": "ui-style-kit-css",
+        "reason": "Remove the horizontal 12rem flex basis when the public stepper is composed in a vertical Layout stack. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+        "conditions": [],
+        "evidence": [
+          "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+          "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+          "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+        ],
+        "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+      },
+      {
+        "id": "vertical-workflow-flex-wrap",
+        "file": "app/styles/motion.css",
+        "selector": ".showcase-stage",
+        "property": "flex-wrap",
+        "value": "wrap",
+        "owner": "ui-style-kit-css",
+        "reason": "Allow marker, label and description to wrap without clipping at phone widths. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+        "conditions": [],
+        "evidence": [
+          "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+          "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+          "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+        ],
+        "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+      }
+    ]
+  },
+  "proof": [
+    {
+      "requirement": "Focused implementation and compatibility checks",
+      "status": "verified",
+      "evidence": [
+        "tests/motion-settings.test.ts: individual random/fixed/default cases passed",
+        "tests/playground-options.test.ts: individual export/intensity/recipe cases passed",
+        "tests/configuration.test.ts: recipe/density round-trip and legacy defaults/markup cases passed",
+        "tests/browser/client-playground.spec.ts: individual configuration, primitives/wrappers, reflex/intensity, exports/fallback and overlay cases passed",
+        "tests/browser/configuration-motion.spec.ts: individual shared random/fixed/latest-request and main-control cases passed",
+        "tests/browser/motion-showcase.spec.ts: responsive and four-style/two-mode scoped axe checks passed",
+        "tests/browser/motion.spec.ts: affected controller and all-preset cases passed",
+        "Native Editorial dark workflow contrast regression: passed after composing public Text descriptions"
+      ]
+    },
+    {
+      "requirement": "Production and source checks",
+      "status": "verified",
+      "evidence": [
+        "npm run lint: exit 0",
+        "npm run build: exit 0; TypeScript and ten static routes complete",
+        "Prettier applied to changed source/test/docs files",
+        "STE composition ownership audit: passed, zero unapproved/unresolved/stale reviews"
+      ]
+    },
+    {
+      "requirement": "Local production browser and visual evidence",
+      "status": "verified",
+      "evidence": [
+        "output/client-playground-production.json",
+        "output/client-playground-desktop.png",
+        "output/client-playground-mobile.png",
+        "output/client-playground-guide-mobile.png",
+        "output/client-playground-modal.png",
+        "http://127.0.0.1:4391/lab/#motion",
+        "Playwright fallback used because the Gnomie profile was busy and IAB unavailable; no cloud/native proof claimed"
+      ]
+    },
+    {
+      "requirement": "Remote CI, push, publication and deployment",
+      "status": "not-applicable",
+      "evidence": [
+        "Local delivery only; these operations were not requested or performed. No exhaustive 218400-combination test claim."
+      ]
+    },
+    {
+      "requirement": "Generated jsdoc2md reference update",
+      "status": "not-applicable",
+      "evidence": [
+        "This repository has no jsdoc2md generator configured. Added APIs have JSDoc-compatible source comments; no push performed."
+      ]
+    },
+    {
+      "requirement": "Pre-commit handoff: current-source integration and Gnomie replay",
+      "status": "verified",
+      "evidence": [
+        "docs/lab-pr-readiness.md",
+        "Clean npm ci355packages and direct pins verified; 14focused unit cases and18artifact contracts passed individually",
+        "60selected browser cases passed sequentially; final7recipe x20personality x2width matrix passed after wrapper correction",
+        "WebKit anchor replay and direct npm run test:dev-hydration passed; local Firefox blank-page runtime limitation documented separately",
+        "Normal and Pages production builds passed, ten routes each; lint/typecheck passed",
+        "2026-11-04 20:43-20:47UTC: Gnomie native task Chrome657166 visited real production Pages Lab and light homepage. Verified frame, readable application reflow, resize/snap/restore, guide focus/header clearance, healthy opened canonical fixture, logo/count/copy and compact Drawer Escape/focus restoration. Fresh screenshots retained in task transcript.",
+        ".tmp/pr-gnomie-activity.jsonl and .tmp/pr-gnomie-report.md; no credentials, external messages, merge or deployment"
+      ]
+    }
+  ],
+  "configurationInventory": {
+    "layouts": 20,
+    "recipes": 7,
+    "densities": 3,
+    "presets": 20,
+    "sharedThemes": 25,
+    "nativeSchemesPerPreset": 1,
+    "total": 218400,
+    "exhaustivelyRendered": false
+  },
+  "ownershipAudit": {
+    "configuration": "docs/motion-showcase-audit.json",
+    "passed": true,
+    "files": 18,
+    "unresolved": 0,
+    "reviewed": 11,
+    "sourceHashes": [
+      {
+        "path": "app/components/labs/MotionLab.tsx",
+        "sha256": "c584b28aa030629c3a4f377a174bc476686c9c689d2d736e28f09846d69eb86e"
+      },
+      {
+        "path": "app/components/labs/MotionShowcase.tsx",
+        "sha256": "afbd1447f79dadbadb5b6a2d20590aeb81b851c06fd4ed8027f6be50a7736b1c"
+      },
+      {
+        "path": "app/components/MotionPreferences.tsx",
+        "sha256": "ccb5b5ff003e5127a7178ae7f44d2f02dcd617851d6cd41e5bcc7120135a7919"
+      },
+      {
+        "path": "app/components/MotionSettings.tsx",
+        "sha256": "b0b38284257a5ec195ebc704c28a3f358130eb423af48fa329374c9627464353"
+      },
+      {
+        "path": "app/components/useConfigurationMotion.ts",
+        "sha256": "22adea499b84f932b70eff37c9625f13fb1b2b971c2a861bee83d1db346a2937"
+      },
+      {
+        "path": "app/components/LabExperience.tsx",
+        "sha256": "c9cb42ab1cb2dc9d45730bb33b1280de0f1f181ea64aed2b97db94e7853109c5"
+      },
+      {
+        "path": "app/components/LabControls.tsx",
+        "sha256": "1e2b2f87c42cf08c8b4ac5a10cec5a064c2211201c6dd18c648d63a5c3b7a389"
+      },
+      {
+        "path": "app/layout.tsx",
+        "sha256": "352bcde37daa26c5d564a2d9fee5dadd2090de2d00bb70582ad32060ba0d0577"
+      },
+      {
+        "path": "app/styles/motion.css",
+        "sha256": "1220af7dde22d863ef23c41b020c9a63000f0a44a1fd5df7eb2699d8de8766cc"
+      },
+      {
+        "path": "app/components/AnimatedOverlays.tsx",
+        "sha256": "94c73592b0482bace752fc2edb2f4225ea993f81f2e492fcb5b3b27bc2f3f806"
+      },
+      {
+        "path": "app/components/CustomThemeEditor.tsx",
+        "sha256": "7a37d0852dc9ca3c93411a013b9fc9ebabfea143738f373651e21cd43c8491f7"
+      },
+      {
+        "path": "app/components/labs/LayoutExplorer.tsx",
+        "sha256": "fd09875e304514aa193c67644c2af5809f3decf39e27fc71a47a717ce0d4e74c"
+      },
+      {
+        "path": "app/components/labs/ShowcaseRecipe.tsx",
+        "sha256": "002eb4138672c528780fc35f31a6574fbbd842d645745f21e04acae27cfa90e6"
+      },
+      {
+        "path": "app/components/useSurfaceFeedback.ts",
+        "sha256": "ea67db44c2c6c83a3b02845e87421ad8d946e6926c4ca52dbf2676112db27fe7"
+      },
+      {
+        "path": "app/lib/playground-options.ts",
+        "sha256": "9dff7616806d9f304085fc3bee4837ffd2bfeea9c990b44efb2131305355e71b"
+      },
+      {
+        "path": "app/components/CombinedWorkbench.tsx",
+        "sha256": "b6b29d05f774727a3bbc2556c19411a6ccb00b2c83531c08c0bfac86ad0778ed"
+      },
+      {
+        "path": "app/components/ConfigurationReference.tsx",
+        "sha256": "aeb75d449d275a066ea0456f08e94d5970980f26dcc39c5ace0cbc3196545de6"
+      },
+      {
+        "path": "app/components/HeroActions.tsx",
+        "sha256": "b93af503fc9e18e3f1161bd695102b205a380af050c2f7ae04786d56d1d0f414"
+      }
+    ]
+  }
+}

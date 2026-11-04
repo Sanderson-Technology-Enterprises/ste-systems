@@ -1,0 +1,522 @@
+{
+  "files": [
+    "app/components/AdvancedLabExamples.tsx",
+    "app/components/AnimatedOverlays.tsx",
+    "app/components/CombinedWorkbench.tsx",
+    "app/components/ConfigurationReference.tsx",
+    "app/components/CustomThemeEditor.tsx",
+    "app/components/EditorChrome.tsx",
+    "app/components/FeatureShowcase.tsx",
+    "app/components/HeroActions.tsx",
+    "app/components/HomeExperience.tsx",
+    "app/components/HomeObservatory.tsx",
+    "app/components/LabControls.tsx",
+    "app/components/LabExperience.tsx",
+    "app/components/LabWorkbench.tsx",
+    "app/components/MotionPreferences.tsx",
+    "app/components/MotionSettings.tsx",
+    "app/components/ResponsiveNavigation.tsx",
+    "app/components/SiteFooter.tsx",
+    "app/components/SiteHeader.tsx",
+    "app/components/WorkbenchInspector.tsx",
+    "app/components/WorkspaceSections.tsx",
+    "app/components/labs/LayoutExplorer.tsx",
+    "app/components/labs/MotionLab.tsx",
+    "app/components/labs/MotionShowcase.tsx",
+    "app/components/labs/PrimitiveControls.tsx",
+    "app/components/labs/ShowcaseRecipe.tsx",
+    "app/components/useConfigurationMotion.ts",
+    "app/components/useRecipeFit.ts",
+    "app/components/useSurfaceFeedback.ts",
+    "app/data/navigation.ts",
+    "app/lab/page.tsx",
+    "app/layout.tsx",
+    "app/lib/configuration.ts",
+    "app/lib/inspector-state.ts",
+    "app/lib/motion-settings.ts",
+    "app/lib/playground-options.ts",
+    "app/lib/site.ts",
+    "app/page.tsx",
+    "app/styles/atlas.css",
+    "app/styles/motion.css",
+    "app/styles/observatory.css",
+    "app/styles/shell.css",
+    "app/styles/spacing.css",
+    "app/styles/workbench.css",
+    "scripts/build-fixtures.mjs"
+  ],
+  "beforeBytes": 29438,
+  "renderedReviews": [
+    {
+      "id": "app/components/labs/MotionLab.tsx:13995:dynamic-style",
+      "reason": "The resolved browserStyle contains public Interactive Surface intensity tokens and validated active-palette RGB roles only. Native schemes reset inherited shared RGB roles to initial. No local component paint or competing transforms are introduced.",
+      "evidence": [
+        "app/components/labs/MotionLab.tsx: browserStyle",
+        "app/lib/playground-options.ts: interactionIntensity",
+        "client-playground.spec.ts: feedback reflexes, client color edits, native color exports"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:4623:local-primitive",
+      "reason": "Existing direct-CSS layout selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:5235:local-primitive",
+      "reason": "Existing direct-CSS preset selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:5807:local-primitive",
+      "reason": "Existing direct-CSS palette selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:6494:local-primitive",
+      "reason": "Existing direct-CSS mode radio group is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:10521:local-primitive",
+      "reason": "Existing read-only manual-copy textarea is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/AnimatedOverlays.tsx:2457:spread-props",
+      "reason": "Typed public ModalProps are forwarded to the public Modal. The wrapper owns presence and a dialog ref only; it supplies no paint, positioning or style overrides.",
+      "evidence": [
+        "app/components/AnimatedOverlays.tsx: AnimatedModal",
+        "tests/browser/client-playground.spec.ts: sampled modal phases and focus restoration"
+      ]
+    },
+    {
+      "id": "app/components/AnimatedOverlays.tsx:5213:spread-props",
+      "reason": "Typed public Tooltip props remain forwarded; public placement is selected to fit the scrollport. Native anchor event callbacks retain caller handlers. Public Tooltip owns positioning, ARIA and Escape; Motion owns only its content lifecycle.",
+      "evidence": [
+        "app/components/AnimatedOverlays.tsx: AnimatedTooltip",
+        "tests/browser/client-playground.spec.ts: retained tooltip entrance and exit",
+        "tests/browser/workbench-overlays.spec.ts: actual upper scroll-boundary clipping regression"
+      ]
+    },
+    {
+      "id": "app/components/labs/ShowcaseRecipe.tsx:1313:dynamic-style",
+      "reason": "The resolved style sets only the published --ly-card-grid-min and --ly-gallery-min geometry tokens to 22rem, allowing real intrinsic recipe flow.",
+      "evidence": [
+        "node_modules/layout-style-css/manifest.json: tokens.geometry",
+        "tests/browser/motion-showcase.spec.ts: desktop rows and responsive containment"
+      ]
+    },
+    {
+      "id": "app/styles/shell.css:0:local-keyframes",
+      "reason": "The existing CSS-only home scroll-reveal artwork is unchanged. This plan introduces no local keyframes and preserves its reduced-motion fallback rather than expanding into a home-animation migration.",
+      "evidence": [
+        "git diff app/styles/shell.css changes header spacing and logo backing only",
+        "HEAD:app/styles/shell.css already contains home-section-reveal"
+      ]
+    },
+    {
+      "id": "app/components/LabWorkbench.tsx:18564:dynamic-style",
+      "reason": "previewStyle resolves only validated active-palette RGB roles, native inheritance resets and published Interactive Surface hover tokens. The app does not supply competing lifecycle transforms.",
+      "evidence": [
+        "LabWorkbench.tsx: previewStyle",
+        "tests/browser/workbench.spec.ts: actual custom color export, manual and opt-in phases",
+        "tests/browser/site-spacing.spec.ts: all preset paint contexts"
+      ]
+    },
+    {
+      "id": "app/components/WorkbenchInspector.tsx:7481:dynamic-class",
+      "reason": "The editor helper receives only site-owned inspector-rail and inspector-panel-root classes or an empty string. Public InterfaceRoot owns preset paint; the app owns split geometry and the missing resize controller.",
+      "evidence": [
+        "WorkbenchInspector.tsx: editor helper call sites",
+        "Installed Layout Sidebar/Drawer declarations expose geometry and modal semantics but no resize controller",
+        "tests/inspector-state.test.ts and rendered divider regression"
+      ]
+    },
+    {
+      "id": "app/lib/motion-settings.ts:0:unsupported-syntax",
+      "reason": "The CSS/JSX-oriented parser cannot parse this TypeScript generic helper. Manual source review finds only public motion types, catalog sampling and validated timing options; no authored style declarations.",
+      "evidence": [
+        "app/lib/motion-settings.ts",
+        "npm run typecheck",
+        "tests/motion-settings.test.ts"
+      ]
+    },
+    {
+      "id": "app/components/HomeObservatory.tsx:1351:local-primitive",
+      "reason": "Existing native buttons are interactive labels embedded in site-owned orbit artwork, not UI-kit specimen controls. The public Button adapter supplies ordinary themed button paint, not the illustration positioning and opaque artwork palette. Retain the existing native diagram composition and its pressed/controls semantics; no new control implementation is introduced.",
+      "evidence": [
+        "HomeObservatory.tsx unchanged from HEAD",
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Button/Button.d.ts",
+        "tests/browser/home-presentation.spec.ts: live orbit selection, contrast and geometry",
+        "docs/home-presentation-review.md"
+      ]
+    },
+    {
+      "id": "app/components/ResponsiveNavigation.tsx:973:spread-props",
+      "reason": "The unchanged spread supplies only target=_blank and rel=noreferrer noopener to external native anchors. It does not spread styles or repaint shared components.",
+      "evidence": [
+        "ResponsiveNavigation.tsx: NavigationAnchor external branch",
+        "git diff app/components/ResponsiveNavigation.tsx is empty",
+        "tests/browser/home-presentation.spec.ts: real tablet menu behavior"
+      ]
+    },
+    {
+      "id": "app/styles/observatory.css:0:local-keyframes",
+      "reason": "The original orbit and observatory-enter illustration keyframes are unchanged. This scoped repair changes number geometry and contrast, retains its reduced-motion fallbacks, and does not introduce a new local lifecycle effect or broaden into an illustration-animation migration.",
+      "evidence": [
+        "HEAD:app/styles/observatory.css",
+        "git diff app/styles/observatory.css",
+        "docs/home-presentation-review.md"
+      ]
+    },
+    {
+      "id": "app/components/CombinedWorkbench.tsx:7974:spread-props",
+      "reason": "The local attributes object contains only className=client-workspace, data-layout-recipe, data-ly-density and aria-label. Public Stack/Recipe own layout; no style or paint is spread.",
+      "evidence": [
+        "app/components/CombinedWorkbench.tsx: attributes object",
+        "tests/browser/workbench-geometry.spec.ts: all seven recipes and twenty personalities"
+      ]
+    },
+    {
+      "id": "app/components/CombinedWorkbench.tsx:8228:spread-props",
+      "reason": "The local attributes object contains only className=client-workspace, data-layout-recipe, data-ly-density and aria-label. Public Stack/Recipe own layout; no style or paint is spread.",
+      "evidence": [
+        "app/components/CombinedWorkbench.tsx: attributes object",
+        "tests/browser/workbench-geometry.spec.ts: all seven recipes and twenty personalities"
+      ]
+    },
+    {
+      "id": "app/components/WorkbenchInspector.tsx:2789:imperative-style",
+      "reason": "The only imperative style write sets the app-owned --workbench-header-height on the site-owned experience root, measured from its real header. It does not replace a shared token or motion transform. Cleanup removes the same owned property.",
+      "evidence": [
+        "app/components/WorkbenchInspector.tsx: refresh",
+        "tests/browser/workbench-frame.spec.ts: measured frame height and equal outer boundaries"
+      ]
+    }
+  ],
+  "exceptions": [
+    {
+      "id": "legacy-guide-badge-alignment",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-preview .usk-card>.usk-badge",
+      "property": "align-self",
+      "value": "flex-start",
+      "owner": "ui-style-kit-css",
+      "reason": "Existing guide badge placement is unchanged; this file only changes the tab-panel spacing floor.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when the retained legacy composition is deliberately migrated."
+    },
+    {
+      "id": "blueprint-light-danger-ink",
+      "file": "app/styles/motion.css",
+      "selector": ".motion-browser[data-ui=\"technical-blueprint\"][data-mode=\"light\"] .usk-badge[data-ui-variant=\"danger\"]",
+      "property": "color",
+      "value": "color-mix(in srgb,var(--usk-native-danger) 90%,var(--usk-native-text))",
+      "owner": "ui-style-kit-css",
+      "reason": "Rendered axe evidence found 4.26:1 contrast on Blueprint light paper. Mixing its own body ink restores AA; this is a scoped consumer repair.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "legacy-home-reduced-transition",
+      "file": "app/styles/shell.css",
+      "selector": ".package-overview-card",
+      "property": "transition",
+      "value": "none",
+      "owner": "application",
+      "reason": "Existing home reduced-motion fallback is preserved.",
+      "conditions": ["@media (prefers-reduced-motion:reduce)"],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when the retained legacy composition is deliberately migrated."
+    },
+    {
+      "id": "legacy-home-reduced-animation",
+      "file": "app/styles/shell.css",
+      "selector": ".home-experience .section-band",
+      "property": "animation",
+      "value": "none",
+      "owner": "application",
+      "reason": "Existing home reduced-motion fallback is preserved.",
+      "conditions": ["@media (prefers-reduced-motion:reduce)"],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when the retained legacy composition is deliberately migrated."
+    },
+    {
+      "id": "site-control-block-minimum",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode]:is([data-ui][data-mode]) :where(button,span,input,select,textarea,a[href],a.usk-button,[role=\"button\"])",
+      "property": "padding-block",
+      "value": "max(2px,var(--usk-compact-padding-block-min,2px))",
+      "owner": "ui-style-kit-css",
+      "reason": "The user explicitly requires a 2px vertical content floor across styles; preset layers retain larger values.",
+      "conditions": ["@layer ui-style-kit.components"],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts",
+        "tests/browser/workbench-links.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-control-inline-minimum",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode]:is([data-ui][data-mode]) :where(button,span,input,select,textarea,a[href],a.usk-button,[role=\"button\"])",
+      "property": "padding-inline",
+      "value": "max(3px,var(--usk-compact-padding-inline-min,3px))",
+      "owner": "ui-style-kit-css",
+      "reason": "The user explicitly requires at least 3px inline clearance for text controls and spans.",
+      "conditions": ["@layer ui-style-kit.components"],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts",
+        "tests/browser/workbench-links.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-zero-step-floor",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode] .ly-pad-0",
+      "property": "padding",
+      "value": "2px",
+      "owner": "layout-style-css",
+      "reason": "Explicit zero-step choices retain the approved safety minimum and copy their effective style.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-zero-step-span-floor",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode] span.ly-pad-0",
+      "property": "padding",
+      "value": "2px 3px",
+      "owner": "layout-style-css",
+      "reason": "Text spans require the stronger inline minimum even at the zero spacing step.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-breakout-inset",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode] .ly-wrapper--breakout",
+      "property": "padding",
+      "value": "2px",
+      "owner": "layout-style-css",
+      "reason": "The user requires wrapper clearance even for adjoining breakout lanes; their grid topology remains library-owned.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-nav-inset",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode] .usk-nav",
+      "property": "padding",
+      "value": "2px",
+      "owner": "ui-style-kit-css",
+      "reason": "The visible navigation wrapper is otherwise authored flush; retain the approved wrapper minimum.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-icon-control-inset",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode] .usk-icon-button",
+      "property": "padding",
+      "value": "2px 3px",
+      "owner": "ui-style-kit-css",
+      "reason": "Icon controls retain the same approved content floor instead of zero padding.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-inline-label-inset",
+      "file": "app/styles/spacing.css",
+      "selector": "[data-ui][data-mode] .usk-link__label",
+      "property": "padding",
+      "value": "2px 3px",
+      "owner": "ui-style-kit-css",
+      "reason": "The inline-link reset otherwise zeros its visible text span; retain the explicit user minimum.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "site-flush-table-inset",
+      "file": "app/styles/spacing.css",
+      "selector": ":is([data-ui=\"y2k\"],[data-ui=\"organic-modern\"],[data-ui=\"industrial-utility\"],[data-ui=\"paper-editorial\"],[data-ui=\"neo-noir\"])[data-mode] .usk-table-wrap",
+      "property": "padding",
+      "value": "2px",
+      "owner": "ui-style-kit-css",
+      "reason": "Rendered preset sweeps identified these flush table shells; restore only their missing wrapper inset.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "vertical-workflow-flex",
+      "file": "app/styles/motion.css",
+      "selector": ".showcase-stage",
+      "property": "flex",
+      "value": "0 0 auto",
+      "owner": "ui-style-kit-css",
+      "reason": "Remove the horizontal 12rem flex basis when the public stepper is composed in a vertical Layout stack. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+      "conditions": [],
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+        "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+        "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+      ],
+      "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+    },
+    {
+      "id": "vertical-workflow-flex-wrap",
+      "file": "app/styles/motion.css",
+      "selector": ".showcase-stage",
+      "property": "flex-wrap",
+      "value": "wrap",
+      "owner": "ui-style-kit-css",
+      "reason": "Allow marker, label and description to wrap without clipping at phone widths. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+      "conditions": [],
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+        "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+        "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+      ],
+      "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+    },
+    {
+      "id": "retained-home-observatory-stage-animation",
+      "file": "app/styles/observatory.css",
+      "selector": ".home-observatory-stage",
+      "property": "animation",
+      "value": "none",
+      "owner": "application",
+      "conditions": ["@media (prefers-reduced-motion:reduce)"],
+      "reason": "Existing reduced-motion suppression belongs to the retained site-owned orbit illustration, is unchanged from HEAD, and must remain effective during this contrast/geometry repair.",
+      "evidence": [
+        "HEAD:app/styles/observatory.css",
+        "docs/home-presentation-review.md",
+        "tests/browser/home-presentation.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+    },
+    {
+      "id": "retained-home-orbit-runner-animation",
+      "file": "app/styles/observatory.css",
+      "selector": ".home-orbit-runner",
+      "property": "animation",
+      "value": "none",
+      "owner": "application",
+      "conditions": ["@media (prefers-reduced-motion:reduce)"],
+      "reason": "Existing reduced-motion suppression belongs to the retained site-owned orbit illustration, is unchanged from HEAD, and must remain effective during this contrast/geometry repair.",
+      "evidence": [
+        "HEAD:app/styles/observatory.css",
+        "docs/home-presentation-review.md",
+        "tests/browser/home-presentation.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+    },
+    {
+      "id": "retained-home-orbit-control-transition",
+      "file": "app/styles/observatory.css",
+      "selector": ".home-orbit-control",
+      "property": "transition",
+      "value": "none",
+      "owner": "application",
+      "conditions": ["@media (prefers-reduced-motion:reduce)"],
+      "reason": "Existing reduced-motion suppression belongs to the retained site-owned orbit illustration, is unchanged from HEAD, and must remain effective during this contrast/geometry repair.",
+      "evidence": [
+        "HEAD:app/styles/observatory.css",
+        "docs/home-presentation-review.md",
+        "tests/browser/home-presentation.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+    }
+  ]
+}

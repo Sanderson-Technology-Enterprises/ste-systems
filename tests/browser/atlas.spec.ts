@@ -30,7 +30,7 @@ test("component guides expose five tabs and two full Lab links", async ({
   await links.first().click();
   await expect(page).toHaveURL(new RegExp(`${expected}$`));
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Configure the system",
+    "Find your interface.",
   );
 });
 

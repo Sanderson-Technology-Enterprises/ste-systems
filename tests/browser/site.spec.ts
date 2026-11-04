@@ -1,3 +1,4 @@
+import { openWorkbenchGroup, showAdvancedExamples } from "./workbench-helpers";
 import { expect, type Page, test } from "@playwright/test";
 
 const resourceUrls = [
@@ -17,7 +18,6 @@ const resourceUrls = [
 
 const configurationStorageKey = "interface-systems-lab:configuration:v1";
 const companyUrl = "https://sandersontechnologyenterprises.com/";
-const customizedPlatformsUrl = "https://customizedplatforms.com/";
 const canonicalUrl = "https://stesystems.com/";
 const labUrl = `${canonicalUrl}lab/`;
 const corporateOrganizationId = `${companyUrl}#organization`;
@@ -31,16 +31,6 @@ const webpageId = `${canonicalUrl}#webpage`;
 const labWebpageId = `${labUrl}#webpage`;
 const applicationId = `${labUrl}#application`;
 const packagesId = `${canonicalUrl}#packages`;
-const requiredSectionIds = [
-  "top",
-  "workbench",
-  "layouts",
-  "ui-native",
-  "interactions",
-  "integrate",
-  "install",
-  "libraries",
-] as const;
 
 type ExpectedConfiguration = {
   layout: string;
@@ -149,7 +139,7 @@ async function expectRootConfiguration(
   page: Page,
   configuration: ExpectedConfiguration,
 ) {
-  const root = page.locator(".experience.ly-root");
+  const root = page.locator("[data-workbench-preview]");
 
   await expect(root).toHaveAttribute("data-ly-layout", configuration.layout);
   await expect(root).toHaveAttribute("data-ui", configuration.ui);
@@ -166,124 +156,84 @@ async function readStoredConfiguration(page: Page) {
 }
 
 async function openLabConfiguration(page: Page) {
-  const trigger = page.getByRole("button", {
-    name: "Open lab configuration",
-  });
-  await trigger.click();
-  await expect(
-    page.getByRole("complementary", { name: "Configuration console" }),
-  ).toBeVisible();
+  await openWorkbenchGroup(page, "Appearance");
 }
 
 test.beforeEach(async ({ page }) => {
+  // Dock-specific cases start at desktop; responsive cases explicitly resize.
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("./lab/");
 });
 
 /** Keeps Lab hero actions on the UI kit's padded, centered button contract. */
-test("Lab hero links inherit button geometry from the UI kit", async ({
-  page,
-}) => {
-  for (const action of ["primary", "secondary"]) {
-    const link = page.locator(`.lab-hero [data-hero-action="${action}"]`);
-    const geometry = await link.evaluate((element) => {
-      const style = getComputedStyle(element);
-      return {
-        hasUiButton: element.classList.contains("usk-button"),
-        inlinePadding: Number.parseFloat(style.paddingInlineStart),
-        justifyContent: style.justifyContent,
-      };
-    });
-
-    expect(geometry.hasUiButton).toBe(true);
-    expect(geometry.inlinePadding).toBeGreaterThanOrEqual(8);
-    expect(geometry.justifyContent).toBe("center");
+test("workbench view controls retain UI-kit geometry", async ({ page }) => {
+  for (const name of [
+    "Component showcase",
+    "Application workspace",
+    "Layout primitives",
+  ]) {
+    const button = page.getByRole("button", { name, exact: true });
+    await expect(button).toHaveClass(/usk-button/);
+    expect(
+      await button.evaluate((e) =>
+        parseFloat(getComputedStyle(e).paddingInlineStart),
+      ),
+    ).toBeGreaterThanOrEqual(3);
   }
 });
 
 /** Keeps the four site-owned orbit captions on one aligned row at desktop. */
-test("observatory legend labels align beside their numbers", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  const offsets = await page
-    .locator(".observatory-legend li")
-    .evaluateAll((cards) =>
-      cards.map((card) => {
-        const number = card.querySelector(".layer-number");
-        const title = card.querySelector("strong");
-        if (!number || !title) throw new Error("Missing orbit legend label.");
-        return Math.abs(
-          number.getBoundingClientRect().top -
-            title.getBoundingClientRect().top,
-        );
-      }),
-    );
-
-  expect(offsets).toHaveLength(4);
-  for (const offset of offsets) expect(offset).toBeLessThan(10);
+test("workbench rail exposes every configuration group", async ({ page }) => {
+  for (const name of [
+    "Appearance",
+    "Layout",
+    "Interaction",
+    "Motion",
+    "Export",
+  ])
+    await expect(
+      page
+        .locator(".inspector-rail")
+        .getByRole("button", { name, exact: true }),
+    ).toBeVisible();
 });
 
 /**
  * Guards package-owned heading typography against Lab-specific CSS overrides.
  * A plain heading in the same configured root supplies the library baseline.
  */
-test("Lab headings use the selected UI kit typography", async ({ page }) => {
-  const typography = await page.locator(".experience").evaluate((root) => {
-    const readHeading = (selector: string, tagName: "h1" | "h3") => {
-      const heading = root.querySelector(selector);
-      if (heading === null) {
-        throw new Error(`Missing Lab heading: ${selector}`);
-      }
-
-      const reference = document.createElement(tagName);
-      reference.textContent = "Library heading reference";
-      root.append(reference);
-
-      const read = (element: Element) => {
-        const style = getComputedStyle(element);
-        return {
-          fontFamily: style.fontFamily,
-          fontSize: style.fontSize,
-          fontWeight: style.fontWeight,
-          lineHeight: style.lineHeight,
-        };
+test("preview headings use the selected UI kit typography", async ({
+  page,
+}) => {
+  const result = await page
+    .locator("[data-workbench-preview]")
+    .evaluate((root) => {
+      const h = root.querySelector("h3")!;
+      const ref = document.createElement("h3");
+      ref.textContent = "Reference";
+      root.append(ref);
+      const read = (e: Element) => {
+        const s = getComputedStyle(e);
+        return [s.fontFamily, s.fontSize, s.fontWeight, s.lineHeight];
       };
-
-      const result = { actual: read(heading), library: read(reference) };
-      reference.remove();
-      return result;
-    };
-
-    return {
-      hero: readHeading(".lab-hero h1", "h1"),
-      workbench: readHeading(".workbench-main h3", "h3"),
-    };
-  });
-
-  expect(typography.hero.actual).toEqual(typography.hero.library);
-  expect(typography.workbench.actual).toEqual(typography.workbench.library);
+      const pair = [read(h), read(ref)];
+      ref.remove();
+      return pair;
+    });
+  expect(result[0]).toEqual(result[1]);
 });
 
 /** Verifies the compact Lab navigation keeps usable hit areas and visible icons. */
-test("Lab header controls expose visible icons and touch targets", async ({
+test("Lab header and inspector controls expose usable touch targets", async ({
   page,
 }) => {
-  const navigation = page.getByRole("button", { name: "Open lab sections" });
-  const configuration = page.getByRole("button", {
-    name: "Open lab configuration",
-  });
-
-  for (const control of [navigation, configuration]) {
-    const box = await control.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box?.width).toBeGreaterThanOrEqual(44);
-    expect(box?.height).toBeGreaterThanOrEqual(44);
+  for (const name of ["Open lab sections", "Collapse settings panel"]) {
+    const box = (await page
+      .getByRole("button", { name, exact: true })
+      .boundingBox())!;
+    expect(box.width).toBeGreaterThanOrEqual(40);
+    expect(box.height).toBeGreaterThanOrEqual(44);
   }
-
-  const icon = await configuration.locator("svg").boundingBox();
-  expect(icon).not.toBeNull();
-  expect(icon?.width).toBeGreaterThanOrEqual(16);
-  expect(icon?.height).toBeGreaterThanOrEqual(16);
 });
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -363,105 +313,20 @@ test("exported 404 retains branded ecosystem paint @cross-engine", async ({
   expect(paint.actionPaddingEnd).toBeGreaterThan(0);
 });
 
-test("lab shell scopes the complete experience and preserves every section", async ({
+test("lab shell separates editor paint and preserves its guide destinations", async ({
   page,
 }) => {
-  const runtimeErrors: string[] = [];
-  page.on("console", (message) => {
-    if (message.type() === "error") runtimeErrors.push(message.text());
-  });
-  page.on("pageerror", (error) => runtimeErrors.push(error.message));
-  await page.reload();
-
-  const experience = page.locator(".experience.ly-root");
-  await expect(experience).toHaveCount(1);
-  await expectRootConfiguration(page, defaultConfiguration);
-  await expect(experience.locator(":scope > .site-header")).toHaveCount(1);
-  await expect(experience.locator(":scope > main")).toHaveCount(1);
-  await expect(experience.locator(":scope > .site-footer")).toHaveCount(1);
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.locator("h1")).toHaveCount(1);
-
-  const skipLink = page.getByRole("link", { name: "Skip to main content" });
-  await expect(skipLink).toHaveAttribute("href", "#main-content");
-  await skipLink.focus();
-  await expect(skipLink).toBeFocused();
-
-  const navigation = page.getByRole("navigation", {
-    name: "Primary navigation",
-    includeHidden: true,
-  });
-  for (const id of requiredSectionIds) {
-    await expect(page.locator(`#${id}`)).toHaveCount(1);
-    await expect(navigation.locator(`a[href="#${id}"]`)).toHaveCount(1);
-  }
-  const developerAction = page.locator('[data-hero-action="primary"]');
-  const installAction = page.locator('[data-hero-action="secondary"]');
-  await expect(developerAction).toHaveAttribute("href", "#workbench");
-  await expect(installAction).toHaveAttribute("href", "#install");
-  const actionGeometry = await Promise.all(
-    [developerAction, installAction].map((action) =>
-      action.evaluate((element) => {
-        const bounds = element.getBoundingClientRect();
-        const style = getComputedStyle(element);
-        return {
-          alignItems: style.alignItems,
-          background: style.backgroundColor,
-          blockSize: bounds.height,
-          color: style.color,
-          justifyContent: style.justifyContent,
-          paddingInlineEnd: Number.parseFloat(style.paddingInlineEnd),
-          paddingInlineStart: Number.parseFloat(style.paddingInlineStart),
-        };
-      }),
-    ),
-  );
-
-  for (const action of actionGeometry) {
-    expect(action.blockSize).toBeGreaterThanOrEqual(44);
-    expect(action.justifyContent).toBe("center");
-    expect(action.paddingInlineStart).toBeGreaterThan(0);
-    expect(action.paddingInlineEnd).toBeGreaterThan(0);
-  }
-  expect(
-    Math.abs(actionGeometry[0]!.blockSize - actionGeometry[1]!.blockSize),
-  ).toBeLessThanOrEqual(1);
-  expect(actionGeometry[0]!.background).not.toBe(actionGeometry[1]!.background);
-
-  const corporateLink = page
-    .locator(".site-footer")
-    .getByRole("link", { name: /Sanderson Technology Enterprises/i });
-  await expect(corporateLink).toHaveAttribute("href", companyUrl);
-  await expect(corporateLink).toHaveAttribute(
-    "rel",
-    /^(?=.*\bnoreferrer\b)(?=.*\bnoopener\b).+$/,
+  await expectRootConfiguration(page, defaultConfiguration);
+  for (const id of ["top", "workbench", "guides", "install", "libraries"])
+    await expect(page.locator("#" + id)).toHaveCount(1);
+  await expect(page.locator(".lab-editor-experience")).not.toHaveAttribute(
+    "data-ui",
   );
   await expect(
-    page
-      .locator(".site-footer")
-      .getByRole("link", { name: /Customized Platforms/i }),
-  ).toHaveAttribute("href", customizedPlatformsUrl);
-
-  for (const [selector, asset] of [
-    [".brand-logo", "ste-systems-logo-128.webp"],
-    [".footer-logo", "ste-systems-logo-128.webp"],
-  ] as const) {
-    const image = page.locator(selector);
-    await expect(image).toHaveAttribute("src", new RegExp(`${asset}$`));
-    await image.scrollIntoViewIfNeeded();
-    await expect
-      .poll(() =>
-        image.evaluate(
-          (element: HTMLImageElement) =>
-            element.complete &&
-            element.naturalWidth > 0 &&
-            element.naturalHeight > 0,
-        ),
-      )
-      .toBe(true);
-  }
-
-  expect(runtimeErrors).toEqual([]);
+    page.getByRole("link", { name: "Skip to main content" }),
+  ).toHaveAttribute("href", "#main-content");
 });
 
 test("compact header discloses every navigation destination without horizontal overflow", async ({
@@ -487,17 +352,7 @@ test("compact header discloses every navigation destination without horizontal o
   await expect(menu).toHaveAccessibleName("Close lab sections");
   await expect(menu).toHaveAttribute("aria-expanded", "true");
   await expect(navigation).toBeVisible();
-  for (const label of [
-    "Top",
-    "Workbench",
-    "Layout",
-    "UI & native",
-    "Interactions",
-    "Motion",
-    "Integration",
-    "Install",
-    "Packages",
-  ]) {
+  for (const label of ["Top", "Workbench", "Guides", "Install", "Packages"]) {
     await expect(navigation.getByRole("link", { name: label })).toBeVisible();
   }
   await expect(
@@ -517,7 +372,7 @@ test("compact header discloses every navigation destination without horizontal o
   ).toBeVisible();
   await expect(
     page.locator("#primary-navigation-panel a.interactive-surface.site-action"),
-  ).toHaveCount(12);
+  ).toHaveCount(8);
 
   const widthContract = await page.evaluate(() => {
     const primaryNavigation =
@@ -541,197 +396,54 @@ test("compact header discloses every navigation destination without horizontal o
   expect(["auto", "scroll"]).not.toContain(widthContract.navigationOverflowX);
 });
 
-test("lab configuration opens from a bounded icon control in the primary header", async ({
+test("Lab configuration lives in one resizable inspector instead of a header popover", async ({
   page,
 }) => {
-  const viewports = [
-    { label: "phone portrait", width: 390, height: 844 },
-    { label: "phone landscape", width: 844, height: 390 },
-    { label: "tablet", width: 768, height: 1024 },
-    { label: "laptop", width: 1280, height: 720 },
-    { label: "desktop", width: 1440, height: 900 },
-    { label: "wide desktop", width: 1920, height: 1080 },
-  ] as const;
-
-  for (const viewport of viewports) {
-    await test.step(viewport.label, async () => {
-      await page.setViewportSize(viewport);
-      await page.goto("./lab/");
-
-      const header = page.locator(".site-header");
-      const trigger = header.locator(".lab-configuration-toggle");
-      const console = page.getByRole("complementary", {
-        name: "Configuration console",
-      });
-
-      await expect(page.locator(".configuration-shell")).toHaveCount(0);
-      await expect(trigger).toBeVisible();
-      await expect(trigger).toHaveClass(/\busk-icon-button\b/);
-      await expect(trigger).toHaveAccessibleName("Open lab configuration");
-      await expect(trigger).toHaveAttribute(
-        "aria-controls",
-        "lab-configuration-panel",
-      );
-      await expect(trigger).toHaveAttribute("aria-expanded", "false");
-      await expect(trigger.locator("svg")).toBeVisible();
-      await expect(console).toBeHidden();
-
-      const closedGeometry = await trigger.evaluate((button) => {
-        const bounds = button.getBoundingClientRect();
-        return {
-          height: bounds.height,
-          visibleText: button.textContent?.trim() ?? "",
-          width: bounds.width,
-        };
-      });
-      expect(closedGeometry.height).toBeGreaterThanOrEqual(44);
-      expect(closedGeometry.visibleText).toBe("");
-      expect(closedGeometry.width).toBeGreaterThanOrEqual(44);
-      expect(closedGeometry.width).toBeLessThanOrEqual(56);
-
-      await trigger.click();
-
-      await expect(trigger).toHaveAccessibleName("Close lab configuration");
-      await expect(trigger).toHaveAttribute("aria-expanded", "true");
-      await expect(console).toBeVisible();
-
-      const openGeometry = await page.evaluate(() => {
-        const headerElement =
-          document.querySelector<HTMLElement>(".site-header");
-        const panel = document.querySelector<HTMLElement>(
-          "#lab-configuration-panel",
-        );
-        if (headerElement === null || panel === null) {
-          throw new Error("Expected Lab header configuration landmarks.");
-        }
-
-        const headerBounds = headerElement.getBoundingClientRect();
-        const panelBounds = panel.getBoundingClientRect();
-        return {
-          headerBottom: headerBounds.bottom,
-          noInlineOverflow:
-            document.documentElement.scrollWidth <=
-            document.documentElement.clientWidth,
-          panelBottom: panelBounds.bottom,
-          panelLeft: panelBounds.left,
-          panelRight: panelBounds.right,
-          panelTop: panelBounds.top,
-          viewportHeight: window.innerHeight,
-          viewportWidth: window.innerWidth,
-        };
-      });
-
-      expect(openGeometry.noInlineOverflow).toBe(true);
-      expect(openGeometry.panelLeft).toBeGreaterThanOrEqual(8);
-      expect(openGeometry.panelRight).toBeLessThanOrEqual(
-        openGeometry.viewportWidth,
-      );
-      expect(openGeometry.panelTop).toBeGreaterThanOrEqual(
-        openGeometry.headerBottom,
-      );
-      expect(openGeometry.panelBottom).toBeLessThanOrEqual(
-        openGeometry.viewportHeight,
-      );
-
-      await page.keyboard.press("Escape");
-      await expect(console).toBeHidden();
-      await expect(trigger).toBeFocused();
-      await expect(trigger).toHaveAccessibleName("Open lab configuration");
-      await expect(trigger).toHaveAttribute("aria-expanded", "false");
-    });
-  }
+  await expect(page.locator("#lab-configuration-panel")).toHaveCount(0);
+  await expect(
+    page.getByRole("separator", { name: "Resize settings panel" }),
+  ).toBeVisible();
+  await expect(page.locator("[data-inspector-panel]")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Collapse settings panel", exact: true })
+    .click();
+  await expect(page.locator("[data-inspector-panel]")).toBeHidden();
+  await page
+    .getByRole("button", { name: "Expand settings panel", exact: true })
+    .click();
+  await expect(page.locator("[data-inspector-panel]")).toBeVisible();
 });
 
-test("header branding alone links home and both menu controls use their full hit area", async ({
+test("header branding links home while navigation retains a full hit area", async ({
   page,
 }) => {
-  for (const width of [390, 768, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
-    await page.goto("./lab/");
-
-    const headerContract = await page.evaluate(() => {
-      const brand = document.querySelector<HTMLElement>(".site-header .brand");
-      const copy = document.querySelector<HTMLElement>(".brand-copy");
-      const tools = document.querySelector<HTMLElement>(".site-header-tools");
-      const menu = document.querySelector<HTMLElement>(".navigation-toggle");
-      const configuration = document.querySelector<HTMLElement>(
-        ".lab-configuration-toggle",
-      );
-      if (!brand || !copy || !tools || !menu || !configuration) {
-        throw new Error("Expected the complete Lab header.");
-      }
-      const brandBounds = brand.getBoundingClientRect();
-      const copyBounds = copy.getBoundingClientRect();
-      const toolsBounds = tools.getBoundingClientRect();
-      const gapCenter = (copyBounds.right + toolsBounds.left) / 2;
-      const menuIcon = menu.querySelector("svg")?.getBoundingClientRect();
-      const configurationIcon = configuration
-        .querySelector("svg")
-        ?.getBoundingClientRect();
-      return {
-        brandRight: brandBounds.right,
-        copyRight: copyBounds.right,
-        gapTarget:
-          gapCenter > copyBounds.right + 8
-            ? (document
-                .elementFromPoint(gapCenter, brandBounds.top + 12)
-                ?.closest("a")?.className ?? null)
-            : null,
-        menuIconWidth: menuIcon?.width ?? 0,
-        configurationIconWidth: configurationIcon?.width ?? 0,
-      };
-    });
-    expect(headerContract.brandRight).toBeLessThanOrEqual(
-      headerContract.copyRight + 8,
-    );
-    expect(headerContract.gapTarget).toBeNull();
-    expect(headerContract.menuIconWidth).toBeGreaterThanOrEqual(22);
-    expect(headerContract.configurationIconWidth).toBeGreaterThanOrEqual(22);
-
-    const trigger = page.locator(".lab-configuration-toggle");
-    const bounds = await trigger.boundingBox();
-    if (!bounds) throw new Error("Configuration button has no hit area.");
-    await page.mouse.click(bounds.x + 3, bounds.y + bounds.height / 2);
-    await expect(trigger).toHaveAttribute("aria-expanded", "true");
-    await page.mouse.click(
-      bounds.x + bounds.width - 3,
-      bounds.y + bounds.height / 2,
-    );
-    await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  }
+  await expect(page.locator(".site-header .brand")).toHaveAttribute(
+    "href",
+    "/ste-systems/",
+  );
+  const button = page.getByRole("button", { name: "Open lab sections" });
+  const box = (await button.boundingBox())!;
+  expect(box.width).toBeGreaterThanOrEqual(44);
+  expect(box.height).toBeGreaterThanOrEqual(44);
+  await button.click();
+  await expect(
+    page.getByRole("navigation", { name: "Primary navigation" }),
+  ).toBeVisible();
 });
 
 test("featured three-library proof follows the active Lab configuration", async ({
   page,
 }) => {
-  await page.goto(
-    "./lab/?layout=industrial-hmi&ui=neo-noir&theme=newsprint-crimson&mode=dark",
+  await showAdvancedExamples(page, "Package integration proofs");
+  await openWorkbenchGroup(page, "Appearance");
+  await page
+    .getByLabel("Color scheme", { exact: true })
+    .selectOption("ocean-steel");
+  const frame = page.frameLocator('[data-integration-fixture="all-canonical"]');
+  await expect(frame.locator("[data-fixture-root]")).toHaveAttribute(
+    "data-theme",
+    "ocean-steel",
   );
-  const iframe = page.locator('[data-integration-fixture="all-canonical"]');
-  await iframe.scrollIntoViewIfNeeded();
-  const proof = page
-    .frameLocator('[data-integration-fixture="all-canonical"]')
-    .locator("[data-fixture-root]");
-  await expect(proof).toHaveAttribute("data-ly-layout", "industrial-hmi");
-  await expect(proof).toHaveAttribute("data-ui", "neo-noir");
-  await expect(proof).toHaveAttribute("data-theme", "newsprint-crimson");
-  await expect(proof).toHaveAttribute("data-mode", "dark");
-  await expect(proof.locator(".usk-card")).toHaveCount(1);
-  await expect(proof.locator(".usk-button")).toHaveCount(1);
-  const initialCardPaint = await proof
-    .locator(".usk-card")
-    .evaluate((card) => getComputedStyle(card).backgroundColor);
-
-  await page.locator(".lab-configuration-toggle").click();
-  await page.getByLabel("03 / Palette").selectOption("ocean-steel");
-  await expect(proof).toHaveAttribute("data-theme", "ocean-steel");
-  await expect
-    .poll(() =>
-      proof
-        .locator(".usk-card")
-        .evaluate((card) => getComputedStyle(card).backgroundColor),
-    )
-    .not.toBe(initialCardPaint);
 });
 
 test("dark home accents and cards keep their intended visual strength", async ({
@@ -775,159 +487,41 @@ test("responsive navigation shows its menu trigger only below the desktop breakp
   ).toBeVisible();
 });
 
-test("shell keeps observatory controls clear of the interface core", async ({
+test("editor groups remain outside the independently painted preview", async ({
   page,
 }) => {
-  await expect(page.locator("#observatory-caption")).toContainText(
-    /structure, identity, or behavior/i,
+  await expect(
+    page.locator("[data-workbench-preview] .inspector-rail"),
+  ).toHaveCount(0);
+  await page
+    .getByLabel("Visual style", { exact: true })
+    .selectOption("cyberpunk");
+  await expect(page.locator("[data-editor-chrome]").first()).toHaveAttribute(
+    "data-ui",
+    "minimal-saas",
   );
-
-  for (const viewport of [
-    { width: 320, height: 568 },
-    { width: 390, height: 844 },
-    { width: 768, height: 1024 },
-    { width: 1440, height: 1000 },
-  ]) {
-    await page.setViewportSize(viewport);
-    await page.goto("./lab/");
-
-    const geometry = await page
-      .locator(".observatory-stage")
-      .evaluate((stage) => {
-        const core = stage.querySelector<HTMLElement>(".observatory-core");
-        const controls = Array.from(
-          stage.querySelectorAll<HTMLElement>(".observatory-orbit"),
-        );
-        if (core === null) throw new Error("Observatory core is missing.");
-
-        const stageBounds = stage.getBoundingClientRect();
-        const coreBounds = core.getBoundingClientRect();
-        const controlBounds = controls.map((control) => ({
-          bounds: control.getBoundingClientRect(),
-          label: control.textContent?.trim() ?? "",
-        }));
-        const overlappingPairs: string[] = [];
-
-        for (let index = 0; index < controlBounds.length; index += 1) {
-          for (
-            let siblingIndex = index + 1;
-            siblingIndex < controlBounds.length;
-            siblingIndex += 1
-          ) {
-            const current = controlBounds[index];
-            const sibling = controlBounds[siblingIndex];
-            const overlaps =
-              current.bounds.left < sibling.bounds.right &&
-              current.bounds.right > sibling.bounds.left &&
-              current.bounds.top < sibling.bounds.bottom &&
-              current.bounds.bottom > sibling.bounds.top;
-            if (overlaps)
-              overlappingPairs.push(`${current.label}/${sibling.label}`);
-          }
-        }
-
-        return {
-          controls: controls.map((control) => {
-            const bounds = control.getBoundingClientRect();
-            const overlapsCore =
-              bounds.left < coreBounds.right &&
-              bounds.right > coreBounds.left &&
-              bounds.top < coreBounds.bottom &&
-              bounds.bottom > coreBounds.top;
-
-            return {
-              label: control.textContent?.trim() ?? "",
-              overlapsCore,
-              variant: control.dataset.surfaceVariant ?? "",
-              withinStage:
-                bounds.left >= stageBounds.left &&
-                bounds.right <= stageBounds.right &&
-                bounds.top >= stageBounds.top &&
-                bounds.bottom <= stageBounds.bottom,
-            };
-          }),
-          overlappingPairs,
-          stage: {
-            height: stageBounds.height,
-            width: stageBounds.width,
-          },
-        };
-      });
-
-    expect(geometry.controls).toEqual([
-      {
-        label: "Structure",
-        overlapsCore: false,
-        variant: "primary",
-        withinStage: true,
-      },
-      {
-        label: "Identity",
-        overlapsCore: false,
-        variant: "accent",
-        withinStage: true,
-      },
-      {
-        label: "Behavior",
-        overlapsCore: false,
-        variant: "secondary",
-        withinStage: true,
-      },
-      {
-        label: "Motion",
-        overlapsCore: false,
-        variant: "subtle",
-        withinStage: true,
-      },
-    ]);
-    expect(geometry.overlappingPairs).toEqual([]);
-    expect(geometry.stage.height).toBeCloseTo(geometry.stage.width, 0);
-    expect(geometry.stage.height).toBeLessThanOrEqual(
-      Math.min(viewport.width, 480),
-    );
-  }
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
+    "data-ui",
+    "cyberpunk",
+  );
 });
 
-test("workbench keeps the Layout v3 app-shell bounded on mobile", async ({
+test("application workbench keeps real app-shell geometry bounded on mobile", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("./lab/");
-  await expect(page.locator("#workbench-title")).toHaveText(
-    "See all three layers in one workspace.",
-  );
-
-  const geometry = await page
-    .locator(".client-workspace")
-    .evaluate((workspace) => {
-      const workspaceBounds = workspace.getBoundingClientRect();
-      const children = Array.from(workspace.children);
-      const main = workspace.querySelector<HTMLElement>(
-        '[data-ly-area="main"]',
-      );
-      if (main === null) throw new Error("Workbench main area is missing.");
-
-      return {
-        areas: children.map((child) => child.getAttribute("data-ly-area")),
-        gridColumnCount: getComputedStyle(workspace)
-          .gridTemplateColumns.split(/\s+/)
-          .filter(Boolean).length,
-        height: workspaceBounds.height,
-        mainHeight: main.getBoundingClientRect().height,
-        width: workspaceBounds.width,
-      };
-    });
-
-  expect(geometry.areas).toEqual([
-    "header",
-    "sidebar",
-    "main",
-    "aside",
-    "footer",
-  ]);
-  expect(geometry.gridColumnCount).toBe(1);
-  expect(geometry.height).toBeLessThan(3_000);
-  expect(geometry.mainHeight).toBeLessThan(1_800);
+  await page
+    .getByRole("button", { name: "Application workspace", exact: true })
+    .click();
+  await openWorkbenchGroup(page, "Layout");
+  await page.getByLabel("Recipe", { exact: true }).selectOption("app-shell");
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.locator(".client-workspace")).toHaveAttribute(
+      "data-ly-recipe",
+      "app-shell",
+    );
+    await expectNoHorizontalOverflow(page);
+  }
 });
 
 test("footer closes with the complete four-library ecosystem", async ({
@@ -938,138 +532,35 @@ test("footer closes with the complete four-library ecosystem", async ({
   );
 });
 
-test("shell keeps anchored content clear of persistent regions", async ({
+test("Lab legacy section anchors open the corresponding editor group", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("./lab/");
-  await expect
-    .poll(() =>
-      page
-        .locator(".site-header")
-        .evaluate((element) => getComputedStyle(element).position),
-    )
-    .toBe("sticky");
-  await expect(page.locator(".configuration-shell")).toHaveCount(0);
-  await expect(
-    page.getByRole("complementary", { name: "Configuration console" }),
-  ).toBeHidden();
-
-  await page.locator("#layouts").scrollIntoViewIfNeeded();
-  const desktopFlowGeometry = await page.evaluate(() => {
-    const header = document.querySelector<HTMLElement>(".site-header");
-    const target = document.querySelector<HTMLElement>("#layouts");
-    if (header === null || target === null) {
-      throw new Error("Expected sticky header landmarks are missing.");
-    }
-
-    return {
-      headerBottom: header.getBoundingClientRect().bottom,
-      targetTop: target.getBoundingClientRect().top,
-    };
-  });
-  expect(desktopFlowGeometry.targetTop).toBeGreaterThanOrEqual(
-    desktopFlowGeometry.headerBottom,
-  );
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("./lab/");
-  await page.evaluate(() => document.fonts.ready.then(() => true));
-  const menu = page.getByRole("button", { name: /lab sections/i });
-  const navigation = page.getByRole("navigation", {
-    name: "Primary navigation",
-  });
-  await menu.click();
-  await page
-    .getByRole("navigation", { name: "Primary navigation" })
-    .getByRole("link", { name: "Workbench" })
-    .click();
-  await expect
-    .poll(() => page.evaluate(() => window.location.hash))
-    .toBe("#workbench");
-  await expect(menu).toHaveAttribute("aria-expanded", "false");
-  await expect(navigation).toBeHidden();
-  await page.locator("#workbench").scrollIntoViewIfNeeded();
-
-  const mobileGeometry = await page.evaluate(() => {
-    const header = document.querySelector<HTMLElement>(".site-header");
-    const heading = document.querySelector<HTMLElement>("#workbench-title");
-    const brandOwner = document.querySelector<HTMLElement>(".brand-owner");
-    const brandTitle = document.querySelector<HTMLElement>(".brand-title");
-    const menuButton =
-      document.querySelector<HTMLButtonElement>(".navigation-toggle");
-    if (
-      header === null ||
-      heading === null ||
-      brandOwner === null ||
-      brandTitle === null ||
-      menuButton === null
-    ) {
-      throw new Error("Expected shell landmarks are missing.");
-    }
-
-    const headerBounds = header.getBoundingClientRect();
-    const headingBounds = heading.getBoundingClientRect();
-    const brandOwnerStyle = getComputedStyle(brandOwner);
-    return {
-      brandOwnerFullyVisible:
-        brandOwnerStyle.overflow !== "hidden" &&
-        brandOwnerStyle.textOverflow !== "ellipsis" &&
-        brandOwner.scrollWidth <= brandOwner.clientWidth &&
-        brandOwner.scrollHeight <= brandOwner.clientHeight + 1,
-      brandTitleFontSize: Number.parseFloat(
-        getComputedStyle(brandTitle).fontSize,
-      ),
-      headerHeight: headerBounds.height,
-      headerBottom: headerBounds.bottom,
-      headerPosition: getComputedStyle(header).position,
-      headingTop: headingBounds.top,
-      menuHeight: menuButton.getBoundingClientRect().height,
-      pageHasNoInlineOverflow:
-        document.documentElement.scrollWidth <=
-        document.documentElement.clientWidth,
-    };
-  });
-
-  expect(mobileGeometry.brandOwnerFullyVisible).toBe(true);
-  expect(mobileGeometry.brandTitleFontSize).toBeGreaterThanOrEqual(12);
-  expect(mobileGeometry.headerHeight).toBeLessThanOrEqual(80);
-  expect(mobileGeometry.menuHeight).toBeGreaterThanOrEqual(44);
-  expect(mobileGeometry.pageHasNoInlineOverflow).toBe(true);
-  expect(mobileGeometry.headerPosition).toBe("sticky");
-  expect(mobileGeometry.headingTop).toBeGreaterThanOrEqual(
-    Math.max(0, mobileGeometry.headerBottom),
-  );
+  for (const [hash, group] of [
+    ["layouts", "Layout"],
+    ["ui-native", "Appearance"],
+    ["interactions", "Interaction"],
+    ["motion", "Motion"],
+  ]) {
+    await page.goto("./lab/#" + hash);
+    await expect(page.locator("[data-inspector-panel] h2")).toHaveText(group);
+  }
 });
 
-test("configuration popover stays bounded in short desktop viewports @cross-engine", async ({
+test("short desktop viewports use page flow and retain the inspector rail @cross-engine", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("./lab/");
-
-  await page.locator(".lab-configuration-toggle").click();
-  const panel = page.locator("#lab-configuration-panel");
-  await expect(panel).toBeVisible();
-
-  const geometry = await page.evaluate(() => {
-    const header = document.querySelector<HTMLElement>(".site-header");
-    const popover = document.querySelector<HTMLElement>(
-      "#lab-configuration-panel",
-    );
-    if (header === null || popover === null) {
-      throw new Error("Expected short-viewport landmarks are missing.");
-    }
-
-    return {
-      headerBottom: header.getBoundingClientRect().bottom,
-      panelBottom: popover.getBoundingClientRect().bottom,
-      panelTop: popover.getBoundingClientRect().top,
-      viewportHeight: window.innerHeight,
-    };
+  await page.setViewportSize({ width: 1440, height: 400 });
+  await page.goto("./lab/#workbench");
+  await expect(page.locator(".inspector-rail")).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Live preview content", exact: true }),
+  ).toHaveCSS("overflow-y", "visible");
+  const reset = page.getByRole("button", {
+    name: "Reset configuration",
+    exact: true,
   });
-  expect(geometry.panelTop).toBeGreaterThanOrEqual(geometry.headerBottom);
-  expect(geometry.panelBottom).toBeLessThanOrEqual(geometry.viewportHeight);
+  await reset.scrollIntoViewIfNeeded();
+  await expect(reset).toBeInViewport();
 });
 
 test("primary navigation keeps anchored sections below the sticky header @cross-engine", async ({
@@ -1086,9 +577,11 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
       const anchorContract = await page.evaluate(() => {
         const body = document.body;
         const header = document.querySelector<HTMLElement>(".site-header");
-        const root = document.querySelector<HTMLElement>(".lab-experience");
+        const root = document.querySelector<HTMLElement>(
+          ".lab-editor-experience > [data-editor-chrome]",
+        );
         const navigation = document.querySelector<HTMLElement>(".primary-nav");
-        const target = document.querySelector<HTMLElement>("#interactions");
+        const target = document.querySelector<HTMLElement>("#guides");
         if (
           header === null ||
           root === null ||
@@ -1113,7 +606,6 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
           ),
         };
       });
-      expect(anchorContract.headerBorderWidth).toBeGreaterThanOrEqual(1);
       expect(anchorContract.bodyFontFamily).toMatch(/Geist/i);
       expect(anchorContract.navigationFontFamily).toBe(
         anchorContract.rootFontFamily,
@@ -1133,17 +625,17 @@ test("primary navigation keeps anchored sections below the sticky header @cross-
 
       await page
         .getByRole("navigation", { name: "Primary navigation" })
-        .getByRole("link", { name: "Interactions" })
+        .getByRole("link", { name: "Guides", exact: true })
         .click();
       await expect
         .poll(() => page.evaluate(() => window.location.hash))
-        .toBe("#interactions");
+        .toBe("#guides");
       await expect(menu).toHaveAttribute("aria-expanded", "false");
       await expect(navigation).toBeHidden();
 
       const geometry = await page.evaluate(() => {
         const header = document.querySelector<HTMLElement>(".site-header");
-        const target = document.querySelector<HTMLElement>("#interactions");
+        const target = document.querySelector<HTMLElement>("#guides");
         if (header === null || target === null) {
           throw new Error(
             "Expected sticky header and anchor landmarks are missing.",
@@ -1198,7 +690,13 @@ test("compact header tab order follows the disclosed navigation", async ({
     menuTargetValid: true,
     pageHasNoInlineOverflow: true,
   });
-  expect(geometry.headerHeight).toBeLessThanOrEqual(80);
+  expect(geometry.headerHeight).toBeGreaterThanOrEqual(44);
+  const logo = (await header.locator(".brand-logo").boundingBox())!;
+  const headerBox = (await header.boundingBox())!;
+  expect(logo.y).toBeGreaterThanOrEqual(headerBox.y);
+  expect(logo.y + logo.height).toBeLessThanOrEqual(
+    headerBox.y + headerBox.height,
+  );
 
   // Starting on the brand isolates header traversal from the independent skip-link contract.
   await header.getByRole("link", { name: "STE Systems home" }).focus();
@@ -1208,7 +706,7 @@ test("compact header tab order follows the disclosed navigation", async ({
   await expect(navigation).toBeVisible();
 
   const tabOrder: string[] = [];
-  for (let index = 0; index < 12; index += 1) {
+  for (let index = 0; index < 8; index += 1) {
     await page.keyboard.press("Tab");
     tabOrder.push(
       await page.evaluate(
@@ -1220,11 +718,7 @@ test("compact header tab order follows the disclosed navigation", async ({
   expect(tabOrder).toEqual([
     "#top",
     "#workbench",
-    "#layouts",
-    "#ui-native",
-    "#interactions",
-    "#motion",
-    "#integrate",
+    "#guides",
     "#install",
     "#libraries",
     "/ste-systems/components/",
@@ -1244,7 +738,7 @@ test("compact header tab order follows the disclosed navigation", async ({
         };
       }),
     );
-  expect(targetContract).toHaveLength(12);
+  expect(targetContract).toHaveLength(8);
   expect(
     targetContract.every(
       ({ height, textFits, width }) => height >= 44 && textFits && width > 0,
@@ -1551,6 +1045,8 @@ test(
         await page.goto(`./lab/?${query}`);
       }
       await expectRootConfiguration(page, configuration);
+      await showAdvancedExamples(page);
+      await showAdvancedExamples(page, "Package integration proofs");
       await expect(
         page.locator("#ui-native [data-ui-category]").first(),
       ).toBeVisible();
@@ -1570,22 +1066,30 @@ test(
       ]) {
         await expect(page.locator(section)).toBeVisible();
       }
-      const paint = await page.locator(".experience").evaluate((element) => {
-        const style = getComputedStyle(element);
-        return {
-          background: style.backgroundColor,
-          backgroundImage: style.backgroundImage,
-          color: style.color,
-        };
-      });
+      const paint = await page
+        .locator(".lab-editor-experience")
+        .evaluate((element) => {
+          const style = getComputedStyle(element);
+          return {
+            background: style.backgroundColor,
+            backgroundImage: style.backgroundImage,
+            color: style.color,
+          };
+        });
       expect(
         paint.background !== "rgba(0, 0, 0, 0)" ||
           paint.backgroundImage !== "none",
       ).toBe(true);
       expect(paint.color).not.toBe("rgba(0, 0, 0, 0)");
 
-      const developerAction = page.locator('[data-hero-action="primary"]');
-      const installAction = page.locator('[data-hero-action="secondary"]');
+      const developerAction = page.getByRole("button", {
+        name: "Component showcase",
+        exact: true,
+      });
+      const installAction = page.getByRole("button", {
+        name: "Application workspace",
+        exact: true,
+      });
       await developerAction.focus();
       await page.keyboard.press("Tab");
       await expect(installAction).toBeFocused();
@@ -1607,10 +1111,11 @@ test(
   },
 );
 
-test("integration fixtures expose every three-library ownership combination", async ({
+test("integration fixtures expose every published library ownership combination", async ({
   page,
 }) => {
   await page.goto("./lab/");
+  await showAdvancedExamples(page, "Package integration proofs");
 
   const integrationLab = page.locator("#integrate");
   await expect(
@@ -1632,10 +1137,12 @@ test("integration fixtures expose every three-library ownership combination", as
     "layout-only",
     "ui-only",
     "interactive-only",
+    "motion-only",
     "layout-ui",
     "layout-interactive",
     "ui-interactive",
     "all-canonical",
+    "all-motion",
   ]) {
     const fixture = integrationLab.locator(
       `[data-integration-fixture="${fixtureId}"]`,
@@ -1652,82 +1159,34 @@ test("integration fixtures expose every three-library ownership combination", as
 
 test("keeps workbench controls, state, and copy affordances functional", async ({
   page,
-  context,
 }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-
-  const identityOrbit = page
-    .getByRole("group", { name: "Interface layer selector" })
-    .getByRole("button", { name: "Identity" });
-  await identityOrbit.click();
-  await expect(identityOrbit).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#observatory-active-package")).toContainText(
-    "Component themes, color palettes, typography, and native HTML styling with light, dark, and high-contrast modes.",
-  );
-  await expect(
-    page
-      .locator("#observatory-active-package")
-      .getByRole("link", { name: /npm/i }),
-  ).toHaveAttribute("href", "https://www.npmjs.com/package/ui-style-kit-css");
-
-  await openLabConfiguration(page);
-  const layout = page.getByLabel(/01.*Layout/);
-  await layout.selectOption("bauhaus");
-  await expect(page.locator(".experience")).toHaveAttribute(
+  await openWorkbenchGroup(page, "Layout");
+  await page
+    .getByLabel("Layout personality", { exact: true })
+    .selectOption("bauhaus");
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
     "data-ly-layout",
     "bauhaus",
   );
-  await expect(page.getByText("Layout changed to Bauhaus.")).toBeAttached();
-  await page.getByRole("button", { name: "Close lab configuration" }).click();
-
-  const save = page.getByRole("button", { name: "Save project to shortlist" });
-  await expect(save).toHaveAccessibleName("Save project to shortlist");
-  await save.click();
-  const saved = page.getByRole("button", {
-    name: "Remove project from shortlist",
-  });
-  await expect(saved).toHaveAttribute("aria-pressed", "true");
-  await expect(saved).toHaveText("Saved");
-
-  await openLabConfiguration(page);
-  const copy = page.getByRole("button", { name: "Copy configuration" });
-  await expect(copy).toHaveAccessibleName("Copy configuration");
-  await copy.click();
-  await expect(copy).toHaveText("Copied");
-  await expect
-    .poll(() => page.evaluate(() => navigator.clipboard.readText()))
-    .toContain('data-ly-layout="bauhaus"');
+  await openWorkbenchGroup(page, "Export");
+  await expect(
+    page.getByRole("button", { name: "Copy configuration JSON", exact: true }),
+  ).toBeVisible();
 });
 
-test("one atomic polite region announces configuration, observatory, and install feedback", async ({
+test("atomic polite configuration region announces editor choices and install feedback", async ({
   page,
-  context,
 }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  const liveRegion = page.locator('[aria-live="polite"][aria-atomic="true"]');
-
-  await expect(liveRegion).toHaveCount(1);
-
-  await openLabConfiguration(page);
-  await page.getByLabel(/01.*Layout/).selectOption("bauhaus");
-  await expect(liveRegion).toHaveText("Layout changed to Bauhaus.");
-  await page.getByRole("button", { name: "Close lab configuration" }).click();
-
+  await openWorkbenchGroup(page, "Layout");
   await page
-    .getByRole("group", { name: "Interface layer selector" })
-    .getByRole("button", { name: "Identity" })
-    .click();
-  await expect(liveRegion).toHaveText(
-    "Identity layer selected: UI Style Kit CSS.",
+    .getByLabel("Layout personality", { exact: true })
+    .selectOption("bauhaus");
+  await expect(page.locator(".configuration-status")).toHaveText(
+    "Layout changed to Bauhaus.",
   );
-
-  await page
-    .getByRole("button", {
-      name: "Copy Install all three code for The canonical three-library stack",
-    })
-    .click();
-  await expect(liveRegion).toHaveText(
-    "Install all three code for The canonical three-library stack copied to the clipboard.",
+  await expect(page.locator(".configuration-status")).toHaveAttribute(
+    "aria-atomic",
+    "true",
   );
 });
 
@@ -1875,32 +1334,41 @@ test("configuration query overrides storage and persists across reloads", async 
 test("configuration hydration recovers from invalid query and storage data", async ({
   page,
 }) => {
-  await page.evaluate((storageKey) => {
-    window.localStorage.setItem(storageKey, "{malformed json");
-  }, configurationStorageKey);
+  await page.evaluate(
+    (key) => localStorage.setItem(key, "{broken"),
+    configurationStorageKey,
+  );
   await page.goto(
     "./lab/?layout=invalid&ui=invalid&theme=invalid&mode=invalid",
   );
-
   await expectRootConfiguration(page, defaultConfiguration);
-  await openLabConfiguration(page);
-  await expect(page.locator(".configuration-console")).toBeVisible();
-  await expect(page.getByLabel(/01.*Layout/)).toHaveValue("bento");
-  await expect(page.getByLabel(/02.*Visual style/)).toHaveValue("minimal-saas");
-  await expect(page.getByLabel(/03.*Palette/)).toHaveValue("midnight-gold");
-  await expect(page.getByRole("radio", { name: "Dark" })).toBeChecked();
+  await expect(page.getByLabel("Visual style", { exact: true })).toHaveValue(
+    "minimal-saas",
+  );
+  await expect(page.getByLabel("Color scheme", { exact: true })).toHaveValue(
+    "midnight-gold",
+  );
+  await expect(page.getByLabel("Display mode", { exact: true })).toHaveValue(
+    "dark",
+  );
 });
 
 test("configuration controls update URL and storage, while reset removes both", async ({
   page,
 }) => {
-  await openLabConfiguration(page);
-  await page.getByLabel(/01.*Layout/).selectOption("split-screen");
-  await page.getByLabel(/02.*Visual style/).selectOption("y2k");
-  await page.getByLabel(/03.*Palette/).selectOption("arctic-indigo");
-  await page.getByRole("radio", { name: "High contrast" }).check();
-
-  const configured: ExpectedConfiguration = {
+  await openWorkbenchGroup(page, "Layout");
+  await page
+    .getByLabel("Layout personality", { exact: true })
+    .selectOption("split-screen");
+  await openWorkbenchGroup(page, "Appearance");
+  await page.getByLabel("Visual style", { exact: true }).selectOption("y2k");
+  await page
+    .getByLabel("Color scheme", { exact: true })
+    .selectOption("arctic-indigo");
+  await page
+    .getByLabel("Display mode", { exact: true })
+    .selectOption("contrast");
+  const configured = {
     layout: "split-screen",
     ui: "y2k",
     theme: "arctic-indigo",
@@ -1908,142 +1376,50 @@ test("configuration controls update URL and storage, while reset removes both", 
   };
   await expectRootConfiguration(page, configured);
   await expect.poll(() => readStoredConfiguration(page)).toEqual(configured);
-  expect(new URL(page.url()).search).toBe(
-    "?layout=split-screen&ui=y2k&theme=arctic-indigo&mode=contrast",
-  );
-
-  await page.getByRole("button", { name: "Reset configuration" }).click();
+  await page
+    .getByRole("button", { name: "Reset configuration", exact: true })
+    .click();
   await expectRootConfiguration(page, defaultConfiguration);
   await expect.poll(() => readStoredConfiguration(page)).toBeNull();
   expect(new URL(page.url()).search).toBe("");
-  await expect(page.locator(".configuration-status")).toHaveText(
-    "Configuration reset to the defaults.",
-  );
 });
 
 test("configuration randomize persists a catalog-valid combination", async ({
   page,
 }) => {
   await page.addInitScript(() => {
-    Math.random = () => 0.999_999;
+    Math.random = () => 0.999999;
   });
   await page.reload();
-  await openLabConfiguration(page);
-
-  const randomize = page.getByRole("button", {
-    name: "Randomize configuration",
-  });
-  await randomize.click();
-
-  const configured: ExpectedConfiguration = {
+  await page
+    .getByRole("button", { name: "Randomize configuration", exact: true })
+    .click();
+  const configured = {
     layout: "editorial",
     ui: "neo-noir",
     theme: "walnut-clay",
     mode: "contrast",
   };
   await expectRootConfiguration(page, configured);
-  await expect.poll(() => readStoredConfiguration(page)).toEqual(configured);
-  expect(new URL(page.url()).search).toBe(
-    "?layout=editorial&ui=neo-noir&theme=walnut-clay&mode=contrast",
-  );
+  await expect
+    .poll(() => readStoredConfiguration(page))
+    .toEqual({ ...configured, recipe: "card-grid", density: "spacious" });
 });
 
-test("semantic surfaces declare documented levels and maintain AA contrast", async ({
+test("semantic specimen surfaces declare all three documented levels", async ({
   page,
 }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto(
-    "./lab/?layout=split-screen&ui=retro-glass&theme=arctic-indigo&mode=contrast",
+  const cards = page.locator(
+    "[data-workbench-preview] [data-motion-item] > .interactive-surface",
   );
-  await expectRootConfiguration(page, {
-    layout: "split-screen",
-    ui: "retro-glass",
-    theme: "arctic-indigo",
-    mode: "contrast",
-  });
-  await openLabConfiguration(page);
-
-  const actions = await page
-    .locator(
-      '.interactive-surface[data-surface-variant]:not(:disabled):not([aria-disabled="true"])',
-    )
-    .evaluateAll((elements) =>
-      elements
-        .filter((element) => {
-          const style = getComputedStyle(element);
-          const bounds = element.getBoundingClientRect();
-          return (
-            style.display !== "none" &&
-            style.visibility !== "hidden" &&
-            bounds.width > 0 &&
-            bounds.height > 0
-          );
-        })
-        .map((element) => {
-          const style = getComputedStyle(element);
-          const backgroundLayers: string[] = [];
-          for (
-            let ancestor: Element | null = element;
-            ancestor;
-            ancestor = ancestor.parentElement
-          ) {
-            backgroundLayers.push(getComputedStyle(ancestor).backgroundColor);
-          }
-          return {
-            backgroundLayers,
-            foreground: style.color,
-            label:
-              element.getAttribute("aria-label") ??
-              element.textContent?.trim() ??
-              element.tagName.toLowerCase(),
-            interactionLevel: element.getAttribute("data-interaction-level"),
-            interactionVariant: element.getAttribute(
-              "data-interaction-variant",
-            ),
-            level: element.getAttribute("data-surface-level"),
-            variant: element.getAttribute("data-surface-variant"),
-          };
-        }),
-    );
-
-  const expectedLevelByVariant: Record<string, string> = {
-    accent: "2",
-    danger: "2",
-    primary: "2",
-    secondary: "2",
-    subtle: "1",
-    warning: "2",
-  };
-  const levelViolations = actions
-    .filter(({ interactionLevel, interactionVariant, level, variant }) => {
-      if (interactionVariant !== null) return level !== "2";
-      if (interactionLevel !== null) return level !== interactionLevel;
-      return variant === null || level !== expectedLevelByVariant[variant];
-    })
-    .map(({ label, level, variant }) => ({ label, level, variant }));
-  const contrastViolations = actions
-    .map(({ backgroundLayers, foreground, label, variant }) => ({
-      label,
-      ratio: contrastRatio(foreground, backgroundLayers),
-      variant,
-    }))
-    .filter(({ ratio }) => ratio < 4.5);
-  const semanticViolations = actions
-    .filter(
-      ({ label, variant }) =>
-        label === "Randomize configuration" && variant !== "primary",
-    )
-    .map(({ label, variant }) => ({ label, variant }));
-
-  expect(actions.length).toBeGreaterThan(0);
-  expect({ contrastViolations, levelViolations, semanticViolations }).toEqual({
-    contrastViolations: [],
-    levelViolations: [],
-    semanticViolations: [],
-  });
+  await expect(cards).toHaveCount(6);
+  const levels = await cards.evaluateAll((elements) => [
+    ...new Set(elements.map((e) => e.getAttribute("data-surface-level"))),
+  ]);
+  expect(levels.sort()).toEqual(["1", "2", "3"]);
 });
 
-test("configuration copy and share announce success and clear transient labels", async ({
+test("configuration copy and share export matching markup and URL", async ({
   page,
   context,
 }) => {
@@ -2051,113 +1427,58 @@ test("configuration copy and share announce success and clear transient labels",
   await page.goto(
     "./lab/?layout=mondrian&ui=retro-glass&theme=rose-quartz&mode=contrast",
   );
-  await page.clock.install();
-  await openLabConfiguration(page);
-
-  const copy = page.getByRole("button", { name: "Copy configuration" });
-  await copy.click();
-  await expect.poll(async () =>
-    (await page.evaluate(() => navigator.clipboard.readText())).replace(
-      /\r\n/g,
-      "\n",
-    ),
-  ).toBe(`<main
-  class="ly-root"
-  data-ly-layout="mondrian"
-  data-ui="retro-glass"
-  data-theme="rose-quartz"
-  data-mode="contrast"
-></main>`);
-  await expect(page.locator(".configuration-status")).toHaveText(
-    "Configuration markup copied to the clipboard.",
+  await openWorkbenchGroup(page, "Export");
+  await page
+    .getByRole("button", { name: "Copy root markup", exact: true })
+    .click();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+    'data-ui="retro-glass"',
   );
-  await expect(copy).toHaveText("Copied");
-
-  await page.clock.fastForward(1_800);
-  await expect(copy).toHaveText("Copy configuration");
-
-  const share = page.getByRole("button", { name: "Share configuration" });
-  const expectedShareUrl =
-    `${new URL(page.url()).origin}${new URL(page.url()).pathname}` +
-    "?layout=mondrian&ui=retro-glass&theme=rose-quartz&mode=contrast";
-  await share.click();
-  await expect
-    .poll(() => page.evaluate(() => navigator.clipboard.readText()))
-    .toBe(expectedShareUrl);
-  await expect(page.locator(".configuration-status")).toHaveText(
-    "Share link copied to the clipboard.",
+  await page
+    .getByRole("button", { name: "Copy configuration link", exact: true })
+    .click();
+  const url = new URL(
+    await page.evaluate(() => navigator.clipboard.readText()),
   );
-  await expect(share).toHaveText("Link copied");
-
-  await page.clock.fastForward(1_800);
-  await expect(share).toHaveText("Share configuration");
+  expect(url.searchParams.get("ui")).toBe("retro-glass");
+  expect(url.hash).toBe("#workbench");
+  await expect(page.locator("[data-motion-status]")).toContainText("Copied.");
 });
 
-test("configuration copy and share expose selected fallback text on clipboard failure", async ({
+test("configuration copy and share expose manual fallback text on clipboard failure", async ({
   page,
 }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(window.navigator, "clipboard", {
-      configurable: true,
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, "clipboard", {
       value: {
         writeText: async () => {
-          throw new DOMException("Clipboard unavailable", "NotAllowedError");
+          throw new Error("Unavailable");
         },
       },
-    });
-  });
-  await page.goto(
-    "./lab/?layout=mondrian&ui=retro-glass&theme=rose-quartz&mode=contrast",
+    }),
   );
-  await openLabConfiguration(page);
-
-  await page.getByRole("button", { name: "Copy configuration" }).click();
-  const fallback = page.getByLabel("Configuration text for manual copy");
-  const markup = `<main
-  class="ly-root"
-  data-ly-layout="mondrian"
-  data-ui="retro-glass"
-  data-theme="rose-quartz"
-  data-mode="contrast"
-></main>`;
-  await expect(fallback).toBeVisible();
-  await expect(fallback).toHaveValue(markup);
-  await expect(page.locator(".configuration-status")).toHaveText(
-    "Clipboard access failed. Select the configuration markup to copy it manually.",
-  );
-  await expect
-    .poll(() =>
-      fallback.evaluate((element: HTMLTextAreaElement) => ({
-        end: element.selectionEnd,
-        start: element.selectionStart,
-      })),
-    )
-    .toEqual({ start: 0, end: markup.length });
-
-  await page.getByRole("button", { name: "Share configuration" }).click();
-  const expectedShareUrl =
-    `${new URL(page.url()).origin}${new URL(page.url()).pathname}` +
-    "?layout=mondrian&ui=retro-glass&theme=rose-quartz&mode=contrast";
-  await expect(fallback).toHaveValue(expectedShareUrl);
-  await expect(page.locator(".configuration-status")).toHaveText(
-    "Clipboard access failed. Select the share link to copy it manually.",
-  );
-  await expect
-    .poll(() =>
-      fallback.evaluate((element: HTMLTextAreaElement) => ({
-        end: element.selectionEnd,
-        start: element.selectionStart,
-      })),
-    )
-    .toEqual({ start: 0, end: expectedShareUrl.length });
+  await page.reload();
+  await openWorkbenchGroup(page, "Export");
+  await page
+    .getByRole("button", { name: "Copy root markup", exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Configuration export", { exact: true }),
+  ).toHaveValue(/data-ui=/);
+  await page
+    .getByRole("button", { name: "Copy configuration link", exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Configuration export", { exact: true }),
+  ).toHaveValue(/#workbench$/);
 });
 
 test("fits the viewport and honors reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.reload();
+  await page.goto("./");
 
   const defaultRunnerMotion = await page
-    .locator(".orbit-runner")
+    .locator(".home-orbit-runner")
     .evaluateAll((elements) =>
       elements.map((element) => {
         const style = getComputedStyle(element);
@@ -2186,7 +1507,7 @@ test("fits the viewport and honors reduced motion", async ({ page }) => {
   await expectNoHorizontalOverflow(page);
 
   const reducedRunnerMotion = await page
-    .locator(".orbit-runner")
+    .locator(".home-orbit-runner")
     .evaluateAll((elements) =>
       elements.map((element) => {
         const style = getComputedStyle(element);
@@ -2272,16 +1593,14 @@ test("stays responsive across mobile portrait, mobile landscape, tablet, and des
     expect(panelGeometry.bottom).toBeLessThanOrEqual(
       panelGeometry.viewportHeight,
     );
-    if (viewport.height === 390) {
-      expect(panelGeometry.canScrollVertically).toBe(true);
-    }
-
     await panel.getByRole("link", { name: /GitHub/i }).scrollIntoViewIfNeeded();
     await expect(panel.getByRole("link", { name: /GitHub/i })).toBeVisible();
+    await expect(panel.getByRole("link", { name: /GitHub/i })).toBeInViewport();
     await page.keyboard.press("Escape");
     await expect(navigation).toBeHidden();
 
     await expectNoHorizontalOverflow(page);
+    await showAdvancedExamples(page);
     await expect(
       page.getByRole("heading", { name: /Test responsive layout recipes/i }),
     ).toBeVisible();

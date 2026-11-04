@@ -180,6 +180,9 @@
 .home-observatory {
   --home-observatory-cyan: #39d3c6;
   --home-observatory-gold: #ffca66;
+  /* The orbit artwork keeps opaque navy surfaces and matching light ink in every mode. */
+  --home-observatory-ink: #f1f5f9;
+  --home-observatory-muted: #c4cedd;
 
   display: grid;
   min-inline-size: 0;
@@ -190,6 +193,7 @@
 .home-observatory-stage {
   position: relative;
   display: grid;
+  container-type: inline-size;
   inline-size: min(100%, 35rem);
   aspect-ratio: 1;
   place-items: center;
@@ -279,8 +283,8 @@
   padding: 0.55rem 0.75rem;
   border: 1px solid rgb(57 211 198 / 32%);
   border-radius: 999px;
-  background: rgb(5 19 32 / 92%);
-  color: rgb(var(--usk-text-rgb));
+  background: #07111f;
+  color: var(--home-observatory-ink);
   font-family: var(--font-code);
   font-size: 0.68rem;
   font-weight: 800;
@@ -321,17 +325,13 @@
 
 .home-observatory-core {
   display: grid;
-  inline-size: 30%;
+  inline-size: min(44%, 11rem);
   aspect-ratio: 1;
   place-content: center;
   gap: 0.25rem;
   border: 1px solid rgb(57 211 198 / 52%);
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgb(57 211 198 / 16%),
-    rgb(6 17 31 / 96%) 66%
-  );
+  background: radial-gradient(circle at 38% 32%, #163241, #07111f 72%);
   text-align: center;
   box-shadow: 0 0 4rem rgb(57 211 198 / 14%);
 }
@@ -339,12 +339,15 @@
 .home-observatory-core strong {
   color: var(--home-observatory-gold);
   font-family: var(--font-code);
-  font-size: clamp(1rem, 2.6vw, 1.75rem);
+  /* Size the complete count against its stage, rather than the viewport. */
+  font-size: clamp(0.85rem, 6cqi, 1.75rem);
+  white-space: nowrap;
+  overflow-wrap: normal;
 }
 
 .home-observatory-core small {
   max-inline-size: 10ch;
-  color: rgb(var(--usk-text-muted-rgb));
+  color: var(--home-observatory-muted);
   font-size: 0.6rem;
   line-height: 1.25;
 }
@@ -354,11 +357,11 @@
   padding: 1.25rem;
   border: 1px solid rgb(57 211 198 / 24%);
   border-radius: 1rem;
-  background: linear-gradient(145deg, rgb(19 45 63 / 88%), rgb(7 23 38 / 84%));
+  background: rgb(var(--usk-surface-rgb));
 }
 
 .home-observatory-detail > span {
-  color: var(--home-observatory-cyan);
+  color: rgb(var(--usk-link-rgb));
   font-family: var(--font-code);
   font-size: 0.7rem;
   font-weight: 800;
@@ -375,7 +378,7 @@
 }
 
 .home-observatory-detail code {
-  color: var(--home-observatory-gold);
+  color: rgb(var(--usk-text-rgb));
   overflow-wrap: anywhere;
 }
 
@@ -384,7 +387,7 @@
   min-block-size: 44px;
   align-items: center;
   gap: 0.35rem;
-  color: var(--home-observatory-cyan);
+  color: rgb(var(--usk-link-rgb));
 }
 
 @keyframes observatory-enter {
@@ -401,10 +404,6 @@
 @media (max-width: 32rem) {
   .home-orbit-control {
     font-size: 0.58rem;
-  }
-
-  .home-observatory-core strong {
-    font-size: 0.85rem;
   }
 }
 

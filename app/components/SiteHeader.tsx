@@ -48,24 +48,26 @@ export function SiteHeader({
           aria-label="STE Systems home"
         >
           {/* The explicit helper keeps this rendered asset correct in local and Pages builds. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="brand-logo"
-            src={withBasePath("/ste-systems-logo-128.webp")}
-            srcSet={[64, 128, 256]
-              .map(
-                (width) =>
-                  `${withBasePath(`/ste-systems-logo-${width}.webp`)} ${width}w`,
-              )
-              .join(", ")}
-            sizes="(max-width: 46rem) 43px, 64px"
-            width="72"
-            height="54"
-            alt=""
-            aria-hidden="true"
-            decoding="async"
-            fetchPriority="high"
-          />
+          <span className="brand-logo-backing">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="brand-logo"
+              src={withBasePath("/ste-systems-logo-128.webp")}
+              srcSet={[64, 128, 256]
+                .map(
+                  (width) =>
+                    `${withBasePath(`/ste-systems-logo-${width}.webp`)} ${width}w`,
+                )
+                .join(", ")}
+              sizes="(max-width: 46rem) 43px, 64px"
+              width="72"
+              height="54"
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </span>
           <span className="brand-copy ly-stack ly-gap-2">
             <span className="brand-title">{SITE.name}</span>
             <span className="brand-owner">Sanderson Technology</span>
