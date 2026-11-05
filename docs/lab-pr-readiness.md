@@ -75,3 +75,41 @@ user approved its four exact action pins and separately approved the sole nested
 upload-artifact pin. Readback verified all five additions while retaining existing
 entries and both broad-action restrictions. Verification runs on the feature
 branch preserve the independently verified main-only deployment guards.
+
+## Rendered CI follow-up
+
+The next integration run passed all 73 unit tests, fixture/brand checks, development
+hydration, production export and 12 export contracts. Its browser phase exposed
+stale disclosure, target and keyboard-modality assumptions, plus two real defects:
+unannounced workbench configuration changes and narrow fixture headings that
+overflowed their text area. The centralized configuration callback now announces
+all six counted configuration fields. Fixture headings wrap naturally and use
+language-aware hyphenation without clipping or shrinking type.
+
+Loading all nine lazy fixture documents before Axe also exposed WebKit's white
+text on native silver buttons in UI-only proofs. The shared buttons now compose
+the public `usk-button` primary/secondary variants with `interactive-surface`.
+No custom paint replaces a package owner; unloaded hooks remain inert. The
+ownership truth table and canonical hover/focus/geometry contracts still pass.
+
+Browser cases now disclose their destination after every reload, use the real
+UI-only pill target, and establish keyboard modality before checking
+`:focus-visible`. The legacy-anchor case starts with a cold bookmark, then checks
+hydrated same-document fragments; history tracing confirmed that the previous
+test navigated again before Next's initial router hydration completed. The preset
+matrix is split into five independently timed cases, retaining all three modes,
+five viewport widths and Axe assertions. No accessibility rule or case is skipped.
+
+Focused replays passed individually, including all originally failed cases,
+the split preset matrices, strict fixture overflow and default WebKit Axe after
+all nine frame documents loaded. Final formatting, lint, type checking, ownership
+records and production builds are verified before the follow-up commit. Remote
+CI must still be checked against that commit; this is not a green-CI claim.
+
+Gnomie Browser Commander repeated native Chrome review on the refreshed Pages
+preview at 23:55–23:58 UTC on 2026-11-04. Cold `#layouts` opened Layout;
+application cards remained readable while expanding, snapping closed and dragging
+outward to reopen the inspector. The isolated UI-only proof showed readable
+primary and secondary buttons. Screenshots and the local activity journal retain
+the observations; the managed profile lock was not bypassed. The earlier complete
+manual review remains evidence for unchanged Drawer, overlay and guide flows.

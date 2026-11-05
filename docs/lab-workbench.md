@@ -130,5 +130,12 @@ geometry, text contrast and footer logo. Earlier profile/focus failures remain
 in the local activity journal.
 Local, CI, commit, publication and deployment proof stay separate.
 
+Workbench configuration actions share one atomic callback and polite announcement
+for layout, recipe, density, visual style, palette and mode changes. Isolated
+fixture controls compose public UI button variants with interaction hooks; a
+missing library remains inert. Fixture headings use a site-owned wrapping rule
+for narrow embedded documents. See the PR handoff for the CI findings and focused
+replays, including the fully loaded nine-frame accessibility check.
+
 This repository has no jsdoc2md generation command. Changed reusable APIs carry
 JSDoc-compatible comments; no generator or shared-library release is introduced.

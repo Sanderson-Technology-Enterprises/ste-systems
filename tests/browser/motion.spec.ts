@@ -6,11 +6,10 @@ test("motion Lab plays real frames, preserves controls, and honors reduced motio
   await page.goto("./lab/#motion");
   const lab = page.locator("[data-workbench]");
   await expect(lab.getByLabel("Motion preset", { exact: true })).toBeVisible();
+  /** The mobile Drawer has its own heading; selection is shared by both editors. */
   await expect(
-    lab.getByRole("heading", {
-      name: "Motion",
-    }),
-  ).toBeVisible();
+    lab.getByRole("button", { name: "Motion", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   await expect(lab.getByLabel("Motion preset").locator("option")).toHaveCount(
     11,
   );

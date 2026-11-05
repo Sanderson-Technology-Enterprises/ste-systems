@@ -614,6 +614,18 @@
         "2026-11-04 20:43-20:47UTC: Gnomie native task Chrome657166 visited real production Pages Lab and light homepage. Verified frame, readable application reflow, resize/snap/restore, guide focus/header clearance, healthy opened canonical fixture, logo/count/copy and compact Drawer Escape/focus restoration. Fresh screenshots retained in task transcript.",
         ".tmp/pr-gnomie-activity.jsonl and .tmp/pr-gnomie-report.md; no credentials, external messages, merge or deployment"
       ]
+    },
+    {
+      "requirement": "PR integration browser remedies and current native replay",
+      "status": "verified",
+      "evidence": [
+        "docs/lab-pr-readiness.md: rendered CI follow-up and causal evidence",
+        "All originally failed browser cases passed focused local replays; five isolated preset matrices retain every mode and viewport",
+        "Nine loaded fixture documents: default Axe passes in Chromium desktop/mobile and WebKit; strict overflow, ownership truth table and canonical hover/focus remain passing",
+        "Shared fixture markup uses verified public usk-button primary/secondary variants; no custom button paint. Manually reviewed generated heading CSS: overflow-wrap:anywhere and hyphens:auto apply only to data-fixture-heading in isolated proofs, preserving typography and natural height. The static audit does not extract CSS from JavaScript template strings.",
+        "2026-11-04 23:55-23:58UTC: Gnomie native Chrome263858 verified cold Layout bookmark, readable application reflow, expanded divider, snap collapse, outward drag reopen, readable UI-only proof buttons, and light homepage logo/count. Screenshots retained in task transcript; .tmp/pr-gnomie-activity.jsonl.",
+        "Local lint/typecheck and focused fixture determinism/source-contract checks passed; remote CI remains a separate pushed-SHA gate."
+      ]
     }
   ],
   "configurationInventory": {
@@ -685,7 +697,7 @@
       },
       {
         "path": "app/components/LabExperience.tsx",
-        "sha256": "c9cb42ab1cb2dc9d45730bb33b1280de0f1f181ea64aed2b97db94e7853109c5"
+        "sha256": "dee89dd941c21e6039d5ac9556ca48e50dc36fcbfc7c20fb46cb9348b08104da"
       },
       {
         "path": "app/components/LabWorkbench.tsx",
@@ -813,7 +825,7 @@
       },
       {
         "path": "scripts/build-fixtures.mjs",
-        "sha256": "119cbe15e0fc2f18b65cf01b44bb9bfdd82c5ea7060630362a6c5027bae15e05"
+        "sha256": "6d39421499e410c631fd6bd7a7c6fc92c4dfaa027b7228994c4ddf32dec1477b"
       }
     ]
   },

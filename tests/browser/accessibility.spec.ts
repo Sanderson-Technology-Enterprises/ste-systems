@@ -42,6 +42,16 @@ test(
         for (const detail of details)
           (detail as HTMLDetailsElement).open = true;
       });
+    /** Lazy fixture documents must finish navigating before Axe traverses frames. */
+    const fixtures = page.locator("[data-integration-fixture]");
+    await expect(fixtures).toHaveCount(9);
+    for (const iframe of await fixtures.all()) {
+      await iframe.scrollIntoViewIfNeeded();
+      const frame = await (await iframe.elementHandle())?.contentFrame();
+      if (!frame) throw new Error("Integration fixture has no document frame.");
+      await expect(frame.locator("[data-fixture-root]")).toHaveCount(1);
+      await frame.waitForLoadState("load");
+    }
     await expect(
       page.locator('[data-specimen="ui-paint-signature"]'),
     ).toBeVisible();

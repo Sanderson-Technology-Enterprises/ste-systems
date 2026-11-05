@@ -226,11 +226,11 @@ export async function assertSafeGeneratedPath(
 }
 
 /**
- * Builds an isolated fixture with semantic UI hooks that survive preset swaps.
- *
- * @param {object} fixture Validated fixture catalog entry.
- * @param {object} assets Pinned local stylesheet definitions.
- * @returns {string} Standalone HTML using only its selected package assets.
+ * Render narrow-safe proof headings and public UI/interaction button composition.
+ * Unloaded package hooks remain inert in each isolated ownership fixture.
+ * @param {object} fixture Validated integration catalog entry.
+ * @param {object} assets Pinned local stylesheet and controller descriptors.
+ * @returns {string} Deterministic standalone fixture HTML.
  */
 function fixtureMarkup(fixture, assets) {
   const hasMotion = fixture.styles.includes("motion-style");
@@ -250,6 +250,9 @@ function fixtureMarkup(fixture, assets) {
     <meta name="robots" content="noindex,nofollow">
     <title>${escapeHtml(fixture.title)} | STE Systems integration proof</title>
 ${stylesheetMarkup}
+    <style>
+      [data-fixture-heading] { overflow-wrap: anywhere; hyphens: auto; }
+    </style>
   </head>
   <body
     class="ly-root ly-page"
@@ -263,7 +266,7 @@ ${stylesheetMarkup}
     <main class="ly-wrapper ly-section ly-stack ly-gap-6" aria-label="${escapeHtml(fixture.title)}">
       <header class="ly-stack ly-gap-2">
         <p>Isolated package proof</p>
-        <h1>${escapeHtml(fixture.title)}</h1>
+        <h1 data-fixture-heading>${escapeHtml(fixture.title)}</h1>
         <p>${escapeHtml(fixture.summary)}</p>
       </header>
       ${hasMotion ? '<button id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
@@ -283,8 +286,9 @@ ${stylesheetMarkup}
           <h2>Interaction mechanics</h2>
           <div class="ly-cluster ly-gap-4">
             <button
-              class="interactive-surface"
+              class="usk-button interactive-surface"
               type="button"
+              data-ui-variant="primary"
               data-surface-variant="primary"
               data-surface-level="2"
               data-proof-interaction
@@ -292,8 +296,9 @@ ${stylesheetMarkup}
               Interaction proof
             </button>
             <button
-              class="interactive-surface"
+              class="usk-button interactive-surface"
               type="button"
+              data-ui-variant="secondary"
               data-surface-variant="accent"
               data-surface-level="2"
               data-proof-pressed

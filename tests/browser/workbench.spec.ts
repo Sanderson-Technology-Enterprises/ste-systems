@@ -238,19 +238,20 @@ test("legacy anchors open the matching inspector and advanced examples share its
   await expect(page.locator("#integrate")).toBeVisible();
 });
 
-test("workbench remains accessible and contained across styles and screen sizes", async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("./lab/#workbench");
-  const bench = page.locator("[data-workbench]");
-  for (const style of [
-    "minimal-saas",
-    "data-terminal",
-    "editorial-luxe",
-    "maximalist",
-    "technical-blueprint",
-  ]) {
+/** Isolate each preset's full matrix so one test does not consume five timeout budgets. */
+for (const style of [
+  "minimal-saas",
+  "data-terminal",
+  "editorial-luxe",
+  "maximalist",
+  "technical-blueprint",
+]) {
+  test(`workbench remains accessible and contained across styles and screen sizes: ${style}`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("./lab/#workbench");
+    const bench = page.locator("[data-workbench]");
     await page.setViewportSize({ width: 1440, height: 1100 });
     await bench.getByLabel("Visual style", { exact: true }).selectOption(style);
     for (const mode of ["light", "dark", "contrast"]) {
@@ -289,13 +290,13 @@ test("workbench remains accessible and contained across styles and screen sizes"
         ).toBe(true);
       }
     }
-  }
-  await page.setViewportSize({ width: 390, height: 844 });
-  await bench.screenshot({
-    path: "output/workbench-mobile.png",
-    style: ".site-header,nextjs-portal {visibility:hidden;}",
+    await page.setViewportSize({ width: 390, height: 844 });
+    await bench.screenshot({
+      path: `output/workbench-mobile-${style}.png`,
+      style: ".site-header,nextjs-portal {visibility:hidden;}",
+    });
   });
-});
+}
 
 test("configuration motion is optional while manual and overlay motion retain real phases", async ({
   page,

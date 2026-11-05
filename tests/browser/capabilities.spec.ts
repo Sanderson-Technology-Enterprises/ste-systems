@@ -367,6 +367,18 @@ async function openTask4Details(page: Page) {
     });
 }
 
+/**
+ * Establish keyboard modality after disclosure clicks before checking focus paint.
+ * @param page Browser page containing the specimen.
+ * @param target Native focus target whose keyboard affordance is under test.
+ */
+async function focusFromKeyboard(page: Page, target: Locator) {
+  await target.scrollIntoViewIfNeeded();
+  await page.keyboard.press("Tab");
+  await target.focus();
+  await expect(target).toBeFocused();
+}
+
 async function openIntegrationDetails(page: Page) {
   await showAdvancedExamples(page, "Package integration proofs");
   await page.locator("#integrate details").evaluateAll((details) => {
@@ -881,11 +893,13 @@ test("layout laboratory applies every personality without changing DOM or tab or
   });
 });
 
-test("layout laboratory uses only the active UI prefix for pill actions", async ({
+/** Inspect the UI-only pill specimen, independently of the composed application action. */
+test("UI laboratory uses only the active UI prefix for pill actions", async ({
   page,
 }) => {
   await openLabConfiguration(page);
-  const pill = page.getByRole("button", { name: "Approve project direction" });
+  await openTask4Details(page);
+  const pill = page.locator('#ui-native [data-ui-suffix="button-pill"]');
   await expect(pill).toHaveClass(/\bsaas-button-pill\b/);
   await expect(pill).not.toHaveClass(/\binteractive-surface\b/);
 
@@ -943,8 +957,13 @@ test("layout laboratory honors local responsive allocations while Reel remains s
   ]) {
     await page.setViewportSize(viewport);
     await page.goto(
-      "./lab/?layout=brutalism&ui=minimal-saas&theme=arctic-indigo&mode=contrast",
+      "./lab/?layout=brutalism&ui=minimal-saas&theme=arctic-indigo&mode=contrast&recipe=app-shell",
     );
+    /** Reloads restore client configuration, while the preview view remains explicit. */
+    await page
+      .getByRole("button", { name: "Application workspace", exact: true })
+      .click();
+    await showAdvancedExamples(page);
     await expect(page.locator("#layouts details")).toHaveCount(3);
     await expect(page.locator("#layouts [data-layout-recipe]")).toHaveCount(6);
     await openLayoutDetails(page);
@@ -1735,12 +1754,10 @@ test("interaction laboratory makes real state-collision precedence observable", 
 test("interaction laboratory keeps focus independent and honors reduced motion", async ({
   page,
 }) => {
-  await page.locator("#interactions details").evaluateAll((details) => {
-    for (const detail of details) (detail as HTMLDetailsElement).open = true;
-  });
+  await openTask4Details(page);
   const pressed = page.locator('[data-interaction-state="aria-pressed"]');
   const beforeFocus = await readInteractionSignature(pressed);
-  await pressed.focus();
+  await focusFromKeyboard(page, pressed);
   expect(
     await pressed.evaluate((element) => element.matches(":focus-visible")),
   ).toBe(true);
@@ -1750,13 +1767,11 @@ test("interaction laboratory keeps focus independent and honors reduced motion",
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
-  await page.locator("#interactions details").evaluateAll((details) => {
-    for (const detail of details) (detail as HTMLDetailsElement).open = true;
-  });
+  await openTask4Details(page);
   const reducedPressed = page.locator(
     '[data-interaction-state="aria-pressed"]',
   );
-  await reducedPressed.focus();
+  await focusFromKeyboard(page, reducedPressed);
   const reduced = await readInteractionSignature(reducedPressed);
   expect(
     reduced.transitionDuration
@@ -1777,7 +1792,7 @@ test("interaction laboratory uses system affordances in forced colors", async ({
 
   const pressed = page.locator('[data-interaction-state="aria-pressed"]');
   const disabled = page.locator('[data-interaction-state="aria-disabled"]');
-  await pressed.focus();
+  await focusFromKeyboard(page, pressed);
   await expect(pressed).toBeVisible();
   await expect(pressed).toBeFocused();
   expect(
@@ -1928,7 +1943,7 @@ test("review contract proves native pseudo parts against package tokens and real
   expect(enabledPaint.borderColor).toBe(fileButtonBorderColor);
   expect(enabledPaint.cursor).toBe("pointer");
 
-  await focus.focus();
+  await focusFromKeyboard(page, focus);
   expect(
     await focus.evaluate((element) => element.matches(":focus-visible")),
   ).toBe(true);
@@ -2258,7 +2273,7 @@ test("review contract establishes forced-color focus and resolved system outline
   const pressed = page.locator('[data-interaction-state="aria-pressed"]');
   const disabled = page.locator('[data-interaction-state="aria-disabled"]');
   await expect(pressed).toBeVisible();
-  await pressed.focus();
+  await focusFromKeyboard(page, pressed);
   await expect(pressed).toBeFocused();
   expect(
     await pressed.evaluate((element) => element.matches(":focus-visible")),

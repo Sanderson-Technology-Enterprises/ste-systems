@@ -535,6 +535,8 @@ test("footer closes with the complete four-library ecosystem", async ({
 test("Lab legacy section anchors open the corresponding editor group", async ({
   page,
 }) => {
+  /** Exercise a bookmarked entry before testing hydrated same-document changes. */
+  await page.goto("about:blank");
   for (const [hash, group] of [
     ["layouts", "Layout"],
     ["ui-native", "Appearance"],
@@ -543,6 +545,7 @@ test("Lab legacy section anchors open the corresponding editor group", async ({
   ]) {
     await page.goto("./lab/#" + hash);
     await expect(page.locator("[data-inspector-panel] h2")).toHaveText(group);
+    await expect(page).toHaveURL(new RegExp(`#${hash}$`));
   }
 });
 
@@ -967,6 +970,8 @@ test("renders the production metadata and complete resource directory", async ({
   });
 
   await page.goto("./lab/");
+  /** Resource landmarks are progressively disclosed by the public Guides section. */
+  await showAdvancedExamples(page);
   await expect(
     page.getByRole("heading", { name: /Test responsive layout recipes/i }),
   ).toBeVisible();
@@ -1174,20 +1179,60 @@ test("keeps workbench controls, state, and copy affordances functional", async (
   ).toBeVisible();
 });
 
-test("atomic polite configuration region announces editor choices and install feedback", async ({
+/** Each client setting must reach the same atomic polite region as legacy controls. */
+test("atomic polite configuration region announces every editor choice", async ({
   page,
 }) => {
-  await openWorkbenchGroup(page, "Layout");
-  await page
-    .getByLabel("Layout personality", { exact: true })
-    .selectOption("bauhaus");
-  await expect(page.locator(".configuration-status")).toHaveText(
-    "Layout changed to Bauhaus.",
-  );
-  await expect(page.locator(".configuration-status")).toHaveAttribute(
-    "aria-atomic",
-    "true",
-  );
+  for (const choice of [
+    {
+      group: "Layout",
+      label: "Layout personality",
+      value: "bauhaus",
+      message: "Layout changed to Bauhaus.",
+    },
+    {
+      group: "Layout",
+      label: "Recipe",
+      value: "docs",
+      message: "Recipe changed to Docs.",
+    },
+    {
+      group: "Layout",
+      label: "Spacing density",
+      value: "spacious",
+      message: "Spacing density changed to spacious.",
+    },
+    {
+      group: "Appearance",
+      label: "Visual style",
+      value: "cyberpunk",
+      message: "Visual style changed to Cyberpunk.",
+    },
+    {
+      group: "Appearance",
+      label: "Color scheme",
+      value: "native",
+      message: "Palette changed to Preset default.",
+    },
+    {
+      group: "Appearance",
+      label: "Display mode",
+      value: "contrast",
+      message: "Mode changed to High contrast.",
+    },
+  ]) {
+    await openWorkbenchGroup(page, choice.group);
+    await page
+      .getByLabel(choice.label, { exact: true })
+      .selectOption(choice.value);
+    await expect(page.locator(".configuration-status")).toHaveText(
+      choice.message,
+    );
+    await expect(page.locator(".configuration-status")).toHaveAttribute(
+      "aria-atomic",
+      "true",
+    );
+  }
 });
 
 test("the polite region re-announces repeated identical feedback", async ({

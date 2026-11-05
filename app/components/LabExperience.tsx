@@ -214,55 +214,77 @@ export function LabExperience({
     if (hasConfigurationQuery) clearConfigurationUrl();
   }, []);
 
-  const setLayout = useCallback(
-    (layout: LayoutPersonality) => {
-      commitConfiguration({ ...configurationRef.current, layout });
-      announce(`Layout changed to ${formatCatalogLabel(layout)}.`);
+  /**
+   * Commit one editor action atomically and announce every changed client field.
+   * @param patch Configuration fields selected by the current editor action.
+   */
+  const configure = useCallback(
+    (patch: Partial<LabConfiguration>) => {
+      commitConfiguration({ ...configurationRef.current, ...patch });
+      const messages: string[] = [];
+      if (patch.layout !== undefined)
+        messages.push(`Layout changed to ${formatCatalogLabel(patch.layout)}.`);
+      if (patch.ui !== undefined) {
+        const label =
+          UI_PRESETS.find((preset) => preset.id === patch.ui)?.label ??
+          patch.ui;
+        messages.push(`Visual style changed to ${label}.`);
+      }
+      if (patch.theme !== undefined)
+        messages.push(`Palette changed to ${formatThemeLabel(patch.theme)}.`);
+      if (patch.mode !== undefined)
+        messages.push(
+          `Mode changed to ${patch.mode === "contrast" ? "High contrast" : formatCatalogLabel(patch.mode)}.`,
+        );
+      if (patch.recipe !== undefined)
+        messages.push(`Recipe changed to ${formatCatalogLabel(patch.recipe)}.`);
+      if (patch.density !== undefined)
+        messages.push(`Spacing density changed to ${patch.density}.`);
+      if (messages.length > 0) announce(messages.join(" "));
     },
     [announce, commitConfiguration],
+  );
+
+  const setLayout = useCallback(
+    (layout: LayoutPersonality) => {
+      configure({ layout });
+    },
+    [configure],
   );
 
   const setUi = useCallback(
     (ui: UiPreset) => {
-      commitConfiguration({ ...configurationRef.current, ui });
-      const label = UI_PRESETS.find((preset) => preset.id === ui)?.label ?? ui;
-      announce(`Visual style changed to ${label}.`);
+      configure({ ui });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const setTheme = useCallback(
     (theme: LabTheme) => {
-      commitConfiguration({ ...configurationRef.current, theme });
-      announce(`Palette changed to ${formatThemeLabel(theme)}.`);
+      configure({ theme });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const setMode = useCallback(
     (mode: UiMode) => {
-      commitConfiguration({ ...configurationRef.current, mode });
-      const label =
-        mode === "contrast" ? "High contrast" : formatCatalogLabel(mode);
-      announce(`Mode changed to ${label}.`);
+      configure({ mode });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const setRecipe = useCallback(
     (recipe: LayoutRecipe) => {
-      commitConfiguration({ ...configurationRef.current, recipe });
-      announce(`Recipe changed to ${formatCatalogLabel(recipe)}.`);
+      configure({ recipe });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const setDensity = useCallback(
     (density: NonNullable<LabConfiguration["density"]>) => {
-      commitConfiguration({ ...configurationRef.current, density });
-      announce(`Spacing density changed to ${density}.`);
+      configure({ density });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const randomizeConfiguration = useCallback(() => {
@@ -301,8 +323,7 @@ export function LabExperience({
       setUi,
       setRecipe,
       setDensity,
-      configure: (patch) =>
-        commitConfiguration({ ...configurationRef.current, ...patch }),
+      configure,
       applyPreviewChange: transition,
       interruptPreviewChange: interrupt,
     }),
@@ -318,7 +339,7 @@ export function LabExperience({
       setUi,
       setRecipe,
       setDensity,
-      commitConfiguration,
+      configure,
       transition,
       interrupt,
     ],
