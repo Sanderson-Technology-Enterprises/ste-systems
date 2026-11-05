@@ -254,6 +254,10 @@ test("feedback reflexes and hover intensity use visible library effects", async 
   page,
 }) => {
   await page.goto("./components/#atlas-motion");
+  /** Keep Playwright's hover scrolling instant without disabling surface animations. */
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+  });
   const lab = page.locator("#motion-guide-preview");
   const action = lab.getByRole("button", {
     name: "Success reflex",
@@ -286,9 +290,12 @@ test("feedback reflexes and hover intensity use visible library effects", async 
   await queue.hover();
   await expect
     .poll(() =>
-      queue.evaluate((element) => getComputedStyle(element).translate),
+      queue.evaluate((element) => ({
+        hovered: element.matches(":hover"),
+        translate: getComputedStyle(element).translate,
+      })),
     )
-    .toBe("0px -8px");
+    .toEqual({ hovered: true, translate: "0px -8px" });
   await lab
     .getByLabel("Hover intensity", { exact: true })
     .selectOption("subtle");
@@ -298,9 +305,12 @@ test("feedback reflexes and hover intensity use visible library effects", async 
   await queue.hover();
   await expect
     .poll(() =>
-      queue.evaluate((element) => getComputedStyle(element).translate),
+      queue.evaluate((element) => ({
+        hovered: element.matches(":hover"),
+        translate: getComputedStyle(element).translate,
+      })),
     )
-    .toBe("0px -2px");
+    .toEqual({ hovered: true, translate: "0px -2px" });
 });
 
 test("client color edits paint the preview and copy actual JSON and CSS variables", async ({

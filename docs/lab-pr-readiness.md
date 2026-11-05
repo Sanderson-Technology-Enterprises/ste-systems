@@ -113,3 +113,18 @@ outward to reopen the inspector. The isolated UI-only proof showed readable
 primary and secondary buttons. Screenshots and the local activity journal retain
 the observations; the managed profile lock was not bypassed. The earlier complete
 manual review remains evidence for unchanged Drawer, overlay and guide flows.
+
+## Local hover-test correction
+
+A complete local verification run exercised all 310 browser cases and exposed one
+desktop hover-test failure. The strong/subtle intensity tokens were correct, but
+document smooth scrolling continued after Playwright positioned the pointer,
+moving the button away and clearing `:hover`. Instant centering alone did not
+prevent Playwright's subsequent hover scroll from continuing.
+
+That case now uses instant document scrolling in its own browser page. Surface
+transitions and feedback animations remain enabled. Both lift assertions also
+require the button to match `:hover`, preserving the exact -8px and -2px values
+and the existing real-reflex-animation checks. Application code, package versions,
+and production scrolling behavior are unchanged. A fresh full local verification
+loop is required on this test/documentation change before committing.
