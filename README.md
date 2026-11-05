@@ -37,6 +37,36 @@ layers without changing ownership boundaries.
 
 ## Install with npm
 
+To install and run this repository, use Node.js 22.14.0 or newer:
+
+```bash
+npm ci
+npm run build
+npm start
+```
+
+The production start command serves the static `out/` export at
+`http://127.0.0.1:3000/`. Build first; Next.js server mode is incompatible with
+this project's `output: "export"` configuration. Use `npm run dev` for development
+with live updates. The existing `preview:prepare` and `preview:serve` commands
+remain the separate GitHub Pages preview workflow after `npm run build:pages`.
+
+Override the production port with `PORT` or `npm start -- --port 4173`.
+To listen on another interface, use `npm start -- --hostname 0.0.0.0`.
+
+On Windows PowerShell, use `npm.cmd` in place of `npm` if execution policy blocks
+`npm.ps1`; for example, `npm.cmd ci` and `npm.cmd start`. No execution-policy
+change is required. The manifest explicitly approves the locked `esbuild`,
+`unrs-resolver`, and optional macOS `fsevents` installation scripts used by the
+build, lint, and file-watching tooling. Review those approvals when their
+transitive dependency versions change.
+
+The current install retains moderate `minimatch` audit warnings in the lint-tool
+dependency chain. Avoid `npm audit fix --force`: its proposed ESLint/Next config
+downgrades are incompatible with this project. Next.js and Sharp are pinned to
+patched releases; the remaining lint-tool advisories require compatible upstream
+updates.
+
 Install the exact aligned foundational releases:
 
 ```bash
@@ -203,7 +233,7 @@ The libraries coordinate through four root attributes while preserving semantic 
 
 ## Hero observatory interaction
 
-The hero's `InterfaceObservatory` is intentionally interactive. The orbit
+The homepage's `HomeObservatory` is intentionally interactive. The orbit
 controls select one ecosystem layer, update the package summary, and expose
 repository, wiki, npm, and demo links for that selected package.
 
@@ -211,6 +241,13 @@ When changing this component, keep the orbit controls as real buttons with
 visible focus states and `aria-pressed` state. If the visual treatment changes
 back toward pure decoration, remove button affordances instead of leaving
 non-functional clickable-looking dots.
+
+Use `/?site-mode=light`, `/?site-mode=dark`, or `/?site-mode=contrast` to inspect
+the live homepage with its real menu and orbit controls. This mode preview stays
+separate from Lab configuration URLs and storage. See the
+[homepage presentation review](docs/home-presentation-review.md) for the count,
+contrast, tablet-card, action-label and logo corrections. The earlier local
+logo-only snapshot is obsolete and must not be used for interaction checks.
 
 ## Website roadmap reference
 
@@ -222,6 +259,39 @@ See [the three-site roadmap implementation record](docs/website-roadmap-2026-10-
 ## Motion Style CSS
 
 Motion Style CSS is the newest addition to the STE web development system. The fourth CSS layer supplies ten paired presets and choreography on dedicated shells. Try `/lab/#motion`, read `/components/#atlas-motion`, or use the static reference at `/components/reference/#atlas-motion`. Motion presets are separate from the manifest-derived design-configuration count.
+
+The Motion Lab and embedded guide share a pseudo-browser with six working
+specimen panels: actions, forms, progress, activity data, feedback, and review.
+Choose all 20 layouts, seven recipes, three densities, 20 visual styles, and
+26 color schemes (25 named palettes plus each preset's native scheme). These
+selectors expose every factor in the advertised 218,400 combinations. Display
+modes, seven wrapper sizes, and the 22-primitive layout explorer add more options.
+Edits, filtering, and confirmation use local demo state and publish nothing.
+
+The homepage’s **Explore every configuration** link opens these controls. Try the
+three Interactive Surface reflex effects and four hover intensity settings.
+Modals retain focus management while Motion Style animates their show/hide
+phases; tooltip content also animates in and out. **Custom colors & client theme
+export** edits the active palette and copies actual RGB variable objects as JSON
+or CSS, including native material roles. Copy output remains available manually
+when the clipboard is unavailable.
+
+The main Lab uses one workbench with Appearance, Layout, Interaction, Motion, and
+Export groups. Its resizable inspector snaps closed like an editor side panel,
+remembers its width, and becomes a drawer below 1024px. Desktop inspector controls
+and preview content scroll independently in an aligned viewport-height frame;
+narrow or short screens use normal page flow. Application recipes retain readable
+content sections instead of squeezing shell regions into card columns. The editor
+keeps a stable appearance while the preview changes. See [the workbench record](docs/lab-workbench.md).
+
+Configuration changes apply immediately by default. **Animate configuration changes**
+is an explicit opt-in. Manual playback and modal/tooltip presence retain enabled,
+random entrance, exit, direction, easing, duration, delay, and stagger settings.
+Open **Motion settings** to choose fixed effects and slider values. Settings are shared
+across the current app session; a reload restores random defaults. Reduced-motion
+preferences take priority. Main Lab recipes and densities are also included in
+shareable configuration URLs. See [the motion showcase implementation record](docs/motion-showcase.md)
+for ownership, timing ranges, and focused verification.
 
 The optional STE USK React 2.3.0 `/motion` adapter retains exiting children and cancels superseded effects. The root React stylesheet and motion stylesheet are each imported once in the application layout.
 

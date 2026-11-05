@@ -487,14 +487,14 @@ test("the Pages artifact contains every isolated integration fixture", async () 
     path.join(repositoryRoot, "out", "lab", "index.html"),
     "utf8",
   );
+  assert.match(page, /Package integration proofs/);
+  assert.doesNotMatch(page, /<iframe[^>]*data-integration-fixture=/);
 
   for (const id of fixtureIds) {
     const fixturePath = path.join(exportFixtureRoot, `${id}.html`);
     const fixture = await readFile(fixturePath, "utf8");
-    assert.match(
-      page,
-      new RegExp(`src="/ste-systems/fixtures/generated/${id}\\.html"`),
-    );
+    // Rendering and base-path-safe iframe mounting are exercised after opening
+    // the real disclosure in the browser; the export still owns every fixture file.
     assert.doesNotMatch(fixture, /https?:\/\//);
 
     const stylesheetLinks = Array.from(

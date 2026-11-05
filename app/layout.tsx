@@ -17,6 +17,9 @@ import "./styles/motion.css";
 import "./styles/labs.css";
 import "./styles/atlas.css";
 import "./styles/responsive.css";
+import "./styles/spacing.css";
+import "./styles/workbench.css";
+import { MotionPreferences } from "./components/MotionPreferences";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -138,7 +141,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializedGlobalStructuredData }}
         />
-        {children}
+        <MotionPreferences>{children}</MotionPreferences>
       </body>
     </html>
   );

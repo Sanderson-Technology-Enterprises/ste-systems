@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type TestInfo } from "@playwright/test";
+import { showAdvancedExamples } from "./workbench-helpers";
 
 type AxeResults = Awaited<ReturnType<AxeBuilder["analyze"]>>;
 
@@ -31,7 +32,8 @@ test(
   "axe finds no violations across the complete default experience",
   { tag: "@cross-engine" },
   async ({ page }, testInfo) => {
-    await page.getByRole("button", { name: "Open lab sections" }).click();
+    await showAdvancedExamples(page);
+    await showAdvancedExamples(page, "Package integration proofs");
     await page
       .locator(
         "#ui-native details, #interactions details, #integrate details, #install details",
@@ -40,6 +42,16 @@ test(
         for (const detail of details)
           (detail as HTMLDetailsElement).open = true;
       });
+    /** Lazy fixture documents must finish navigating before Axe traverses frames. */
+    const fixtures = page.locator("[data-integration-fixture]");
+    await expect(fixtures).toHaveCount(9);
+    for (const iframe of await fixtures.all()) {
+      await iframe.scrollIntoViewIfNeeded();
+      const frame = await (await iframe.elementHandle())?.contentFrame();
+      if (!frame) throw new Error("Integration fixture has no document frame.");
+      await expect(frame.locator("[data-fixture-root]")).toHaveCount(1);
+      await frame.waitForLoadState("load");
+    }
     await expect(
       page.locator('[data-specimen="ui-paint-signature"]'),
     ).toBeVisible();
@@ -49,6 +61,7 @@ test(
     await expect(page.locator("#integrate")).toBeVisible();
     await expect(page.locator("#install")).toBeVisible();
     await expect(page.locator("#libraries")).toBeVisible();
+    await page.getByRole("button", { name: "Open lab sections" }).click();
     const results = await new AxeBuilder({ page }).analyze();
     await expectNoAxeViolations(
       results,
@@ -67,6 +80,7 @@ test(
     await page.goto(
       "./lab/?layout=split-screen&ui=maximalist&theme=cyber-lime&mode=contrast",
     );
+    await showAdvancedExamples(page);
     await page
       .locator("#ui-native details, #interactions details")
       .evaluateAll((details) => {

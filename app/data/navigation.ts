@@ -28,11 +28,7 @@ export const HOME_NAVIGATION_ACTIONS = [
 export const LAB_NAVIGATION_ITEMS = [
   { label: "Top", href: "#top" },
   { label: "Workbench", href: "#workbench" },
-  { label: "Layout", href: "#layouts" },
-  { label: "UI & native", href: "#ui-native" },
-  { label: "Interactions", href: "#interactions" },
-  { label: "Motion", href: "#motion" },
-  { label: "Integration", href: "#integrate" },
+  { label: "Guides", href: "#guides" },
   { label: "Install", href: "#install" },
   { label: "Packages", href: "#libraries" },
 ] as const satisfies readonly NavigationItem[];

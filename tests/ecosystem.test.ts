@@ -492,6 +492,7 @@ test("local README guidance documents the global CSS entry points", async () => 
   assert.doesNotMatch(layoutSource, /custom-element runtime/);
 });
 
+/** Guards canonical Layout markup while the editor keeps a fixed presentation. */
 test("page runtime emits only canonical Layout v3 attributes", async () => {
   const [homeSource, labSource, experienceSource, configurationSource] =
     await Promise.all([
@@ -510,30 +511,42 @@ test("page runtime emits only canonical Layout v3 attributes", async () => {
     0,
     "the configuration runtime must not emit the deprecated data-layout attribute",
   );
-  assert.doesNotMatch(homeSource, /<LabExperience>/);
-  assert.match(labSource, /<LabExperience>/);
-  assert.match(experienceSource, /data-ly-layout=\{configuration\.layout\}/);
+  assert.doesNotMatch(homeSource, /<LabExperience\b/);
+  assert.match(labSource, /<LabExperience\s+stableEditor>/);
+  assert.match(
+    experienceSource,
+    /data-ly-layout=\{stableEditor \? "minimal-saas" : configuration\.layout\}/,
+  );
   assert.match(
     configurationSource,
     /data-ly-layout="\$\{configuration\.layout\}"/,
   );
 });
 
+/** Keeps density on its owning public root instead of restoring competing menus. */
 test("Layout 3.2 contexts replace application-owned spacing workarounds", async () => {
   const [
     homeSource,
     labPageSource,
-    configurationMenuSource,
+    inspectorSource,
+    labWorkbenchSource,
     experienceSource,
     workbenchSource,
     layoutLabSource,
     shellStyles,
     responsiveStyles,
   ] = await Promise.all([
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(
+      new URL("../app/components/HomeExperience.tsx", import.meta.url),
+      "utf8",
+    ),
     readFile(new URL("../app/lab/page.tsx", import.meta.url), "utf8"),
     readFile(
-      new URL("../app/components/LabConfigurationMenu.tsx", import.meta.url),
+      new URL("../app/components/WorkbenchInspector.tsx", import.meta.url),
+      "utf8",
+    ),
+    readFile(
+      new URL("../app/components/LabWorkbench.tsx", import.meta.url),
       "utf8",
     ),
     readFile(
@@ -552,13 +565,24 @@ test("Layout 3.2 contexts replace application-owned spacing workarounds", async 
     readFile(new URL("../app/styles/responsive.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(homeSource, /data-ly-density="spacious"/);
-  assert.match(experienceSource, /data-ly-density="normal"/);
-  assert.match(labPageSource, /tools=\{<LabConfigurationMenu \/>\}/);
+  assert.match(homeSource, /density="spacious"/);
+  assert.match(
+    experienceSource,
+    /stableEditor \? "normal" : \(configuration\.density \?\? "normal"\)/,
+  );
+  assert.match(labPageSource, /<LabWorkbench\s*\/>/);
+  assert.doesNotMatch(labPageSource, /LabConfigurationMenu/);
   assert.doesNotMatch(labPageSource, /configuration-shell/);
-  assert.match(configurationMenuSource, /data-ly-density="compact"/);
-  assert.match(workbenchSource, /ly-wrapper ly-wrapper--workspace/);
-  assert.match(workbenchSource, /data-ly-density="compact"/);
+  assert.match(inspectorSource, /<InterfaceRoot[\s\S]*?data-editor-chrome/);
+  assert.match(
+    labWorkbenchSource,
+    /density=\{configuration\.density \?\? "normal"\}/,
+  );
+  assert.match(workbenchSource, /<Layout\.Wrapper measure="workspace">/);
+  assert.match(
+    workbenchSource,
+    /"data-ly-density": configuration\.density \?\? "normal"/,
+  );
   assert.match(layoutLabSource, /"workspace"/);
   assert.match(layoutLabSource, /ly-scroll ly-scroll--bounded/);
   assert.match(layoutLabSource, /length: 10/);
@@ -1108,6 +1132,7 @@ test("metadata routes opt into static generation for the exported site", async (
   }
 });
 
+/** Preserves resource landmarks around the independently painted Lab workbench. */
 test("page components expose approved observatory and resource landmarks", async () => {
   const [
     homePage,
@@ -1153,9 +1178,12 @@ test("page components expose approved observatory and resource landmarks", async
   assert.match(directory, /Package resources/);
   assert.match(layoutLab, /Test responsive layout recipes/);
   assert.match(layoutLab, /data-ly-recipe="dashboard"/);
-  assert.doesNotMatch(homePage, /<LabExperience>/);
+  assert.doesNotMatch(homePage, /<LabExperience\b/);
   assert.match(homePage, /<FeatureShowcase/);
-  assert.match(labPage, /<LabExperience>/);
+  assert.match(labPage, /<LabExperience\s+stableEditor>/);
+  assert.match(labPage, /<LabWorkbench\s*\/>/);
+  assert.match(labPage, /id="guides"/);
+  assert.match(labPage, /anchor="integrate"/);
   assert.doesNotMatch(homePage, /^"use client";/);
   assert.match(siteHeader, /brand-logo/);
   assert.match(siteHeader, /Sanderson Technology/);

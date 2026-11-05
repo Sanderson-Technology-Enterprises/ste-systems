@@ -32,14 +32,19 @@ test("Turbopack development hydrates the interactive routes cleanly", async ({
   await page.goto("/lab/");
   await expect(
     page.getByRole("heading", {
-      name: "Configure the system. Inspect every layer.",
+      name: "Find your interface.",
     }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Open lab configuration" }).click();
-  const contrastMode = page.getByRole("radio", { name: "High contrast" });
-  await contrastMode.check();
-  await expect(contrastMode).toBeChecked();
-  await expect(page.locator('[data-mode="contrast"]').first()).toBeVisible();
+  const mode = page.getByRole("combobox", {
+    name: "Display mode",
+    exact: true,
+  });
+  await mode.selectOption("contrast");
+  await expect(mode).toHaveValue("contrast");
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
+    "data-mode",
+    "contrast",
+  );
 
   await page.goto("/components/");
   await page.getByRole("tab", { name: "STE USK React", exact: true }).click();

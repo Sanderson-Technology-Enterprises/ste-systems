@@ -18,6 +18,27 @@ const storedConfiguration: LabConfiguration = {
   mode: "light",
 };
 
+test("recipe and density selections round-trip through URLs, storage and copied markup", () => {
+  const selected = parseConfiguration(
+    new URLSearchParams({ recipe: "docs", density: "spacious" }),
+  );
+  assert.equal(selected.recipe, "docs");
+  assert.equal(selected.density, "spacious");
+  assert.equal(serializeConfiguration(selected).get("recipe"), "docs");
+  assert.equal(serializeConfiguration(selected).get("density"), "spacious");
+  assert.equal(
+    parseStoredConfiguration(JSON.stringify(selected))?.recipe,
+    "docs",
+  );
+  assert.match(configurationMarkup(selected), /data-ly-recipe="docs"/);
+  assert.match(configurationMarkup(selected), /data-ly-density="spacious"/);
+  const invalid = parseConfiguration(
+    new URLSearchParams({ recipe: "unknown", density: "huge" }),
+  );
+  assert.equal(invalid.recipe, undefined);
+  assert.equal(invalid.density, undefined);
+});
+
 test("configuration defaults match the approved ecosystem starting point", () => {
   assert.equal(
     CONFIGURATION_STORAGE_KEY,

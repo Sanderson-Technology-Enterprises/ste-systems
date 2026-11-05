@@ -1,19 +1,27 @@
 import { expect, test } from "@playwright/test";
+import { setDockedViewport } from "./workbench-helpers";
 
-test("configuration disclosure exposes form semantics and restores keyboard focus", async ({
+test.beforeEach(setDockedViewport);
+
+test("configuration inspector exposes form semantics and restores focus on collapse", async ({
   page,
 }) => {
   await page.goto("lab/");
-  const trigger = page.getByRole("button", { name: "Open lab configuration" });
-  await expect(trigger).not.toHaveAttribute("aria-haspopup");
-  await trigger.click();
-  await page.keyboard.press("Tab");
+  const divider = page.getByRole("separator", {
+    name: "Resize settings panel",
+  });
+  await page.getByRole("button", { name: "Layout", exact: true }).click();
   await expect(
-    page.getByRole("combobox", { name: "01 / Layout", exact: true }),
-  ).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(trigger).toBeFocused();
-  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    page.getByRole("combobox", { name: "Layout personality", exact: true }),
+  ).toBeVisible();
+  await divider.focus();
+  await divider.press("Home");
+  const toggle = page.getByRole("button", {
+    name: "Expand settings panel",
+    exact: true,
+  });
+  await expect(toggle).toBeFocused();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
 });
 
 test("successive copy results each update the live region", async ({
@@ -79,18 +87,16 @@ test("native palette changes survive reload and omit the theme from copied marku
     });
   });
   await page.goto("lab/");
-  await page.getByRole("button", { name: "Open lab configuration" }).click();
+  await page.getByLabel("Color scheme", { exact: true }).selectOption("native");
   await page
-    .getByRole("combobox", { name: "03 / Palette", exact: true })
-    .selectOption("native");
-  await page
-    .getByRole("combobox", { name: "02 / Visual style", exact: true })
+    .getByLabel("Visual style", { exact: true })
     .selectOption("bauhaus");
-  await expect(page.locator(".lab-experience")).not.toHaveAttribute(
+  await expect(page.locator("[data-workbench-preview]")).not.toHaveAttribute(
     "data-theme",
   );
+  await page.getByRole("button", { name: "Export", exact: true }).click();
   await page
-    .getByRole("button", { name: "Copy configuration", exact: true })
+    .getByRole("button", { name: "Copy root markup", exact: true })
     .click();
   await expect(page.locator("html")).toHaveAttribute(
     "data-clipboard",
@@ -101,26 +107,28 @@ test("native palette changes survive reload and omit the theme from copied marku
     /data-theme/,
   );
   await page
-    .getByRole("button", { name: "Share configuration", exact: true })
+    .getByRole("button", { name: "Copy configuration link", exact: true })
     .click();
   await expect(page.locator("html")).toHaveAttribute(
     "data-clipboard",
     /theme=native/,
   );
   await page.reload();
-  await expect(page.locator(".lab-experience")).toHaveAttribute(
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
     "data-ui",
     "bauhaus",
   );
-  await expect(page.locator(".lab-experience")).not.toHaveAttribute(
+  await expect(page.locator("[data-workbench-preview]")).not.toHaveAttribute(
     "data-theme",
   );
-  await page.getByRole("button", { name: "Open lab configuration" }).click();
-  await expect(
-    page.getByRole("combobox", { name: "03 / Palette", exact: true }),
-  ).toHaveValue("native");
-  await page.getByRole("button", { name: "Reset configuration" }).click();
-  await expect(page.locator(".lab-experience")).toHaveAttribute(
+  await page.getByRole("button", { name: "Appearance", exact: true }).click();
+  await expect(page.getByLabel("Color scheme", { exact: true })).toHaveValue(
+    "native",
+  );
+  await page
+    .getByRole("button", { name: "Reset configuration", exact: true })
+    .click();
+  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
     "data-theme",
     "midnight-gold",
   );

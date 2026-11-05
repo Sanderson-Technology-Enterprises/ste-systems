@@ -1,0 +1,854 @@
+{
+  "schemaVersion": 1,
+  "scope": "substantial-ui",
+  "packages": [
+    {
+      "name": "layout-style-css",
+      "version": "3.2.3",
+      "state": "Available",
+      "evidence": [
+        "node_modules/layout-style-css/package.json",
+        "sha256:c3c6a70f01ac73feb681aaf8a79a981ebf5800a99b97f3394e155838cb908fc0"
+      ]
+    },
+    {
+      "name": "ui-style-kit-css",
+      "version": "2.7.1",
+      "state": "Available",
+      "evidence": [
+        "node_modules/ui-style-kit-css/package.json",
+        "sha256:f48904398140e56807175cff2bbd640807308c10d36789063a3571a7ae1b6b92"
+      ]
+    },
+    {
+      "name": "interactive-surface-css",
+      "version": "1.7.3",
+      "state": "Available",
+      "evidence": [
+        "node_modules/interactive-surface-css/package.json",
+        "sha256:831026e695808599eda9016149e44ca91c87c7b90fa5b8607295c4e22b87ed16"
+      ]
+    },
+    {
+      "name": "@sanderson-technology-enterprises/motion-style-css",
+      "version": "1.0.0",
+      "state": "Available",
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/motion-style-css/package.json",
+        "sha256:4b4f61a751cd0f2dd129bfeb9745e777adf0295f8919ed97d090308235eca54a"
+      ]
+    },
+    {
+      "name": "@sanderson-technology-enterprises/ste-usk-react",
+      "version": "2.3.0",
+      "state": "Available",
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/package.json",
+        "sha256:632b6d8f12a5b938ae527010fe765646777c6677ca0b37db577afe4abc9e4ca9"
+      ]
+    }
+  ],
+  "layout": [
+    {
+      "need": "One persistent inspector and preview with all selectable client configurations",
+      "hook": "Public Layout.Sidebar/SidebarItem, Layout.Wrapper/Recipe, all 22 primitive adapters and Drawer",
+      "evidence": [
+        "app/components/WorkbenchInspector.tsx",
+        "app/components/LabWorkbench.tsx",
+        "app/components/labs/LayoutExplorer.tsx"
+      ],
+      "check": "Focused real pointer/touch resize, snap, restore, cancellation, maximum width, mobile Drawer and catalog tests passed."
+    },
+    {
+      "need": "Aligned viewport workbench and readable application recipes",
+      "hook": "Public Layout.Scroll, Stack, Grid, Recipe, Surface, Header/Footer and documented geometry/responsive tokens; site-owned header measurement and width-only fit guard",
+      "evidence": [
+        "app/components/WorkspaceSections.tsx",
+        "app/components/useRecipeFit.ts",
+        "app/components/WorkbenchInspector.tsx",
+        "tests/browser/workbench-frame.spec.ts",
+        "tests/browser/workbench-geometry.spec.ts"
+      ],
+      "check": "All seven recipes and twenty personalities passed wide/constrained geometry. 240/320/maximum inspector widths preserve aligned boundaries and final content access. Page-flow/Drawer and scroll/sample persistence passed focused checks."
+    }
+  ],
+  "components": [
+    {
+      "need": "Dense interactive specimens, custom colors, accessible overlays and exports",
+      "hook": "Verified public React Button, Card, Form, Table, Stepper, Modal, Tooltip, Slider, ProgressBar and theme tokens",
+      "evidence": [
+        "app/components/labs/MotionShowcase.tsx",
+        "app/components/AnimatedOverlays.tsx",
+        "app/components/CustomThemeEditor.tsx"
+      ],
+      "check": "Specimen controls, modal phases, custom RGB export, clipboard denial fallback and content-sized stage geometry passed focused browser cases."
+    }
+  ],
+  "elevation": [
+    {
+      "target": "Selectable specimen elevation 1",
+      "level": 1,
+      "reason": "Quiet supporting information",
+      "check": "Existing focused motion-surface preset matrix verified three distinct computed shadows; mixed or fixed levels remain selectable."
+    },
+    {
+      "target": "Selectable specimen elevation 2",
+      "level": 2,
+      "reason": "Editable working surfaces",
+      "check": "Existing focused motion-surface preset matrix verified three distinct computed shadows; mixed or fixed levels remain selectable."
+    },
+    {
+      "target": "Selectable specimen elevation 3",
+      "level": 3,
+      "reason": "Featured confirmation surface",
+      "check": "Existing focused motion-surface preset matrix verified three distinct computed shadows; mixed or fixed levels remain selectable."
+    }
+  ],
+  "motion": {
+    "policy": "expressive",
+    "respectReducedMotion": true,
+    "decisions": [
+      {
+        "target": "Configuration preview",
+        "trigger": "Client theme/style/mode or geometry edits",
+        "owner": "useConfigurationMotion with public motion controllers",
+        "effect": "Immediate by default; animateConfigurationChanges opt-in retains random/fixed phases and latest-request cancellation",
+        "check": "Immediate updates, opt-in phases, reduced motion, rapid changes and manual interruption passed focused cases."
+      },
+      {
+        "target": "Modal and tooltip",
+        "trigger": "Explicit open/close or hover/focus",
+        "owner": "AnimatedOverlays public motion lifecycle",
+        "effect": "Public enter/exit presence retained while disabling automatic configuration transitions",
+        "check": "Sampled live modal phases, retained tooltip exit and reduced-motion checks passed; final main-workbench modal test passed."
+      },
+      {
+        "target": "Inspector and editor navigation",
+        "trigger": "Resize, toggle, group or preview-view selection",
+        "owner": "Site layout state",
+        "effect": "No automatic lifecycle animation",
+        "check": "Pointer/touch, keyboard, view persistence and blocked-storage cases passed; inspector state excluded from client exports."
+      }
+    ]
+  },
+  "localCss": {
+    "beforeBytes": 29438,
+    "afterBytes": 42677,
+    "unapproved": 0,
+    "exceptions": [
+      {
+        "id": "legacy-guide-badge-alignment",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-preview .usk-card>.usk-badge",
+        "property": "align-self",
+        "value": "flex-start",
+        "owner": "ui-style-kit-css",
+        "reason": "Existing guide badge placement is unchanged; this file only changes the tab-panel spacing floor.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when the retained legacy composition is deliberately migrated."
+      },
+      {
+        "id": "blueprint-light-danger-ink",
+        "file": "app/styles/motion.css",
+        "selector": ".motion-browser[data-ui=\"technical-blueprint\"][data-mode=\"light\"] .usk-badge[data-ui-variant=\"danger\"]",
+        "property": "color",
+        "value": "color-mix(in srgb,var(--usk-native-danger) 90%,var(--usk-native-text))",
+        "owner": "ui-style-kit-css",
+        "reason": "Rendered axe evidence found 4.26:1 contrast on Blueprint light paper. Mixing its own body ink restores AA; this is a scoped consumer repair.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "legacy-home-reduced-transition",
+        "file": "app/styles/shell.css",
+        "selector": ".package-overview-card",
+        "property": "transition",
+        "value": "none",
+        "owner": "application",
+        "reason": "Existing home reduced-motion fallback is preserved.",
+        "conditions": ["@media (prefers-reduced-motion:reduce)"],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when the retained legacy composition is deliberately migrated."
+      },
+      {
+        "id": "legacy-home-reduced-animation",
+        "file": "app/styles/shell.css",
+        "selector": ".home-experience .section-band",
+        "property": "animation",
+        "value": "none",
+        "owner": "application",
+        "reason": "Existing home reduced-motion fallback is preserved.",
+        "conditions": ["@media (prefers-reduced-motion:reduce)"],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when the retained legacy composition is deliberately migrated."
+      },
+      {
+        "id": "site-control-block-minimum",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode]:is([data-ui][data-mode]) :where(button,span,input,select,textarea,a[href],a.usk-button,[role=\"button\"])",
+        "property": "padding-block",
+        "value": "max(2px,var(--usk-compact-padding-block-min,2px))",
+        "owner": "ui-style-kit-css",
+        "reason": "The user explicitly requires a 2px vertical content floor across styles; preset layers retain larger values.",
+        "conditions": ["@layer ui-style-kit.components"],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts",
+          "tests/browser/workbench-links.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-control-inline-minimum",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode]:is([data-ui][data-mode]) :where(button,span,input,select,textarea,a[href],a.usk-button,[role=\"button\"])",
+        "property": "padding-inline",
+        "value": "max(3px,var(--usk-compact-padding-inline-min,3px))",
+        "owner": "ui-style-kit-css",
+        "reason": "The user explicitly requires at least 3px inline clearance for text controls and spans.",
+        "conditions": ["@layer ui-style-kit.components"],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts",
+          "tests/browser/workbench-links.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-zero-step-floor",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode] .ly-pad-0",
+        "property": "padding",
+        "value": "2px",
+        "owner": "layout-style-css",
+        "reason": "Explicit zero-step choices retain the approved safety minimum and copy their effective style.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-zero-step-span-floor",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode] span.ly-pad-0",
+        "property": "padding",
+        "value": "2px 3px",
+        "owner": "layout-style-css",
+        "reason": "Text spans require the stronger inline minimum even at the zero spacing step.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-breakout-inset",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode] .ly-wrapper--breakout",
+        "property": "padding",
+        "value": "2px",
+        "owner": "layout-style-css",
+        "reason": "The user requires wrapper clearance even for adjoining breakout lanes; their grid topology remains library-owned.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-nav-inset",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode] .usk-nav",
+        "property": "padding",
+        "value": "2px",
+        "owner": "ui-style-kit-css",
+        "reason": "The visible navigation wrapper is otherwise authored flush; retain the approved wrapper minimum.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-icon-control-inset",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode] .usk-icon-button",
+        "property": "padding",
+        "value": "2px 3px",
+        "owner": "ui-style-kit-css",
+        "reason": "Icon controls retain the same approved content floor instead of zero padding.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-inline-label-inset",
+        "file": "app/styles/spacing.css",
+        "selector": "[data-ui][data-mode] .usk-link__label",
+        "property": "padding",
+        "value": "2px 3px",
+        "owner": "ui-style-kit-css",
+        "reason": "The inline-link reset otherwise zeros its visible text span; retain the explicit user minimum.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "site-flush-table-inset",
+        "file": "app/styles/spacing.css",
+        "selector": ":is([data-ui=\"y2k\"],[data-ui=\"organic-modern\"],[data-ui=\"industrial-utility\"],[data-ui=\"paper-editorial\"],[data-ui=\"neo-noir\"])[data-mode] .usk-table-wrap",
+        "property": "padding",
+        "value": "2px",
+        "owner": "ui-style-kit-css",
+        "reason": "Rendered preset sweeps identified these flush table shells; restore only their missing wrapper inset.",
+        "conditions": [],
+        "evidence": [
+          "Approved user plan: site spacing and coherent workbench",
+          "docs/lab-workbench.md",
+          "tests/browser/site-spacing.spec.ts",
+          "tests/browser/workbench.spec.ts"
+        ],
+        "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+      },
+      {
+        "id": "vertical-workflow-flex",
+        "file": "app/styles/motion.css",
+        "selector": ".showcase-stage",
+        "property": "flex",
+        "value": "0 0 auto",
+        "owner": "ui-style-kit-css",
+        "reason": "Remove the horizontal 12rem flex basis when the public stepper is composed in a vertical Layout stack. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+        "conditions": [],
+        "evidence": [
+          "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+          "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+          "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+        ],
+        "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+      },
+      {
+        "id": "vertical-workflow-flex-wrap",
+        "file": "app/styles/motion.css",
+        "selector": ".showcase-stage",
+        "property": "flex-wrap",
+        "value": "wrap",
+        "owner": "ui-style-kit-css",
+        "reason": "Allow marker, label and description to wrap without clipping at phone widths. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+        "conditions": [],
+        "evidence": [
+          "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+          "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+          "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+        ],
+        "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+      },
+      {
+        "id": "retained-home-observatory-stage-animation",
+        "file": "app/styles/observatory.css",
+        "selector": ".home-observatory-stage",
+        "property": "animation",
+        "value": "none",
+        "owner": "application",
+        "conditions": ["@media (prefers-reduced-motion:reduce)"],
+        "reason": "Existing reduced-motion suppression belongs to the retained site-owned orbit illustration, is unchanged from HEAD, and must remain effective during this contrast/geometry repair.",
+        "evidence": [
+          "HEAD:app/styles/observatory.css",
+          "docs/home-presentation-review.md",
+          "tests/browser/home-presentation.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+      },
+      {
+        "id": "retained-home-orbit-runner-animation",
+        "file": "app/styles/observatory.css",
+        "selector": ".home-orbit-runner",
+        "property": "animation",
+        "value": "none",
+        "owner": "application",
+        "conditions": ["@media (prefers-reduced-motion:reduce)"],
+        "reason": "Existing reduced-motion suppression belongs to the retained site-owned orbit illustration, is unchanged from HEAD, and must remain effective during this contrast/geometry repair.",
+        "evidence": [
+          "HEAD:app/styles/observatory.css",
+          "docs/home-presentation-review.md",
+          "tests/browser/home-presentation.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+      },
+      {
+        "id": "retained-home-orbit-control-transition",
+        "file": "app/styles/observatory.css",
+        "selector": ".home-orbit-control",
+        "property": "transition",
+        "value": "none",
+        "owner": "application",
+        "conditions": ["@media (prefers-reduced-motion:reduce)"],
+        "reason": "Existing reduced-motion suppression belongs to the retained site-owned orbit illustration, is unchanged from HEAD, and must remain effective during this contrast/geometry repair.",
+        "evidence": [
+          "HEAD:app/styles/observatory.css",
+          "docs/home-presentation-review.md",
+          "tests/browser/home-presentation.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+      }
+    ]
+  },
+  "proof": [
+    {
+      "requirement": "218400 factors, wrappers, primitives and real exports",
+      "status": "verified",
+      "evidence": [
+        "tests/browser/workbench.spec.ts: one inspector exposes every catalog factor",
+        "tests/browser/workbench.spec.ts: clipboard denial leaves effective configuration available",
+        "20 layouts x 7 recipes x 3 densities x 20 visual presets x 26 schemes selectable; not exhaustively rendered"
+      ]
+    },
+    {
+      "requirement": "Resizable inspector, safe persistence, touch and mobile Drawer",
+      "status": "verified",
+      "evidence": [
+        "tests/inspector-state.test.ts",
+        "tests/browser/workbench.spec.ts: inspector divider resizes",
+        "tests/browser/workbench.spec.ts: blocked storage preserves usable controls",
+        "360px preview floor includes pane padding; public Sidebar minimum is not overridden"
+      ]
+    },
+    {
+      "requirement": "Shared state, legacy configuration compatibility and optional motion",
+      "status": "verified",
+      "evidence": [
+        "tests/browser/workbench.spec.ts: one workbench applies selections immediately",
+        "tests/browser/workbench.spec.ts: legacy anchors open matching inspector",
+        "tests/browser/workbench.spec.ts: configuration motion is optional",
+        "tests/browser/workbench.spec.ts: manual playback interrupts pending swap"
+      ]
+    },
+    {
+      "requirement": "Spacing, accessible modes and responsive containment",
+      "status": "verified",
+      "evidence": [
+        "tests/browser/site-spacing.spec.ts: 20 presets x 2 schemes x 3 modes, public shells and alternate views",
+        "tests/browser/workbench.spec.ts: five styles x three modes and 320/390/768/1024/1440px containment; axe passes",
+        "tests/browser/workbench.spec.ts: content-sized vertical stages",
+        "output/workbench-desktop.png",
+        "output/workbench-mobile-inspector.png"
+      ]
+    },
+    {
+      "requirement": "Light-mode logo backing with original artwork proportions",
+      "status": "verified",
+      "evidence": [
+        "tests/browser/site-spacing.spec.ts: site header and light logo",
+        "output/nav-logo-light-backing.png",
+        "Production CSS light-mode header fixture; #07111f and 6px padding verified; adjacent brand copy outside backing"
+      ]
+    },
+    {
+      "requirement": "Production build, types, lint, formatting and ownership",
+      "status": "verified",
+      "evidence": [
+        "npm run build: exit 0, all 10 static routes generated with TypeScript passed",
+        "npm run lint and npm run typecheck passed; subsequent modified files linted individually",
+        "Changed-file prettier check and git diff --check recorded in local task ledger",
+        "docs/lab-workbench-audit.json: zero unapproved, unresolved or stale reviews"
+      ]
+    },
+    {
+      "requirement": "Mandatory Gnomie manual rendered resize/collapse and logo inspection before commit",
+      "status": "verified",
+      "evidence": [
+        "2026-11-04 15:47-15:48 UTC: Gnomie native Chrome visited http://127.0.0.1:4391/lab/ in a new task tab. Pointer drag expanded the inspector from 320px to approximately 490px; inward drag snapped it closed; toggle restored the previous width. Fresh native screenshots verified every state, visible focus, stable editor styling and text clearance.",
+        "2026-11-04 16:03:34 UTC: Gnomie desktop_screenshot of foreground Chrome 657166 verified http://127.0.0.1:4391/qa-logo-light.html. The production-markup/CSS light fixture showed legible silver artwork, a padded navy backing, preserved proportions, no clipping and separate brand text on the normal header background.",
+        ".tmp/gnomie-workbench-activity.jsonl",
+        "output/nav-logo-light-backing.png is the corresponding Playwright artifact; native Gnomie screenshot evidence is retained in the task transcript. The managed browser-profile lock was not bypassed.",
+        "No commit, push, external message, release or deployment performed."
+      ]
+    },
+    {
+      "requirement": "Remote CI, commit, push, shared-library release and deployment",
+      "status": "not-applicable",
+      "evidence": [
+        "User authorized inline local implementation only; no such operations performed."
+      ]
+    },
+    {
+      "requirement": "Generated jsdoc2md update",
+      "status": "not-applicable",
+      "evidence": [
+        "No jsdoc2md generator exists in package scripts. Reusable code has JSDoc-compatible comments and docs/lab-workbench.md is updated."
+      ]
+    },
+    {
+      "requirement": "Homepage follow-up: live light-mode behavior and legacy compatibility",
+      "status": "verified",
+      "evidence": [
+        "tests/browser/home-presentation.spec.ts: live light-mode homepage retains working tablet navigation and orbit controls (dev and production passed)",
+        "tests/browser/home-presentation.spec.ts: default appearance and legacy Lab URLs passed",
+        "The prior static logo-only snapshot removed scripts. Its ignored local URL now redirects to /?site-mode=light with production scripts intact. No public ResponsiveNavigation API change."
+      ]
+    },
+    {
+      "requirement": "Homepage follow-up: count, contrast, card geometry, actions and footer artwork",
+      "status": "verified",
+      "evidence": [
+        "Focused failing tests preceded the corresponding number, palette, card/action and footer corrections.",
+        "Production count measurement passed at 320/390/512/768/974/1024/1440/1920px; single-line text and measured clearance.",
+        "Production homepage contrast passed light/dark/contrast and hover; explicit gradient-stop count >=7:1 and caption >=4.5:1 passed.",
+        "Production tablet card/action test passed, including containment at 320/390/768/974/1440/1920px. Footer backing and unchanged 128x96 image geometry passed.",
+        "output/home-light-orbit.png",
+        "output/home-light-packages.png",
+        "output/home-light-footer.png",
+        "output/home-tablet-menu.png",
+        "output/home-presentation-runtime.json: no page errors"
+      ]
+    },
+    {
+      "requirement": "Homepage follow-up: final local quality and production export",
+      "status": "verified",
+      "evidence": [
+        "npm run lint: exit 0",
+        "npm run typecheck: exit 0",
+        "Changed-file Prettier and git diff --check passed",
+        "npm run build: exit 0, all ten static routes generated with TypeScript verification",
+        "Ownership audit: zero unapproved, unresolved, obsolete or stale reviews. Shared library versions unchanged."
+      ]
+    },
+    {
+      "requirement": "Homepage follow-up: Gnomie rendered visual and manual replay",
+      "status": "verified",
+      "evidence": [
+        "2026-11-04 17:36-17:37 UTC: Gnomie Browser Commander native Chrome 657166, foreground throughout the exercised flow. Window resized to 975px wide for tablet inspection.",
+        "Native navigation loaded the real http://127.0.0.1:4391/?site-mode=light with scripts intact. The fresh settled screenshot at 17:36:31 showed the complete single-line 218,400 count, readable light-mode copy and orbit labels, and the padded header logo.",
+        "Native click opened the hamburger menu; screenshot at 17:36:39 showed the expanded panel. Clicking Packages closed the panel and navigated to the library section; the settled 17:36:51 screenshot showed two readable columns and equal-width single-line action buttons.",
+        "Native Ctrl+End and screenshot at 17:37:03 verified the padded navy footer backing, original silver logo proportions, unclipped artwork, and legible adjacent footer copy.",
+        "Native screenshots are retained in the task transcript. Corresponding production artifacts: output/home-light-orbit.png, output/home-light-packages.png, output/home-tablet-menu.png, output/home-light-footer.png.",
+        ".tmp/home-gnomie-activity.jsonl; earlier profile, focus and alternate-runtime failures retained separately. No claim that failed routes provided native proof.",
+        "No credentials, external messages, commit, push, release or deployment used."
+      ]
+    },
+    {
+      "requirement": "Frame correction: geometry, recipes, anchors, overlays and final local quality",
+      "status": "verified",
+      "evidence": [
+        "docs/workbench-frame-correction.md",
+        "Production build exit 0: real Geist/Geist Mono fonts and all ten static routes",
+        "Lint and typecheck exit 0; individual browser cases only, no entire suite/CI",
+        "Production recipe matrix 7 x 20 x 2 passed; inspector minimum/default/maximum content reachability passed",
+        "output/workbench-frame-1920.png",
+        "output/workbench-frame-1440-stacked.png",
+        "output/workbench-frame-mobile.png",
+        "output/workbench-frame-mobile-drawer.png",
+        "output/workbench-frame-runtime.json: no page errors",
+        "Ownership audit: 42 files, zero unapproved, obsolete, unresolved or stale findings"
+      ]
+    },
+    {
+      "requirement": "Frame correction: required final Gnomie native rendered/manual replay",
+      "status": "verified",
+      "evidence": [
+        "2026-11-04 19:37-19:40UTC: Gnomie Browser Commander native Chrome657166 navigated the real local4391/lab/ page and hard-reloaded the current production build. Fresh native screenshots verified the aligned single-border inspector, borderless rail and readable Application content cards.",
+        "Native divider drag expanded320px to480px; inward drag snapped closed; toggle restored480px. Fragment navigation focused project content within preview without moving the editor. Preview scrolled to final footer/risk action while toolbar/chrome/status remained visible.",
+        "Motion inspector scrolled independently to Cancel motion and Reset preview while preview remained at footer. At975px window width, public Drawer opened, selected Layout and dismissed via Escape with visible focus restored to Open settings. Tablet site hamburger also opened/closed.",
+        "Maximizing restored the remembered480px desktop inspector. Double-click restored320px. No code changes were needed after the rendered check.",
+        ".tmp/frame-gnomie-activity.jsonl; native screenshots retained in task transcript. Production artifacts: output/workbench-frame-1920.png, output/workbench-frame-1440-stacked.png, output/workbench-frame-mobile.png, output/workbench-frame-mobile-drawer.png.",
+        "Earlier profile/focus failures remain in journal; no profile lock bypass. No credentials, messages, commit, push, shared-library release, dependency upgrade or deployment."
+      ]
+    },
+    {
+      "requirement": "Pre-commit handoff: current-source integration and Gnomie replay",
+      "status": "verified",
+      "evidence": [
+        "docs/lab-pr-readiness.md",
+        "Clean npm ci355packages and direct pins verified; 14focused unit cases and18artifact contracts passed individually",
+        "60selected browser cases passed sequentially; final7recipe x20personality x2width matrix passed after wrapper correction",
+        "WebKit anchor replay and direct npm run test:dev-hydration passed; local Firefox blank-page runtime limitation documented separately",
+        "Normal and Pages production builds passed, ten routes each; lint/typecheck passed",
+        "2026-11-04 20:43-20:47UTC: Gnomie native task Chrome657166 visited real production Pages Lab and light homepage. Verified frame, readable application reflow, resize/snap/restore, guide focus/header clearance, healthy opened canonical fixture, logo/count/copy and compact Drawer Escape/focus restoration. Fresh screenshots retained in task transcript.",
+        ".tmp/pr-gnomie-activity.jsonl and .tmp/pr-gnomie-report.md; no credentials, external messages, merge or deployment"
+      ]
+    },
+    {
+      "requirement": "PR integration browser remedies and current native replay",
+      "status": "verified",
+      "evidence": [
+        "docs/lab-pr-readiness.md: rendered CI follow-up and causal evidence",
+        "All originally failed browser cases passed focused local replays; five isolated preset matrices retain every mode and viewport",
+        "Nine loaded fixture documents: default Axe passes in Chromium desktop/mobile and WebKit; strict overflow, ownership truth table and canonical hover/focus remain passing",
+        "Shared fixture markup uses verified public usk-button primary/secondary variants; no custom button paint. Manually reviewed generated heading CSS: overflow-wrap:anywhere and hyphens:auto apply only to data-fixture-heading in isolated proofs, preserving typography and natural height. The static audit does not extract CSS from JavaScript template strings.",
+        "2026-11-04 23:55-23:58UTC: Gnomie native Chrome263858 verified cold Layout bookmark, readable application reflow, expanded divider, snap collapse, outward drag reopen, readable UI-only proof buttons, and light homepage logo/count. Screenshots retained in task transcript; .tmp/pr-gnomie-activity.jsonl.",
+        "Local lint/typecheck and focused fixture determinism/source-contract checks passed; remote CI remains a separate pushed-SHA gate."
+      ]
+    }
+  ],
+  "configurationInventory": {
+    "layouts": 20,
+    "recipes": 7,
+    "densities": 3,
+    "presets": 20,
+    "sharedThemes": 25,
+    "nativeSchemesPerPreset": 1,
+    "total": 218400,
+    "exhaustivelyRendered": false,
+    "wrappers": 7,
+    "primitives": 22,
+    "modes": 3,
+    "hoverIntensities": 4,
+    "elevationLevels": 3,
+    "inspectorPreferencesExported": false
+  },
+  "ownershipAudit": {
+    "configuration": "docs/lab-workbench-audit.json",
+    "passed": true,
+    "files": 44,
+    "unresolved": 0,
+    "reviewed": 19,
+    "sourceHashes": [
+      {
+        "path": "app/components/AdvancedLabExamples.tsx",
+        "sha256": "cf86d3ec847bdc003e5760137249fec71a379eb5c98bcd366f2a2cd94fd50e4a"
+      },
+      {
+        "path": "app/components/AnimatedOverlays.tsx",
+        "sha256": "94c73592b0482bace752fc2edb2f4225ea993f81f2e492fcb5b3b27bc2f3f806"
+      },
+      {
+        "path": "app/components/CombinedWorkbench.tsx",
+        "sha256": "b6b29d05f774727a3bbc2556c19411a6ccb00b2c83531c08c0bfac86ad0778ed"
+      },
+      {
+        "path": "app/components/ConfigurationReference.tsx",
+        "sha256": "aeb75d449d275a066ea0456f08e94d5970980f26dcc39c5ace0cbc3196545de6"
+      },
+      {
+        "path": "app/components/CustomThemeEditor.tsx",
+        "sha256": "7a37d0852dc9ca3c93411a013b9fc9ebabfea143738f373651e21cd43c8491f7"
+      },
+      {
+        "path": "app/components/EditorChrome.tsx",
+        "sha256": "3fd026664977776c3e70cfe9b9b4d63414e58b5e0d13f234dde177b0a114ba96"
+      },
+      {
+        "path": "app/components/FeatureShowcase.tsx",
+        "sha256": "76845d830903ce09984585c1ee2ddd46f159ba0be702feabb61307aa45f36ec0"
+      },
+      {
+        "path": "app/components/HeroActions.tsx",
+        "sha256": "b93af503fc9e18e3f1161bd695102b205a380af050c2f7ae04786d56d1d0f414"
+      },
+      {
+        "path": "app/components/HomeExperience.tsx",
+        "sha256": "0dd402f782af96149b16e1773e7f432b7b5a751ea4c2979916387c720f950e52"
+      },
+      {
+        "path": "app/components/HomeObservatory.tsx",
+        "sha256": "b9120e641a86876120787d12ee7a4d7c3b2041518cd6e5c322c0f4f3f0d3a0e1"
+      },
+      {
+        "path": "app/components/LabControls.tsx",
+        "sha256": "1e2b2f87c42cf08c8b4ac5a10cec5a064c2211201c6dd18c648d63a5c3b7a389"
+      },
+      {
+        "path": "app/components/LabExperience.tsx",
+        "sha256": "dee89dd941c21e6039d5ac9556ca48e50dc36fcbfc7c20fb46cb9348b08104da"
+      },
+      {
+        "path": "app/components/LabWorkbench.tsx",
+        "sha256": "812750a9ea4abb061efac074488d87a8920f73980f9858a8ebc81d4cd362afa4"
+      },
+      {
+        "path": "app/components/MotionPreferences.tsx",
+        "sha256": "ccb5b5ff003e5127a7178ae7f44d2f02dcd617851d6cd41e5bcc7120135a7919"
+      },
+      {
+        "path": "app/components/MotionSettings.tsx",
+        "sha256": "b0b38284257a5ec195ebc704c28a3f358130eb423af48fa329374c9627464353"
+      },
+      {
+        "path": "app/components/ResponsiveNavigation.tsx",
+        "sha256": "0f5be23d2205fed40e6d58d3213506eaabc7349edb22d0b33a66a58a7c9b2341"
+      },
+      {
+        "path": "app/components/SiteFooter.tsx",
+        "sha256": "469fe60f1f26435c21a3c23b2d5c032c15a9cb1793737b7ffeca6c2c66a4cc2c"
+      },
+      {
+        "path": "app/components/SiteHeader.tsx",
+        "sha256": "b633f86551866962f5e58a2bbd717f22d87f14ef41d33c676364ac15c5e6c199"
+      },
+      {
+        "path": "app/components/WorkbenchInspector.tsx",
+        "sha256": "ed99a4e275be9b205dc1e951a131d0a586c707295105e39eb90957f8f0e69952"
+      },
+      {
+        "path": "app/components/WorkspaceSections.tsx",
+        "sha256": "196f7970e29b37105e026ac61e90f1b44d5f5d5689898e62d5cc9222644a80f9"
+      },
+      {
+        "path": "app/components/labs/LayoutExplorer.tsx",
+        "sha256": "fd09875e304514aa193c67644c2af5809f3decf39e27fc71a47a717ce0d4e74c"
+      },
+      {
+        "path": "app/components/labs/MotionLab.tsx",
+        "sha256": "c584b28aa030629c3a4f377a174bc476686c9c689d2d736e28f09846d69eb86e"
+      },
+      {
+        "path": "app/components/labs/MotionShowcase.tsx",
+        "sha256": "afbd1447f79dadbadb5b6a2d20590aeb81b851c06fd4ed8027f6be50a7736b1c"
+      },
+      {
+        "path": "app/components/labs/PrimitiveControls.tsx",
+        "sha256": "744edb46a42c3e7bbc9f45aff81fd1ba732fc691101f92916b09a11b82b1d871"
+      },
+      {
+        "path": "app/components/labs/ShowcaseRecipe.tsx",
+        "sha256": "002eb4138672c528780fc35f31a6574fbbd842d645745f21e04acae27cfa90e6"
+      },
+      {
+        "path": "app/components/useConfigurationMotion.ts",
+        "sha256": "22adea499b84f932b70eff37c9625f13fb1b2b971c2a861bee83d1db346a2937"
+      },
+      {
+        "path": "app/components/useRecipeFit.ts",
+        "sha256": "8a8ce6f2adc703e372d2a9c92e88aa5df009a6de91fdddeb85eb3b89cb770cc1"
+      },
+      {
+        "path": "app/components/useSurfaceFeedback.ts",
+        "sha256": "ea67db44c2c6c83a3b02845e87421ad8d946e6926c4ca52dbf2676112db27fe7"
+      },
+      {
+        "path": "app/data/navigation.ts",
+        "sha256": "f7fbb9846f5612d89c768672521c13c2a1f3c4dc052f8ffb9a238bfa19ec4aae"
+      },
+      {
+        "path": "app/lab/page.tsx",
+        "sha256": "3603be55128eb56468a76a4374ee0edd65fbf3a16baba7fa47ccc14af5a40e95"
+      },
+      {
+        "path": "app/layout.tsx",
+        "sha256": "352bcde37daa26c5d564a2d9fee5dadd2090de2d00bb70582ad32060ba0d0577"
+      },
+      {
+        "path": "app/lib/configuration.ts",
+        "sha256": "35b46480836c4c86684173e944e31d2c06ba7e9fe66783b1c7fad981351698a4"
+      },
+      {
+        "path": "app/lib/inspector-state.ts",
+        "sha256": "2309345ec5e9a79167a5da1ce968873b42b07e70104f643d7f55f6fa032792d0"
+      },
+      {
+        "path": "app/lib/motion-settings.ts",
+        "sha256": "bc099b85a13673b7076684d8040b9d806d7226349c16a80217aefbef1030b5dc"
+      },
+      {
+        "path": "app/lib/playground-options.ts",
+        "sha256": "9dff7616806d9f304085fc3bee4837ffd2bfeea9c990b44efb2131305355e71b"
+      },
+      {
+        "path": "app/lib/site.ts",
+        "sha256": "077b083639a3f91eccbfc8662ec24f3a27a9ef6325ded8b614e41853a4ab39ae"
+      },
+      {
+        "path": "app/page.tsx",
+        "sha256": "20d80c60ac528ab5103f54e425952a7ffc4feece5d2ef73ba3dd8e4164fded1d"
+      },
+      {
+        "path": "app/styles/atlas.css",
+        "sha256": "963da8f4ec69ff25152e2b49b614ad62fe0c14bcdea60b6419c5f5917f749b4d"
+      },
+      {
+        "path": "app/styles/motion.css",
+        "sha256": "1220af7dde22d863ef23c41b020c9a63000f0a44a1fd5df7eb2699d8de8766cc"
+      },
+      {
+        "path": "app/styles/observatory.css",
+        "sha256": "8995a758f1d9ebbb05a5f29214f702cc06c8933117ac05b684d9d2e5f084d289"
+      },
+      {
+        "path": "app/styles/shell.css",
+        "sha256": "7a97d3aa7691bbd661aebb9bc48ec41b7de95dfb50f9c7f372b80416b6b31f6b"
+      },
+      {
+        "path": "app/styles/spacing.css",
+        "sha256": "42af4bdfe9454aba00d64d15a4a08e6e2e84831e3bd96022674f77dc290d9812"
+      },
+      {
+        "path": "app/styles/workbench.css",
+        "sha256": "6a5810845cd49832e0358710ac92e13ad4fe2bc8734539ae2a9fb6512188fe53"
+      },
+      {
+        "path": "scripts/build-fixtures.mjs",
+        "sha256": "6d39421499e410c631fd6bd7a7c6fc92c4dfaa027b7228994c4ddf32dec1477b"
+      }
+    ]
+  },
+  "delivery": {
+    "capturedAt": "2026-11-04T20:52:11.708Z",
+    "boundary": "local-only",
+    "preview": "http://127.0.0.1:4391/lab/#workbench",
+    "commitReady": true,
+    "outstandingGate": null,
+    "verificationBoundary": "Local UI acceptance; pushed SHA and remote PR checks are verified separately"
+  },
+  "homePresentationReview": {
+    "findings": [
+      "H1 inert static fixture",
+      "H2 constrained orbit count",
+      "H3 mismatched light/dark ink and surfaces",
+      "H4 narrow intrinsic cards and wrapped actions",
+      "H5 footer silver-logo backing"
+    ],
+    "documentation": "docs/home-presentation-review.md",
+    "liveLightPreview": "http://127.0.0.1:4391/?site-mode=light",
+    "cloudBrowser": "Not applicable: localhost-only implementation; no public deployment authorized.",
+    "nativeOwner": "Gnomie Browser Commander",
+    "video": "Not requested; screenshots and action journal retained."
+  }
+}

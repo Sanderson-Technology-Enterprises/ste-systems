@@ -1,0 +1,171 @@
+{
+  "files": [
+    "app/components/labs/MotionLab.tsx",
+    "app/components/labs/MotionShowcase.tsx",
+    "app/components/MotionPreferences.tsx",
+    "app/components/MotionSettings.tsx",
+    "app/components/useConfigurationMotion.ts",
+    "app/components/LabExperience.tsx",
+    "app/components/LabControls.tsx",
+    "app/layout.tsx",
+    "app/styles/motion.css",
+    "app/components/AnimatedOverlays.tsx",
+    "app/components/CustomThemeEditor.tsx",
+    "app/components/labs/LayoutExplorer.tsx",
+    "app/components/labs/ShowcaseRecipe.tsx",
+    "app/components/useSurfaceFeedback.ts",
+    "app/lib/playground-options.ts",
+    "app/components/CombinedWorkbench.tsx",
+    "app/components/ConfigurationReference.tsx",
+    "app/components/HeroActions.tsx"
+  ],
+  "beforeBytes": 409,
+  "renderedReviews": [
+    {
+      "id": "app/components/labs/MotionLab.tsx:13995:dynamic-style",
+      "reason": "The resolved browserStyle contains public Interactive Surface intensity tokens and validated active-palette RGB roles only. Native schemes reset inherited shared RGB roles to initial. No local component paint or competing transforms are introduced.",
+      "evidence": [
+        "app/components/labs/MotionLab.tsx: browserStyle",
+        "app/lib/playground-options.ts: interactionIntensity",
+        "client-playground.spec.ts: feedback reflexes, client color edits, native color exports"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:4623:local-primitive",
+      "reason": "Existing direct-CSS layout selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:5235:local-primitive",
+      "reason": "Existing direct-CSS preset selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:5807:local-primitive",
+      "reason": "Existing direct-CSS palette selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:6494:local-primitive",
+      "reason": "Existing direct-CSS mode radio group is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/LabControls.tsx:10521:local-primitive",
+      "reason": "Existing read-only manual-copy textarea is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
+      "evidence": [
+        "git diff app/components/LabControls.tsx",
+        "tests/browser/configuration-motion.spec.ts",
+        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
+      ]
+    },
+    {
+      "id": "app/components/AnimatedOverlays.tsx:2457:spread-props",
+      "reason": "Typed public ModalProps are forwarded to the public Modal. The wrapper owns presence and a dialog ref only; it supplies no paint, positioning or style overrides.",
+      "evidence": [
+        "app/components/AnimatedOverlays.tsx: AnimatedModal",
+        "tests/browser/client-playground.spec.ts: sampled modal phases and focus restoration"
+      ]
+    },
+    {
+      "id": "app/components/AnimatedOverlays.tsx:5213:spread-props",
+      "reason": "Typed public Tooltip props remain forwarded; public placement is selected to fit the scrollport. Native anchor event callbacks retain caller handlers. Public Tooltip owns positioning, ARIA and Escape; Motion owns only its content lifecycle.",
+      "evidence": [
+        "app/components/AnimatedOverlays.tsx: AnimatedTooltip",
+        "tests/browser/client-playground.spec.ts: retained tooltip entrance and exit",
+        "tests/browser/workbench-overlays.spec.ts: actual upper scroll-boundary clipping regression"
+      ]
+    },
+    {
+      "id": "app/components/labs/ShowcaseRecipe.tsx:1313:dynamic-style",
+      "reason": "The resolved style sets only the published --ly-card-grid-min and --ly-gallery-min geometry tokens to 22rem, allowing real intrinsic recipe flow.",
+      "evidence": [
+        "node_modules/layout-style-css/manifest.json: tokens.geometry",
+        "tests/browser/motion-showcase.spec.ts: desktop rows and responsive containment"
+      ]
+    },
+    {
+      "id": "app/components/CombinedWorkbench.tsx:7974:spread-props",
+      "reason": "The local attributes object contains only className=client-workspace, data-layout-recipe, data-ly-density and aria-label. Public Stack/Recipe own layout; no style or paint is spread.",
+      "evidence": [
+        "app/components/CombinedWorkbench.tsx: attributes object",
+        "tests/browser/workbench-geometry.spec.ts: all seven recipes and twenty personalities"
+      ]
+    },
+    {
+      "id": "app/components/CombinedWorkbench.tsx:8228:spread-props",
+      "reason": "The local attributes object contains only className=client-workspace, data-layout-recipe, data-ly-density and aria-label. Public Stack/Recipe own layout; no style or paint is spread.",
+      "evidence": [
+        "app/components/CombinedWorkbench.tsx: attributes object",
+        "tests/browser/workbench-geometry.spec.ts: all seven recipes and twenty personalities"
+      ]
+    }
+  ],
+  "exceptions": [
+    {
+      "id": "blueprint-light-danger-ink",
+      "file": "app/styles/motion.css",
+      "selector": ".motion-browser[data-ui=\"technical-blueprint\"][data-mode=\"light\"] .usk-badge[data-ui-variant=\"danger\"]",
+      "property": "color",
+      "value": "color-mix(in srgb,var(--usk-native-danger) 90%,var(--usk-native-text))",
+      "owner": "ui-style-kit-css",
+      "reason": "Rendered axe evidence found 4.26:1 contrast on Blueprint light paper. Mixing its own body ink restores AA; this is a scoped consumer repair.",
+      "conditions": [],
+      "evidence": [
+        "Approved user plan: site spacing and coherent workbench",
+        "docs/lab-workbench.md",
+        "tests/browser/site-spacing.spec.ts",
+        "tests/browser/workbench.spec.ts"
+      ],
+      "removalCondition": "Remove when an admitted upstream API satisfies the same rendered spacing, sizing or contrast contract."
+    },
+    {
+      "id": "vertical-workflow-flex",
+      "file": "app/styles/motion.css",
+      "selector": ".showcase-stage",
+      "property": "flex",
+      "value": "0 0 auto",
+      "owner": "ui-style-kit-css",
+      "reason": "Remove the horizontal 12rem flex basis when the public stepper is composed in a vertical Layout stack. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+      "conditions": [],
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+        "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+        "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+      ],
+      "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+    },
+    {
+      "id": "vertical-workflow-flex-wrap",
+      "file": "app/styles/motion.css",
+      "selector": ".showcase-stage",
+      "property": "flex-wrap",
+      "value": "wrap",
+      "owner": "ui-style-kit-css",
+      "reason": "Allow marker, label and description to wrap without clipping at phone widths. The installed public Stepper exposes no orientation or item-basis prop; this site-owned composition retains library paint and semantics.",
+      "conditions": [],
+      "evidence": [
+        "node_modules/@sanderson-technology-enterprises/ste-usk-react/dist/components/Stepper/Stepper.d.ts",
+        "tests/browser/workbench.spec.ts: vertical workflow stages stay content-sized",
+        "Rendered evidence: horizontal item flex basis became a 192px row height in the vertical stack"
+      ],
+      "removalCondition": "Remove when an admitted public Stepper orientation API handles content-sized vertical rows."
+    }
+  ]
+}

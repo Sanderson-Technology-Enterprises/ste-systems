@@ -13,10 +13,12 @@ import {
 
 import {
   LAYOUT_PERSONALITIES,
+  LAYOUT_RECIPES,
   UI_MODES,
   UI_PRESETS,
   UI_THEMES,
   type LayoutPersonality,
+  type LayoutRecipe,
   type UiMode,
   type UiPreset,
 } from "../data/catalog";
@@ -30,11 +32,20 @@ import {
   type LabTheme,
   type LabConfiguration,
 } from "../lib/configuration";
+import { useConfigurationMotion } from "./useConfigurationMotion";
 
-const configurationKeys = ["layout", "ui", "theme", "mode"] as const;
+const configurationKeys = [
+  "layout",
+  "ui",
+  "theme",
+  "mode",
+  "recipe",
+  "density",
+] as const;
 
 type LabConfigurationContextValue = {
   configuration: LabConfiguration;
+  requestedConfiguration: LabConfiguration;
   announce: (message: string) => void;
   randomizeConfiguration: () => void;
   resetConfiguration: () => void;
@@ -42,10 +53,16 @@ type LabConfigurationContextValue = {
   setMode: (mode: UiMode) => void;
   setTheme: (theme: LabTheme) => void;
   setUi: (ui: UiPreset) => void;
+  setRecipe: (recipe: LayoutRecipe) => void;
+  setDensity: (density: NonNullable<LabConfiguration["density"]>) => void;
+  configure: (patch: Partial<LabConfiguration>) => void;
+  applyPreviewChange: (apply: () => void) => Promise<void>;
+  interruptPreviewChange: (commitPending?: boolean) => void;
 };
 
 type LabExperienceProps = {
   children: ReactNode;
+  stableEditor?: boolean;
 };
 
 const LabConfigurationContext =
@@ -112,7 +129,10 @@ function sameConfiguration(
  * @param props.children Laboratory sections rendered inside the shared root.
  * @returns The configured STE Systems Lab experience.
  */
-export function LabExperience({ children }: LabExperienceProps) {
+export function LabExperience({
+  children,
+  stableEditor = false,
+}: LabExperienceProps) {
   const [configuration, setConfiguration] = useState<LabConfiguration>(() => ({
     ...DEFAULT_CONFIGURATION,
   }));
@@ -121,6 +141,17 @@ export function LabExperience({ children }: LabExperienceProps) {
     revision: 0,
   });
   const configurationRef = useRef(configuration);
+  const [requestedConfiguration, setRequestedConfiguration] =
+    useState(configuration);
+  const experienceRef = useRef<HTMLDivElement>(null);
+  const getMotionShell = useCallback(
+    () =>
+      experienceRef.current?.querySelector<HTMLElement>(
+        "[data-workbench-motion], [data-lab-configuration-motion]",
+      ) ?? null,
+    [],
+  );
+  const { transition, interrupt } = useConfigurationMotion(getMotionShell);
 
   const announce = useCallback((message: string) => {
     setAnnouncement((current) => ({
@@ -132,11 +163,12 @@ export function LabExperience({ children }: LabExperienceProps) {
   const commitConfiguration = useCallback(
     (nextConfiguration: LabConfiguration) => {
       configurationRef.current = nextConfiguration;
-      setConfiguration(nextConfiguration);
+      setRequestedConfiguration(nextConfiguration);
+      void transition(() => setConfiguration(nextConfiguration));
       persistConfiguration(nextConfiguration);
       replaceConfigurationUrl(nextConfiguration);
     },
-    [],
+    [transition],
   );
 
   useEffect(() => {
@@ -166,6 +198,7 @@ export function LabExperience({ children }: LabExperienceProps) {
 
     if (!sameConfiguration(configurationRef.current, hydratedConfiguration)) {
       setConfiguration(hydratedConfiguration);
+      setRequestedConfiguration(hydratedConfiguration);
     }
     configurationRef.current = hydratedConfiguration;
 
@@ -181,39 +214,77 @@ export function LabExperience({ children }: LabExperienceProps) {
     if (hasConfigurationQuery) clearConfigurationUrl();
   }, []);
 
-  const setLayout = useCallback(
-    (layout: LayoutPersonality) => {
-      commitConfiguration({ ...configurationRef.current, layout });
-      announce(`Layout changed to ${formatCatalogLabel(layout)}.`);
+  /**
+   * Commit one editor action atomically and announce every changed client field.
+   * @param patch Configuration fields selected by the current editor action.
+   */
+  const configure = useCallback(
+    (patch: Partial<LabConfiguration>) => {
+      commitConfiguration({ ...configurationRef.current, ...patch });
+      const messages: string[] = [];
+      if (patch.layout !== undefined)
+        messages.push(`Layout changed to ${formatCatalogLabel(patch.layout)}.`);
+      if (patch.ui !== undefined) {
+        const label =
+          UI_PRESETS.find((preset) => preset.id === patch.ui)?.label ??
+          patch.ui;
+        messages.push(`Visual style changed to ${label}.`);
+      }
+      if (patch.theme !== undefined)
+        messages.push(`Palette changed to ${formatThemeLabel(patch.theme)}.`);
+      if (patch.mode !== undefined)
+        messages.push(
+          `Mode changed to ${patch.mode === "contrast" ? "High contrast" : formatCatalogLabel(patch.mode)}.`,
+        );
+      if (patch.recipe !== undefined)
+        messages.push(`Recipe changed to ${formatCatalogLabel(patch.recipe)}.`);
+      if (patch.density !== undefined)
+        messages.push(`Spacing density changed to ${patch.density}.`);
+      if (messages.length > 0) announce(messages.join(" "));
     },
     [announce, commitConfiguration],
+  );
+
+  const setLayout = useCallback(
+    (layout: LayoutPersonality) => {
+      configure({ layout });
+    },
+    [configure],
   );
 
   const setUi = useCallback(
     (ui: UiPreset) => {
-      commitConfiguration({ ...configurationRef.current, ui });
-      const label = UI_PRESETS.find((preset) => preset.id === ui)?.label ?? ui;
-      announce(`Visual style changed to ${label}.`);
+      configure({ ui });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const setTheme = useCallback(
     (theme: LabTheme) => {
-      commitConfiguration({ ...configurationRef.current, theme });
-      announce(`Palette changed to ${formatThemeLabel(theme)}.`);
+      configure({ theme });
     },
-    [announce, commitConfiguration],
+    [configure],
   );
 
   const setMode = useCallback(
     (mode: UiMode) => {
-      commitConfiguration({ ...configurationRef.current, mode });
-      const label =
-        mode === "contrast" ? "High contrast" : formatCatalogLabel(mode);
-      announce(`Mode changed to ${label}.`);
+      configure({ mode });
     },
-    [announce, commitConfiguration],
+    [configure],
+  );
+
+  const setRecipe = useCallback(
+    (recipe: LayoutRecipe) => {
+      configure({ recipe });
+    },
+    [configure],
+  );
+
+  const setDensity = useCallback(
+    (density: NonNullable<LabConfiguration["density"]>) => {
+      configure({ density });
+    },
+    [configure],
   );
 
   const randomizeConfiguration = useCallback(() => {
@@ -222,6 +293,8 @@ export function LabExperience({ children }: LabExperienceProps) {
       ui: pickRandom(UI_PRESETS).id,
       theme: pickRandom(UI_THEMES),
       mode: pickRandom(UI_MODES),
+      recipe: pickRandom(LAYOUT_RECIPES),
+      density: pickRandom(["compact", "normal", "spacious"] as const),
     };
     commitConfiguration(nextConfiguration);
     announce("A randomized interface configuration is ready.");
@@ -230,15 +303,17 @@ export function LabExperience({ children }: LabExperienceProps) {
   const resetConfiguration = useCallback(() => {
     const nextConfiguration: LabConfiguration = { ...DEFAULT_CONFIGURATION };
     configurationRef.current = nextConfiguration;
-    setConfiguration(nextConfiguration);
+    setRequestedConfiguration(nextConfiguration);
+    void transition(() => setConfiguration(nextConfiguration));
     removeStoredConfiguration();
     clearConfigurationUrl();
     announce("Configuration reset to the defaults.");
-  }, [announce]);
+  }, [announce, transition]);
 
   const contextValue = useMemo<LabConfigurationContextValue>(
     () => ({
       configuration,
+      requestedConfiguration,
       announce,
       randomizeConfiguration,
       resetConfiguration,
@@ -246,9 +321,15 @@ export function LabExperience({ children }: LabExperienceProps) {
       setMode,
       setTheme,
       setUi,
+      setRecipe,
+      setDensity,
+      configure,
+      applyPreviewChange: transition,
+      interruptPreviewChange: interrupt,
     }),
     [
       configuration,
+      requestedConfiguration,
       announce,
       randomizeConfiguration,
       resetConfiguration,
@@ -256,20 +337,30 @@ export function LabExperience({ children }: LabExperienceProps) {
       setMode,
       setTheme,
       setUi,
+      setRecipe,
+      setDensity,
+      configure,
+      transition,
+      interrupt,
     ],
   );
 
   return (
     <LabConfigurationContext.Provider value={contextValue}>
       <div
-        className="experience lab-experience ly-root ly-page"
-        data-ly-density="normal"
-        data-ly-layout={configuration.layout}
-        data-ui={configuration.ui}
-        data-theme={
-          configuration.theme === "native" ? undefined : configuration.theme
+        ref={experienceRef}
+        className={`experience lab-experience ly-root ly-page${stableEditor ? " lab-editor-experience" : ""}`}
+        data-ly-density={
+          stableEditor ? "normal" : (configuration.density ?? "normal")
         }
-        data-mode={configuration.mode}
+        data-ly-layout={stableEditor ? "minimal-saas" : configuration.layout}
+        data-ui={stableEditor ? undefined : configuration.ui}
+        data-theme={
+          stableEditor || configuration.theme === "native"
+            ? undefined
+            : configuration.theme
+        }
+        data-mode={stableEditor ? undefined : configuration.mode}
       >
         {children}
         <p

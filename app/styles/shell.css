@@ -57,8 +57,7 @@
 }
 
 /**
- * Keep header structure flush when UI Style Kit applies its 2px element floor.
- * App-owned header padding and control hit areas are restored by later rules.
+ * Retain the minimum content clearance while later rules supply roomier hit areas.
  */
 .site-header,
 .site-header
@@ -76,7 +75,7 @@
     .lab-configuration-menu
   ) {
   margin: 0;
-  padding: 0;
+  padding: 2px;
 }
 
 .site-header
@@ -166,6 +165,8 @@
 }
 
 .brand {
+  /* The branded anchor also observes the site's control-text clearance floor. */
+  padding: 2px 3px;
   color: inherit;
   font-weight: 800;
   justify-self: start;
@@ -179,6 +180,24 @@
 .footer-brand p {
   min-inline-size: 0;
   line-height: 1.1;
+}
+.brand-copy,
+.brand-title,
+.brand-owner {
+  padding: 2px 3px;
+}
+
+/* Silver artwork needs its own contrast surface on pale navigation backgrounds. */
+.brand-logo-backing {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 2px 3px;
+}
+[data-mode="light"] :is(.site-header, .site-footer) .brand-logo-backing {
+  padding: 6px;
+  background: #07111f;
+  border-radius: 0.375rem;
 }
 
 /** Let the legal name wrap within its own slot before it compresses navigation labels. */
@@ -277,7 +296,7 @@
   display: none;
   inline-size: 44px;
   min-block-size: 44px;
-  padding-inline: 0;
+  padding-inline: 3px;
 }
 
 /* Header glyphs fill their 44px targets without changing library paint. */
@@ -330,7 +349,7 @@
 .site-navigation[data-presentation="disclosure"] .navigation-toggle {
   display: inline-flex;
   inline-size: 44px;
-  padding-inline: 0;
+  padding-inline: 3px;
 }
 
 .site-navigation[data-presentation="disclosure"] .navigation-panel {
@@ -457,7 +476,7 @@
 }
 
 .hero.home-hero h1 em {
-  color: rgb(var(--usk-primary-rgb));
+  color: rgb(var(--usk-link-rgb));
   font-style: normal;
 }
 
@@ -509,14 +528,14 @@
 }
 
 .experience:not(.lab-experience) .section-label {
-  color: rgb(var(--usk-primary-rgb));
+  color: rgb(var(--usk-link-rgb));
   font-size: 0.75rem;
   font-weight: 850;
   text-transform: uppercase;
 }
 
 .experience:not(.lab-experience) .eyebrow {
-  color: rgb(var(--usk-primary-rgb));
+  color: rgb(var(--usk-link-rgb));
   font-family: var(--font-code);
   font-size: 0.75rem;
   font-weight: 850;
@@ -569,8 +588,10 @@
 }
 
 .package-overview-grid {
+  /* The public intrinsic-grid minimum prevents four narrow cards on tablets. */
+  --ly-grid-min: 20rem;
   margin: 0;
-  padding: 0;
+  padding: 2px;
   list-style: none;
 }
 
@@ -596,6 +617,7 @@
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   line-height: 1.1;
+  overflow-wrap: normal;
 }
 
 .package-overview-card code {
@@ -604,6 +626,11 @@
 
 .package-overview-actions {
   margin-block-start: auto;
+}
+
+.package-overview-actions > .site-action {
+  inline-size: 100%;
+  white-space: nowrap;
 }
 
 .quick-start-layout,

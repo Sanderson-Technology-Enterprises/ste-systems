@@ -670,12 +670,7 @@ export async function collectExportIssues() {
     "Google verification file contents",
     issues,
   );
-  requireText(
-    lab,
-    "Configure the system. Inspect every layer.",
-    "lab primary content",
-    issues,
-  );
+  requireText(lab, "Find your interface.", "lab primary content", issues);
   requireText(
     components,
     "Components &amp; library guides",

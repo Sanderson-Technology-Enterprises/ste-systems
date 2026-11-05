@@ -23,6 +23,29 @@ async function readCatalog() {
   return JSON.parse(await readFile(catalogPath, "utf8"));
 }
 
+test("embedded integration proofs give every main and layout landmark a unique name", async () => {
+  await buildFixtures();
+  const names = [];
+  for (const fixture of await readCatalog()) {
+    const html = await readFile(
+      path.join(
+        repositoryRoot,
+        "public/fixtures/generated",
+        `${fixture.id}.html`,
+      ),
+      "utf8",
+    );
+    const main = html.match(/<main[^>]*aria-label="([^"]+)"/);
+    const layout = html.match(
+      /<section[^>]*data-proof-layout[^>]*aria-label="([^"]+)"/,
+    );
+    assert.ok(main, `${fixture.id} needs a named main landmark`);
+    assert.ok(layout, `${fixture.id} needs a named layout region`);
+    names.push(main[1], layout[1]);
+  }
+  assert.equal(new Set(names).size, names.length);
+});
+
 async function collectGeneratedFiles(root, relativeDirectory = "") {
   const directory = path.join(root, relativeDirectory);
   const entries = await readdir(directory, { withFileTypes: true });
