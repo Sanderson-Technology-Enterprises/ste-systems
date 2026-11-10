@@ -685,7 +685,7 @@ test("Pages workflow verifies the complete artifact before non-PR deployment", a
   assert.match(workflow, /^\s*run: npm run fixtures:build\s*$/m);
   assert.match(
     workflow,
-    /^\s*run: npx playwright install --with-deps chromium firefox webkit\s*$/m,
+    /^\s*run: npx playwright install --with-deps chromium\s*$/m,
   );
   assert.match(workflow, /^\s*path: out\s*$/m);
   assert.match(
@@ -710,7 +710,7 @@ test("Pages workflow verifies the complete artifact before non-PR deployment", a
 
   const fixtureStep = workflow.indexOf("run: npm run fixtures:build");
   const browserStep = workflow.indexOf(
-    "run: npx playwright install --with-deps chromium firefox webkit",
+    "run: npx playwright install --with-deps chromium",
   );
   const qualityStep = workflow.indexOf("run: npm run quality");
   assert.ok(fixtureStep >= 0);
