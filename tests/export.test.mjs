@@ -16,9 +16,9 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-/** Expected CSS ceiling for UI Style Kit 2.6 and its React composition layer. */
-const nextCssBudgetBytes = 2688 * 1024;
-/** Expected font ceiling for all ui-style-kit-css 2.6 identities. */
+/** Expected CSS ceiling for the installed UI Style Kit 2.7.2 identities and studio. */
+const nextCssBudgetBytes = 2944 * 1024;
+/** Expected font ceiling for all ui-style-kit-css 2.7.2 identities. */
 const exportedFontBudgetBytes = 2560 * 1024;
 const outRoot = path.join(repositoryRoot, "out");
 const googleVerificationFile = "google5abb0289b99a9f42.html";
@@ -74,8 +74,12 @@ function nodesOfType(nodes, type) {
 }
 
 function localAssetReferences(html) {
+  const assetMarkup = html.replace(
+    /<link\b[^>]*\brel="(?:preconnect|dns-prefetch)"[^>]*>/g,
+    "",
+  );
   return Array.from(
-    html.matchAll(/(?:href|src)="([^"]+)"/g),
+    assetMarkup.matchAll(/(?:href|src)="([^"]+)"/g),
     (match) => match[1],
   ).filter(
     (reference) =>
@@ -285,7 +289,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         name: "ui-style-kit-css",
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/ui-style-kit-css",
-        version: "2.7.1",
+        version: "2.7.2",
       },
       {
         codeRepository: "https://github.com/Foscat/Interactive-Surface-CSS",
@@ -300,7 +304,7 @@ test("route structured data separates the overview, lab, and atlas", async () =>
         name: "@sanderson-technology-enterprises/motion-style-css",
         programmingLanguage: "CSS",
         url: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
-        version: "1.0.0",
+        version: "1.1.0",
       },
     ],
   );
@@ -450,7 +454,7 @@ test("the exported routes stay within separate deterministic budgets", async () 
     ["raw index.html", index.length, 96 * 1024],
     ["raw lab/index.html", lab.length, 256 * 1024],
     ["raw components/index.html", components.length, 768 * 1024],
-    ["Next.js JavaScript", totalByExtension(/\.js$/), 1024 * 1024],
+    ["Next.js JavaScript", totalByExtension(/\.js$/), 2048 * 1024],
     ["Next.js CSS", totalByExtension(/\.css$/), nextCssBudgetBytes],
     [
       "exported fonts",

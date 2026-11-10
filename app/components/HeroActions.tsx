@@ -14,7 +14,7 @@ export function HomeHeroActions() {
           href={withBasePath(SITE.labPath)}
           tabIndex={0}
         >
-          Open the lab
+          Start your design plan
           <ArrowRightIcon />
         </a>
         <a
@@ -25,7 +25,7 @@ export function HomeHeroActions() {
           href={withBasePath(SITE.componentsPath)}
           tabIndex={0}
         >
-          Read component guides
+          Explore the design system
         </a>
       </div>
       <p className="hero-service-copy">

@@ -17,7 +17,7 @@ export type EcosystemPackage = {
 };
 
 /** Exact registry version used by installation examples and package contracts. */
-export const UI_STYLE_KIT_INSTALL_SPEC = "2.7.1";
+export const UI_STYLE_KIT_INSTALL_SPEC = "2.7.2";
 
 /** Version-pinned jsDelivr root for the published UI Style Kit package. */
 const UI_STYLE_KIT_CDN_ROOT = `https://cdn.jsdelivr.net/npm/ui-style-kit-css@${UI_STYLE_KIT_INSTALL_SPEC}`;
@@ -77,7 +77,7 @@ export const ECOSYSTEM_PACKAGES: readonly EcosystemPackage[] = [
   {
     name: "@sanderson-technology-enterprises/motion-style-css",
     displayName: "Motion Style CSS",
-    version: "1.0.0",
+    version: "1.1.0",
     layer: "Motion",
     summary:
       "The newest addition to the STE web development system: paired entrances, exits, and choreography on dedicated shells, with reduced-motion support.",
@@ -222,12 +222,12 @@ function adoptionSnippets(
 const motionStyle: CdnAsset = {
   packageName: "@sanderson-technology-enterprises/motion-style-css",
   kind: "style",
-  href: "https://cdn.jsdelivr.net/npm/@sanderson-technology-enterprises/motion-style-css@1.0.0/src/motion.css",
+  href: "https://cdn.jsdelivr.net/npm/@sanderson-technology-enterprises/motion-style-css@1.1.0/src/motion.css",
 };
 const motionController: CdnAsset = {
   packageName: "@sanderson-technology-enterprises/motion-style-css",
   kind: "module",
-  href: "https://cdn.jsdelivr.net/npm/@sanderson-technology-enterprises/motion-style-css@1.0.0/src/index.js",
+  href: "https://cdn.jsdelivr.net/npm/@sanderson-technology-enterprises/motion-style-css@1.1.0/src/index.js",
 };
 const motionImports = [
   'import "@sanderson-technology-enterprises/motion-style-css/styles.css";',
@@ -246,7 +246,7 @@ export const ADOPTION_PATHS = [
     packages: ["@sanderson-technology-enterprises/motion-style-css"],
     snippets: adoptionSnippets(
       "motion-only",
-      "npm install @sanderson-technology-enterprises/motion-style-css@1.0.0",
+      "npm install @sanderson-technology-enterprises/motion-style-css@1.1.0",
       motionImports,
       [motionStyle, motionController],
       "Install Motion Style CSS",
@@ -267,7 +267,7 @@ export const ADOPTION_PATHS = [
     ],
     snippets: adoptionSnippets(
       "all-motion",
-      `${NPM_INSTALL} @sanderson-technology-enterprises/motion-style-css@1.0.0`,
+      `${NPM_INSTALL} @sanderson-technology-enterprises/motion-style-css@1.1.0`,
       [...BUNDLER_IMPORTS, ...motionImports],
       [...CDN_LINKS, motionStyle, motionController],
       "Install all four CSS libraries",

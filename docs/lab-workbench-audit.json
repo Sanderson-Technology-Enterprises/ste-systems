@@ -5,9 +5,11 @@
     "app/components/CombinedWorkbench.tsx",
     "app/components/ConfigurationReference.tsx",
     "app/components/CustomThemeEditor.tsx",
+    "app/components/DesignPlanProvider.tsx",
     "app/components/EditorChrome.tsx",
     "app/components/FeatureShowcase.tsx",
     "app/components/HeroActions.tsx",
+    "app/components/Icons.tsx",
     "app/components/HomeExperience.tsx",
     "app/components/HomeObservatory.tsx",
     "app/components/LabControls.tsx",
@@ -19,6 +21,9 @@
     "app/components/SiteFooter.tsx",
     "app/components/SiteHeader.tsx",
     "app/components/WorkbenchInspector.tsx",
+    "app/components/studio/PreviewFrame.tsx",
+    "app/components/studio/ScenarioRenderer.tsx",
+    "app/components/studio/StudioPreviewClient.tsx",
     "app/components/WorkspaceSections.tsx",
     "app/components/labs/LayoutExplorer.tsx",
     "app/components/labs/MotionLab.tsx",
@@ -42,13 +47,14 @@
     "app/styles/observatory.css",
     "app/styles/shell.css",
     "app/styles/spacing.css",
+    "app/styles/studio.css",
     "app/styles/workbench.css",
     "scripts/build-fixtures.mjs"
   ],
   "beforeBytes": 29438,
   "renderedReviews": [
     {
-      "id": "app/components/labs/MotionLab.tsx:13995:dynamic-style",
+      "id": "app/components/labs/MotionLab.tsx:13998:dynamic-style",
       "reason": "The resolved browserStyle contains public Interactive Surface intensity tokens and validated active-palette RGB roles only. Native schemes reset inherited shared RGB roles to initial. No local component paint or competing transforms are introduced.",
       "evidence": [
         "app/components/labs/MotionLab.tsx: browserStyle",
@@ -102,7 +108,7 @@
       ]
     },
     {
-      "id": "app/components/AnimatedOverlays.tsx:2457:spread-props",
+      "id": "app/components/AnimatedOverlays.tsx:2584:spread-props",
       "reason": "Typed public ModalProps are forwarded to the public Modal. The wrapper owns presence and a dialog ref only; it supplies no paint, positioning or style overrides.",
       "evidence": [
         "app/components/AnimatedOverlays.tsx: AnimatedModal",
@@ -110,7 +116,7 @@
       ]
     },
     {
-      "id": "app/components/AnimatedOverlays.tsx:5213:spread-props",
+      "id": "app/components/AnimatedOverlays.tsx:5340:spread-props",
       "reason": "Typed public Tooltip props remain forwarded; public placement is selected to fit the scrollport. Native anchor event callbacks retain caller handlers. Public Tooltip owns positioning, ARIA and Escape; Motion owns only its content lifecycle.",
       "evidence": [
         "app/components/AnimatedOverlays.tsx: AnimatedTooltip",
@@ -135,16 +141,7 @@
       ]
     },
     {
-      "id": "app/components/LabWorkbench.tsx:18564:dynamic-style",
-      "reason": "previewStyle resolves only validated active-palette RGB roles, native inheritance resets and published Interactive Surface hover tokens. The app does not supply competing lifecycle transforms.",
-      "evidence": [
-        "LabWorkbench.tsx: previewStyle",
-        "tests/browser/workbench.spec.ts: actual custom color export, manual and opt-in phases",
-        "tests/browser/site-spacing.spec.ts: all preset paint contexts"
-      ]
-    },
-    {
-      "id": "app/components/WorkbenchInspector.tsx:7481:dynamic-class",
+      "id": "app/components/WorkbenchInspector.tsx:7415:dynamic-class",
       "reason": "The editor helper receives only site-owned inspector-rail and inspector-panel-root classes or an empty string. Public InterfaceRoot owns preset paint; the app owns split geometry and the missing resize controller.",
       "evidence": [
         "WorkbenchInspector.tsx: editor helper call sites",
@@ -206,15 +203,77 @@
       ]
     },
     {
-      "id": "app/components/WorkbenchInspector.tsx:2789:imperative-style",
+      "id": "app/components/WorkbenchInspector.tsx:2841:imperative-style",
       "reason": "The only imperative style write sets the app-owned --workbench-header-height on the site-owned experience root, measured from its real header. It does not replace a shared token or motion transform. Cleanup removes the same owned property.",
       "evidence": [
         "app/components/WorkbenchInspector.tsx: refresh",
         "tests/browser/workbench-frame.spec.ts: measured frame height and equal outer boundaries"
       ]
+    },
+    {
+      "id": "app/components/Icons.tsx:541:dynamic-class",
+      "reason": "The legacy icon adapter forwards only caller-supplied className to the public Icon component. Icon artwork and theme selection remain package-owned; the site supplies a base-path-safe asset URL.",
+      "evidence": [
+        "app/components/Icons.tsx: DecorativeIcon",
+        "tests/browser/design-studio.spec.ts: published icons render on home and in studio"
+      ]
+    },
+    {
+      "id": "app/components/studio/StudioPreviewClient.tsx:8477:dynamic-style",
+      "reason": "The frame applies validated public RGB palette roles and documented Interactive Surface intensity tokens to its isolated InterfaceRoot. It does not assign component paint or lifecycle transforms.",
+      "evidence": [
+        "app/components/studio/StudioPreviewClient.tsx: style",
+        "app/lib/design-plan.ts: validateVisualDesign",
+        "tests/browser/design-studio.spec.ts: colors, icons, viewport and capture"
+      ]
     }
   ],
   "exceptions": [
+    {
+      "id": "print-hide-editor",
+      "file": "app/styles/studio.css",
+      "selector": "body :not(.studio-brief):not(.studio-brief *)",
+      "property": "visibility",
+      "value": "hidden",
+      "important": true,
+      "owner": "application",
+      "reason": "Browser print must contain the client preference brief without editor controls or sample transactions.",
+      "conditions": ["@media print"],
+      "evidence": [
+        "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+      ],
+      "removalCondition": "Remove when a dedicated print document replaces browser printing."
+    },
+    {
+      "id": "print-show-brief",
+      "file": "app/styles/studio.css",
+      "selector": ".studio-brief",
+      "property": "visibility",
+      "value": "visible",
+      "important": true,
+      "owner": "application",
+      "reason": "The frozen client brief must remain visible while editor controls are hidden during browser printing.",
+      "conditions": ["@media print"],
+      "evidence": [
+        "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+      ],
+      "removalCondition": "Remove when a dedicated print document replaces browser printing."
+    },
+    {
+      "id": "print-show-brief-descendants",
+      "file": "app/styles/studio.css",
+      "selector": ".studio-brief *",
+      "property": "visibility",
+      "value": "visible",
+      "important": true,
+      "owner": "application",
+      "reason": "Text, representative preview image and technical appendix must remain visible inside the frozen print brief.",
+      "conditions": ["@media print"],
+      "evidence": [
+        "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+      ],
+      "removalCondition": "Remove when a dedicated print document replaces browser printing."
+    },
     {
       "id": "legacy-guide-badge-alignment",
       "file": "app/styles/atlas.css",

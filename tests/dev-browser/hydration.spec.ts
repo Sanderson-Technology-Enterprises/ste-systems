@@ -18,7 +18,7 @@ test("Turbopack development hydrates the interactive routes cleanly", async ({
 
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /Design every layer/ }),
+    page.getByRole("heading", { name: /Plan the look and feel/ }),
   ).toBeVisible();
   const identityLayer = page.getByRole("button", { name: /Identity/ });
   await identityLayer.click();
@@ -32,19 +32,21 @@ test("Turbopack development hydrates the interactive routes cleanly", async ({
   await page.goto("/lab/");
   await expect(
     page.getByRole("heading", {
-      name: "Find your interface.",
+      name: "Make it yours.",
     }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Style and colors" }).click();
   const mode = page.getByRole("combobox", {
     name: "Display mode",
     exact: true,
   });
   await mode.selectOption("contrast");
   await expect(mode).toHaveValue("contrast");
-  await expect(page.locator("[data-workbench-preview]")).toHaveAttribute(
-    "data-mode",
-    "contrast",
-  );
+  await expect(
+    page
+      .frameLocator("iframe.studio-preview-frame")
+      .locator("[data-scenario-root]"),
+  ).toHaveAttribute("data-mode", "contrast");
 
   await page.goto("/components/");
   await page.getByRole("tab", { name: "STE USK React", exact: true }).click();

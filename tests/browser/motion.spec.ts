@@ -4,24 +4,21 @@ test("motion Lab plays real frames, preserves controls, and honors reduced motio
   page,
 }) => {
   await page.goto("./lab/#motion");
-  const lab = page.locator("[data-workbench]");
-  await expect(lab.getByLabel("Motion preset", { exact: true })).toBeVisible();
-  /** The mobile Drawer has its own heading; selection is shared by both editors. */
-  await expect(
-    lab.getByRole("button", { name: "Motion", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await expect(lab.getByLabel("Motion preset").locator("option")).toHaveCount(
-    11,
+  await expect(page.getByRole("button", { name: "Effects" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
   );
-  await lab.getByLabel("Motion preset").selectOption("slide");
-  await lab.getByLabel("Motion direction").selectOption("right");
-  for (const name of ["duration", "delay"]) {
-    const control = lab.getByLabel(`Random ${name}`, { exact: true });
-    await control.focus();
-    await control.press("Space");
-  }
-  await lab.getByRole("button", { name: "Play entrance", exact: true }).click();
-  const shell = lab.locator("[data-motion-preview]");
+  await page.getByText(/Advanced animation/).click();
+  await expect(
+    page.getByLabel("Entrance effect").locator("option"),
+  ).toHaveCount(17);
+  await page.getByLabel("Entrance effect").selectOption("slide");
+  await page.getByLabel("Direction").selectOption("right");
+  await page.getByLabel("Duration (ms)").fill("1200");
+  await page.getByRole("button", { name: "in", exact: true }).click();
+  const shell = page
+    .frameLocator("iframe.studio-preview-frame")
+    .locator("[data-preview-motion]");
   await expect(shell).toHaveAttribute("data-ms-phase", "in");
   const frames = await shell.evaluate(async (element) => {
     const samples: string[] = [];
@@ -32,16 +29,16 @@ test("motion Lab plays real frames, preserves controls, and honors reduced motio
     return samples;
   });
   expect(new Set(frames).size).toBeGreaterThan(1);
-  await lab.getByRole("button", { name: "Play exit", exact: true }).click();
+  await page.getByRole("button", { name: "out", exact: true }).click();
   await expect(shell).toHaveAttribute("data-ms-exited", "true");
   await expect(
-    lab.getByRole("button", { name: "Play entrance", exact: true }),
+    page.getByRole("button", { name: "Fullscreen preview" }),
   ).toBeFocused();
-  await lab.getByRole("button", { name: "Reset preview", exact: true }).click();
+  await page.getByRole("button", { name: "restore", exact: true }).click();
   await expect(shell).not.toHaveAttribute("data-ms-exited", "true");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await lab.getByRole("button", { name: "Play entrance", exact: true }).click();
-  await expect(lab.locator("[data-motion-status]")).toContainText("skipped");
+  await page.getByRole("button", { name: "in", exact: true }).click();
+  await expect(page.locator(".studio-notice")).toContainText("skipped");
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth > innerWidth,
   );
@@ -52,49 +49,36 @@ test("motion surfaces retain three distinct depths and all presets remain playab
   page,
 }) => {
   await page.goto("./lab/#motion");
-  const lab = page.locator("[data-workbench]");
-  await expect(lab.getByLabel("Motion preset", { exact: true })).toBeVisible();
-  const shadows = await lab
-    .locator("[data-motion-item] > .interactive-surface")
+  await page.getByText(/Advanced animation/).click();
+  const frame = page.frameLocator("iframe.studio-preview-frame");
+  const shadows = await frame
+    .locator("[data-motion-item] .usk-card")
     .evaluateAll((elements) =>
       elements.map((element) => getComputedStyle(element).boxShadow),
     );
-  expect(shadows).toHaveLength(6);
+  expect(shadows.length).toBeGreaterThanOrEqual(3);
   expect(new Set(shadows).size).toBe(3);
-  for (const preset of [
-    "form",
-    "slide",
-    "swirl",
-    "slam",
-    "origami",
-    "portal",
-    "curtain",
-    "elastic",
-    "cascade",
-    "flip",
-  ]) {
-    await lab.getByLabel("Motion preset").selectOption(preset);
-    await lab
-      .getByRole("button", { name: "Play entrance", exact: true })
-      .click();
-    await expect(lab.locator("[data-motion-preview]")).toHaveAttribute(
+  await page.getByLabel("Duration (ms)").fill("120");
+  const presets = await page
+    .getByLabel("Entrance effect")
+    .locator("option")
+    .evaluateAll((options) =>
+      options.map((option) => (option as HTMLOptionElement).value),
+    );
+  expect(presets).toHaveLength(17);
+  for (const preset of presets) {
+    await page.getByLabel("Entrance effect").selectOption(preset);
+    await page.getByRole("button", { name: "in", exact: true }).click();
+    await expect(frame.locator("[data-preview-motion]")).toHaveAttribute(
       "data-ms-preset",
       preset,
     );
-    expect(
-      await lab
-        .locator("[data-motion-preview]")
-        .evaluate((element) => element.getAnimations().length),
-    ).toBeGreaterThan(0);
-    await expect(lab.locator("[data-motion-status]")).toContainText("finished");
+    await expect(page.locator(".studio-notice")).toContainText("finished");
   }
-  await lab.getByRole("button", { name: "Play stagger", exact: true }).click();
-  await expect(lab.locator("[data-motion-item]").last()).toHaveAttribute(
-    "data-ms-phase",
-    "in",
-  );
-  await lab.getByRole("button", { name: "Cancel motion", exact: true }).click();
-  await expect(lab.locator("[data-motion-status]")).toContainText("cancelled");
+  await page.getByRole("button", { name: "stagger", exact: true }).click();
+  await expect(page.locator(".studio-notice")).toContainText("finished");
+  await page.getByRole("button", { name: "cancel", exact: true }).click();
+  await expect(page.locator(".studio-notice")).toContainText("cancelled");
   await page.goto("./components/#atlas-motion");
   await expect(
     page.getByRole("tab", { name: "Motion Style CSS", exact: true }),

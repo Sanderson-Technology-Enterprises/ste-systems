@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 
 import "@sanderson-technology-enterprises/ste-usk-react/styles.css";
 import "@sanderson-technology-enterprises/motion-style-css/styles.css";
@@ -19,17 +18,8 @@ import "./styles/atlas.css";
 import "./styles/responsive.css";
 import "./styles/spacing.css";
 import "./styles/workbench.css";
+import "./styles/studio.css";
 import { MotionPreferences } from "./components/MotionPreferences";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const verification = buildVerificationMetadata(process.env);
 
@@ -134,9 +124,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializedGlobalStructuredData }}

@@ -23,16 +23,16 @@ import {
 } from "../lib/structured-data";
 
 const labDescription =
-  "Configure layout, visual style, palette, and mode, then inspect the four STE Systems CSS layers on shared semantic markup.";
+  "Create a complete STE website design preference brief with interactive previews, styles, comparison, and portable files.";
 
 export const metadata: Metadata = {
-  title: "Configurable CSS workbench",
+  title: "Client design studio",
   description: labDescription,
   alternates: { canonical: SITE.labUrl },
   openGraph: {
     type: "website",
     url: SITE.labUrl,
-    title: `Configurable CSS workbench | ${SITE.name}`,
+    title: `Client design studio | ${SITE.name}`,
     description: labDescription,
     siteName: SITE.name,
     locale: SITE.locale,
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Configurable CSS workbench | ${SITE.name}`,
+    title: `Client design studio | ${SITE.name}`,
     description: labDescription,
     images: [{ url: SITE.socialImage, alt: SITE.socialImageAlt }],
   },
@@ -103,12 +103,11 @@ export default function Lab() {
             aria-labelledby="lab-title"
           >
             <div className="hero-copy ly-stack ly-gap-3">
-              <p className="section-label">Client configuration workbench</p>
-              <h1 id="lab-title">Find your interface.</h1>
+              <p className="section-label">Your design plan</p>
+              <h1 id="lab-title">Make it yours.</h1>
               <p className="lede">
-                Explore every layout, visual style, and color scheme in one live
-                preview. Use the left rail to customize, inspect motion, and
-                export your choices.
+                Choose a sample website, personalize the direction, compare
+                alternatives, and download a brief to share with STE.
               </p>
             </div>
           </section>

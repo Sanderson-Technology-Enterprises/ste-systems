@@ -14,6 +14,7 @@ const protectedFiles = ["next-env.d.ts", "tsconfig.json"].map((fileName) =>
 );
 const require = createRequire(import.meta.url);
 const playwrightCli = require.resolve("@playwright/test/cli");
+const nextCli = require.resolve("next/dist/bin/next");
 
 /**
  * Reads a generated file when present without requiring it in a fresh clone.
@@ -88,7 +89,7 @@ function runPlaywright() {
       [playwrightCli, "test", "--config", "playwright.dev.config.ts"],
       {
         cwd: repositoryRoot,
-        env: process.env,
+        env: { ...process.env, PLAYWRIGHT_EXTERNAL_DEV_SERVER: "1" },
         stdio: "inherit",
       },
     );
@@ -105,6 +106,67 @@ function runPlaywright() {
   });
 }
 
+/** Starts the one test server directly so its process tree can be reclaimed. */
+async function startDevServer(port) {
+  const server = spawn(
+    process.execPath,
+    [
+      nextCli,
+      "dev",
+      "--turbopack",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      String(port),
+    ],
+    {
+      cwd: repositoryRoot,
+      env: { ...process.env, NEXT_DIST_DIR: ".qa/next-dev-hydration" },
+      stdio: ["ignore", "inherit", "inherit"],
+      detached: process.platform !== "win32",
+      windowsHide: true,
+    },
+  );
+  /** Next can retain child handles after its listening process closes on Windows. */
+  server.unref();
+  const deadline = Date.now() + 180_000;
+  while (Date.now() < deadline) {
+    if (server.exitCode !== null)
+      throw new Error(`Development server exited before opening port ${port}.`);
+    try {
+      await fetch(`http://127.0.0.1:${port}/`, {
+        signal: AbortSignal.timeout(1_000),
+      });
+      return server;
+    } catch {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+    }
+  }
+  await stopDevServer(server);
+  throw new Error(`Development server did not open port ${port} in time.`);
+}
+
+/** Stops only the development server tree created by this runner. */
+async function stopDevServer(server) {
+  if (!server.pid) return;
+  if (process.platform === "win32") {
+    await new Promise((resolve) => {
+      const stop = spawn("taskkill", ["/PID", String(server.pid), "/T", "/F"], {
+        stdio: "ignore",
+        windowsHide: true,
+      });
+      stop.once("error", resolve);
+      stop.once("exit", resolve);
+    });
+  } else {
+    try {
+      process.kill(-server.pid, "SIGTERM");
+    } catch {
+      // A server that already exited has no remaining process group.
+    }
+  }
+}
+
 async function main() {
   const portText = process.env.PLAYWRIGHT_DEV_PORT?.trim() || "4176";
   const port = Number(portText);
@@ -113,7 +175,14 @@ async function main() {
   }
 
   await assertPortAvailable(port);
-  const exitCode = await withRestoredFiles(protectedFiles, runPlaywright);
+  const exitCode = await withRestoredFiles(protectedFiles, async () => {
+    const server = await startDevServer(port);
+    try {
+      return await runPlaywright();
+    } finally {
+      await stopDevServer(server);
+    }
+  });
   process.exitCode = exitCode;
 }
 

@@ -9,11 +9,11 @@ branding, and sample copy were not added to the site.
 
 | Need                 | Verified owner and public hook                                                                                                         | Implementation                                                                                                                                         |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Responsive specimens | Layout Style CSS 3.2.3 through STE USK React 2.3.0 layout adapters                                                                     | All 20 personalities, seven recipes, three densities, seven wrapper sizes, and 22 primitives; intrinsic specimen grid reflows in narrow guide contexts |
-| Appearance           | UI Style Kit CSS 2.7.1 through `InterfaceRoot`                                                                                         | All 20 presets, 25 named palettes plus native schemes, and light/dark/high-contrast modes; explicit scope prevents outer palette inheritance           |
+| Responsive specimens | Layout Style CSS 3.2.3 through STE USK React 2.4.0 layout adapters                                                                     | All 20 personalities, seven recipes, three densities, seven wrapper sizes, and 22 primitives; intrinsic specimen grid reflows in narrow guide contexts |
+| Appearance           | UI Style Kit CSS 2.7.2 through `InterfaceRoot`                                                                                         | All 20 presets, 25 named palettes plus native schemes, and light/dark/high-contrast modes; explicit scope prevents outer palette inheritance           |
 | Working specimens    | STE USK React `Button`, `Card`, `Form`, `Badge`, `Alert`, `Table`, `Slider`, `ProgressBar`, `Stepper`, `SegmentedControl`, and `Modal` | Local form updates, filter/empty state, progress changes, pressed/loading/disabled examples, and keyboard-accessible confirmation                      |
 | Interaction depth    | Interactive Surface CSS 1.7.3 through `surfaceLevel`, public motion tokens and `data-surface-feedback`                                 | Three elevation levels; none/subtle/balanced/strong hover intensity; success, error, and attention reflexes                                            |
-| Lifecycle effects    | Motion Style CSS 1.0.0 `enter`, `exit`, `stagger`, and `cancel`                                                                        | Dedicated workspace/panel shells; global configuration paints swap between exit and entrance                                                           |
+| Lifecycle effects    | Motion Style CSS 1.1.0 `enter`, `exit`, `stagger`, and `cancel`                                                                        | Dedicated workspace/panel shells; global configuration paints swap between exit and entrance                                                           |
 
 The shared React stylesheet and motion stylesheet remain imported once at
 `app/layout.tsx`. Browser chrome, containment, and specimen margin resets are the
@@ -68,7 +68,7 @@ directly.
 
 | Setting           | Random default per change                              | Fixed override            |
 | ----------------- | ------------------------------------------------------ | ------------------------- |
-| Entrance and exit | Independently selected from all ten installed presets  | Separate effect selectors |
+| Entrance and exit | Independently selected from all 17 installed presets   | Separate effect selectors |
 | Direction         | Left, right, up, or down                               | Direction selector        |
 | Easing            | Ease, ease-in-out, ease-out, or linear                 | Easing selector           |
 | Duration          | 200–700ms, in 50ms steps, independently for each phase | 200–1200ms slider         |

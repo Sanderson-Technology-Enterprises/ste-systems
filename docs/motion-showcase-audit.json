@@ -22,7 +22,7 @@
   "beforeBytes": 409,
   "renderedReviews": [
     {
-      "id": "app/components/labs/MotionLab.tsx:13995:dynamic-style",
+      "id": "app/components/labs/MotionLab.tsx:13998:dynamic-style",
       "reason": "The resolved browserStyle contains public Interactive Surface intensity tokens and validated active-palette RGB roles only. Native schemes reset inherited shared RGB roles to initial. No local component paint or competing transforms are introduced.",
       "evidence": [
         "app/components/labs/MotionLab.tsx: browserStyle",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "id": "app/components/AnimatedOverlays.tsx:2457:spread-props",
+      "id": "app/components/AnimatedOverlays.tsx:2584:spread-props",
       "reason": "Typed public ModalProps are forwarded to the public Modal. The wrapper owns presence and a dialog ref only; it supplies no paint, positioning or style overrides.",
       "evidence": [
         "app/components/AnimatedOverlays.tsx: AnimatedModal",
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "id": "app/components/AnimatedOverlays.tsx:5213:spread-props",
+      "id": "app/components/AnimatedOverlays.tsx:5340:spread-props",
       "reason": "Typed public Tooltip props remain forwarded; public placement is selected to fit the scrollport. Native anchor event callbacks retain caller handlers. Public Tooltip owns positioning, ARIA and Escape; Motion owns only its content lifecycle.",
       "evidence": [
         "app/components/AnimatedOverlays.tsx: AnimatedTooltip",

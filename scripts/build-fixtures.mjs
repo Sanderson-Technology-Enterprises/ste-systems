@@ -27,26 +27,26 @@ const defaultGeneratedRoot = path.join(
 export const EXPECTED_PACKAGE_VERSIONS = Object.freeze({
   "interactive-surface-css": "1.7.3",
   "layout-style-css": "3.2.3",
-  "ui-style-kit-css": "2.7.1",
-  "@sanderson-technology-enterprises/motion-style-css": "1.0.0",
+  "ui-style-kit-css": "2.7.2",
+  "@sanderson-technology-enterprises/motion-style-css": "1.1.0",
 });
 
 export const FIXTURE_ASSETS = Object.freeze({
   "motion-style": Object.freeze({
     export: "@sanderson-technology-enterprises/motion-style-css/styles.css",
-    target: "assets/motion-style-css/1.0.0/motion.css",
+    target: "assets/motion-style-css/1.1.0/motion.css",
   }),
   "motion-controller": Object.freeze({
     export: "@sanderson-technology-enterprises/motion-style-css",
-    target: "assets/motion-style-css/1.0.0/index.js",
+    target: "assets/motion-style-css/1.1.0/index.js",
   }),
   "ui-visual": Object.freeze({
     export: "ui-style-kit-css/visual.css",
-    target: "assets/ui-style-kit-css/2.7.1/ui-style-kit.visual.css",
+    target: "assets/ui-style-kit-css/2.7.2/ui-style-kit.visual.css",
   }),
   "ui-theme": Object.freeze({
     export: "ui-style-kit-css/interactive-surface-theme.css",
-    target: "assets/ui-style-kit-css/2.7.1/interactive-surface-theme.css",
+    target: "assets/ui-style-kit-css/2.7.2/interactive-surface-theme.css",
   }),
   "interaction-core": Object.freeze({
     export: "interactive-surface-css/state-core.css",

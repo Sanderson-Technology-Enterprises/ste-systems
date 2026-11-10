@@ -13,11 +13,11 @@
     },
     {
       "name": "ui-style-kit-css",
-      "version": "2.7.1",
+      "version": "2.7.2",
       "state": "Available",
       "evidence": [
         "node_modules/ui-style-kit-css/package.json",
-        "sha256:f48904398140e56807175cff2bbd640807308c10d36789063a3571a7ae1b6b92"
+        "sha256:fb3e5ec12f572dd58c24a2ed7ae055cc056bddfda9d2ca276b7f1d762b3f354f"
       ]
     },
     {
@@ -31,20 +31,29 @@
     },
     {
       "name": "@sanderson-technology-enterprises/motion-style-css",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "state": "Available",
       "evidence": [
         "node_modules/@sanderson-technology-enterprises/motion-style-css/package.json",
-        "sha256:4b4f61a751cd0f2dd129bfeb9745e777adf0295f8919ed97d090308235eca54a"
+        "sha256:99c8623946326a556ce37e2e53cf70c3881768c65f206ff55302a8953a57af9b"
       ]
     },
     {
       "name": "@sanderson-technology-enterprises/ste-usk-react",
-      "version": "2.3.0",
+      "version": "2.4.0",
       "state": "Available",
       "evidence": [
         "node_modules/@sanderson-technology-enterprises/ste-usk-react/package.json",
-        "sha256:632b6d8f12a5b938ae527010fe765646777c6677ca0b37db577afe4abc9e4ca9"
+        "sha256:4e1553bf98ff6caada88b34ebaea4927a69915737eb1984d0a1c640c61cf5f49"
+      ]
+    },
+    {
+      "name": "ui-style-kit-icons",
+      "version": "2.0.0",
+      "state": "Available",
+      "evidence": [
+        "node_modules/ui-style-kit-icons/package.json",
+        "sha256:ed6b9fc2c191b7618fee0f98c07b0c4c3e453a53eaa074508ed0e9bb111d5593"
       ]
     }
   ],
@@ -133,7 +142,7 @@
   },
   "localCss": {
     "beforeBytes": 29438,
-    "afterBytes": 42677,
+    "afterBytes": 48831,
     "unapproved": 0,
     "exceptions": [
       {
@@ -626,6 +635,17 @@
         "2026-11-04 23:55-23:58UTC: Gnomie native Chrome263858 verified cold Layout bookmark, readable application reflow, expanded divider, snap collapse, outward drag reopen, readable UI-only proof buttons, and light homepage logo/count. Screenshots retained in task transcript; .tmp/pr-gnomie-activity.jsonl.",
         "Local lint/typecheck and focused fixture determinism/source-contract checks passed; remote CI remains a separate pushed-SHA gate."
       ]
+    },
+    {
+      "requirement": "Client design studio revamp: local acceptance on 2026-11-10",
+      "status": "verified",
+      "evidence": [
+        "Pinned Next.js 16.4.6, React 19.3.1, STE React 2.4.0, four CSS owners, and icons 2.0.0; exact installed package hashes appear above.",
+        "Focused DesignPlan, compressed visual-link, contrast, package-contract, and fixture checks passed. Portable reload/import, invalid-file recovery, A/B isolation, four sample flows, device sizing, mobile focus, full-screen Escape, and frozen brief capture passed in local Chrome.",
+        "All 17 effects completed in the isolated frame; three rendered surface shadows were distinct; reduced-motion and cancellation checks passed. The component guide modal and homepage/editor package icons rendered in local Chrome.",
+        "npm run format:check, lint, typecheck, docs:check, build, build:pages, verify:export, and the single dev hydration test passed. Both STE ownership audits passed with zero unresolved or stale reviews.",
+        "The published Gnomie Browser Commander profile was locked. Browser proof used Playwright with installed local Chrome; remote CI, publication, and deployment are not represented by these local checks."
+      ]
     }
   ],
   "configurationInventory": {
@@ -647,9 +667,9 @@
   "ownershipAudit": {
     "configuration": "docs/lab-workbench-audit.json",
     "passed": true,
-    "files": 44,
+    "files": 50,
     "unresolved": 0,
-    "reviewed": 19,
+    "reviewed": 20,
     "sourceHashes": [
       {
         "path": "app/components/AdvancedLabExamples.tsx",
@@ -657,7 +677,7 @@
       },
       {
         "path": "app/components/AnimatedOverlays.tsx",
-        "sha256": "94c73592b0482bace752fc2edb2f4225ea993f81f2e492fcb5b3b27bc2f3f806"
+        "sha256": "8f1f03933e0d962eb5d386837916317cf95730cbdaeb1c79e265c27c08101120"
       },
       {
         "path": "app/components/CombinedWorkbench.tsx",
@@ -672,6 +692,10 @@
         "sha256": "7a37d0852dc9ca3c93411a013b9fc9ebabfea143738f373651e21cd43c8491f7"
       },
       {
+        "path": "app/components/DesignPlanProvider.tsx",
+        "sha256": "e2901d895635697f563e0c793e8ba205c619b4928af982f64855c288711811d7"
+      },
+      {
         "path": "app/components/EditorChrome.tsx",
         "sha256": "3fd026664977776c3e70cfe9b9b4d63414e58b5e0d13f234dde177b0a114ba96"
       },
@@ -681,7 +705,11 @@
       },
       {
         "path": "app/components/HeroActions.tsx",
-        "sha256": "b93af503fc9e18e3f1161bd695102b205a380af050c2f7ae04786d56d1d0f414"
+        "sha256": "184ecd7fc92f67e73084c33fe7d344a67bf854db30377ef74f3d75ad7fac5176"
+      },
+      {
+        "path": "app/components/Icons.tsx",
+        "sha256": "f00f445940353018498120022230f83cda40188530610efce7150d37ff201396"
       },
       {
         "path": "app/components/HomeExperience.tsx",
@@ -697,19 +725,19 @@
       },
       {
         "path": "app/components/LabExperience.tsx",
-        "sha256": "dee89dd941c21e6039d5ac9556ca48e50dc36fcbfc7c20fb46cb9348b08104da"
+        "sha256": "7b640291b0b604d8b78c671ab4fbbcebcdda3047cddb174f1b5040937c7bb34a"
       },
       {
         "path": "app/components/LabWorkbench.tsx",
-        "sha256": "812750a9ea4abb061efac074488d87a8920f73980f9858a8ebc81d4cd362afa4"
+        "sha256": "7aed9fa6d269887f0d2bf855711191c8c74262b335c44af1efcea216896cf4b7"
       },
       {
         "path": "app/components/MotionPreferences.tsx",
-        "sha256": "ccb5b5ff003e5127a7178ae7f44d2f02dcd617851d6cd41e5bcc7120135a7919"
+        "sha256": "cee62d6879d1c95338f0684a77705be85af692323d4fb9ccb9e7328e7992ed53"
       },
       {
         "path": "app/components/MotionSettings.tsx",
-        "sha256": "b0b38284257a5ec195ebc704c28a3f358130eb423af48fa329374c9627464353"
+        "sha256": "7590bf6823af0876c14a9cc3465d47b07c99d87d7606b00fef9db87c2e87fdf7"
       },
       {
         "path": "app/components/ResponsiveNavigation.tsx",
@@ -725,7 +753,19 @@
       },
       {
         "path": "app/components/WorkbenchInspector.tsx",
-        "sha256": "ed99a4e275be9b205dc1e951a131d0a586c707295105e39eb90957f8f0e69952"
+        "sha256": "624bda427de840e2f977afff6c3ceb9b3036bb48f2b2dc1f220cc51790844996"
+      },
+      {
+        "path": "app/components/studio/PreviewFrame.tsx",
+        "sha256": "b97dfac7f988ccdceb6b9cb495b84e1a56858a38a1a1d4f153f1bd9f9de3f7da"
+      },
+      {
+        "path": "app/components/studio/ScenarioRenderer.tsx",
+        "sha256": "dae3b494b033798d11dcb6d86c6fc48b1f16b2bf2a0725746d8da2b7e7a0d64e"
+      },
+      {
+        "path": "app/components/studio/StudioPreviewClient.tsx",
+        "sha256": "43fdb885de5e102a45664bb134e7f7eddbef02b734ec51b95e24d7bfaa9af213"
       },
       {
         "path": "app/components/WorkspaceSections.tsx",
@@ -737,11 +777,11 @@
       },
       {
         "path": "app/components/labs/MotionLab.tsx",
-        "sha256": "c584b28aa030629c3a4f377a174bc476686c9c689d2d736e28f09846d69eb86e"
+        "sha256": "419116a3a2f86a4b241604492663c4f2c9e297096cd47ae24381493bf4c58310"
       },
       {
         "path": "app/components/labs/MotionShowcase.tsx",
-        "sha256": "afbd1447f79dadbadb5b6a2d20590aeb81b851c06fd4ed8027f6be50a7736b1c"
+        "sha256": "e11eaaa25b8eb7af0d771e50307c7906d72789e9eacc1efd2d28117a8dcc4c09"
       },
       {
         "path": "app/components/labs/PrimitiveControls.tsx",
@@ -769,11 +809,11 @@
       },
       {
         "path": "app/lab/page.tsx",
-        "sha256": "3603be55128eb56468a76a4374ee0edd65fbf3a16baba7fa47ccc14af5a40e95"
+        "sha256": "2615071af0050c880fb5ac4daabe7776aad90160c061594ce6890252b5e8cc42"
       },
       {
         "path": "app/layout.tsx",
-        "sha256": "352bcde37daa26c5d564a2d9fee5dadd2090de2d00bb70582ad32060ba0d0577"
+        "sha256": "998c6f87d077bd3dcc8ae7ba69f35734bfd9f7b2b06100bc3be5dedfa0fa4de1"
       },
       {
         "path": "app/lib/configuration.ts",
@@ -781,7 +821,7 @@
       },
       {
         "path": "app/lib/inspector-state.ts",
-        "sha256": "2309345ec5e9a79167a5da1ce968873b42b07e70104f643d7f55f6fa032792d0"
+        "sha256": "2d775003d37a27b6f87f6cc451e43c0d8002106ab0a884db29424e2a42ab8877"
       },
       {
         "path": "app/lib/motion-settings.ts",
@@ -797,7 +837,7 @@
       },
       {
         "path": "app/page.tsx",
-        "sha256": "20d80c60ac528ab5103f54e425952a7ffc4feece5d2ef73ba3dd8e4164fded1d"
+        "sha256": "07681eb51714da63bdd05fdb81f4431ae08cb4a1b8381a26a34079e273b31d06"
       },
       {
         "path": "app/styles/atlas.css",
@@ -813,29 +853,33 @@
       },
       {
         "path": "app/styles/shell.css",
-        "sha256": "7a97d3aa7691bbd661aebb9bc48ec41b7de95dfb50f9c7f372b80416b6b31f6b"
+        "sha256": "76169b1f7efc1a0b8afc77f0667b6fd79387eb3f3fd9ef7d71a23cd294c2ea4c"
       },
       {
         "path": "app/styles/spacing.css",
         "sha256": "42af4bdfe9454aba00d64d15a4a08e6e2e84831e3bd96022674f77dc290d9812"
       },
       {
+        "path": "app/styles/studio.css",
+        "sha256": "6edf0701698ca9faf246ce963539752638520d3c6ccf9655634d330ae11308d6"
+      },
+      {
         "path": "app/styles/workbench.css",
-        "sha256": "6a5810845cd49832e0358710ac92e13ad4fe2bc8734539ae2a9fb6512188fe53"
+        "sha256": "14e32c4babe6b48d00b623b862cff8cd02498bc3b413da2a155dffeccdc639d6"
       },
       {
         "path": "scripts/build-fixtures.mjs",
-        "sha256": "6d39421499e410c631fd6bd7a7c6fc92c4dfaa027b7228994c4ddf32dec1477b"
+        "sha256": "dd8a2235c5b6b252b05cd42a54513f1bef55db5111bd1e1d57c9832be38533bc"
       }
     ]
   },
   "delivery": {
-    "capturedAt": "2026-11-04T20:52:11.708Z",
+    "capturedAt": "2026-11-10T23:16:05.939Z",
     "boundary": "local-only",
-    "preview": "http://127.0.0.1:4391/lab/#workbench",
+    "preview": "http://127.0.0.1:4173/ste-systems/lab/",
     "commitReady": true,
     "outstandingGate": null,
-    "verificationBoundary": "Local UI acceptance; pushed SHA and remote PR checks are verified separately"
+    "verificationBoundary": "Local static and Chrome checks; remote CI, publication, and deployment require separate proof"
   },
   "homePresentationReview": {
     "findings": [

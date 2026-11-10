@@ -21,12 +21,16 @@ export default defineConfig({
       name: "desktop-chromium",
       use: {
         ...devices["Desktop Chrome"],
+        ...(!process.env.CI ? { channel: "chrome" } : {}),
         viewport: { width: 1440, height: 1000 },
       },
     },
     {
       name: "mobile-chromium",
-      use: { ...devices["Pixel 7"] },
+      use: {
+        ...devices["Pixel 7"],
+        ...(!process.env.CI ? { channel: "chrome" } : {}),
+      },
     },
     {
       name: "desktop-firefox",
@@ -39,10 +43,12 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  webServer: {
-    command: `npm run preview:prepare && node scripts/serve-preview.mjs .preview ${browserPort}`,
-    url: browserBaseUrl,
-    reuseExistingServer: false,
-    timeout: 120_000,
-  },
+  webServer: process.env.PLAYWRIGHT_EXTERNAL_SERVER
+    ? undefined
+    : {
+        command: `npm run preview:prepare && node scripts/serve-preview.mjs .preview ${browserPort}`,
+        url: browserBaseUrl,
+        reuseExistingServer: false,
+        timeout: 120_000,
+      },
 });

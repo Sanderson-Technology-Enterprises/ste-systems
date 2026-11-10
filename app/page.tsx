@@ -232,16 +232,16 @@ export default function Home() {
           aria-labelledby="home-title"
         >
           <div className="hero-copy ly-stack ly-gap-6">
-            <p className="section-label">Four focused CSS libraries</p>
+            <p className="section-label">STE client design studio</p>
             <h1 id="home-title">
-              Design every layer.
+              Plan the look and feel
               <br />
-              <em>Keep one interface.</em>
+              <em>of your STE website.</em>
             </h1>
             <p className="lede">
-              Reusable rules keep related screens consistent while layout and
-              appearance change independently. Inspect structure, visual
-              styling, and interaction states in a working interface.
+              Explore styles, colors, layouts, icons, and motion in working
+              sample websites. Save a complete design preference brief for STE
+              to implement.
             </p>
             <HomeHeroActions />
           </div>

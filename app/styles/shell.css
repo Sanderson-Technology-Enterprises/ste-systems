@@ -48,6 +48,11 @@
   block-size: 1.1em;
   flex: 0 0 auto;
 }
+.experience usk-icon {
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  flex: 0 0 auto;
+}
 
 /** Keep the compact site navigation usable without changing library paint. */
 .lab-experience
@@ -301,6 +306,10 @@
 
 /* Header glyphs fill their 44px targets without changing library paint. */
 .site-header :is(.navigation-toggle, .lab-configuration-toggle) svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+.site-header :is(.navigation-toggle, .lab-configuration-toggle) usk-icon {
   inline-size: 1.5rem;
   block-size: 1.5rem;
 }

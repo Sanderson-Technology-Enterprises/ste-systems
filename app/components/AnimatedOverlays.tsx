@@ -71,6 +71,8 @@ export function AnimatedModal({ open = false, ...props }: ModalProps) {
       target.removeAttribute("data-ms-exited");
     };
   }, [open, present]);
+  /** Closed dialogs have no focus target and need no custom-element upgrade before hydration. */
+  if (!present) return null;
   return (
     <Modal {...props} ref={dialog} open={present} data-overlay-motion="modal" />
   );

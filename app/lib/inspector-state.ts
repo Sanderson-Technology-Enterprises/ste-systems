@@ -1,10 +1,11 @@
 /** Inspector groups share one preview instead of owning independent configurations. */
 export const INSPECTOR_GROUPS = [
-  "Appearance",
-  "Layout",
-  "Interaction",
-  "Motion",
-  "Export",
+  "Preview",
+  "Style and colors",
+  "Page layout",
+  "Effects",
+  "Compare",
+  "Review and save",
 ] as const;
 export type InspectorGroup = (typeof INSPECTOR_GROUPS)[number];
 
@@ -19,7 +20,7 @@ export const INSPECTOR_STORAGE_KEY = "ste-systems:inspector:v1";
 export const DEFAULT_INSPECTOR: Readonly<InspectorPreferences> = {
   width: 320,
   open: true,
-  group: "Appearance",
+  group: "Preview",
 };
 
 /**
@@ -28,7 +29,7 @@ export const DEFAULT_INSPECTOR: Readonly<InspectorPreferences> = {
  * @returns Maximum expanded inspector width; narrow screens use a drawer instead.
  */
 export function inspectorMaximum(availableWidth: number): number {
-  return Math.max(240, availableWidth - 48 - 8 - 360);
+  return Math.max(240, availableWidth - 168 - 8 - 360);
 }
 
 /**
@@ -62,6 +63,16 @@ export function parseInspectorPreferences(
 ): InspectorPreferences {
   try {
     const value = JSON.parse(stored ?? "null");
+    if (value && typeof value === "object") {
+      const legacyGroups: Record<string, InspectorGroup> = {
+        Appearance: "Style and colors",
+        Layout: "Page layout",
+        Interaction: "Effects",
+        Motion: "Effects",
+        Export: "Review and save",
+      };
+      value.group = legacyGroups[value.group] ?? value.group;
+    }
     if (
       !value ||
       !Number.isFinite(value.width) ||

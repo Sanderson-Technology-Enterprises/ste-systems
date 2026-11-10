@@ -42,21 +42,21 @@
 }
 .inspector-dock {
   display: grid;
-  grid-template-columns: 48px minmax(0, var(--inspector-width)) 8px;
+  grid-template-columns: 168px minmax(0, var(--inspector-width)) 8px;
   align-content: stretch;
   block-size: 100%;
   min-block-size: 0;
   min-inline-size: 0;
 }
 .inspector-rail {
-  inline-size: 48px;
+  inline-size: 168px;
   min-inline-size: 0;
   padding: 2px;
   border: 0;
   block-size: 100%;
 }
 .inspector-rail button {
-  inline-size: 40px;
+  inline-size: 100%;
   min-inline-size: 0;
   min-block-size: 44px;
   padding: 2px 3px;
@@ -123,6 +123,15 @@
 .inspector-mobile-label,
 .inspector-mobile-toolbar {
   display: none;
+}
+.inspector-rail .inspector-mobile-label {
+  display: inline;
+}
+.inspector-rail .inspector-groups button {
+  justify-content: flex-start;
+  gap: 0.55rem;
+  text-align: start;
+  padding-inline: 10px;
 }
 .inspector-divider {
   position: relative;

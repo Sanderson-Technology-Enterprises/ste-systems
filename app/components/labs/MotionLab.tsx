@@ -218,7 +218,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
         <p className="section-label">Motion Style CSS / New to STE</p>
         <Title id={`${id}-title`}>Motion with a clear beginning and end.</Title>
         <p>
-          Try ten paired motion presets on a complete interface, a featured
+          Try all 17 paired motion presets on a complete interface, a featured
           card, or six coordinated panels. Compare real controls, forms,
           feedback, and data across visual styles while the same content stays
           in place.

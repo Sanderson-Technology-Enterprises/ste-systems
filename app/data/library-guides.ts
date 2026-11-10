@@ -173,7 +173,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
     id: "motion",
     role: "04 / Lifecycle motion",
     summary:
-      "Motion Style CSS is the newest addition to STE's web development system. Use ten paired entrance/exit presets and coordinated movement while leaving layout, paint, and control feedback with their existing owners.",
+      "Motion Style CSS is the newest addition to STE's web development system. Use 17 paired entrance/exit presets and coordinated movement while leaving layout, paint, and control feedback with their existing owners.",
     concepts: [
       {
         api: "presets / enter / exit",

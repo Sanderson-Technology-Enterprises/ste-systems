@@ -13,6 +13,7 @@ import {
   Button,
   Drawer,
   InterfaceRoot,
+  Icon,
   Layout,
 } from "@sanderson-technology-enterprises/ste-usk-react";
 import {
@@ -25,6 +26,7 @@ import {
   type InspectorGroup,
   type InspectorPreferences,
 } from "../lib/inspector-state";
+import { withBasePath } from "../lib/site";
 
 /** The inspector supplies editor layout only; its contents share the workbench state. */
 interface WorkbenchInspectorProps {
@@ -126,10 +128,10 @@ export function WorkbenchInspector({
   useEffect(() => {
     const routeHash = () => {
       const group: Record<string, InspectorGroup> = {
-        "#layouts": "Layout",
-        "#ui-native": "Appearance",
-        "#interactions": "Interaction",
-        "#motion": "Motion",
+        "#layouts": "Page layout",
+        "#ui-native": "Style and colors",
+        "#interactions": "Effects",
+        "#motion": "Effects",
       };
       const selected = group[location.hash];
       if (selected) {
@@ -150,11 +152,7 @@ export function WorkbenchInspector({
     const next = {
       ...current.current,
       group,
-      open: mobile
-        ? current.current.open
-        : group === current.current.group
-          ? !current.current.open
-          : true,
+      open: true,
     };
     commit(next);
     if (mobile) setDrawerOpen(true);
@@ -234,6 +232,7 @@ export function WorkbenchInspector({
       preset="minimal-saas"
       theme="midnight-gold"
       mode="dark"
+      iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
       data-editor-chrome
       className={className}
     >
@@ -254,7 +253,13 @@ export function WorkbenchInspector({
           }
           onClick={() => select(group)}
         >
-          <span aria-hidden="true">{["◐", "▦", "↗", "▷", "⇩"][index]}</span>
+          <Icon
+            name={
+              (["eye", "palette", "grid", "play", "layers", "save"] as const)[
+                index
+              ]
+            }
+          />
           <span className="inspector-mobile-label">{group}</span>
         </Button>
       ))}
@@ -280,7 +285,7 @@ export function WorkbenchInspector({
         )}
       </div>
       <Layout.Sidebar
-        sideSize={`${48 + width + 8 + 4}px`}
+        sideSize={`${168 + width + 8 + 4}px`}
         // Reserve the preview's 360px plus its content pane's two 2px insets.
         minContentWidth="364px"
         gap={0}
@@ -300,7 +305,7 @@ export function WorkbenchInspector({
                 aria-expanded={preferences.open}
                 onClick={toggle}
               >
-                <span aria-hidden="true">☰</span>
+                <Icon name="menu" />
               </Button>
               {groupButtons}
             </>,
@@ -402,6 +407,15 @@ export function WorkbenchInspector({
           >
             {groupButtons}
             {controls(preferences.group)}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setDrawerOpen(false);
+                requestAnimationFrame(() => opener.current?.focus());
+              }}
+            >
+              Show preview
+            </Button>
           </Drawer>,
         )}
     </div>

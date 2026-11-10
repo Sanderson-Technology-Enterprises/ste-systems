@@ -16,6 +16,8 @@ html {
 
 body {
   /* Resolve the site aliases where Next.js supplies its font variables. */
+  --font-geist-sans: "Segoe UI", Arial, sans-serif;
+  --font-geist-mono: "Cascadia Code", Consolas, monospace;
   --font-display: var(--font-geist-sans), "Arial Narrow", sans-serif;
   --font-copy: var(--font-geist-sans), Arial, sans-serif;
   --font-code: var(--font-geist-mono), "Cascadia Code", monospace;

@@ -9,7 +9,7 @@ test("motion is the fourth CSS layer with standalone and full-stack adoption", (
     (pkg) => pkg.name === "@sanderson-technology-enterprises/motion-style-css",
   );
   assert.ok(motion);
-  assert.equal(motion.version, "1.0.0");
+  assert.equal(motion.version, "1.1.0");
   assert.equal(motion.links.demo, "https://stesystems.com/lab/#motion");
   assert.ok(ADOPTION_PATHS.find((path) => path.id === "motion-only"));
   assert.equal(

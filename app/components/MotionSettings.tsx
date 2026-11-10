@@ -45,8 +45,8 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
           }
         />
         <p>
-          Entrance, exit, direction, easing, and every timing slider are random
-          until you choose a fixed value. Reduced motion always takes priority.
+          Random discovery resolves into fixed values when saved in a design
+          plan. Reduced motion always takes priority.
         </p>
         <Layout.Grid minColumnWidth="11rem" gap={3}>
           <Form.Select

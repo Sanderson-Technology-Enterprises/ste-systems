@@ -329,7 +329,7 @@ export function MotionShowcase({
           <Form.Input
             label="Version label"
             defaultValue="preview candidate"
-            error="Use a version such as 1.0.0."
+            error="Use a version such as 1.1.0."
           />
           <Form.Input
             label="Managed endpoint"
