@@ -31,7 +31,7 @@
     "test:export": "node --test tests/export.test.mjs",
     "test:browser": "playwright test",
     "test:studio:unit": "node --import tsx --test tests/design-plan.test.ts tests/design-sharing.test.ts tests/contrast.test.ts tests/ecosystem.test.ts tests/three-library-contract.test.ts tests/motion.test.ts tests/atlas-contract.test.ts",
-    "test:studio:browser": "playwright test tests/browser/design-studio.spec.ts --project=desktop-chromium --workers=1 && playwright test tests/browser/design-studio.spec.ts --project=mobile-chromium --grep \"mobile settings return focus\" --workers=1 && playwright test tests/browser/motion.spec.ts --project=desktop-chromium --grep \"motion Lab plays real frames|motion surfaces retain three distinct depths\" --workers=1 && playwright test tests/browser/motion-showcase.spec.ts --project=desktop-chromium --grep \"motion showcase presents a varied component workspace\" --workers=1",
+    "test:studio:browser": "playwright test tests/browser/design-studio.spec.ts --project=desktop-chromium --grep-invert \"mobile settings return focus\" --workers=1 && playwright test tests/browser/design-studio.spec.ts --project=mobile-chromium --grep \"mobile settings return focus\" --workers=1 && playwright test tests/browser/motion.spec.ts --project=desktop-chromium --grep \"motion Lab plays real frames|motion surfaces retain three distinct depths\" --workers=1 && playwright test tests/browser/motion-showcase.spec.ts --project=desktop-chromium --grep \"motion showcase presents a varied component workspace\" --workers=1",
     "pretest:dev-hydration": "npm run assets:build",
     "test:dev-hydration": "node scripts/run-dev-hydration.mjs",
     "verify:export": "node scripts/verify-export.mjs",

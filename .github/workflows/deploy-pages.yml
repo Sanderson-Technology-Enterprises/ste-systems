@@ -34,8 +34,8 @@ jobs:
       - name: Build package fixtures
         run: npm run fixtures:build
 
-      - name: Install browsers for rendered QA
-        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Install Chromium for rendered QA
+        run: npx playwright install --with-deps chromium
 
       - name: Run focused source, export, and client studio checks
         run: npm run quality:studio
