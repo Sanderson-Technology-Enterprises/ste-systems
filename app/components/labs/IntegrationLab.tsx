@@ -99,7 +99,7 @@ function FixtureGroup({
 }) {
   return (
     <details className="integration-disclosure" data-integration-group={group}>
-      <summary>{label}</summary>
+      <summary className="interactive-surface">{label}</summary>
       <div className="integration-grid ly-grid ly-gap-6">
         {fixtures.map((fixture) => (
           <FixtureCard fixture={fixture} key={fixture.id} />

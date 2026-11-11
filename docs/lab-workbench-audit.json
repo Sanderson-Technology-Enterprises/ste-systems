@@ -2,14 +2,18 @@
   "files": [
     "app/components/AdvancedLabExamples.tsx",
     "app/components/AnimatedOverlays.tsx",
+    "app/components/ClientSystems.tsx",
     "app/components/CombinedWorkbench.tsx",
     "app/components/ConfigurationReference.tsx",
     "app/components/CustomThemeEditor.tsx",
+    "app/components/DesignPlanProvider.tsx",
     "app/components/EditorChrome.tsx",
     "app/components/FeatureShowcase.tsx",
     "app/components/HeroActions.tsx",
     "app/components/HomeExperience.tsx",
     "app/components/HomeObservatory.tsx",
+    "app/components/Icons.tsx",
+    "app/components/InstallGuide.tsx",
     "app/components/LabControls.tsx",
     "app/components/LabExperience.tsx",
     "app/components/LabWorkbench.tsx",
@@ -20,35 +24,64 @@
     "app/components/SiteHeader.tsx",
     "app/components/WorkbenchInspector.tsx",
     "app/components/WorkspaceSections.tsx",
+    "app/components/guides/LibraryGuides.tsx",
+    "app/components/guides/ReactProjectExample.tsx",
+    "app/components/labs/IntegrationLab.tsx",
+    "app/components/labs/InteractionLab.tsx",
     "app/components/labs/LayoutExplorer.tsx",
+    "app/components/labs/LayoutLab.tsx",
     "app/components/labs/MotionLab.tsx",
     "app/components/labs/MotionShowcase.tsx",
     "app/components/labs/PrimitiveControls.tsx",
     "app/components/labs/ShowcaseRecipe.tsx",
+    "app/components/labs/UiNativeLab.tsx",
+    "app/components/page.tsx",
+    "app/components/reference/page.tsx",
+    "app/components/studio/LegacyScenarioRenderer.tsx",
+    "app/components/studio/PreviewFrame.tsx",
+    "app/components/studio/ScenarioRenderer.tsx",
+    "app/components/studio/StudioPreviewClient.tsx",
+    "app/components/studio/StudioReferences.tsx",
+    "app/components/studio/WebsiteTemplateGallery.tsx",
+    "app/components/studio/scenarios/BlogTemplate.tsx",
+    "app/components/studio/scenarios/IndustrialTemplate.tsx",
+    "app/components/studio/scenarios/InventoryTemplate.tsx",
+    "app/components/studio/scenarios/MarketingTemplate.tsx",
+    "app/components/studio/scenarios/NewsletterTemplate.tsx",
+    "app/components/studio/scenarios/ScenarioScaffold.tsx",
+    "app/components/studio/scenarios/StorefrontTemplate.tsx",
     "app/components/useConfigurationMotion.ts",
     "app/components/useRecipeFit.ts",
     "app/components/useSurfaceFeedback.ts",
+    "app/data/library-guides.ts",
     "app/data/navigation.ts",
+    "app/data/studio-scenarios.ts",
+    "app/globals.css",
+    "app/health/page.tsx",
     "app/lab/page.tsx",
     "app/layout.tsx",
     "app/lib/configuration.ts",
+    "app/lib/design-plan.ts",
     "app/lib/inspector-state.ts",
     "app/lib/motion-settings.ts",
     "app/lib/playground-options.ts",
     "app/lib/site.ts",
+    "app/lib/website-templates.ts",
     "app/page.tsx",
     "app/styles/atlas.css",
     "app/styles/motion.css",
     "app/styles/observatory.css",
     "app/styles/shell.css",
     "app/styles/spacing.css",
+    "app/styles/studio.css",
+    "app/styles/typography.css",
     "app/styles/workbench.css",
     "scripts/build-fixtures.mjs"
   ],
   "beforeBytes": 29438,
   "renderedReviews": [
     {
-      "id": "app/components/labs/MotionLab.tsx:13995:dynamic-style",
+      "id": "app/components/labs/MotionLab.tsx:14385:dynamic-style",
       "reason": "The resolved browserStyle contains public Interactive Surface intensity tokens and validated active-palette RGB roles only. Native schemes reset inherited shared RGB roles to initial. No local component paint or competing transforms are introduced.",
       "evidence": [
         "app/components/labs/MotionLab.tsx: browserStyle",
@@ -57,52 +90,7 @@
       ]
     },
     {
-      "id": "app/components/LabControls.tsx:4623:local-primitive",
-      "reason": "Existing direct-CSS layout selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
-      "evidence": [
-        "git diff app/components/LabControls.tsx",
-        "tests/browser/configuration-motion.spec.ts",
-        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
-      ]
-    },
-    {
-      "id": "app/components/LabControls.tsx:5235:local-primitive",
-      "reason": "Existing direct-CSS preset selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
-      "evidence": [
-        "git diff app/components/LabControls.tsx",
-        "tests/browser/configuration-motion.spec.ts",
-        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
-      ]
-    },
-    {
-      "id": "app/components/LabControls.tsx:5807:local-primitive",
-      "reason": "Existing direct-CSS palette selector is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
-      "evidence": [
-        "git diff app/components/LabControls.tsx",
-        "tests/browser/configuration-motion.spec.ts",
-        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
-      ]
-    },
-    {
-      "id": "app/components/LabControls.tsx:6494:local-primitive",
-      "reason": "Existing direct-CSS mode radio group is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
-      "evidence": [
-        "git diff app/components/LabControls.tsx",
-        "tests/browser/configuration-motion.spec.ts",
-        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
-      ]
-    },
-    {
-      "id": "app/components/LabControls.tsx:10521:local-primitive",
-      "reason": "Existing read-only manual-copy textarea is preserved with its existing semantic labels and library classes. New recipe, density and motion controls use the public React adapters. This change does not recreate the retained controls.",
-      "evidence": [
-        "git diff app/components/LabControls.tsx",
-        "tests/browser/configuration-motion.spec.ts",
-        "tests/browser/client-playground.spec.ts: main configuration recipes and densities"
-      ]
-    },
-    {
-      "id": "app/components/AnimatedOverlays.tsx:2457:spread-props",
+      "id": "app/components/AnimatedOverlays.tsx:2584:spread-props",
       "reason": "Typed public ModalProps are forwarded to the public Modal. The wrapper owns presence and a dialog ref only; it supplies no paint, positioning or style overrides.",
       "evidence": [
         "app/components/AnimatedOverlays.tsx: AnimatedModal",
@@ -110,7 +98,7 @@
       ]
     },
     {
-      "id": "app/components/AnimatedOverlays.tsx:5213:spread-props",
+      "id": "app/components/AnimatedOverlays.tsx:5340:spread-props",
       "reason": "Typed public Tooltip props remain forwarded; public placement is selected to fit the scrollport. Native anchor event callbacks retain caller handlers. Public Tooltip owns positioning, ARIA and Escape; Motion owns only its content lifecycle.",
       "evidence": [
         "app/components/AnimatedOverlays.tsx: AnimatedTooltip",
@@ -135,21 +123,12 @@
       ]
     },
     {
-      "id": "app/components/LabWorkbench.tsx:18564:dynamic-style",
-      "reason": "previewStyle resolves only validated active-palette RGB roles, native inheritance resets and published Interactive Surface hover tokens. The app does not supply competing lifecycle transforms.",
+      "id": "app/components/WorkbenchInspector.tsx:7458:dynamic-class",
+      "reason": "The editor helper receives site-owned inspector-navigation, inspector-panel-root, and empty class names. Public InterfaceRoot owns paint. The application owns its horizontal navigation composition and resize geometry.",
       "evidence": [
-        "LabWorkbench.tsx: previewStyle",
-        "tests/browser/workbench.spec.ts: actual custom color export, manual and opt-in phases",
-        "tests/browser/site-spacing.spec.ts: all preset paint contexts"
-      ]
-    },
-    {
-      "id": "app/components/WorkbenchInspector.tsx:7481:dynamic-class",
-      "reason": "The editor helper receives only site-owned inspector-rail and inspector-panel-root classes or an empty string. Public InterfaceRoot owns preset paint; the app owns split geometry and the missing resize controller.",
-      "evidence": [
-        "WorkbenchInspector.tsx: editor helper call sites",
-        "Installed Layout Sidebar/Drawer declarations expose geometry and modal semantics but no resize controller",
-        "tests/inspector-state.test.ts and rendered divider regression"
+        "app/components/WorkbenchInspector.tsx: editor call sites",
+        "tests/dev-browser/studio-layout.spec.ts: desktop and phone geometry",
+        "Gnomie Browser Commander: local LAN studio and gallery inspection, 2026-11-10"
       ]
     },
     {
@@ -206,15 +185,347 @@
       ]
     },
     {
-      "id": "app/components/WorkbenchInspector.tsx:2789:imperative-style",
+      "id": "app/components/WorkbenchInspector.tsx:2884:imperative-style",
       "reason": "The only imperative style write sets the app-owned --workbench-header-height on the site-owned experience root, measured from its real header. It does not replace a shared token or motion transform. Cleanup removes the same owned property.",
       "evidence": [
-        "app/components/WorkbenchInspector.tsx: refresh",
-        "tests/browser/workbench-frame.spec.ts: measured frame height and equal outer boundaries"
+        "app/components/WorkbenchInspector.tsx: refresh writes only --workbench-header-height",
+        "tests/dev-browser/studio-layout.spec.ts: desktop preview fits the first screen"
+      ]
+    },
+    {
+      "id": "app/components/Icons.tsx:541:dynamic-class",
+      "reason": "The legacy icon adapter forwards only caller-supplied className to the public Icon component. Icon artwork and theme selection remain package-owned; the site supplies a base-path-safe asset URL.",
+      "evidence": [
+        "app/components/Icons.tsx: DecorativeIcon",
+        "tests/browser/design-studio.spec.ts: published icons render on home and in studio"
+      ]
+    },
+    {
+      "id": "app/components/studio/StudioPreviewClient.tsx:8477:dynamic-style",
+      "reason": "The frame applies validated public RGB palette roles and documented Interactive Surface intensity tokens to its isolated InterfaceRoot. It does not assign component paint or lifecycle transforms.",
+      "evidence": [
+        "app/components/studio/StudioPreviewClient.tsx: style",
+        "app/lib/design-plan.ts: validateVisualDesign",
+        "tests/browser/design-studio.spec.ts: colors, icons, viewport and capture"
+      ]
+    },
+    {
+      "id": "app/components/labs/InteractionLab.tsx:18117:local-primitive",
+      "reason": "The retained state-collision specimen deliberately uses a native button to expose documented ARIA precedence and persistent state hooks. Its only change is opting into interactive-surface; the existing site-action and collision-surface classes and handlers remain intact.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/LayoutLab.tsx:16942:local-primitive",
+      "reason": "The retained Action Bar example demonstrates direct-CSS native markup with the active published preset prefix. Its Save draft button now opts into the shared interaction class without replacing the documented native recipe.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/LayoutLab.tsx:17227:local-primitive",
+      "reason": "The retained Action Bar example demonstrates direct-CSS native markup with the active published preset prefix. Its Publish button now opts into the shared interaction class without replacing the documented native recipe.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:6044:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:7255:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:7572:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:14167:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:14370:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:14623:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:14882:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:15135:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:15385:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:15632:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:15865:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:16121:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:16370:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:16542:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:16827:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:20729:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:21290:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:21776:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:27566:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:28496:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:29325:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:30156:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "app/components/labs/UiNativeLab.tsx:32249:local-primitive",
+      "reason": "This reviewed native CSS-library inventory uses getUiSemanticClass/getUiPrefix and the installed public manifest to demonstrate preset controls, native fields, tooltips and documented helper states. The existing native semantics, prefix classes and actions are preserved; this change adds interactive-surface only. Production template and editor controls use the React components.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
+      ]
+    },
+    {
+      "id": "imports:mixed-stack",
+      "reason": "The additional direct UI Style Kit import is manifest.json in the native CSS inventory. It supplies documented class/token metadata and does not load another stylesheet. app/layout.tsx still imports the React shared stylesheet and Motion stylesheet exactly once.",
+      "evidence": [
+        "docs/client-refinements.md: shared action targets and retained native inventories",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "app/layout.tsx: stylesheet imports",
+        "app/components/labs/UiNativeLab.tsx: public manifest and native control inventory"
       ]
     }
   ],
   "exceptions": [
+    {
+      "id": "print-hide-editor",
+      "file": "app/styles/studio.css",
+      "selector": "body :not(.studio-brief):not(.studio-brief *)",
+      "property": "visibility",
+      "value": "hidden",
+      "important": true,
+      "owner": "application",
+      "reason": "Browser print must contain the client preference brief without editor controls or sample transactions.",
+      "conditions": ["@media print"],
+      "evidence": [
+        "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+      ],
+      "removalCondition": "Remove when a dedicated print document replaces browser printing."
+    },
+    {
+      "id": "print-show-brief",
+      "file": "app/styles/studio.css",
+      "selector": ".studio-brief",
+      "property": "visibility",
+      "value": "visible",
+      "important": true,
+      "owner": "application",
+      "reason": "The frozen client brief must remain visible while editor controls are hidden during browser printing.",
+      "conditions": ["@media print"],
+      "evidence": [
+        "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+      ],
+      "removalCondition": "Remove when a dedicated print document replaces browser printing."
+    },
+    {
+      "id": "print-show-brief-descendants",
+      "file": "app/styles/studio.css",
+      "selector": ".studio-brief *",
+      "property": "visibility",
+      "value": "visible",
+      "important": true,
+      "owner": "application",
+      "reason": "Text, representative preview image and technical appendix must remain visible inside the frozen print brief.",
+      "conditions": ["@media print"],
+      "evidence": [
+        "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+      ],
+      "removalCondition": "Remove when a dedicated print document replaces browser printing."
+    },
     {
       "id": "legacy-guide-badge-alignment",
       "file": "app/styles/atlas.css",
@@ -517,6 +828,614 @@
         "tests/browser/home-presentation.spec.ts"
       ],
       "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+    },
+    {
+      "id": "action-affordance-retained-21",
+      "file": "app/styles/atlas.css",
+      "selector": ".library-guides",
+      "property": "min-inline-size",
+      "value": "0",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-22",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "display",
+      "value": "flex",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-23",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "flex-wrap",
+      "value": "nowrap",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-24",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "gap",
+      "value": "0.5rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-25",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "max-inline-size",
+      "value": "100%",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-26",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "overflow-x",
+      "value": "auto",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-27",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "padding",
+      "value": "0.5rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-28",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "margin-block-end",
+      "value": "2rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-29",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "border",
+      "value": "1px solid rgb(255 255 255/14%)",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-30",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "border-radius",
+      "value": "1rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-31",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "display",
+      "value": "grid",
+      "owner": "ui-style-kit-css",
+      "conditions": ["@media (max-width:60rem)"],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-32",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "grid-template-columns",
+      "value": "repeat(2,minmax(0,1fr))",
+      "owner": "ui-style-kit-css",
+      "conditions": ["@media (max-width:60rem)"],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-33",
+      "file": "app/styles/atlas.css",
+      "selector": ".guide-tabs-list",
+      "property": "overflow",
+      "value": "visible",
+      "owner": "ui-style-kit-css",
+      "conditions": ["@media (max-width:60rem)"],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-34",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "display",
+      "value": "inline-flex",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-35",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "align-items",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-36",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "justify-content",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-37",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "min-block-size",
+      "value": "44px",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-38",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "padding",
+      "value": "0.7rem 1rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-39",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "gap",
+      "value": "0.55rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-40",
+      "file": "app/styles/shell.css",
+      "selector": ".experience:not(.lab-experience) .site-action",
+      "property": "text-align",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-41",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "display",
+      "value": "inline-flex",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-42",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "align-items",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-43",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "justify-content",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-44",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "min-block-size",
+      "value": "44px",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-45",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "padding",
+      "value": "0.7rem 1rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-46",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "gap",
+      "value": "0.55rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-47",
+      "file": "app/styles/shell.css",
+      "selector": ".not-found .site-action",
+      "property": "text-align",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-48",
+      "file": "app/styles/shell.css",
+      "selector": ".navigation-actions .site-action",
+      "property": "min-block-size",
+      "value": "44px",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-49",
+      "file": "app/styles/shell.css",
+      "selector": ".navigation-actions .site-action",
+      "property": "padding-inline",
+      "value": "clamp(0.45rem,0.65vw,0.75rem)",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-50",
+      "file": "app/styles/shell.css",
+      "selector": ".site-navigation[data-presentation=\"disclosure\"] .navigation-actions .site-action",
+      "property": "inline-size",
+      "value": "100%",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-51",
+      "file": "app/styles/shell.css",
+      "selector": ".site-navigation[data-presentation=\"disclosure\"] .navigation-actions .site-action",
+      "property": "padding-inline",
+      "value": "1rem",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-52",
+      "file": "app/styles/shell.css",
+      "selector": ".package-overview-actions>.site-action",
+      "property": "inline-size",
+      "value": "100%",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-53",
+      "file": "app/styles/shell.css",
+      "selector": ".package-overview-actions>.site-action",
+      "property": "white-space",
+      "value": "nowrap",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-54",
+      "file": "app/styles/shell.css",
+      "selector": ".lab-invitation>.site-action",
+      "property": "justify-self",
+      "value": "end",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-55",
+      "file": "app/styles/workbench.css",
+      "selector": ".application-specimen a.site-action",
+      "property": "display",
+      "value": "inline-flex",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-56",
+      "file": "app/styles/workbench.css",
+      "selector": ".application-specimen a.site-action",
+      "property": "align-items",
+      "value": "center",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-57",
+      "file": "app/styles/workbench.css",
+      "selector": ".application-specimen a.site-action",
+      "property": "min-block-size",
+      "value": "44px",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+    },
+    {
+      "id": "action-affordance-retained-58",
+      "file": "app/styles/workbench.css",
+      "selector": ".application-specimen a.site-action",
+      "property": "padding",
+      "value": "8px 12px",
+      "owner": "ui-style-kit-css",
+      "conditions": [],
+      "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+      "evidence": [
+        "docs/client-refinements.md: unchanged guide and navigation composition",
+        "tests/dev-browser/clickable-affordances.spec.ts",
+        "tests/dev-browser/client-tweaks.spec.ts"
+      ],
+      "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
     }
   ]
 }

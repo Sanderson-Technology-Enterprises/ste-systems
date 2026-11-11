@@ -10,19 +10,22 @@
 
 html {
   max-inline-size: 100%;
-  overflow-x: clip;
+  /* Keep an unavoidable whole word reachable instead of clipping it at narrow viewports. */
+  overflow-x: auto;
   scroll-behavior: smooth;
 }
 
 body {
   /* Resolve the site aliases where Next.js supplies its font variables. */
+  --font-geist-sans: "Segoe UI", Arial, sans-serif;
+  --font-geist-mono: "Cascadia Code", Consolas, monospace;
   --font-display: var(--font-geist-sans), "Arial Narrow", sans-serif;
   --font-copy: var(--font-geist-sans), Arial, sans-serif;
   --font-code: var(--font-geist-mono), "Cascadia Code", monospace;
 
   max-inline-size: 100%;
   margin: 0;
-  overflow-x: clip;
+  overflow-x: visible;
   background: rgb(var(--usk-bg-rgb));
   color: rgb(var(--usk-text-rgb));
   font-family: var(--font-copy);

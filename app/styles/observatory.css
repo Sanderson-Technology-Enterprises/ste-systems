@@ -157,7 +157,7 @@
 .observatory-legend strong,
 .observatory-legend small {
   display: block;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .layer-number {
@@ -168,7 +168,7 @@
 }
 
 .observatory-detail code {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 @keyframes orbit {
@@ -346,7 +346,9 @@
 }
 
 .home-observatory-core small {
-  max-inline-size: 10ch;
+  inline-size: max-content;
+  max-inline-size: none;
+  justify-self: center;
   color: var(--home-observatory-muted);
   font-size: 0.6rem;
   line-height: 1.25;
@@ -379,7 +381,7 @@
 
 .home-observatory-detail code {
   color: rgb(var(--usk-text-rgb));
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .home-observatory-detail a {

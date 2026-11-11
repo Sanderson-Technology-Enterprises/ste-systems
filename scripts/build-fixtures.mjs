@@ -27,26 +27,26 @@ const defaultGeneratedRoot = path.join(
 export const EXPECTED_PACKAGE_VERSIONS = Object.freeze({
   "interactive-surface-css": "1.7.3",
   "layout-style-css": "3.2.3",
-  "ui-style-kit-css": "2.7.1",
-  "@sanderson-technology-enterprises/motion-style-css": "1.0.0",
+  "ui-style-kit-css": "2.7.2",
+  "@sanderson-technology-enterprises/motion-style-css": "1.1.0",
 });
 
 export const FIXTURE_ASSETS = Object.freeze({
   "motion-style": Object.freeze({
     export: "@sanderson-technology-enterprises/motion-style-css/styles.css",
-    target: "assets/motion-style-css/1.0.0/motion.css",
+    target: "assets/motion-style-css/1.1.0/motion.css",
   }),
   "motion-controller": Object.freeze({
     export: "@sanderson-technology-enterprises/motion-style-css",
-    target: "assets/motion-style-css/1.0.0/index.js",
+    target: "assets/motion-style-css/1.1.0/index.js",
   }),
   "ui-visual": Object.freeze({
     export: "ui-style-kit-css/visual.css",
-    target: "assets/ui-style-kit-css/2.7.1/ui-style-kit.visual.css",
+    target: "assets/ui-style-kit-css/2.7.2/ui-style-kit.visual.css",
   }),
   "ui-theme": Object.freeze({
     export: "ui-style-kit-css/interactive-surface-theme.css",
-    target: "assets/ui-style-kit-css/2.7.1/interactive-surface-theme.css",
+    target: "assets/ui-style-kit-css/2.7.2/interactive-surface-theme.css",
   }),
   "interaction-core": Object.freeze({
     export: "interactive-surface-css/state-core.css",
@@ -269,16 +269,16 @@ ${stylesheetMarkup}
         <h1 data-fixture-heading>${escapeHtml(fixture.title)}</h1>
         <p>${escapeHtml(fixture.summary)}</p>
       </header>
-      ${hasMotion ? '<button id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
+      ${hasMotion ? '<button class="interactive-surface" id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
       <section class="ly-grid" data-proof-layout aria-label="${escapeHtml(fixture.title)} layout proof">
         <article class="usk-card ly-stack ly-gap-4" data-proof-paint>
           <h2>Shared semantic specimen</h2>
-          <label class="usk-field" for="fixture-field">
+          <label class="interactive-surface usk-field" for="fixture-field">
             <span class="usk-label">Project name</span>
             <!-- Keep the native field's intrinsic width usable when UI-kit geometry is absent. -->
-            <input class="usk-input" id="fixture-field" type="text" size="12" placeholder="Interface system">
+            <input class="interactive-surface usk-input" id="fixture-field" type="text" size="12" placeholder="Interface system">
           </label>
-          <button class="usk-button" type="button" data-ui-variant="primary" data-proof-ui-control>
+          <button class="interactive-surface usk-button" type="button" data-ui-variant="primary" data-proof-ui-control>
             UI-owned control
           </button>
         </article>

@@ -125,7 +125,9 @@ export function CustomThemeEditor({
   const prefix = theme === "native" ? getUiPrefix(preset) : "usk";
   return (
     <details className="ly-stack ly-gap-3" data-custom-theme-editor>
-      <summary>Custom colors & client theme export</summary>
+      <summary className="interactive-surface">
+        Custom colors & client theme export
+      </summary>
       <div className="ly-stack ly-gap-4 ly-pad-4">
         <p>
           Edit the active palette, apply it to the preview, then copy its
@@ -133,6 +135,7 @@ export function CustomThemeEditor({
           session.
         </p>
         <Form.Input
+          className="interactive-surface"
           label="Custom theme name"
           value={name}
           onChange={(event) => setName(event.target.value)}
@@ -147,6 +150,7 @@ export function CustomThemeEditor({
             return (
               <div key={token} className="ly-stack ly-gap-2">
                 <Form.Input
+                  className="interactive-surface"
                   label={`${label} color`}
                   type="color"
                   value={valid ? value : "#000000"}
@@ -158,6 +162,7 @@ export function CustomThemeEditor({
                   }
                 />
                 <Form.Input
+                  className="interactive-surface"
                   label={`${label} hex`}
                   value={value}
                   maxLength={7}
@@ -209,6 +214,7 @@ export function CustomThemeEditor({
           <span key={notice.revision}>{notice.text}</span>
         </p>
         <Form.TextArea
+          className="interactive-surface"
           label="Custom theme variables"
           value={
             exported?.[format] ?? "Enter valid colors to create an export."

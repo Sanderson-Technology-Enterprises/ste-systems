@@ -1,5 +1,21 @@
 # STE Systems
 
+## Client design studio
+
+The design studio at `/lab/` is a static, account-free planning tool. Clients can try business, storefront, booking, and portal samples; choose a visual style, palette, page arrangement, icon treatment, and motion; save independent options A and B; and download a versioned `.ste-design.json` file. The project brief and notes stay in that file. A compressed visual link carries rendering choices only, within an 8 KiB URL limit. Local autosave and Undo support work in progress; the studio does not send sample transactions or approve a design.
+
+Open **Review and save** to print a design preference brief or browser PDF, download a representative PNG, and export technical JSON, theme CSS, or starter markup. Preview artwork comes from the installed `ui-style-kit-icons@2.0.0` package; `npm run assets:build` copies it to generated public assets for root and subpath hosting.
+
+The complete studio runtime is pinned to:
+
+```sh
+npm install @sanderson-technology-enterprises/ste-usk-react@2.4.0 @sanderson-technology-enterprises/motion-style-css@1.1.0 ui-style-kit-css@2.7.2 ui-style-kit-icons@2.0.0 layout-style-css@3.2.3 interactive-surface-css@1.7.3 next@16.4.6 react@19.3.1 react-dom@19.3.1 modern-screenshot@4.7.0
+```
+
+Run `npm run docs:generate` after changing the studio's JSDoc contracts and `npm run docs:check` to detect generated API drift. The source of truth is the TypeScript code, not the generated Markdown in `docs/api/studio/`.
+
+Run `npm run quality:studio` for the focused local client-studio gate. The existing `npm run quality` command remains available for the broader legacy regression suite.
+
 [STE Systems](https://stesystems.com/) is the accessible four-library design system from Sanderson Technology Enterprises LLC. It demonstrates how structure, visual identity, interaction, and lifecycle motion can share one semantic HTML contract.
 
 - Product owner: [Sanderson Technology Enterprises LLC](https://sandersontechnologyenterprises.com/)
@@ -13,9 +29,9 @@
 | Layer     | Package                                                    | Repository                                                                         | Wiki                                                                                                              | npm                                                                                     | Demo                                                           |
 | --------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | Structure | `layout-style-css@3.2.3`                                   | [Repository](https://github.com/Foscat/Layout-Style-CSS)                           | [Wiki](https://github.com/Foscat/Layout-Style-CSS/wiki)                                                           | [npm](https://www.npmjs.com/package/layout-style-css)                                   | [Live demo](https://foscat.github.io/Layout-Style-CSS/)        |
-| Identity  | `ui-style-kit-css@2.7.1`                                   | [Repository](https://github.com/Foscat/ui-style-kit-css)                           | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)                                                           | [npm](https://www.npmjs.com/package/ui-style-kit-css)                                   | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
+| Identity  | `ui-style-kit-css@2.7.2`                                   | [Repository](https://github.com/Foscat/ui-style-kit-css)                           | [Wiki](https://github.com/Foscat/ui-style-kit-css/wiki)                                                           | [npm](https://www.npmjs.com/package/ui-style-kit-css)                                   | [Live demo](https://foscat.github.io/ui-style-kit-css/)        |
 | Behavior  | `interactive-surface-css@1.7.3`                            | [Repository](https://github.com/Foscat/Interactive-Surface-CSS)                    | [Wiki](https://github.com/Foscat/Interactive-Surface-CSS/wiki)                                                    | [npm](https://www.npmjs.com/package/interactive-surface-css)                            | [Live demo](https://foscat.github.io/Interactive-Surface-CSS/) |
-| Motion    | `@sanderson-technology-enterprises/motion-style-css@1.0.0` | [Repository](https://github.com/Sanderson-Technology-Enterprises/motion-style-css) | [Integration](https://github.com/Sanderson-Technology-Enterprises/motion-style-css/blob/main/docs/INTEGRATION.md) | [npm](https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css) | [Live Lab](https://stesystems.com/lab/#motion)                 |
+| Motion    | `@sanderson-technology-enterprises/motion-style-css@1.1.0` | [Repository](https://github.com/Sanderson-Technology-Enterprises/motion-style-css) | [Integration](https://github.com/Sanderson-Technology-Enterprises/motion-style-css/blob/main/docs/INTEGRATION.md) | [npm](https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css) | [Live Lab](https://stesystems.com/lab/#motion)                 |
 
 ## Adoption matrix
 
@@ -48,8 +64,17 @@ npm start
 The production start command serves the static `out/` export at
 `http://127.0.0.1:3000/`. Build first; Next.js server mode is incompatible with
 this project's `output: "export"` configuration. Use `npm run dev` for development
-with live updates. The existing `preview:prepare` and `preview:serve` commands
-remain the separate GitHub Pages preview workflow after `npm run build:pages`.
+with live updates.
+
+Production is hosted on Render. The obsolete GitHub Pages deployment workflow
+and its PR verification check have been removed. The existing `build:pages`,
+`preview:prepare`, and `preview:serve` commands remain optional local subpath
+compatibility tools; they do not publish or deploy the application.
+
+CodeQL uses GitHub's default setup to scan JavaScript and TypeScript. Its language
+selection must match the tracked source: GitHub Actions analysis is excluded while
+this repository has no workflows. If workflows are introduced, enable Actions
+analysis alongside them. Verify all checks on the current PR head before merging.
 
 Override the production port with `PORT` or `npm start -- --port 4173`.
 To listen on another interface, use `npm start -- --hostname 0.0.0.0`.
@@ -70,7 +95,7 @@ updates.
 Install the exact aligned foundational releases:
 
 ```bash
-npm install ui-style-kit-css@2.7.1 layout-style-css@3.2.3 interactive-surface-css@1.7.3
+npm install ui-style-kit-css@2.7.2 layout-style-css@3.2.3 interactive-surface-css@1.7.3
 ```
 
 Then load the package entry points in ownership order. UI Style Kit establishes
@@ -88,7 +113,7 @@ import "interactive-surface-css/state-core.css";
 import "layout-style-css";
 ```
 
-UI Style Kit 2.7.1 exposes 20 visual systems and 25 themes through stable
+UI Style Kit 2.7.2 exposes 20 visual systems and 25 themes through stable
 semantic classes such as `.usk-card`,
 `.usk-field`, `.usk-input`, and `.usk-button`. The earlier `.ui-*` component
 classes remain compatibility aliases. Set `data-ui-variant` on semantic
@@ -122,11 +147,11 @@ For static HTML consumers, keep this exact order in the document head:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1/dist/ui-style-kit.visual.min.css"
+  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.2/dist/ui-style-kit.visual.min.css"
 />
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1/styles/interactive-surface-theme.css"
+  href="https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.2/styles/interactive-surface-theme.css"
 />
 <link
   rel="stylesheet"
@@ -172,7 +197,7 @@ npm run quality
 ```
 
 `quality` includes formatting, linting, type checks, unit/source contracts, deterministic
-fixture safety and byte-parity checks, the GitHub Pages export build, export
+fixture safety and byte-parity checks, a subpath compatibility export build, export
 verification, exhaustive Chromium desktop/mobile QA, and representative Firefox
 and WebKit coverage.
 
@@ -258,7 +283,7 @@ See [the three-site roadmap implementation record](docs/website-roadmap-2026-10-
 
 ## Motion Style CSS
 
-Motion Style CSS is the newest addition to the STE web development system. The fourth CSS layer supplies ten paired presets and choreography on dedicated shells. Try `/lab/#motion`, read `/components/#atlas-motion`, or use the static reference at `/components/reference/#atlas-motion`. Motion presets are separate from the manifest-derived design-configuration count.
+Motion Style CSS is the newest addition to the STE web development system. The fourth CSS layer supplies 17 paired presets and choreography on dedicated shells. Try `/lab/#motion`, read `/components/#atlas-motion`, or use the static reference at `/components/reference/#atlas-motion`. Motion presets are separate from the manifest-derived design-configuration count.
 
 The Motion Lab and embedded guide share a pseudo-browser with six working
 specimen panels: actions, forms, progress, activity data, feedback, and review.
@@ -293,12 +318,12 @@ preferences take priority. Main Lab recipes and densities are also included in
 shareable configuration URLs. See [the motion showcase implementation record](docs/motion-showcase.md)
 for ownership, timing ranges, and focused verification.
 
-The optional STE USK React 2.3.0 `/motion` adapter retains exiting children and cancels superseded effects. The root React stylesheet and motion stylesheet are each imported once in the application layout.
+The optional STE USK React 2.4.0 `/motion` adapter retains exiting children and cancels superseded effects. The root React stylesheet and motion stylesheet are each imported once in the application layout.
 
 Install the optional React motion integration and its four aligned CSS peers:
 
 ```bash
-npm install @sanderson-technology-enterprises/ste-usk-react@2.3.0 @sanderson-technology-enterprises/motion-style-css@1.0.0 ui-style-kit-css@2.7.1 layout-style-css@3.2.3 interactive-surface-css@1.7.3
+npm install @sanderson-technology-enterprises/ste-usk-react@2.4.0 @sanderson-technology-enterprises/motion-style-css@1.1.0 ui-style-kit-css@2.7.2 layout-style-css@3.2.3 interactive-surface-css@1.7.3
 ```
 
 ```tsx

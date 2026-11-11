@@ -10,6 +10,7 @@ test-results/
 .playwright-cli/
 output/
 /public/fixtures/generated/
+/public/vendor/ui-style-kit-icons/
 .superpowers/
 *.tsbuildinfo
 .env*

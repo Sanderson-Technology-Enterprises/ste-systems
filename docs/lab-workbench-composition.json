@@ -13,11 +13,11 @@
     },
     {
       "name": "ui-style-kit-css",
-      "version": "2.7.1",
+      "version": "2.7.2",
       "state": "Available",
       "evidence": [
         "node_modules/ui-style-kit-css/package.json",
-        "sha256:f48904398140e56807175cff2bbd640807308c10d36789063a3571a7ae1b6b92"
+        "sha256:fb3e5ec12f572dd58c24a2ed7ae055cc056bddfda9d2ca276b7f1d762b3f354f"
       ]
     },
     {
@@ -31,20 +31,29 @@
     },
     {
       "name": "@sanderson-technology-enterprises/motion-style-css",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "state": "Available",
       "evidence": [
         "node_modules/@sanderson-technology-enterprises/motion-style-css/package.json",
-        "sha256:4b4f61a751cd0f2dd129bfeb9745e777adf0295f8919ed97d090308235eca54a"
+        "sha256:99c8623946326a556ce37e2e53cf70c3881768c65f206ff55302a8953a57af9b"
       ]
     },
     {
       "name": "@sanderson-technology-enterprises/ste-usk-react",
-      "version": "2.3.0",
+      "version": "2.4.0",
       "state": "Available",
       "evidence": [
         "node_modules/@sanderson-technology-enterprises/ste-usk-react/package.json",
-        "sha256:632b6d8f12a5b938ae527010fe765646777c6677ca0b37db577afe4abc9e4ca9"
+        "sha256:4e1553bf98ff6caada88b34ebaea4927a69915737eb1984d0a1c640c61cf5f49"
+      ]
+    },
+    {
+      "name": "ui-style-kit-icons",
+      "version": "2.0.0",
+      "state": "Available",
+      "evidence": [
+        "node_modules/ui-style-kit-icons/package.json",
+        "sha256:ed6b9fc2c191b7618fee0f98c07b0c4c3e453a53eaa074508ed0e9bb111d5593"
       ]
     }
   ],
@@ -70,6 +79,18 @@
         "tests/browser/workbench-geometry.spec.ts"
       ],
       "check": "All seven recipes and twenty personalities passed wide/constrained geometry. 240/320/maximum inspector widths preserve aligned boundaries and final content access. Page-flow/Drawer and scroll/sample persistence passed focused checks."
+    },
+    {
+      "need": "Six distinct client website starters and an early template chooser",
+      "hook": "Canonical scenario catalog; public Layout.Grid, Sidebar, Recipe, Wrapper, Header/Footer; isolated actual-template thumbnails and exact device viewports",
+      "evidence": [
+        "app/data/studio-scenarios.ts",
+        "app/components/studio/WebsiteTemplateGallery.tsx",
+        "app/components/studio/scenarios/ScenarioScaffold.tsx",
+        "tests/dev-browser/template-entry.spec.ts",
+        "tests/dev-browser/template-handoff.spec.ts"
+      ],
+      "check": "Homepage, compact phone rows, replacement chooser, resume, undo, and all six types at desktop/tablet/phone viewports passed focused local checks."
     }
   ],
   "components": [
@@ -82,6 +103,16 @@
         "app/components/CustomThemeEditor.tsx"
       ],
       "check": "Specimen controls, modal phases, custom RGB export, clipboard denial fallback and content-sized stage geometry passed focused browser cases."
+    },
+    {
+      "need": "Six distinct client website starters and an early template chooser",
+      "hook": "STE React 2.4.0 Card with interactive opt-in, Table, Metric, Meter, Form, Tabs, Modal, themed Icon and Layout; existing Drawer retained",
+      "evidence": [
+        "app/components/studio/scenarios/",
+        "tests/dev-browser/website-flows.spec.ts",
+        "tests/browser/motion.spec.ts"
+      ],
+      "check": "Six local sample flows, validation/empty states, honest feedback, three distinct computed elevation shadows, 17 presets, cancellation and reduced motion passed."
     }
   ],
   "elevation": [
@@ -133,9 +164,54 @@
   },
   "localCss": {
     "beforeBytes": 29438,
-    "afterBytes": 42677,
+    "afterBytes": 55616,
     "unapproved": 0,
     "exceptions": [
+      {
+        "id": "print-hide-editor",
+        "file": "app/styles/studio.css",
+        "selector": "body :not(.studio-brief):not(.studio-brief *)",
+        "property": "visibility",
+        "value": "hidden",
+        "important": true,
+        "owner": "application",
+        "reason": "Browser print must contain the client preference brief without editor controls or sample transactions.",
+        "conditions": ["@media print"],
+        "evidence": [
+          "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+        ],
+        "removalCondition": "Remove when a dedicated print document replaces browser printing."
+      },
+      {
+        "id": "print-show-brief",
+        "file": "app/styles/studio.css",
+        "selector": ".studio-brief",
+        "property": "visibility",
+        "value": "visible",
+        "important": true,
+        "owner": "application",
+        "reason": "The frozen client brief must remain visible while editor controls are hidden during browser printing.",
+        "conditions": ["@media print"],
+        "evidence": [
+          "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+        ],
+        "removalCondition": "Remove when a dedicated print document replaces browser printing."
+      },
+      {
+        "id": "print-show-brief-descendants",
+        "file": "app/styles/studio.css",
+        "selector": ".studio-brief *",
+        "property": "visibility",
+        "value": "visible",
+        "important": true,
+        "owner": "application",
+        "reason": "Text, representative preview image and technical appendix must remain visible inside the frozen print brief.",
+        "conditions": ["@media print"],
+        "evidence": [
+          "tests/browser/design-studio.spec.ts: preview capture and printable brief refer to one revision"
+        ],
+        "removalCondition": "Remove when a dedicated print document replaces browser printing."
+      },
       {
         "id": "legacy-guide-badge-alignment",
         "file": "app/styles/atlas.css",
@@ -438,6 +514,614 @@
           "tests/browser/home-presentation.spec.ts"
         ],
         "removalCondition": "Remove when a separately scoped migration replaces the legacy illustration effects with public motion controllers."
+      },
+      {
+        "id": "action-affordance-retained-21",
+        "file": "app/styles/atlas.css",
+        "selector": ".library-guides",
+        "property": "min-inline-size",
+        "value": "0",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-22",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "display",
+        "value": "flex",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-23",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "flex-wrap",
+        "value": "nowrap",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-24",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "gap",
+        "value": "0.5rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-25",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "max-inline-size",
+        "value": "100%",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-26",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "overflow-x",
+        "value": "auto",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-27",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "padding",
+        "value": "0.5rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-28",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "margin-block-end",
+        "value": "2rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-29",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "border",
+        "value": "1px solid rgb(255 255 255/14%)",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-30",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "border-radius",
+        "value": "1rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-31",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "display",
+        "value": "grid",
+        "owner": "ui-style-kit-css",
+        "conditions": ["@media (max-width:60rem)"],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-32",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "grid-template-columns",
+        "value": "repeat(2,minmax(0,1fr))",
+        "owner": "ui-style-kit-css",
+        "conditions": ["@media (max-width:60rem)"],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-33",
+        "file": "app/styles/atlas.css",
+        "selector": ".guide-tabs-list",
+        "property": "overflow",
+        "value": "visible",
+        "owner": "ui-style-kit-css",
+        "conditions": ["@media (max-width:60rem)"],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-34",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "display",
+        "value": "inline-flex",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-35",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "align-items",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-36",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "justify-content",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-37",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "min-block-size",
+        "value": "44px",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-38",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "padding",
+        "value": "0.7rem 1rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-39",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "gap",
+        "value": "0.55rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-40",
+        "file": "app/styles/shell.css",
+        "selector": ".experience:not(.lab-experience) .site-action",
+        "property": "text-align",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-41",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "display",
+        "value": "inline-flex",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-42",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "align-items",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-43",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "justify-content",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-44",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "min-block-size",
+        "value": "44px",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-45",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "padding",
+        "value": "0.7rem 1rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-46",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "gap",
+        "value": "0.55rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-47",
+        "file": "app/styles/shell.css",
+        "selector": ".not-found .site-action",
+        "property": "text-align",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-48",
+        "file": "app/styles/shell.css",
+        "selector": ".navigation-actions .site-action",
+        "property": "min-block-size",
+        "value": "44px",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-49",
+        "file": "app/styles/shell.css",
+        "selector": ".navigation-actions .site-action",
+        "property": "padding-inline",
+        "value": "clamp(0.45rem,0.65vw,0.75rem)",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-50",
+        "file": "app/styles/shell.css",
+        "selector": ".site-navigation[data-presentation=\"disclosure\"] .navigation-actions .site-action",
+        "property": "inline-size",
+        "value": "100%",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-51",
+        "file": "app/styles/shell.css",
+        "selector": ".site-navigation[data-presentation=\"disclosure\"] .navigation-actions .site-action",
+        "property": "padding-inline",
+        "value": "1rem",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-52",
+        "file": "app/styles/shell.css",
+        "selector": ".package-overview-actions>.site-action",
+        "property": "inline-size",
+        "value": "100%",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-53",
+        "file": "app/styles/shell.css",
+        "selector": ".package-overview-actions>.site-action",
+        "property": "white-space",
+        "value": "nowrap",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-54",
+        "file": "app/styles/shell.css",
+        "selector": ".lab-invitation>.site-action",
+        "property": "justify-self",
+        "value": "end",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-55",
+        "file": "app/styles/workbench.css",
+        "selector": ".application-specimen a.site-action",
+        "property": "display",
+        "value": "inline-flex",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-56",
+        "file": "app/styles/workbench.css",
+        "selector": ".application-specimen a.site-action",
+        "property": "align-items",
+        "value": "center",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-57",
+        "file": "app/styles/workbench.css",
+        "selector": ".application-specimen a.site-action",
+        "property": "min-block-size",
+        "value": "44px",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
+      },
+      {
+        "id": "action-affordance-retained-58",
+        "file": "app/styles/workbench.css",
+        "selector": ".application-specimen a.site-action",
+        "property": "padding",
+        "value": "8px 12px",
+        "owner": "ui-style-kit-css",
+        "conditions": [],
+        "reason": "This pre-existing application composition is unchanged by the action-class adoption. The wider audit now sees its class on public React elements. Preserve its reviewed guide/navigation geometry and existing wrapper paint while enabling shared pointer, hover and focus feedback.",
+        "evidence": [
+          "docs/client-refinements.md: unchanged guide and navigation composition",
+          "tests/dev-browser/clickable-affordances.spec.ts",
+          "tests/dev-browser/client-tweaks.spec.ts"
+        ],
+        "removalCondition": "Remove when a separately scoped migration replaces this retained application composition with equivalent public layout or token hooks."
       }
     ]
   },
@@ -626,6 +1310,73 @@
         "2026-11-04 23:55-23:58UTC: Gnomie native Chrome263858 verified cold Layout bookmark, readable application reflow, expanded divider, snap collapse, outward drag reopen, readable UI-only proof buttons, and light homepage logo/count. Screenshots retained in task transcript; .tmp/pr-gnomie-activity.jsonl.",
         "Local lint/typecheck and focused fixture determinism/source-contract checks passed; remote CI remains a separate pushed-SHA gate."
       ]
+    },
+    {
+      "requirement": "Client design studio revamp: local acceptance on 2026-11-10",
+      "status": "verified",
+      "evidence": [
+        "Pinned Next.js 16.4.6, React 19.3.1, STE React 2.4.0, four CSS owners, and icons 2.0.0; exact installed package hashes appear above.",
+        "Focused DesignPlan, compressed visual-link, contrast, package-contract, and fixture checks passed. Portable reload/import, invalid-file recovery, A/B isolation, four sample flows, device sizing, mobile focus, full-screen Escape, and frozen brief capture passed in local Chrome.",
+        "All 17 effects completed in the isolated frame; three rendered surface shadows were distinct; reduced-motion and cancellation checks passed. The component guide modal and homepage/editor package icons rendered in local Chrome.",
+        "npm run format:check, lint, typecheck, docs:check, build, build:pages, verify:export, and the single dev hydration test passed. Both STE ownership audits passed with zero unresolved or stale reviews.",
+        "The published Gnomie Browser Commander profile was locked. Browser proof used Playwright with installed local Chrome; remote CI, publication, and deployment are not represented by these local checks."
+      ]
+    },
+    {
+      "requirement": "Client studio repair: rendered local acceptance on 2026-11-10",
+      "status": "verified",
+      "evidence": [
+        "docs/studio-repair-2026-11-10.md: reproduced causes, corrections, and verification limits",
+        "tests/dev-browser/local-development.spec.ts: default-server loopback hydration, insecure-origin UUID fallback, preview download, and clipboard recovery",
+        "tests/dev-browser/studio-layout.spec.ts: desktop/phone geometry, hero composition, modal gallery and icon, independent comparison view, exact device viewports, and cold legacy bookmarks",
+        "Gnomie Browser Commander inspected the actual LAN development URL, desktop/phone previews, comparison, and rendered gallery; local Chrome verified root and Pages asset paths",
+        "Focused production journeys passed: reload/import, all four sample scenarios, A/B independence, frozen printable brief, fullscreen focus, 17 effects, distinct elevation, reduced motion, and cancellation",
+        "Root and Pages builds, export structure/assets, fixture determinism, lint, type checking, generated documentation, and ownership audit passed locally; no entire test suite was launched",
+        ".qa/repair-2026-11-10 retains local screenshots, browser PDF, and audit output; no remote CI, push, publication, or deployment is represented"
+      ]
+    },
+    {
+      "requirement": "Website template entry journey: local acceptance on 2026-11-10",
+      "status": "verified",
+      "evidence": [
+        "docs/website-templates.md: contracts, sample boundaries, migrations and local verification",
+        "tests/website-templates.test.ts: six catalogs, pure selection, renderer 1 migration, all six file/link round trips",
+        "tests/dev-browser/template-entry.spec.ts: consumed intent, deferred autosave, homepage chooser, preserved styling and undo",
+        "tests/dev-browser/template-indicator.spec.ts: development indicator removal, hydration and delayed-listener recovery",
+        "tests/dev-browser/template-handoff.spec.ts: independent comparison, file/link opening, frozen printable brief and phone focus",
+        "tests/dev-browser/website-flows.spec.ts: six normal, empty, validation and demonstration feedback journeys",
+        "Root and Pages builds plus local Chrome asset checks for all six templates, thumbnails and 18 device viewports; no failed requests",
+        "Gnomie Browser Commander inspected desktop homepage, studio, industrial/inventory views and compact phone chooser; final navigation had no console errors or warnings",
+        "Formatting, lint, types, generated-doc drift, fixture determinism, export resources and ownership audit passed locally. No full suite was launched.",
+        "Local evidence in .qa/website-templates; no remote CI, publication, push or deployment represented"
+      ]
+    },
+    {
+      "requirement": "Client refinements: whole words, action icons, appearance controls and shared clickable surfaces",
+      "status": "verified",
+      "evidence": [
+        "docs/client-refinements.md: causes, ownership, native inventories and local checks",
+        "tests/dev-browser/client-tweaks.spec.ts: whole-word brand/diagram at 280-1440px, editor/preview icon dimensions, persisted icon control placement, scoped reset and reachable long text",
+        "tests/dev-browser/clickable-affordances.spec.ts: home/studio/interactive guides/static reference surfaces, pointer/hover/focus, keyboard disclosure and cold bookmark hydration",
+        "tests/fixtures.test.mjs: focused shared action-class assertion passed on all generated fixtures",
+        "Installed Icon --usk-icon-size hook and public className props used; existing React and Motion stylesheet imports retained once",
+        "Gnomie Browser Commander inspected actual local labels, 24px icons beside 16px labels, and native guide disclosures; fresh final guide navigation had zero console errors/warnings",
+        "Formatting, lint, type checking, generated JSDoc drift, 77-file ownership review and GitHub Pages build/resource checks passed locally",
+        "Final static preview loaded all six templates and thumbnails, themed icons, and all 18 device viewport combinations without failed assets or overflow",
+        "No full suite, remote CI, commit, publication or deployment represented"
+      ]
+    },
+    {
+      "requirement": "PR 23 focused pre-commit integration gate",
+      "status": "verified",
+      "evidence": [
+        "52 focused source/contract checks and six fixture checks passed serially",
+        "33 development browser checks passed with unaffected green results retained and the three corrected geometry checks rerun individually",
+        "17 selected production-export browser journeys passed; the retired rail icon selector was corrected and rerun individually",
+        "Formatting, lint, types, granular jsdoc2md drift, ownership review, composition-record validation, Pages build and export resource checks passed locally",
+        "Template success feedback preserves the first-screen preview; compact mobile actions preserve accessible names; footer identifiers scroll locally without letter wrapping",
+        "Remote CI and source publication are recorded by the current PR head; this proof covers local checks only. No full legacy suite was run."
+      ]
     }
   ],
   "configurationInventory": {
@@ -647,17 +1398,21 @@
   "ownershipAudit": {
     "configuration": "docs/lab-workbench-audit.json",
     "passed": true,
-    "files": 44,
+    "files": 77,
     "unresolved": 0,
-    "reviewed": 19,
+    "reviewed": 42,
     "sourceHashes": [
       {
         "path": "app/components/AdvancedLabExamples.tsx",
-        "sha256": "cf86d3ec847bdc003e5760137249fec71a379eb5c98bcd366f2a2cd94fd50e4a"
+        "sha256": "bbf960612384cb7cd98d19aa811abc7a7f8d6ef95ad5efe9e71984a3f0d0bfe5"
       },
       {
         "path": "app/components/AnimatedOverlays.tsx",
-        "sha256": "94c73592b0482bace752fc2edb2f4225ea993f81f2e492fcb5b3b27bc2f3f806"
+        "sha256": "8f1f03933e0d962eb5d386837916317cf95730cbdaeb1c79e265c27c08101120"
+      },
+      {
+        "path": "app/components/ClientSystems.tsx",
+        "sha256": "7f6a5c90f6f59ca9023f246828458a0fb6ec5358e3f5bc5766123704716cef71"
       },
       {
         "path": "app/components/CombinedWorkbench.tsx",
@@ -665,11 +1420,15 @@
       },
       {
         "path": "app/components/ConfigurationReference.tsx",
-        "sha256": "aeb75d449d275a066ea0456f08e94d5970980f26dcc39c5ace0cbc3196545de6"
+        "sha256": "3d52a25513926f9bb1ac3637ba4cf68bf1bd880bef770607c65fa3db39d668cb"
       },
       {
         "path": "app/components/CustomThemeEditor.tsx",
-        "sha256": "7a37d0852dc9ca3c93411a013b9fc9ebabfea143738f373651e21cd43c8491f7"
+        "sha256": "090363e8f144fafc54e7a84cb307c07ef915b663b7b836b5e29e2651181b2941"
+      },
+      {
+        "path": "app/components/DesignPlanProvider.tsx",
+        "sha256": "b5e0eabf021ad6c16bab8a34feffbc07f1e745e3bc8ea4aab1d2f6d59a5481b7"
       },
       {
         "path": "app/components/EditorChrome.tsx",
@@ -681,35 +1440,43 @@
       },
       {
         "path": "app/components/HeroActions.tsx",
-        "sha256": "b93af503fc9e18e3f1161bd695102b205a380af050c2f7ae04786d56d1d0f414"
+        "sha256": "eb8229280cf2a329f90a0d45820c7ece2d7bbb9d4cd033b2a7c7ff84222ba5a3"
       },
       {
         "path": "app/components/HomeExperience.tsx",
-        "sha256": "0dd402f782af96149b16e1773e7f432b7b5a751ea4c2979916387c720f950e52"
+        "sha256": "6ae1bd67dc98d28902199749fa1129c22182a93fd046a6f396bd85a07fa8ca55"
       },
       {
         "path": "app/components/HomeObservatory.tsx",
-        "sha256": "b9120e641a86876120787d12ee7a4d7c3b2041518cd6e5c322c0f4f3f0d3a0e1"
+        "sha256": "2f35a32a0d00d858ee7e75cf020928aae0a1e7f402b17d6b77e978cec5c56ba7"
+      },
+      {
+        "path": "app/components/Icons.tsx",
+        "sha256": "f00f445940353018498120022230f83cda40188530610efce7150d37ff201396"
+      },
+      {
+        "path": "app/components/InstallGuide.tsx",
+        "sha256": "1a63f80a2d913051f7de1836482de119d0cb9311bd93412f4bb2542010db7fd2"
       },
       {
         "path": "app/components/LabControls.tsx",
-        "sha256": "1e2b2f87c42cf08c8b4ac5a10cec5a064c2211201c6dd18c648d63a5c3b7a389"
+        "sha256": "f8123e62920f67dba5f855c68925b5037678b3f4a6f4578c9311e6705eb967b2"
       },
       {
         "path": "app/components/LabExperience.tsx",
-        "sha256": "dee89dd941c21e6039d5ac9556ca48e50dc36fcbfc7c20fb46cb9348b08104da"
+        "sha256": "7b640291b0b604d8b78c671ab4fbbcebcdda3047cddb174f1b5040937c7bb34a"
       },
       {
         "path": "app/components/LabWorkbench.tsx",
-        "sha256": "812750a9ea4abb061efac074488d87a8920f73980f9858a8ebc81d4cd362afa4"
+        "sha256": "5e299405617e8797b3c00dc655b64683f09c34f54207159464183121cdf98781"
       },
       {
         "path": "app/components/MotionPreferences.tsx",
-        "sha256": "ccb5b5ff003e5127a7178ae7f44d2f02dcd617851d6cd41e5bcc7120135a7919"
+        "sha256": "cee62d6879d1c95338f0684a77705be85af692323d4fb9ccb9e7328e7992ed53"
       },
       {
         "path": "app/components/MotionSettings.tsx",
-        "sha256": "b0b38284257a5ec195ebc704c28a3f358130eb423af48fa329374c9627464353"
+        "sha256": "ab642e99e3d11ae9a3800b6e33a1e345a6f0caaf64bd3d56d80dc929d3a92f86"
       },
       {
         "path": "app/components/ResponsiveNavigation.tsx",
@@ -717,39 +1484,123 @@
       },
       {
         "path": "app/components/SiteFooter.tsx",
-        "sha256": "469fe60f1f26435c21a3c23b2d5c032c15a9cb1793737b7ffeca6c2c66a4cc2c"
+        "sha256": "6309150e0237b5bd80b3462565dc6fcecdcce8a1913e6972dd38b93210c9f031"
       },
       {
         "path": "app/components/SiteHeader.tsx",
-        "sha256": "b633f86551866962f5e58a2bbd717f22d87f14ef41d33c676364ac15c5e6c199"
+        "sha256": "fdb333fac4bb2be240159e9bd1aaab687534d3e4aba44cc40dec6d866fc6ad7f"
       },
       {
         "path": "app/components/WorkbenchInspector.tsx",
-        "sha256": "ed99a4e275be9b205dc1e951a131d0a586c707295105e39eb90957f8f0e69952"
+        "sha256": "5f665d1ef5cc3feff1c84203d17e358cf162fe2dac627f72c0bd9f9e77b50c85"
       },
       {
         "path": "app/components/WorkspaceSections.tsx",
         "sha256": "196f7970e29b37105e026ac61e90f1b44d5f5d5689898e62d5cc9222644a80f9"
       },
       {
+        "path": "app/components/guides/LibraryGuides.tsx",
+        "sha256": "b016bdaf965fca3199c157159bd6217aedd6a4df93a3693bc36b1e2a6a9e8f86"
+      },
+      {
+        "path": "app/components/guides/ReactProjectExample.tsx",
+        "sha256": "b5b9634a51e129086bde24ba22d96b3562e7d85afc53243d54d8b1ddc302732f"
+      },
+      {
+        "path": "app/components/labs/IntegrationLab.tsx",
+        "sha256": "566849fc3bf532470cb9964418e3ae0ee6067402e436db807de35fdc1da15fc7"
+      },
+      {
+        "path": "app/components/labs/InteractionLab.tsx",
+        "sha256": "f523d266df9f5d685523fbde39e29873ff54c7c6162dfba71110aa1e24bcebd6"
+      },
+      {
         "path": "app/components/labs/LayoutExplorer.tsx",
-        "sha256": "fd09875e304514aa193c67644c2af5809f3decf39e27fc71a47a717ce0d4e74c"
+        "sha256": "8275bd0461dc3952430d9075a1e24cad52f9d3c3ae379820a8930d6d05eb8b52"
+      },
+      {
+        "path": "app/components/labs/LayoutLab.tsx",
+        "sha256": "393738f95bb071d05f6431b68b74b9045ab9e23636611d1030556dd109e20ed0"
       },
       {
         "path": "app/components/labs/MotionLab.tsx",
-        "sha256": "c584b28aa030629c3a4f377a174bc476686c9c689d2d736e28f09846d69eb86e"
+        "sha256": "fe52a5370d0deaa411fd887b103c41f0a474269b59f4df5ef2506fbdb942bc27"
       },
       {
         "path": "app/components/labs/MotionShowcase.tsx",
-        "sha256": "afbd1447f79dadbadb5b6a2d20590aeb81b851c06fd4ed8027f6be50a7736b1c"
+        "sha256": "dcd322a4423388b96c54f2eed853b192af2da12d11eb4fc0d0235d9770ac679a"
       },
       {
         "path": "app/components/labs/PrimitiveControls.tsx",
-        "sha256": "744edb46a42c3e7bbc9f45aff81fd1ba732fc691101f92916b09a11b82b1d871"
+        "sha256": "302f953465ea0327032b30463bdfa49709de5c21c81071bec7d666e0f6350356"
       },
       {
         "path": "app/components/labs/ShowcaseRecipe.tsx",
         "sha256": "002eb4138672c528780fc35f31a6574fbbd842d645745f21e04acae27cfa90e6"
+      },
+      {
+        "path": "app/components/labs/UiNativeLab.tsx",
+        "sha256": "47a2b0faa0eacb9f812e8e2d5a635f144616697cf3b8c842934c7e0448e90e8e"
+      },
+      {
+        "path": "app/components/page.tsx",
+        "sha256": "30d8302e7a1fffa9bff597d1dd524f80e2b6f18fd84f32005acaae7194f30a75"
+      },
+      {
+        "path": "app/components/reference/page.tsx",
+        "sha256": "c60632b6acee8dfe90bfbd0ddfe76c91f3e7fbe3ccb0c6cf64ec8b106c9df2f1"
+      },
+      {
+        "path": "app/components/studio/LegacyScenarioRenderer.tsx",
+        "sha256": "fcdb530f1e28937a20c7bf7029b0ac32573b50bfdbbc866bf18b3fb42c705f28"
+      },
+      {
+        "path": "app/components/studio/PreviewFrame.tsx",
+        "sha256": "6bf0dc854035740dffa9d85e8908b0f27b4efd182143dd7e66a4346a10abd46a"
+      },
+      {
+        "path": "app/components/studio/ScenarioRenderer.tsx",
+        "sha256": "2a0243f489b3df81333c52cc6abfa57c49b8cd7c4e5ef81f5686b78ec49c6e6b"
+      },
+      {
+        "path": "app/components/studio/StudioPreviewClient.tsx",
+        "sha256": "574564d33ee0d13c3435c7002ae9e942cd3bf0fd3df41f3491ac7ba4c1b2aebe"
+      },
+      {
+        "path": "app/components/studio/StudioReferences.tsx",
+        "sha256": "d7e0d0e3d8dc1404970c72991a6d360998a5351c7d54eb22d4848693218acc83"
+      },
+      {
+        "path": "app/components/studio/WebsiteTemplateGallery.tsx",
+        "sha256": "766def8d9d597ddcc9640a001d43e65086b2c72bc0b34b242da8dabeb4b01a80"
+      },
+      {
+        "path": "app/components/studio/scenarios/BlogTemplate.tsx",
+        "sha256": "a2e40141a4d743daa8c451a437bdc24284c6a2f6b8669faecc5d35d762984d07"
+      },
+      {
+        "path": "app/components/studio/scenarios/IndustrialTemplate.tsx",
+        "sha256": "d16f94030922391f60b9ba697aca1354c04d25a3b51678ab111524c55fa56d3a"
+      },
+      {
+        "path": "app/components/studio/scenarios/InventoryTemplate.tsx",
+        "sha256": "22d3fe5dead15254765f7176883b37400107336133b76f33d7e3fc8522a81fbf"
+      },
+      {
+        "path": "app/components/studio/scenarios/MarketingTemplate.tsx",
+        "sha256": "fcf5c0c52d66b8ea2b419c641b064aa09af52cdd4933297da49ba5f0f8a98723"
+      },
+      {
+        "path": "app/components/studio/scenarios/NewsletterTemplate.tsx",
+        "sha256": "a5ec8b8215b7c9d60bfde55d957c8f809ee5a7d82775cfb62fc01375e2286154"
+      },
+      {
+        "path": "app/components/studio/scenarios/ScenarioScaffold.tsx",
+        "sha256": "7b6f7f0fa139f0a826aba61aed0f56174930eea53e556fde3d24c4aab4f9c52f"
+      },
+      {
+        "path": "app/components/studio/scenarios/StorefrontTemplate.tsx",
+        "sha256": "0a37f51f497d2db9895475e6f3d1b583f083e5337d0556ff6acf364c0cb3cb2b"
       },
       {
         "path": "app/components/useConfigurationMotion.ts",
@@ -764,24 +1615,44 @@
         "sha256": "ea67db44c2c6c83a3b02845e87421ad8d946e6926c4ca52dbf2676112db27fe7"
       },
       {
+        "path": "app/data/library-guides.ts",
+        "sha256": "76afd22b89e4ca0cf3017fc50b83d6fda195dc8bc811e526e3982d2d8c7c9a27"
+      },
+      {
         "path": "app/data/navigation.ts",
         "sha256": "f7fbb9846f5612d89c768672521c13c2a1f3c4dc052f8ffb9a238bfa19ec4aae"
       },
       {
+        "path": "app/data/studio-scenarios.ts",
+        "sha256": "d71e1f262fe23178994f3a981a941ecb5c20c1c71263487fd304fac3f53a5c1c"
+      },
+      {
+        "path": "app/globals.css",
+        "sha256": "ba72c7cb1133b00de41a8d4b37e3648a0575cc52e0af881715db70d5f4f2c604"
+      },
+      {
+        "path": "app/health/page.tsx",
+        "sha256": "fdcd8544c5206fabb07988ba100bd89be010f0ff7e283e86160fdeffd13ecea8"
+      },
+      {
         "path": "app/lab/page.tsx",
-        "sha256": "3603be55128eb56468a76a4374ee0edd65fbf3a16baba7fa47ccc14af5a40e95"
+        "sha256": "c037eb8018185bd3a67da033f874eb30ce12613f01278fc3b11ea95fece38d4a"
       },
       {
         "path": "app/layout.tsx",
-        "sha256": "352bcde37daa26c5d564a2d9fee5dadd2090de2d00bb70582ad32060ba0d0577"
+        "sha256": "69176651b79ced650b74740748035aacbb57f9c654ccff73b5b31708ae925567"
       },
       {
         "path": "app/lib/configuration.ts",
         "sha256": "35b46480836c4c86684173e944e31d2c06ba7e9fe66783b1c7fad981351698a4"
       },
       {
+        "path": "app/lib/design-plan.ts",
+        "sha256": "95cb5cc59b845f4b5ec83a4cccdaa5b716ad46eca09f6002079eb3c716ced4e1"
+      },
+      {
         "path": "app/lib/inspector-state.ts",
-        "sha256": "2309345ec5e9a79167a5da1ce968873b42b07e70104f643d7f55f6fa032792d0"
+        "sha256": "6bb7c6493444cf026b8bb358235283f4c56bc7571d36c5dfc5791dadf7292e26"
       },
       {
         "path": "app/lib/motion-settings.ts",
@@ -796,46 +1667,58 @@
         "sha256": "077b083639a3f91eccbfc8662ec24f3a27a9ef6325ded8b614e41853a4ab39ae"
       },
       {
+        "path": "app/lib/website-templates.ts",
+        "sha256": "6ffe69e199e63bdf67ebd1ab34de9abeb322dcba2dcf66eadb8ddd1181be8cf2"
+      },
+      {
         "path": "app/page.tsx",
-        "sha256": "20d80c60ac528ab5103f54e425952a7ffc4feece5d2ef73ba3dd8e4164fded1d"
+        "sha256": "54ed665608118f214cb46aea6db13c0260a1c16ee6b9636ee86c95b3a4fdae35"
       },
       {
         "path": "app/styles/atlas.css",
-        "sha256": "963da8f4ec69ff25152e2b49b614ad62fe0c14bcdea60b6419c5f5917f749b4d"
+        "sha256": "5ba1ed6296a0484f575cedc3b231608d4324a1a6cc33670483d4bed5d1490c5f"
       },
       {
         "path": "app/styles/motion.css",
-        "sha256": "1220af7dde22d863ef23c41b020c9a63000f0a44a1fd5df7eb2699d8de8766cc"
+        "sha256": "870917f05c14cd6eb978f68dfbec076d0efe63fe5a1d5ec5957e23c79cbeb49c"
       },
       {
         "path": "app/styles/observatory.css",
-        "sha256": "8995a758f1d9ebbb05a5f29214f702cc06c8933117ac05b684d9d2e5f084d289"
+        "sha256": "c818e26c8e51a45150f0e3d08cd1f4d4dcbe3dc1467b01d5b7980520959f981f"
       },
       {
         "path": "app/styles/shell.css",
-        "sha256": "7a97d3aa7691bbd661aebb9bc48ec41b7de95dfb50f9c7f372b80416b6b31f6b"
+        "sha256": "6d3e9233204a0bf1690f7b30f1dce392bbea7ccb4bc32e770cd0ea3391763317"
       },
       {
         "path": "app/styles/spacing.css",
         "sha256": "42af4bdfe9454aba00d64d15a4a08e6e2e84831e3bd96022674f77dc290d9812"
       },
       {
+        "path": "app/styles/studio.css",
+        "sha256": "91dbe70be4d28aa9d5c85b6bbd6e9d512602ff021c1a80d077f859156474bd92"
+      },
+      {
+        "path": "app/styles/typography.css",
+        "sha256": "e9c6b35267a1b3a091ac9b42d842458781c719c219f3a0dc1d8afef62926b404"
+      },
+      {
         "path": "app/styles/workbench.css",
-        "sha256": "6a5810845cd49832e0358710ac92e13ad4fe2bc8734539ae2a9fb6512188fe53"
+        "sha256": "2b323934c0972a709d6cf00f3ba4898ce00ce79c3e4c3a4368c27a502e17fd6e"
       },
       {
         "path": "scripts/build-fixtures.mjs",
-        "sha256": "6d39421499e410c631fd6bd7a7c6fc92c4dfaa027b7228994c4ddf32dec1477b"
+        "sha256": "6a7959cd1a69594354b1687b2919912d84ba29259e294861bd831a0692fdbfe3"
       }
     ]
   },
   "delivery": {
-    "capturedAt": "2026-11-04T20:52:11.708Z",
+    "capturedAt": "2026-11-11T04:30:49.436Z",
     "boundary": "local-only",
-    "preview": "http://127.0.0.1:4391/lab/#workbench",
+    "preview": "http://localhost:3000/",
     "commitReady": true,
     "outstandingGate": null,
-    "verificationBoundary": "Local UI acceptance; pushed SHA and remote PR checks are verified separately"
+    "verificationBoundary": "Focused pre-commit integration checks passed locally. Git and PR 23 record source delivery; remote CI, package publication and deployment require separate evidence."
   },
   "homePresentationReview": {
     "findings": [

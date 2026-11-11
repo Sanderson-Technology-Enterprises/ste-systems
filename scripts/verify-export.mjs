@@ -7,9 +7,9 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const exportRoot = path.join(repositoryRoot, "out");
-/** Maximum CSS payload for UI Style Kit 2.7.1 and its React composition layer. */
-const nextCssBudgetBytes = 2688 * 1024;
-/** Maximum bundled font payload for all ui-style-kit-css 2.7.1 identities. */
+/** Maximum CSS payload for UI Style Kit 2.7.2 and the client studio. */
+const nextCssBudgetBytes = 2944 * 1024;
+/** Maximum bundled font payload for all ui-style-kit-css 2.7.2 identities. */
 const exportedFontBudgetBytes = 2560 * 1024;
 const googleVerificationFile = "google5abb0289b99a9f42.html";
 const googleVerificationText =
@@ -122,9 +122,14 @@ function requireSingleSchemaNode(nodes, type, documentName, issues) {
 }
 
 async function validateLocalAssets(html, documentName, issues) {
+  /** React may add same-origin preconnect hints; they are network hints, not assets. */
+  const assetMarkup = html.replace(
+    /<link\b[^>]*\brel="(?:preconnect|dns-prefetch)"[^>]*>/g,
+    "",
+  );
   const references = new Set(
     Array.from(
-      html.matchAll(/(?:href|src)="([^"]+)"/g),
+      assetMarkup.matchAll(/(?:href|src)="([^"]+)"/g),
       (match) => match[1],
     ).filter(
       (reference) =>
@@ -445,7 +450,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.7.1",
+          version: "2.7.2",
         },
         {
           codeRepository: "https://github.com/Foscat/Interactive-Surface-CSS",
@@ -460,7 +465,7 @@ function validateStructuredData(index, lab, components, notFound, issues) {
           name: "@sanderson-technology-enterprises/motion-style-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
-          version: "1.0.0",
+          version: "1.1.0",
         },
       ]),
       "ItemList package contracts",
@@ -547,7 +552,7 @@ export async function collectExportIssues() {
   );
   enforceArtifactBudget(
     totalByExtension(/\.js$/),
-    1024 * 1024,
+    2048 * 1024,
     "Total Next.js JavaScript",
     issues,
   );
@@ -663,14 +668,14 @@ export async function collectExportIssues() {
     "Pages-prefixed application assets",
     issues,
   );
-  requireText(index, "Design every layer.", "primary page content", issues);
+  requireText(index, "Plan the look and feel", "primary page content", issues);
   requireExact(
     googleVerification,
     googleVerificationText,
     "Google verification file contents",
     issues,
   );
-  requireText(lab, "Find your interface.", "lab primary content", issues);
+  requireText(lab, "Website design studio", "lab primary content", issues);
   requireText(
     components,
     "Components &amp; library guides",

@@ -43,7 +43,7 @@ export function HomeObservatory() {
           <button
             aria-controls="home-observatory-detail"
             aria-pressed={selectedIndex === index}
-            className={`home-orbit-control home-orbit-control-${index + 1}`}
+            className={`interactive-surface home-orbit-control home-orbit-control-${index + 1}`}
             key={pkg.name}
             onClick={() => setSelectedIndex(index)}
             type="button"
@@ -59,7 +59,9 @@ export function HomeObservatory() {
         </span>
       </div>
 
-      <a href="#configuration-reference">How this count is calculated</a>
+      <a className="interactive-surface" href="#configuration-reference">
+        How this count is calculated
+      </a>
 
       <article
         className="home-observatory-detail ly-stack ly-gap-4"
@@ -71,6 +73,7 @@ export function HomeObservatory() {
         <code>{selectedPackage.attribute}</code>
         <div className="ly-cluster ly-gap-2">
           <a
+            className="interactive-surface"
             href={selectedPackage.links.npm}
             target="_blank"
             rel="noreferrer noopener"
@@ -79,6 +82,7 @@ export function HomeObservatory() {
             <span className="ly-visually-hidden"> (opens in a new tab)</span>
           </a>
           <a
+            className="interactive-surface"
             href={selectedPackage.links.demo}
             target="_blank"
             rel="noreferrer noopener"

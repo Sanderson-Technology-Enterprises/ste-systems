@@ -173,7 +173,7 @@ export const LIBRARY_GUIDES: readonly LibraryGuide[] = [
     id: "motion",
     role: "04 / Lifecycle motion",
     summary:
-      "Motion Style CSS is the newest addition to STE's web development system. Use ten paired entrance/exit presets and coordinated movement while leaving layout, paint, and control feedback with their existing owners.",
+      "Motion Style CSS is the newest addition to STE's web development system. Use 17 paired entrance/exit presets and coordinated movement while leaving layout, paint, and control feedback with their existing owners.",
     concepts: [
       {
         api: "presets / enter / exit",
@@ -305,9 +305,9 @@ export const CSS_GUIDE_EXAMPLES: Readonly<
     <span class="usk-badge" data-ui-variant="success">Ready for review</span>
     <h4>Customer portal</h4>
     <p>Keep your projects, people, and progress together.</p>
-    <label class="usk-field">
+    <label class="interactive-surface usk-field">
       <span class="usk-label">Workspace name</span>
-      <input class="usk-input" value="Northstar Studio" aria-describedby="guide-workspace-help">
+      <input class="interactive-surface usk-input" value="Northstar Studio" aria-describedby="guide-workspace-help">
       <span class="usk-help-text" id="guide-workspace-help">Visible to your project team.</span>
     </label>
   </article>

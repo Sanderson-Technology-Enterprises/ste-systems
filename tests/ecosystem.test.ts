@@ -101,7 +101,7 @@ test("registry exposes every package and resource in ecosystem order", () => {
   );
   assert.deepEqual(
     ECOSYSTEM_PACKAGES.map(({ version }) => version),
-    ["3.2.3", "2.7.1", "1.7.3", "1.0.0"],
+    ["3.2.3", "2.7.2", "1.7.3", "1.1.0"],
   );
   assert.equal(ECOSYSTEM_PACKAGES[0]?.version, "3.2.3");
   assert.equal(ECOSYSTEM_PACKAGES[2]?.version, "1.7.3");
@@ -129,7 +129,7 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
     UI_SEMANTIC_COMPONENT_API.selectorsByRole,
   ).flat();
 
-  assert.equal((uiManifest as { readonly version: string }).version, "2.7.1");
+  assert.equal((uiManifest as { readonly version: string }).version, "2.7.2");
   assert.equal(selectors.length, 75);
   assert.deepEqual(
     selectors.slice(0, 29).map(({ selector }) => selector),
@@ -190,7 +190,7 @@ test("the pinned UI manifest publishes the stable semantic component contract", 
 
 test("installation examples pin approved versions and cascade order", () => {
   const uiStyleKitCdnRoot =
-    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1";
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.2";
 
   assert.equal(
     NPM_INSTALL,
@@ -265,7 +265,7 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
   );
 
   const uiStyleKitCdnRoot =
-    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.1";
+    "https://cdn.jsdelivr.net/npm/ui-style-kit-css@2.7.2";
   const uiVisualCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/dist/ui-style-kit.visual.min.css">`;
   const uiThemeCdn = `<link rel="stylesheet" href="${uiStyleKitCdnRoot}/styles/interactive-surface-theme.css">`;
   const interactionCoreCdn =
@@ -355,7 +355,7 @@ test("adoption paths cover every standalone, pair, and complete-stack fixture", 
         ["npm", "bundler", "cdn"],
       );
       for (const snippet of path.snippets)
-        assert.match(snippet.code, /motion-style-css@1\.0\.0|motion-style-css/);
+        assert.match(snippet.code, /motion-style-css@1\.1\.0|motion-style-css/);
       continue;
     }
     const expected = expectedMatrix[path.id];
@@ -463,7 +463,7 @@ test("site consumes the CSS libraries as local dependencies", async () => {
   assert.equal(manifest.dependencies["interactive-surface-css"], "1.7.3");
   assert.equal(
     manifest.dependencies["@sanderson-technology-enterprises/ste-usk-react"],
-    "2.3.0",
+    "2.4.0",
   );
   assert.match(
     layoutSource,
@@ -566,18 +566,12 @@ test("Layout 3.2 contexts replace application-owned spacing workarounds", async 
   ]);
 
   assert.match(homeSource, /density="spacious"/);
-  assert.match(
-    experienceSource,
-    /stableEditor \? "normal" : \(configuration\.density \?\? "normal"\)/,
-  );
+  assert.match(experienceSource, /configuration\.density \?\? "normal"/);
   assert.match(labPageSource, /<LabWorkbench\s*\/>/);
   assert.doesNotMatch(labPageSource, /LabConfigurationMenu/);
   assert.doesNotMatch(labPageSource, /configuration-shell/);
   assert.match(inspectorSource, /<InterfaceRoot[\s\S]*?data-editor-chrome/);
-  assert.match(
-    labWorkbenchSource,
-    /density=\{configuration\.density \?\? "normal"\}/,
-  );
+  assert.match(labWorkbenchSource, /config\.density \|\| "normal"/);
   assert.match(workbenchSource, /<Layout\.Wrapper measure="workspace">/);
   assert.match(
     workbenchSource,
@@ -680,48 +674,25 @@ test("quality runs every source, fixture, export, and browser gate", async () =>
   }
 });
 
-test("Pages workflow verifies the complete artifact before non-PR deployment", async () => {
-  const workflow = await readFile(
-    new URL("../.github/workflows/deploy-pages.yml", import.meta.url),
-    "utf8",
-  );
+/** Verifies that repository automation cannot restore the retired Pages checks. */
+test("repository workflows omit retired Pages deployment and verification", async () => {
+  const workflowDirectory = new URL("../.github/workflows/", import.meta.url);
+  let workflowFiles: string[] = [];
+  try {
+    workflowFiles = await readdir(workflowDirectory);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
 
-  assert.match(workflow, /^\s*run: npm ci\s*$/m);
-  assert.doesNotMatch(workflow, /legacy-peer-deps/);
-  assert.match(workflow, /^\s*run: npm run fixtures:build\s*$/m);
-  assert.match(
-    workflow,
-    /^\s*run: npx playwright install --with-deps chromium firefox webkit\s*$/m,
-  );
-  assert.match(workflow, /^\s*path: out\s*$/m);
-  assert.match(
-    workflow,
-    /- name: Upload verified Pages artifact\s+if: github\.event_name != 'pull_request' && github\.ref == 'refs\/heads\/main'[\s\S]*?path: out/,
-  );
-  assert.match(
-    workflow,
-    /deploy:\s+name: Deploy GitHub Pages\s+if: github\.event_name != 'pull_request' && github\.ref == 'refs\/heads\/main'\s+needs: verify/,
-  );
-  assert.match(
-    workflow,
-    /concurrency:\s+group: \$\{\{ github\.event_name == 'pull_request' && format\('verify-pr-\{0\}', github\.event\.pull_request\.number\) \|\| 'pages' \}\}\s+cancel-in-progress: true/,
-  );
-  const mainDeploymentGuard =
-    "if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'";
-  assert.equal(workflow.split(mainDeploymentGuard).length - 1, 2);
-  const verifyTimeout = Number(
-    workflow.match(/verify:[\s\S]*?timeout-minutes:\s*(\d+)/)?.[1],
-  );
-  assert.ok(verifyTimeout >= 30, `verify timeout was ${verifyTimeout}`);
-
-  const fixtureStep = workflow.indexOf("run: npm run fixtures:build");
-  const browserStep = workflow.indexOf(
-    "run: npx playwright install --with-deps chromium firefox webkit",
-  );
-  const qualityStep = workflow.indexOf("run: npm run quality");
-  assert.ok(fixtureStep >= 0);
-  assert.ok(browserStep > fixtureStep);
-  assert.ok(qualityStep > browserStep);
+  assert.equal(workflowFiles.includes("deploy-pages.yml"), false);
+  for (const file of workflowFiles.filter((name) => /\.ya?ml$/.test(name))) {
+    const workflow = await readFile(new URL(file, workflowDirectory), "utf8");
+    assert.doesNotMatch(
+      workflow,
+      /actions\/(?:configure-pages|upload-pages-artifact|deploy-pages)@|name:\s*(?:Deploy to GitHub Pages|Verify production export)/,
+      file,
+    );
+  }
 });
 
 test("Playwright keeps exhaustive Chromium and tagged cross-engine projects", async () => {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { EditorChrome as InterfaceRoot } from "../components/EditorChrome";
 import { LabWorkbench } from "../components/LabWorkbench";
+import { StudioReferences } from "../components/studio/StudioReferences";
 import { AdvancedLabExamples } from "../components/AdvancedLabExamples";
 import { InstallGuide } from "../components/InstallGuide";
 import { LabExperience } from "../components/LabExperience";
@@ -23,16 +24,16 @@ import {
 } from "../lib/structured-data";
 
 const labDescription =
-  "Configure layout, visual style, palette, and mode, then inspect the four STE Systems CSS layers on shared semantic markup.";
+  "Create a complete STE website design preference brief with interactive previews, styles, comparison, and portable files.";
 
 export const metadata: Metadata = {
-  title: "Configurable CSS workbench",
+  title: "Client design studio",
   description: labDescription,
   alternates: { canonical: SITE.labUrl },
   openGraph: {
     type: "website",
     url: SITE.labUrl,
-    title: `Configurable CSS workbench | ${SITE.name}`,
+    title: `Client design studio | ${SITE.name}`,
     description: labDescription,
     siteName: SITE.name,
     locale: SITE.locale,
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Configurable CSS workbench | ${SITE.name}`,
+    title: `Client design studio | ${SITE.name}`,
     description: labDescription,
     images: [{ url: SITE.socialImage, alt: SITE.socialImageAlt }],
   },
@@ -58,8 +59,8 @@ const serializedLabStructuredData = serializeStructuredData(
 );
 
 /**
- * Renders the configurable package workbench and its focused laboratory
- * sections under the shared Lab experience provider.
+ * Renders the client studio first and retains developer references in a disclosure.
+ * The editor remains stable while the isolated preview owns client styling.
  *
  * @returns The exported STE Systems Lab route.
  */
@@ -70,7 +71,7 @@ export default function Lab() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializedLabStructuredData }}
       />
-      <a className="skip-link" href="#main-content">
+      <a className="interactive-surface skip-link" href="#main-content">
         Skip to main content
       </a>
 
@@ -91,71 +92,54 @@ export default function Lab() {
 
       {/* A programmatic focus target lets the skip link transfer focus reliably. */}
       <main id="main-content" tabIndex={-1}>
-        <InterfaceRoot
-          preset="minimal-saas"
-          theme="midnight-gold"
-          mode="dark"
-          data-editor-chrome
-        >
-          <section
-            className="workbench-introduction ly-wrapper ly-stack ly-gap-3"
-            id="top"
-            aria-labelledby="lab-title"
-          >
-            <div className="hero-copy ly-stack ly-gap-3">
-              <p className="section-label">Client configuration workbench</p>
-              <h1 id="lab-title">Find your interface.</h1>
-              <p className="lede">
-                Explore every layout, visual style, and color scheme in one live
-                preview. Use the left rail to customize, inspect motion, and
-                export your choices.
-              </p>
-            </div>
-          </section>
-        </InterfaceRoot>
         <LabWorkbench />
-        <InterfaceRoot
-          preset="minimal-saas"
-          theme="midnight-gold"
-          mode="dark"
-          data-editor-chrome
-        >
-          <section
-            id="guides"
-            className="ly-wrapper ly-section ly-stack ly-gap-4"
-            aria-labelledby="try-lab-title"
+        <StudioReferences>
+          <InterfaceRoot
+            preset="minimal-saas"
+            theme="midnight-gold"
+            mode="dark"
+            data-editor-chrome
           >
-            <h2 id="try-lab-title">Guides and integration examples</h2>
-            <p>
-              <a href={withBasePath("/components/")}>
-                Read the component guides
-              </a>{" "}
-              for APIs, accessibility guidance, and copyable examples. The
-              advanced examples below isolate library behavior without adding
-              another configuration menu.
-            </p>
-          </section>
-        </InterfaceRoot>
-        <AdvancedLabExamples title="Advanced library examples">
-          <LayoutLab />
-          <UiNativeLab />
-          <InteractionLab />
-        </AdvancedLabExamples>
-        <AdvancedLabExamples
-          title="Package integration proofs"
-          anchor="integrate"
-        >
-          <IntegrationLab />
-        </AdvancedLabExamples>
-        <InterfaceRoot
-          preset="minimal-saas"
-          theme="midnight-gold"
-          mode="dark"
-          data-editor-chrome
-        >
-          <InstallGuide />
-          <LibraryDirectory />
-        </InterfaceRoot>
+            <section
+              id="guides"
+              className="ly-wrapper ly-section ly-stack ly-gap-4"
+              aria-labelledby="try-lab-title"
+            >
+              <h2 id="try-lab-title">Guides and integration examples</h2>
+              <p>
+                <a
+                  className="interactive-surface"
+                  href={withBasePath("/components/")}
+                >
+                  Read the component guides
+                </a>{" "}
+                for APIs, accessibility guidance, and copyable examples. The
+                advanced examples below isolate library behavior without adding
+                another configuration menu.
+              </p>
+            </section>
+          </InterfaceRoot>
+          <AdvancedLabExamples title="Advanced library examples">
+            <LayoutLab />
+            <UiNativeLab />
+            <InteractionLab />
+          </AdvancedLabExamples>
+          <AdvancedLabExamples
+            title="Package integration proofs"
+            anchor="integrate"
+          >
+            <IntegrationLab />
+          </AdvancedLabExamples>
+          <InterfaceRoot
+            preset="minimal-saas"
+            theme="midnight-gold"
+            mode="dark"
+            data-editor-chrome
+          >
+            <InstallGuide />
+            <LibraryDirectory />
+          </InterfaceRoot>
+        </StudioReferences>
       </main>
 
       <InterfaceRoot

@@ -11,10 +11,10 @@ export function HomeHeroActions() {
           data-hero-action="primary"
           data-surface-variant="accent"
           data-surface-level="2"
-          href={withBasePath(SITE.labPath)}
+          href={withBasePath(`${SITE.labPath}?choose=type`)}
           tabIndex={0}
         >
-          Open the lab
+          Start your design plan
           <ArrowRightIcon />
         </a>
         <a
@@ -25,13 +25,13 @@ export function HomeHeroActions() {
           href={withBasePath(SITE.componentsPath)}
           tabIndex={0}
         >
-          Read component guides
+          Explore the design system
         </a>
       </div>
       <p className="hero-service-copy">
         Need an application for your business?{" "}
         <a
-          className="hero-service-link"
+          className="interactive-surface hero-service-link"
           href={SITE.customizedPlatforms.url}
           target="_blank"
           rel="noreferrer noopener"

@@ -30,14 +30,18 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
       data-motion-settings
       open={expanded || undefined}
     >
-      <summary>Motion settings · {settings.enabled ? "on" : "off"}</summary>
+      <summary className="interactive-surface">
+        Motion settings · {settings.enabled ? "on" : "off"}
+      </summary>
       <div className="ly-stack ly-gap-4 ly-pad-4">
         <Form.Toggle
+          className="interactive-surface"
           label="Enable motion"
           checked={settings.enabled}
           onChange={(event) => update("enabled", event.target.checked)}
         />
         <Form.Toggle
+          className="interactive-surface"
           label="Animate configuration changes"
           checked={settings.animateConfigurationChanges}
           onChange={(event) =>
@@ -45,11 +49,12 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
           }
         />
         <p>
-          Entrance, exit, direction, easing, and every timing slider are random
-          until you choose a fixed value. Reduced motion always takes priority.
+          Random discovery resolves into fixed values when saved in a design
+          plan. Reduced motion always takes priority.
         </p>
         <Layout.Grid minColumnWidth="11rem" gap={3}>
           <Form.Select
+            className="interactive-surface"
             label="Motion preset"
             value={settings.entrance}
             onChange={(event) =>
@@ -64,6 +69,7 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
             ))}
           </Form.Select>
           <Form.Select
+            className="interactive-surface"
             label="Exit preset"
             value={settings.exit}
             onChange={(event) =>
@@ -78,6 +84,7 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
             ))}
           </Form.Select>
           <Form.Select
+            className="interactive-surface"
             label="Motion direction"
             value={settings.direction}
             onChange={(event) =>
@@ -92,6 +99,7 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
             ))}
           </Form.Select>
           <Form.Select
+            className="interactive-surface"
             label="Motion easing"
             value={settings.easing}
             onChange={(event) => update("easing", event.target.value)}
@@ -135,6 +143,7 @@ export function MotionSettings({ expanded = false }: { expanded?: boolean }) {
           ).map(({ key, label, min, max, step, fallback }) => (
             <div key={key} className="ly-stack ly-gap-2">
               <Form.Checkbox
+                className="interactive-surface"
                 label={`Random ${label.toLowerCase()}`}
                 checked={settings[key] === "random"}
                 onChange={(event) =>

@@ -1,0 +1,26 @@
+/** Client reading policy: responsive layouts wrap at word boundaries, never inside words. */
+:where(body),
+:where(body) :where(*) {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+/** Standalone technical identifiers scroll locally instead of breaking or widening the page. */
+:where(body)
+  :where(
+    pre,
+    .package-overview-card > code,
+    .library-list code,
+    .home-observatory-detail code,
+    .observatory-detail code
+  ) {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+/** The public icon-size token scales action artwork with its label; explicit Icon sizes win. */
+:where(body) :where(button, .site-action, a[data-link-presentation="control"]) {
+  --usk-icon-size: 1.5em;
+}

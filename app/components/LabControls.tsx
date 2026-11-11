@@ -149,9 +149,10 @@ export function LabControls() {
         aria-label="Interface configuration"
         onSubmit={(event) => event.preventDefault()}
       >
-        <label>
+        <label className="interactive-surface">
           <span>01 / Layout</span>
           <select
+            className="interactive-surface"
             value={configuration.layout}
             onChange={(event) => {
               const layout = LAYOUT_PERSONALITIES.find(
@@ -168,9 +169,10 @@ export function LabControls() {
           </select>
         </label>
 
-        <label>
+        <label className="interactive-surface">
           <span>02 / Visual style</span>
           <select
+            className="interactive-surface"
             value={configuration.ui}
             onChange={(event) => {
               const preset = UI_PRESETS.find(
@@ -187,9 +189,10 @@ export function LabControls() {
           </select>
         </label>
 
-        <label>
+        <label className="interactive-surface">
           <span>03 / Palette</span>
           <select
+            className="interactive-surface"
             value={configuration.theme}
             onChange={(event) => {
               const theme = event.target.value;
@@ -209,8 +212,9 @@ export function LabControls() {
           <legend>04 / Mode</legend>
           <div className="mode-options">
             {UI_MODES.map((mode) => (
-              <label key={mode}>
+              <label className="interactive-surface" key={mode}>
                 <input
+                  className="interactive-surface"
                   type="radio"
                   name="mode"
                   value={mode}
@@ -229,6 +233,7 @@ export function LabControls() {
         </fieldset>
 
         <Form.Select
+          className="interactive-surface"
           label="05 / Page recipe"
           value={configuration.recipe ?? "app-shell"}
           onChange={(event) => setRecipe(event.target.value as LayoutRecipe)}
@@ -240,6 +245,7 @@ export function LabControls() {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="06 / Spacing density"
           value={configuration.density ?? "normal"}
           onChange={(event) =>
@@ -328,9 +334,10 @@ export function LabControls() {
       </div>
 
       {fallbackText !== null ? (
-        <label>
+        <label className="interactive-surface">
           <span>Configuration text for manual copy</span>
           <textarea
+            className="interactive-surface"
             ref={fallbackRef}
             aria-label="Configuration text for manual copy"
             readOnly

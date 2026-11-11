@@ -192,7 +192,7 @@ export function LayoutExplorer({
       data-layout-explorer
       open={expanded || undefined}
     >
-      <summary hidden={!showControls}>
+      <summary className="interactive-surface" hidden={!showControls}>
         Explore all {Object.keys(primitives).length} layout primitives
       </summary>
       <div className="ly-stack ly-gap-4 ly-pad-4">
@@ -204,6 +204,7 @@ export function LayoutExplorer({
         {showControls && (
           <Layout.Grid minColumnWidth="11rem" gap={3}>
             <Form.Select
+              className="interactive-surface"
               label="Layout primitive"
               value={requested.primitive}
               onChange={(event) =>
@@ -220,6 +221,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Primitive gap"
               value={requested.gap}
               onChange={(event) =>
@@ -233,6 +235,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Primitive padding"
               value={requested.padding}
               onChange={(event) =>
@@ -246,6 +249,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Primitive alignment"
               value={requested.align}
               onChange={(event) =>
@@ -259,6 +263,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Primitive distribution"
               value={requested.justify}
               onChange={(event) =>
@@ -272,6 +277,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Grid columns"
               value={requested.columns}
               onChange={(event) =>
@@ -291,6 +297,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Frame ratio"
               value={requested.ratio}
               onChange={(event) =>
@@ -304,6 +311,7 @@ export function LayoutExplorer({
               ))}
             </Form.Select>
             <Form.Select
+              className="interactive-surface"
               label="Scroll limit"
               value={requested.scroll}
               onChange={(event) =>
@@ -342,6 +350,7 @@ export function LayoutExplorer({
         </p>
         {markup && (
           <Form.TextArea
+            className="interactive-surface"
             label="Rendered layout markup"
             value={markup}
             readOnly

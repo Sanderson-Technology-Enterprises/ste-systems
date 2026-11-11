@@ -63,7 +63,7 @@ test("five guides preserve the four-package CSS inventory and documented example
     LIBRARY_GUIDES[4].packageName,
     "@sanderson-technology-enterprises/ste-usk-react",
   );
-  assert.equal(LIBRARY_GUIDES[4].version, "2.3.0");
+  assert.equal(LIBRARY_GUIDES[4].version, "2.4.0");
   assert.match(CSS_GUIDE_EXAMPLES.ui[0].html, /class="usk-card /);
   assert.match(CSS_GUIDE_EXAMPLES.layout[0].html, /class="ly-grid /);
   for (const guide of LIBRARY_GUIDES) {

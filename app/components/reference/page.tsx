@@ -47,7 +47,7 @@ export default function LibraryReferencePage() {
       data-mode="dark"
       data-ly-layout="minimal-saas"
     >
-      <a className="skip-link" href="#main-content">
+      <a className="interactive-surface skip-link" href="#main-content">
         Skip to main content
       </a>
       <main
@@ -56,7 +56,10 @@ export default function LibraryReferencePage() {
         className="ly-wrapper guide-reference-page ly-stack ly-gap-8"
       >
         <header className="guide-hero ly-stack ly-gap-4">
-          <a href={withBasePath(SITE.componentsPath)}>
+          <a
+            className="interactive-surface"
+            href={withBasePath(SITE.componentsPath)}
+          >
             Back to interactive guides
           </a>
           <h1>Library reference</h1>
@@ -69,7 +72,11 @@ export default function LibraryReferencePage() {
             aria-label="Guide reference sections"
           >
             {LIBRARY_GUIDES.map((guide) => (
-              <a key={guide.id} href={`#atlas-${guide.id}`}>
+              <a
+                className="interactive-surface"
+                key={guide.id}
+                href={`#atlas-${guide.id}`}
+              >
                 {guide.name}
               </a>
             ))}
@@ -128,7 +135,11 @@ export default function LibraryReferencePage() {
                     aria-label={`${guide.name} resources`}
                   >
                     {guide.links.map((link) => (
-                      <a key={link.label} href={link.href}>
+                      <a
+                        className="interactive-surface"
+                        key={link.label}
+                        href={link.href}
+                      >
                         {link.label}
                       </a>
                     ))}

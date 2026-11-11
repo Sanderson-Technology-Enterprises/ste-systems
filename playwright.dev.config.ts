@@ -21,17 +21,20 @@ export default defineConfig({
       name: "turbopack-chromium",
       use: {
         ...devices["Desktop Chrome"],
+        ...(!process.env.CI ? { channel: "chrome" } : {}),
         viewport: { width: 1440, height: 1000 },
       },
     },
   ],
-  webServer: {
-    command: `npm run dev -- --turbopack --hostname 127.0.0.1 --port ${devPort}`,
-    env: {
-      NEXT_DIST_DIR: ".qa/next-dev-hydration",
-    },
-    url: devBaseUrl,
-    reuseExistingServer: false,
-    timeout: 180_000,
-  },
+  webServer: process.env.PLAYWRIGHT_EXTERNAL_DEV_SERVER
+    ? undefined
+    : {
+        command: `node node_modules/next/dist/bin/next dev --turbopack --hostname 127.0.0.1 --port ${devPort}`,
+        env: {
+          NEXT_DIST_DIR: ".qa/next-dev-hydration",
+        },
+        url: devBaseUrl,
+        reuseExistingServer: false,
+        timeout: 180_000,
+      },
 });

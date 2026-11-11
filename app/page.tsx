@@ -5,6 +5,7 @@ import { ConfigurationReference } from "./components/ConfigurationReference";
 import { FeatureShowcase } from "./components/FeatureShowcase";
 import { HomeHeroActions } from "./components/HeroActions";
 import { HomeObservatory } from "./components/HomeObservatory";
+import { WebsiteTemplateGallery } from "./components/studio/WebsiteTemplateGallery";
 import { HomeExperience } from "./components/HomeExperience";
 import { ExternalLinkIcon } from "./components/Icons";
 import { LegacyLabRedirect } from "./components/LegacyLabRedirect";
@@ -212,7 +213,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializedHomeStructuredData }}
       />
-      <a className="skip-link" href="#main-content">
+      <a className="interactive-surface skip-link" href="#main-content">
         Skip to main content
       </a>
 
@@ -227,28 +228,36 @@ export default function Home() {
       {/* A programmatic focus target lets the skip link transfer focus reliably. */}
       <main id="main-content" tabIndex={-1}>
         <section
-          className="hero home-hero ly-wrapper ly-section ly-split ly-gap-8 ly-items-center"
+          className="hero home-hero home-template-entry ly-wrapper ly-section ly-split ly-gap-6 ly-items-start"
           id="top"
           aria-labelledby="home-title"
         >
           <div className="hero-copy ly-stack ly-gap-6">
-            <p className="section-label">Four focused CSS libraries</p>
+            <p className="section-label">STE client design studio</p>
             <h1 id="home-title">
-              Design every layer.
+              Plan the look and feel
               <br />
-              <em>Keep one interface.</em>
+              <em>of your STE website.</em>
             </h1>
             <p className="lede">
-              Reusable rules keep related screens consistent while layout and
-              appearance change independently. Inspect structure, visual
-              styling, and interaction states in a working interface.
+              Explore styles, colors, layouts, icons, and motion in working
+              sample websites. Save a complete design preference brief for STE
+              to implement.
             </p>
             <HomeHeroActions />
           </div>
 
+          <WebsiteTemplateGallery compact />
+        </section>
+        <section
+          className="ly-wrapper ly-section ly-stack ly-gap-4"
+          aria-labelledby="system-exploration-title"
+        >
+          <h2 id="system-exploration-title">
+            Explore how the design system works
+          </h2>
           <HomeObservatory />
         </section>
-
         <FeatureShowcase />
         <ConfigurationReference />
         <ClientSystems />

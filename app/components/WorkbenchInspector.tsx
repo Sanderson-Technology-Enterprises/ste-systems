@@ -13,6 +13,7 @@ import {
   Button,
   Drawer,
   InterfaceRoot,
+  Icon,
   Layout,
 } from "@sanderson-technology-enterprises/ste-usk-react";
 import {
@@ -25,15 +26,17 @@ import {
   type InspectorGroup,
   type InspectorPreferences,
 } from "../lib/inspector-state";
+import { withBasePath } from "../lib/site";
 
 /** The inspector supplies editor layout only; its contents share the workbench state. */
 interface WorkbenchInspectorProps {
   controls: (group: InspectorGroup) => ReactNode;
   children: ReactNode;
+  mobileAction?: ReactNode;
 }
 
 /**
- * Compose an IDE-style activity rail, snapping inspector, and independent preview.
+ * Compose labeled navigation above a resizable inspector and independent preview.
  * Pointer gestures never write client configuration or invoke lifecycle animation.
  * @param props Grouped controls and the persistent live preview subtree.
  * @returns A keyboard-accessible split workbench with a mobile drawer fallback.
@@ -41,6 +44,7 @@ interface WorkbenchInspectorProps {
 export function WorkbenchInspector({
   controls,
   children,
+  mobileAction,
 }: WorkbenchInspectorProps) {
   const [preferences, setPreferences] = useState<InspectorPreferences>({
     ...DEFAULT_INSPECTOR,
@@ -126,10 +130,10 @@ export function WorkbenchInspector({
   useEffect(() => {
     const routeHash = () => {
       const group: Record<string, InspectorGroup> = {
-        "#layouts": "Layout",
-        "#ui-native": "Appearance",
-        "#interactions": "Interaction",
-        "#motion": "Motion",
+        "#layouts": "Page layout",
+        "#ui-native": "Style and colors",
+        "#interactions": "Effects",
+        "#motion": "Effects",
       };
       const selected = group[location.hash];
       if (selected) {
@@ -150,11 +154,7 @@ export function WorkbenchInspector({
     const next = {
       ...current.current,
       group,
-      open: mobile
-        ? current.current.open
-        : group === current.current.group
-          ? !current.current.open
-          : true,
+      open: true,
     };
     commit(next);
     if (mobile) setDrawerOpen(true);
@@ -234,6 +234,8 @@ export function WorkbenchInspector({
       preset="minimal-saas"
       theme="midnight-gold"
       mode="dark"
+      density="compact"
+      iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
       data-editor-chrome
       className={className}
     >
@@ -254,7 +256,13 @@ export function WorkbenchInspector({
           }
           onClick={() => select(group)}
         >
-          <span aria-hidden="true">{["◐", "▦", "↗", "▷", "⇩"][index]}</span>
+          <Icon
+            name={
+              (["eye", "palette", "grid", "play", "layers", "save"] as const)[
+                index
+              ]
+            }
+          />
           <span className="inspector-mobile-label">{group}</span>
         </Button>
       ))}
@@ -263,49 +271,57 @@ export function WorkbenchInspector({
   return (
     <div
       ref={container}
+      id="workbench"
       className="workbench-split"
       data-inspector-open={preferences.open}
       style={{ "--inspector-width": `${width}px` } as CSSProperties}
     >
+      <div className="inspector-desktop-toolbar">
+        {editor(
+          <>
+            {groupButtons}
+            <Button
+              ref={!mobile ? opener : undefined}
+              variant="ghost"
+              aria-label={
+                preferences.open
+                  ? "Collapse settings panel"
+                  : "Expand settings panel"
+              }
+              aria-expanded={preferences.open}
+              onClick={toggle}
+            >
+              <Icon name="settings" />
+              {preferences.open ? "Hide controls" : "Show controls"}
+            </Button>
+          </>,
+          "inspector-navigation",
+        )}
+      </div>
       <div className="inspector-mobile-toolbar">
         {editor(
-          <Button
-            ref={mobile ? opener : undefined}
-            variant="secondary"
-            onClick={toggle}
-            aria-expanded={drawerOpen}
-          >
-            Open settings
-          </Button>,
+          <Layout.Cluster gap={2}>
+            <Button
+              ref={mobile ? opener : undefined}
+              variant="secondary"
+              aria-label="Open settings"
+              onClick={toggle}
+              aria-expanded={drawerOpen}
+            >
+              Settings
+            </Button>
+            {mobileAction}
+          </Layout.Cluster>,
         )}
       </div>
       <Layout.Sidebar
-        sideSize={`${48 + width + 8 + 4}px`}
+        sideSize={`${width + 8 + 4}px`}
         // Reserve the preview's 360px plus its content pane's two 2px insets.
         minContentWidth="364px"
         gap={0}
         className="workbench-panes"
       >
         <Layout.SidebarItem position="side" className="inspector-dock">
-          {editor(
-            <>
-              <Button
-                ref={!mobile ? opener : undefined}
-                variant="ghost"
-                aria-label={
-                  preferences.open
-                    ? "Collapse settings panel"
-                    : "Expand settings panel"
-                }
-                aria-expanded={preferences.open}
-                onClick={toggle}
-              >
-                <span aria-hidden="true">☰</span>
-              </Button>
-              {groupButtons}
-            </>,
-            "inspector-rail",
-          )}
           {!mobile &&
             editor(
               <div
@@ -402,6 +418,15 @@ export function WorkbenchInspector({
           >
             {groupButtons}
             {controls(preferences.group)}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setDrawerOpen(false);
+                requestAnimationFrame(() => opener.current?.focus());
+              }}
+            >
+              Show preview
+            </Button>
           </Drawer>,
         )}
     </div>

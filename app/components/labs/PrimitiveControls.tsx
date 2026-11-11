@@ -71,6 +71,7 @@ export function PrimitiveControls({
     <Layout.Stack gap={3}>
       {fields.map(([key, label, options]) => (
         <Form.Select
+          className="interactive-surface"
           key={key}
           label={label}
           value={value[key]}

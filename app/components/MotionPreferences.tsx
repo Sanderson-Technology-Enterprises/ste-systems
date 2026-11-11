@@ -25,11 +25,30 @@ const MotionContext = createContext<{
  * @param props Route content rendered beneath the shared preferences context.
  * @returns A provider with randomized, enabled defaults and session-local overrides.
  */
-export function MotionPreferences({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<MotionSettings>({
+export function MotionPreferences({
+  children,
+  value: controlled,
+  onChange,
+}: {
+  children: ReactNode;
+  value?: MotionSettings;
+  onChange?: (settings: MotionSettings) => void;
+}) {
+  const [localSettings, setLocalSettings] = useState<MotionSettings>({
     ...DEFAULT_MOTION_SETTINGS,
   });
-  const value = useMemo(() => ({ settings, setSettings }), [settings]);
+  const settings = controlled ?? localSettings;
+  const value = useMemo(
+    () => ({
+      settings,
+      setSettings: (change: SetStateAction<MotionSettings>) => {
+        const next = typeof change === "function" ? change(settings) : change;
+        if (onChange) onChange(next);
+        else setLocalSettings(next);
+      },
+    }),
+    [settings, onChange],
+  );
   return (
     <MotionContext.Provider value={value}>{children}</MotionContext.Provider>
   );

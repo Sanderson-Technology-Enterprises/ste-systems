@@ -46,7 +46,7 @@
   opacity: 0.55;
 }
 .motion-browser-address {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 .motion-browser-page,
 .motion-browser-page [data-motion-item] {

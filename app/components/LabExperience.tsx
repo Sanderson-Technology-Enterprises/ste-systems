@@ -1,47 +1,24 @@
 "use client";
 
+import { createContext, useContext, type ReactNode } from "react";
 import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
-
-import {
-  LAYOUT_PERSONALITIES,
-  LAYOUT_RECIPES,
-  UI_MODES,
   UI_PRESETS,
+  LAYOUT_PERSONALITIES,
   UI_THEMES,
+  UI_MODES,
+  LAYOUT_RECIPES,
   type LayoutPersonality,
   type LayoutRecipe,
   type UiMode,
   type UiPreset,
 } from "../data/catalog";
 import {
-  CONFIGURATION_STORAGE_KEY,
-  DEFAULT_CONFIGURATION,
-  parseConfiguration,
-  parseStoredConfiguration,
-  serializeConfiguration,
   formatThemeLabel,
   type LabTheme,
   type LabConfiguration,
 } from "../lib/configuration";
-import { useConfigurationMotion } from "./useConfigurationMotion";
-
-const configurationKeys = [
-  "layout",
-  "ui",
-  "theme",
-  "mode",
-  "recipe",
-  "density",
-] as const;
+import { createDesignPlan } from "../lib/design-plan";
+import { DesignPlanProvider, useDesignPlan } from "./DesignPlanProvider";
 
 type LabConfigurationContextValue = {
   configuration: LabConfiguration;
@@ -68,287 +45,53 @@ type LabExperienceProps = {
 const LabConfigurationContext =
   createContext<LabConfigurationContextValue | null>(null);
 
-function formatCatalogLabel(value: string): string {
-  return value
-    .split("-")
-    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
-    .join(" ");
-}
-
-function pickRandom<T>(values: readonly T[]): T {
-  const selection = values[Math.floor(Math.random() * values.length)];
-  if (selection === undefined) {
-    throw new Error("Cannot randomize an empty configuration catalog.");
-  }
-  return selection;
-}
-
-function persistConfiguration(configuration: LabConfiguration): void {
-  try {
-    window.localStorage.setItem(
-      CONFIGURATION_STORAGE_KEY,
-      JSON.stringify(configuration),
+/** Bridges the established lab API to the sole durable client design document. */
+function LabAdapter({ children, stableEditor = false }: LabExperienceProps) {
+  const { plan, updateDesign, announce } = useDesignPlan();
+  const configuration = plan.design.configuration;
+  const configure = (patch: Partial<LabConfiguration>) => {
+    updateDesign({ configuration: { ...configuration, ...patch } });
+    announce(
+      "Design updated. " +
+        (patch.ui
+          ? UI_PRESETS.find((p) => p.id === patch.ui)?.label
+          : patch.theme
+            ? formatThemeLabel(patch.theme)
+            : ""),
     );
-  } catch {
-    // URL state remains usable when storage is disabled or over quota.
-  }
-}
-
-function removeStoredConfiguration(): void {
-  try {
-    window.localStorage.removeItem(CONFIGURATION_STORAGE_KEY);
-  } catch {
-    // Reset still updates in-memory and URL state when storage is unavailable.
-  }
-}
-
-function replaceConfigurationUrl(configuration: LabConfiguration): void {
-  const url = new URL(window.location.href);
-  url.search = serializeConfiguration(configuration).toString();
-  window.history.replaceState(window.history.state, "", url);
-}
-
-function clearConfigurationUrl(): void {
-  const url = new URL(window.location.href);
-  for (const key of configurationKeys) url.searchParams.delete(key);
-  window.history.replaceState(window.history.state, "", url);
-}
-
-function sameConfiguration(
-  left: LabConfiguration,
-  right: LabConfiguration,
-): boolean {
-  return configurationKeys.every((key) => left[key] === right[key]);
-}
-
-/**
- * Provides the configurable Lab state and the normal-density Layout Style CSS
- * root shared by every laboratory section.
- *
- * @param props Component properties.
- * @param props.children Laboratory sections rendered inside the shared root.
- * @returns The configured STE Systems Lab experience.
- */
-export function LabExperience({
-  children,
-  stableEditor = false,
-}: LabExperienceProps) {
-  const [configuration, setConfiguration] = useState<LabConfiguration>(() => ({
-    ...DEFAULT_CONFIGURATION,
-  }));
-  const [announcement, setAnnouncement] = useState({
-    message: "",
-    revision: 0,
-  });
-  const configurationRef = useRef(configuration);
-  const [requestedConfiguration, setRequestedConfiguration] =
-    useState(configuration);
-  const experienceRef = useRef<HTMLDivElement>(null);
-  const getMotionShell = useCallback(
-    () =>
-      experienceRef.current?.querySelector<HTMLElement>(
-        "[data-workbench-motion], [data-lab-configuration-motion]",
-      ) ?? null,
-    [],
-  );
-  const { transition, interrupt } = useConfigurationMotion(getMotionShell);
-
-  const announce = useCallback((message: string) => {
-    setAnnouncement((current) => ({
-      message,
-      revision: current.revision + 1,
-    }));
-  }, []);
-
-  const commitConfiguration = useCallback(
-    (nextConfiguration: LabConfiguration) => {
-      configurationRef.current = nextConfiguration;
-      setRequestedConfiguration(nextConfiguration);
-      void transition(() => setConfiguration(nextConfiguration));
-      persistConfiguration(nextConfiguration);
-      replaceConfigurationUrl(nextConfiguration);
+  };
+  const pick = <T,>(values: readonly T[]) =>
+    values[Math.floor(Math.random() * values.length)];
+  const value: LabConfigurationContextValue = {
+    configuration,
+    requestedConfiguration: configuration,
+    announce,
+    configure,
+    setLayout: (layout) => configure({ layout }),
+    setUi: (ui) => configure({ ui }),
+    setTheme: (theme) => configure({ theme }),
+    setMode: (mode) => configure({ mode }),
+    setRecipe: (recipe) => configure({ recipe }),
+    setDensity: (density) => configure({ density }),
+    randomizeConfiguration: () =>
+      configure({
+        layout: pick(LAYOUT_PERSONALITIES),
+        ui: pick(UI_PRESETS).id,
+        theme: pick(UI_THEMES),
+        mode: pick(UI_MODES),
+        recipe: pick(LAYOUT_RECIPES),
+        density: pick(["compact", "normal", "spacious"] as const),
+      }),
+    resetConfiguration: () =>
+      configure(createDesignPlan().design.configuration),
+    applyPreviewChange: async (apply) => {
+      apply();
     },
-    [transition],
-  );
-
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search);
-    let storedValue: string | null = null;
-
-    try {
-      storedValue = window.localStorage.getItem(CONFIGURATION_STORAGE_KEY);
-    } catch {
-      // Storage reads can fail in privacy modes; URL/default state remains safe.
-    }
-
-    const storedConfiguration = parseStoredConfiguration(storedValue);
-    const hydratedConfiguration = parseConfiguration(
-      search,
-      storedConfiguration,
-    );
-    const hasConfigurationQuery = configurationKeys.some((key) =>
-      search.has(key),
-    );
-    const hasValidQuery = configurationKeys.some(
-      (key) => search.get(key) === hydratedConfiguration[key],
-    );
-    const hasValidStorage =
-      storedConfiguration !== null &&
-      Object.keys(storedConfiguration).length > 0;
-
-    if (!sameConfiguration(configurationRef.current, hydratedConfiguration)) {
-      setConfiguration(hydratedConfiguration);
-      setRequestedConfiguration(hydratedConfiguration);
-    }
-    configurationRef.current = hydratedConfiguration;
-
-    if (hasValidQuery || hasValidStorage) {
-      persistConfiguration(hydratedConfiguration);
-      if (hasConfigurationQuery) {
-        replaceConfigurationUrl(hydratedConfiguration);
-      }
-      return;
-    }
-
-    if (storedValue !== null) removeStoredConfiguration();
-    if (hasConfigurationQuery) clearConfigurationUrl();
-  }, []);
-
-  /**
-   * Commit one editor action atomically and announce every changed client field.
-   * @param patch Configuration fields selected by the current editor action.
-   */
-  const configure = useCallback(
-    (patch: Partial<LabConfiguration>) => {
-      commitConfiguration({ ...configurationRef.current, ...patch });
-      const messages: string[] = [];
-      if (patch.layout !== undefined)
-        messages.push(`Layout changed to ${formatCatalogLabel(patch.layout)}.`);
-      if (patch.ui !== undefined) {
-        const label =
-          UI_PRESETS.find((preset) => preset.id === patch.ui)?.label ??
-          patch.ui;
-        messages.push(`Visual style changed to ${label}.`);
-      }
-      if (patch.theme !== undefined)
-        messages.push(`Palette changed to ${formatThemeLabel(patch.theme)}.`);
-      if (patch.mode !== undefined)
-        messages.push(
-          `Mode changed to ${patch.mode === "contrast" ? "High contrast" : formatCatalogLabel(patch.mode)}.`,
-        );
-      if (patch.recipe !== undefined)
-        messages.push(`Recipe changed to ${formatCatalogLabel(patch.recipe)}.`);
-      if (patch.density !== undefined)
-        messages.push(`Spacing density changed to ${patch.density}.`);
-      if (messages.length > 0) announce(messages.join(" "));
-    },
-    [announce, commitConfiguration],
-  );
-
-  const setLayout = useCallback(
-    (layout: LayoutPersonality) => {
-      configure({ layout });
-    },
-    [configure],
-  );
-
-  const setUi = useCallback(
-    (ui: UiPreset) => {
-      configure({ ui });
-    },
-    [configure],
-  );
-
-  const setTheme = useCallback(
-    (theme: LabTheme) => {
-      configure({ theme });
-    },
-    [configure],
-  );
-
-  const setMode = useCallback(
-    (mode: UiMode) => {
-      configure({ mode });
-    },
-    [configure],
-  );
-
-  const setRecipe = useCallback(
-    (recipe: LayoutRecipe) => {
-      configure({ recipe });
-    },
-    [configure],
-  );
-
-  const setDensity = useCallback(
-    (density: NonNullable<LabConfiguration["density"]>) => {
-      configure({ density });
-    },
-    [configure],
-  );
-
-  const randomizeConfiguration = useCallback(() => {
-    const nextConfiguration: LabConfiguration = {
-      layout: pickRandom(LAYOUT_PERSONALITIES),
-      ui: pickRandom(UI_PRESETS).id,
-      theme: pickRandom(UI_THEMES),
-      mode: pickRandom(UI_MODES),
-      recipe: pickRandom(LAYOUT_RECIPES),
-      density: pickRandom(["compact", "normal", "spacious"] as const),
-    };
-    commitConfiguration(nextConfiguration);
-    announce("A randomized interface configuration is ready.");
-  }, [announce, commitConfiguration]);
-
-  const resetConfiguration = useCallback(() => {
-    const nextConfiguration: LabConfiguration = { ...DEFAULT_CONFIGURATION };
-    configurationRef.current = nextConfiguration;
-    setRequestedConfiguration(nextConfiguration);
-    void transition(() => setConfiguration(nextConfiguration));
-    removeStoredConfiguration();
-    clearConfigurationUrl();
-    announce("Configuration reset to the defaults.");
-  }, [announce, transition]);
-
-  const contextValue = useMemo<LabConfigurationContextValue>(
-    () => ({
-      configuration,
-      requestedConfiguration,
-      announce,
-      randomizeConfiguration,
-      resetConfiguration,
-      setLayout,
-      setMode,
-      setTheme,
-      setUi,
-      setRecipe,
-      setDensity,
-      configure,
-      applyPreviewChange: transition,
-      interruptPreviewChange: interrupt,
-    }),
-    [
-      configuration,
-      requestedConfiguration,
-      announce,
-      randomizeConfiguration,
-      resetConfiguration,
-      setLayout,
-      setMode,
-      setTheme,
-      setUi,
-      setRecipe,
-      setDensity,
-      configure,
-      transition,
-      interrupt,
-    ],
-  );
-
+    interruptPreviewChange: () => {},
+  };
   return (
-    <LabConfigurationContext.Provider value={contextValue}>
+    <LabConfigurationContext.Provider value={value}>
       <div
-        ref={experienceRef}
         className={`experience lab-experience ly-root ly-page${stableEditor ? " lab-editor-experience" : ""}`}
         data-ly-density={
           stableEditor ? "normal" : (configuration.density ?? "normal")
@@ -363,22 +106,24 @@ export function LabExperience({
         data-mode={stableEditor ? undefined : configuration.mode}
       >
         {children}
-        <p
-          className="configuration-status ly-visually-hidden"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          <span key={announcement.revision}>{announcement.message}</span>
-        </p>
       </div>
     </LabConfigurationContext.Provider>
   );
 }
 
+/** Supplies canonical plan ownership while preserving existing lab consumers. */
+export function LabExperience(props: LabExperienceProps) {
+  return (
+    <DesignPlanProvider>
+      <LabAdapter {...props} />
+    </DesignPlanProvider>
+  );
+}
+
+/** Reads the compatibility API backed by the current DesignPlan. */
 export function useLabConfiguration(): LabConfigurationContextValue {
   const context = useContext(LabConfigurationContext);
-  if (context === null) {
+  if (!context)
     throw new Error("useLabConfiguration must be used within LabExperience.");
-  }
   return context;
 }

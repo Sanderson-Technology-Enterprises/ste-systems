@@ -75,7 +75,7 @@ export default function ComponentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializedAtlasStructuredData }}
       />
-      <a className="skip-link" href="#main-content">
+      <a className="interactive-surface skip-link" href="#main-content">
         Skip to main content
       </a>
 
@@ -110,7 +110,7 @@ export default function ComponentsPage() {
             View full Lab <ArrowRightIcon />
           </a>
           <a
-            className="guide-reference-link"
+            className="interactive-surface guide-reference-link"
             href={withBasePath("/components/reference/")}
           >
             Read all guides without interactive previews

@@ -943,7 +943,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "ui-style-kit-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/ui-style-kit-css",
-          version: "2.7.1",
+          version: "2.7.2",
         },
       },
       {
@@ -962,7 +962,7 @@ test("renders the production metadata and complete resource directory", async ({
           name: "@sanderson-technology-enterprises/motion-style-css",
           programmingLanguage: "CSS",
           url: "https://www.npmjs.com/package/@sanderson-technology-enterprises/motion-style-css",
-          version: "1.0.0",
+          version: "1.1.0",
         },
       },
     ],
@@ -1001,9 +1001,9 @@ test("renders the production metadata and complete resource directory", async ({
 
   for (const [name, version] of [
     ["layout-style-css", "3.2.3"],
-    ["ui-style-kit-css", "2.7.1"],
+    ["ui-style-kit-css", "2.7.2"],
     ["interactive-surface-css", "1.7.3"],
-    ["@sanderson-technology-enterprises/motion-style-css", "1.0.0"],
+    ["@sanderson-technology-enterprises/motion-style-css", "1.1.0"],
   ]) {
     const packageEntry = page.locator(`[data-package="${name}"]`);
     await expect(packageEntry.getByRole("heading", { name })).toBeAttached();

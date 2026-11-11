@@ -23,6 +23,30 @@ async function readCatalog() {
   return JSON.parse(await readFile(catalogPath, "utf8"));
 }
 
+test("fixture action targets opt into the shared interaction class", async () => {
+  await buildFixtures();
+  for (const fixture of await readCatalog()) {
+    const html = await readFile(
+      path.join(
+        repositoryRoot,
+        "public/fixtures/generated",
+        `${fixture.id}.html`,
+      ),
+      "utf8",
+    );
+    for (const element of html.matchAll(
+      /<(?:button|input|label|select|textarea|summary|a)\b[^>]*>/g,
+    )) {
+      const classes =
+        element[0].match(/class="([^"]*)"/)?.[1].split(/\s+/) ?? [];
+      assert.ok(
+        classes.includes("interactive-surface"),
+        `${fixture.id}: ${element[0]}`,
+      );
+    }
+  }
+});
+
 test("embedded integration proofs give every main and layout landmark a unique name", async () => {
   await buildFixtures();
   const names = [];
@@ -67,8 +91,8 @@ test("fixture ownership contains the four pinned CSS libraries", () => {
   assert.deepEqual(EXPECTED_PACKAGE_VERSIONS, {
     "interactive-surface-css": "1.7.3",
     "layout-style-css": "3.2.3",
-    "ui-style-kit-css": "2.7.1",
-    "@sanderson-technology-enterprises/motion-style-css": "1.0.0",
+    "ui-style-kit-css": "2.7.2",
+    "@sanderson-technology-enterprises/motion-style-css": "1.1.0",
   });
   assert.deepEqual(Object.keys(FIXTURE_ASSETS).sort(), [
     "interaction-core",

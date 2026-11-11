@@ -20,11 +20,11 @@ test("the public ecosystem contains the four CSS libraries", () => {
     ECOSYSTEM_PACKAGES.map(({ name, version }) => ({ name, version })),
     [
       { name: "layout-style-css", version: "3.2.3" },
-      { name: "ui-style-kit-css", version: "2.7.1" },
+      { name: "ui-style-kit-css", version: "2.7.2" },
       { name: "interactive-surface-css", version: "1.7.3" },
       {
         name: "@sanderson-technology-enterprises/motion-style-css",
-        version: "1.0.0",
+        version: "1.1.0",
       },
     ],
   );
@@ -35,7 +35,7 @@ test("the public ecosystem contains the four CSS libraries", () => {
     NPM_INSTALL.split(" ").filter((word) => word.includes("@")).length,
     3,
   );
-  assert.match(NPM_INSTALL, /ui-style-kit-css@2\.7\.1(?:\s|$)/);
+  assert.match(NPM_INSTALL, /ui-style-kit-css@2\.7\.2(?:\s|$)/);
   assert.doesNotMatch(NPM_INSTALL, /codeload\.github\.com|tar\.gz/);
   assert.equal(ADOPTION_PATHS.length, 9);
 });

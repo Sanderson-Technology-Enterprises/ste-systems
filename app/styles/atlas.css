@@ -215,7 +215,7 @@
   text-align: start;
   vertical-align: top;
   border-block-end: 1px solid rgb(255 255 255 / 12%);
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
   line-height: 1.6;
 }
 .guide-reference th:first-child {
@@ -270,7 +270,7 @@
   .guide-tabs-list > button {
     min-inline-size: 0;
     white-space: normal;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
     line-height: 1.4;
   }
 }

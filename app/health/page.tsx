@@ -45,7 +45,7 @@ export default function HealthPage() {
       data-theme={DEFAULT_CONFIGURATION.theme}
       data-mode={DEFAULT_CONFIGURATION.mode}
     >
-      <a className="skip-link" href="#main-content">
+      <a className="interactive-surface skip-link" href="#main-content">
         Skip to main content
       </a>
 

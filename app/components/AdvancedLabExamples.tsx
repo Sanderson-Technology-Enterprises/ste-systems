@@ -47,7 +47,7 @@ export function AdvancedLabExamples({
       open={open}
       onToggle={(event) => setOpen(event.currentTarget.open)}
     >
-      <summary>{title}</summary>
+      <summary className="interactive-surface">{title}</summary>
       {open && (
         <InterfaceRoot
           preset={configuration.ui}

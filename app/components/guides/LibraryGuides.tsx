@@ -98,7 +98,11 @@ export function LibraryGuides({
     >
       <Tabs.List label="Library guides" className="guide-tabs-list">
         {LIBRARY_GUIDES.map((guide) => (
-          <Tabs.Tab key={guide.id} value={guide.id}>
+          <Tabs.Tab
+            className="interactive-surface"
+            key={guide.id}
+            value={guide.id}
+          >
             {guide.name}
           </Tabs.Tab>
         ))}
@@ -202,6 +206,7 @@ export function LibraryGuides({
                   >
                     {guide.links.map((link) => (
                       <a
+                        className="interactive-surface"
                         key={link.label}
                         href={link.href}
                         target="_blank"
