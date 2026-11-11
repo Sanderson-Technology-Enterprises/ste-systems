@@ -1,22 +1,114 @@
 /* The editor owns navigation and geometry; the embedded STE libraries paint previews. */
 .studio-workbench {
-  padding-block: 0 2rem;
+  padding-block: 0 1rem;
+  block-size: calc(100dvh - var(--workbench-header-height, 6rem));
+  display: flex;
+  flex-direction: column;
+}
+.studio-workbench .workbench-split {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  block-size: auto;
+}
+.studio-workbench .workbench-panes {
+  flex: 1 1 0%;
+  block-size: auto;
+}
+.studio-workbench[data-choosing-template="true"] {
+  block-size: auto;
+  min-block-size: calc(100dvh - 6rem);
+}
+.studio-plan-actions {
+  /* Inline-size containment needs an explicit flex measure to retain its controls. */
+  inline-size: 25rem;
+  max-inline-size: 100%;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.studio-template-picker {
+  padding: 1rem;
+}
+.studio-picker-recovery {
+  max-inline-size: 42rem;
+  margin: 1.5rem auto;
+}
+.website-template-gallery {
+  inline-size: min(100%, 76rem);
+  max-inline-size: 76rem;
+  margin-inline: auto;
+}
+.website-template-card {
+  --template-thumbnail-width: 240px;
+  --template-thumbnail-scale: 0.25;
+  min-inline-size: 0;
+}
+.website-template-gallery-compact .website-template-card {
+  --template-thumbnail-width: 96px;
+  --template-thumbnail-scale: 0.1;
+}
+.website-template-gallery-compact .website-template-description {
+  display: none;
+}
+.website-template-gallery-compact h2 {
+  font-size: 1.6rem;
+}
+.website-template-gallery-compact .website-template-card h3 {
+  font-size: 1rem;
+}
+.website-template-card h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+.website-template-description {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 0;
+}
+.studio-thumbnail-viewport.studio-template-thumbnail {
+  inline-size: var(--template-thumbnail-width, 240px);
+  block-size: calc(var(--template-thumbnail-width, 240px) * 2 / 3);
+  overflow: hidden;
+}
+.website-template-action-short {
+  display: none;
+}
+.studio-template-thumbnail .studio-thumbnail-frame {
+  transform: scale(var(--template-thumbnail-scale, 0.25));
+}
+.home-template-entry .hero-copy {
+  max-inline-size: 60rem;
+}
+.home-template-entry {
+  padding-block: 1rem;
+}
+.home-template-entry .hero-copy {
+  gap: 1rem;
+}
+.hero.home-template-entry h1 {
+  max-inline-size: 24ch;
+  font-size: clamp(2.3rem, 4.5vw, 3.4rem);
+  line-height: 1.05;
 }
 .studio-intro {
   display: flex;
   justify-content: space-between;
   align-items: end;
   gap: 1.5rem;
-  padding: 1.25rem 0;
+  flex: 0 0 auto;
+  padding: 0;
   color: #f7edd7;
 }
 .studio-intro h1 {
-  font-size: clamp(1.4rem, 2.3vw, 2.4rem);
-  margin: 0.2rem 0;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  margin: 0;
 }
 .studio-intro p {
   max-width: 60ch;
-  margin: 0.2rem 0;
+  margin: 0;
+  font-size: 0.85rem;
 }
 .studio-eyebrow {
   color: #e5b956;
@@ -33,6 +125,7 @@
 }
 .studio-meta strong {
   text-transform: capitalize;
+  font-size: 0.85rem;
 }
 .studio-meta span {
   color: #b9dbb9;
@@ -73,11 +166,15 @@
   gap: 0.5rem;
   margin-block: 0.65rem;
 }
-.studio-directions,
-.studio-gallery {
+.studio-directions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   gap: 0.5rem;
+}
+.studio-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
 }
 .studio-directions button {
   display: grid;
@@ -113,21 +210,25 @@
   border-radius: 50%;
 }
 .studio-gallery-image {
-  height: 92px;
+  height: 160px;
   overflow: hidden;
   background: #e3e7ed;
 }
 .studio-thumbnail-viewport {
-  width: 480px;
-  height: 260px;
-  transform: scale(0.36);
-  transform-origin: top left;
+  width: 240px;
+  height: 160px;
+  margin-inline: auto;
   pointer-events: none;
 }
 .studio-thumbnail-frame {
   width: 480px;
-  height: 260px;
+  max-width: none;
+  height: 320px;
+  transform: scale(0.5);
+  transform-origin: top left;
   border: 0;
+  padding: 0;
+  margin: 0;
 }
 .studio-colors {
   display: grid;
@@ -206,7 +307,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  padding: 0.6rem;
+  padding: 0.5rem;
 }
 .studio-device-controls {
   display: flex;
@@ -224,20 +325,50 @@
   justify-content: safe center;
   align-items: flex-start;
   background: #cfd5de;
-  padding: 0.75rem;
+  padding: 0.5rem;
 }
 .studio-preview-frame {
   min-width: 0;
   width: 100%;
+  max-width: none;
   height: 100%;
-  min-height: 520px;
+  min-height: 0;
   border: 0;
+  padding: 0;
+  margin: 0;
   background: white;
   box-shadow: 0 8px 25px #0003;
   flex: none;
 }
 .studio-render-root {
   min-height: 100vh;
+}
+/* Template shells use the public layout token rather than reserving an empty viewport. */
+.studio-scenario {
+  --ly-shell-min: 0px;
+}
+.studio-sample-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.studio-reading {
+  max-inline-size: 68ch;
+  margin-inline: auto;
+}
+.studio-reference {
+  margin-block: 1rem;
+}
+.studio-reference > summary {
+  cursor: pointer;
+  padding: 1rem;
+  color: #f7edd7;
+  border-block: 1px solid #38465b;
+}
+.studio-reference > summary span {
+  color: #b8c7db;
+  font-size: 0.85rem;
+  margin-inline-start: 1rem;
 }
 .studio-canvas-help {
   margin: 0;
@@ -267,12 +398,34 @@
   height: 100%;
 }
 @media (max-width: 1023px) {
+  .studio-plan-actions {
+    inline-size: 100%;
+  }
+  .studio-plan-actions > button {
+    display: none;
+  }
+  .studio-workbench {
+    block-size: auto;
+    min-block-size: calc(100dvh - 6rem);
+  }
+  .studio-workbench .workbench-split,
+  .studio-workbench .workbench-panes {
+    display: block;
+    flex: none;
+  }
   .studio-intro {
     align-items: start;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
   .studio-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     text-align: start;
+  }
+  .studio-intro > div:first-child > p:last-child {
+    display: none;
   }
   .studio-frame-viewport {
     min-height: 68vh;
@@ -280,11 +433,39 @@
   .studio-preview-frame {
     height: 68vh;
   }
+  .studio-device-controls {
+    gap: 0.15rem;
+  }
+  .studio-device-controls button {
+    padding-inline: 0.6rem;
+  }
+  .studio-reference > summary span {
+    display: block;
+    margin: 0.4rem 0 0;
+  }
   .studio-compare-grid {
     grid-template-columns: 1fr;
   }
   .inspector-drawer .studio-controls {
     padding: 0.75rem;
+  }
+}
+@media (max-width: 600px) {
+  .website-template-action-full {
+    display: none;
+  }
+  .website-template-action-short {
+    display: inline;
+  }
+  .website-template-card {
+    --template-thumbnail-width: 96px;
+    --template-thumbnail-scale: 0.1;
+  }
+  .website-template-description {
+    display: none;
+  }
+  .studio-template-picker {
+    padding: 0.25rem;
   }
 }
 @media print {
@@ -314,7 +495,7 @@
   }
   .studio-brief pre {
     white-space: pre-wrap;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
     font-size: 7pt;
   }
   .studio-brief h2 {

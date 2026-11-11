@@ -255,6 +255,7 @@ export function StudioPreviewClient() {
         style={style}
         className="studio-render-root"
         data-scenario-root
+        data-website-type={model.preview.scenario}
         onPointerOver={(e) => inspectState(e.target, "hover")}
         onPointerDown={(e) => inspectState(e.target, "pressed")}
         onFocus={(e) => inspectState(e.target, "focus")}

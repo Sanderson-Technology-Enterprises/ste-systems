@@ -41,7 +41,10 @@ export function ConfigurationReference() {
           </span>
         </p>
         <p>
-          <a href={withBasePath("/lab/#workbench")}>
+          <a
+            className="interactive-surface"
+            href={withBasePath("/lab/#workbench")}
+          >
             Explore every configuration
           </a>{" "}
           in the client playground, adjust hover intensity and motion, and copy

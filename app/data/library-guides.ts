@@ -305,9 +305,9 @@ export const CSS_GUIDE_EXAMPLES: Readonly<
     <span class="usk-badge" data-ui-variant="success">Ready for review</span>
     <h4>Customer portal</h4>
     <p>Keep your projects, people, and progress together.</p>
-    <label class="usk-field">
+    <label class="interactive-surface usk-field">
       <span class="usk-label">Workspace name</span>
-      <input class="usk-input" value="Northstar Studio" aria-describedby="guide-workspace-help">
+      <input class="interactive-surface usk-input" value="Northstar Studio" aria-describedby="guide-workspace-help">
       <span class="usk-help-text" id="guide-workspace-help">Visible to your project team.</span>
     </label>
   </article>

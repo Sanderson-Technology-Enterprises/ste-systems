@@ -19,6 +19,7 @@ import "./styles/responsive.css";
 import "./styles/spacing.css";
 import "./styles/workbench.css";
 import "./styles/studio.css";
+import "./styles/typography.css";
 import { MotionPreferences } from "./components/MotionPreferences";
 
 const verification = buildVerificationMetadata(process.env);

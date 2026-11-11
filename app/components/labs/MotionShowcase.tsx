@@ -182,24 +182,38 @@ export function MotionShowcase({
             }}
           >
             <Form.Input
+              className="interactive-surface"
               label="Project name"
               value={project}
               required
               onChange={(event) => setProject(event.target.value)}
             />
-            <Form.Select label="Release channel" defaultValue="preview">
+            <Form.Select
+              className="interactive-surface"
+              label="Release channel"
+              defaultValue="preview"
+            >
               <option value="preview">Preview environment</option>
               <option value="stable">Stable environment</option>
               <option value="canary">Canary environment</option>
             </Form.Select>
             <Form.TextArea
+              className="interactive-surface"
               label="Release notes"
               rows={2}
               defaultValue="A clear beginning. A considered finish."
             />
             <Layout.Cluster gap={3}>
-              <Form.Checkbox label="Include changelog" defaultChecked />
-              <Form.Toggle label="Notify team" defaultChecked />
+              <Form.Checkbox
+                className="interactive-surface"
+                label="Include changelog"
+                defaultChecked
+              />
+              <Form.Toggle
+                className="interactive-surface"
+                label="Notify team"
+                defaultChecked
+              />
             </Layout.Cluster>
             <Button type="submit" size="sm">
               Save draft
@@ -257,6 +271,7 @@ export function MotionShowcase({
           embedded={embedded}
         >
           <Form.Input
+            className="interactive-surface"
             label="Filter activity"
             type="search"
             placeholder="Find a task, owner, or state"
@@ -327,11 +342,13 @@ export function MotionShowcase({
             This workspace uses sample data. Nothing is published.
           </Alert>
           <Form.Input
+            className="interactive-surface"
             label="Version label"
             defaultValue="preview candidate"
             error="Use a version such as 1.1.0."
           />
           <Form.Input
+            className="interactive-surface"
             label="Managed endpoint"
             value="Local preview only"
             disabled
@@ -351,10 +368,16 @@ export function MotionShowcase({
             value={channel}
             onValueChange={setChannel}
           >
-            <SegmentedControl.Item value="overview">
+            <SegmentedControl.Item
+              className="interactive-surface"
+              value="overview"
+            >
               Overview
             </SegmentedControl.Item>
-            <SegmentedControl.Item value="changes">
+            <SegmentedControl.Item
+              className="interactive-surface"
+              value="changes"
+            >
               Changes
             </SegmentedControl.Item>
           </SegmentedControl>

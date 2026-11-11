@@ -675,7 +675,7 @@ export async function collectExportIssues() {
     "Google verification file contents",
     issues,
   );
-  requireText(lab, "Make it yours.", "lab primary content", issues);
+  requireText(lab, "Website design studio", "lab primary content", issues);
   requireText(
     components,
     "Components &amp; library guides",

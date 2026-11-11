@@ -23,6 +23,30 @@ async function readCatalog() {
   return JSON.parse(await readFile(catalogPath, "utf8"));
 }
 
+test("fixture action targets opt into the shared interaction class", async () => {
+  await buildFixtures();
+  for (const fixture of await readCatalog()) {
+    const html = await readFile(
+      path.join(
+        repositoryRoot,
+        "public/fixtures/generated",
+        `${fixture.id}.html`,
+      ),
+      "utf8",
+    );
+    for (const element of html.matchAll(
+      /<(?:button|input|label|select|textarea|summary|a)\b[^>]*>/g,
+    )) {
+      const classes =
+        element[0].match(/class="([^"]*)"/)?.[1].split(/\s+/) ?? [];
+      assert.ok(
+        classes.includes("interactive-surface"),
+        `${fixture.id}: ${element[0]}`,
+      );
+    }
+  }
+});
+
 test("embedded integration proofs give every main and layout landmark a unique name", async () => {
   await buildFixtures();
   const names = [];

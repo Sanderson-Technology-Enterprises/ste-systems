@@ -77,7 +77,7 @@ export function ClientSystems() {
           <Link
             href={SITE.customizedPlatforms.url}
             external
-            className="site-action"
+            className="interactive-surface site-action"
             data-surface-variant="accent"
             icon={<ExternalLinkIcon />}
           >
@@ -87,7 +87,7 @@ export function ClientSystems() {
           <Link
             href={SITE.owner.url}
             external
-            className="site-action"
+            className="interactive-surface site-action"
             data-surface-variant="subtle"
             icon={<ExternalLinkIcon />}
           >

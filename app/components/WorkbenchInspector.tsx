@@ -32,10 +32,11 @@ import { withBasePath } from "../lib/site";
 interface WorkbenchInspectorProps {
   controls: (group: InspectorGroup) => ReactNode;
   children: ReactNode;
+  mobileAction?: ReactNode;
 }
 
 /**
- * Compose an IDE-style activity rail, snapping inspector, and independent preview.
+ * Compose labeled navigation above a resizable inspector and independent preview.
  * Pointer gestures never write client configuration or invoke lifecycle animation.
  * @param props Grouped controls and the persistent live preview subtree.
  * @returns A keyboard-accessible split workbench with a mobile drawer fallback.
@@ -43,6 +44,7 @@ interface WorkbenchInspectorProps {
 export function WorkbenchInspector({
   controls,
   children,
+  mobileAction,
 }: WorkbenchInspectorProps) {
   const [preferences, setPreferences] = useState<InspectorPreferences>({
     ...DEFAULT_INSPECTOR,
@@ -232,6 +234,7 @@ export function WorkbenchInspector({
       preset="minimal-saas"
       theme="midnight-gold"
       mode="dark"
+      density="compact"
       iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
       data-editor-chrome
       className={className}
@@ -268,49 +271,57 @@ export function WorkbenchInspector({
   return (
     <div
       ref={container}
+      id="workbench"
       className="workbench-split"
       data-inspector-open={preferences.open}
       style={{ "--inspector-width": `${width}px` } as CSSProperties}
     >
+      <div className="inspector-desktop-toolbar">
+        {editor(
+          <>
+            {groupButtons}
+            <Button
+              ref={!mobile ? opener : undefined}
+              variant="ghost"
+              aria-label={
+                preferences.open
+                  ? "Collapse settings panel"
+                  : "Expand settings panel"
+              }
+              aria-expanded={preferences.open}
+              onClick={toggle}
+            >
+              <Icon name="settings" />
+              {preferences.open ? "Hide controls" : "Show controls"}
+            </Button>
+          </>,
+          "inspector-navigation",
+        )}
+      </div>
       <div className="inspector-mobile-toolbar">
         {editor(
-          <Button
-            ref={mobile ? opener : undefined}
-            variant="secondary"
-            onClick={toggle}
-            aria-expanded={drawerOpen}
-          >
-            Open settings
-          </Button>,
+          <Layout.Cluster gap={2}>
+            <Button
+              ref={mobile ? opener : undefined}
+              variant="secondary"
+              aria-label="Open settings"
+              onClick={toggle}
+              aria-expanded={drawerOpen}
+            >
+              Settings
+            </Button>
+            {mobileAction}
+          </Layout.Cluster>,
         )}
       </div>
       <Layout.Sidebar
-        sideSize={`${168 + width + 8 + 4}px`}
+        sideSize={`${width + 8 + 4}px`}
         // Reserve the preview's 360px plus its content pane's two 2px insets.
         minContentWidth="364px"
         gap={0}
         className="workbench-panes"
       >
         <Layout.SidebarItem position="side" className="inspector-dock">
-          {editor(
-            <>
-              <Button
-                ref={!mobile ? opener : undefined}
-                variant="ghost"
-                aria-label={
-                  preferences.open
-                    ? "Collapse settings panel"
-                    : "Expand settings panel"
-                }
-                aria-expanded={preferences.open}
-                onClick={toggle}
-              >
-                <Icon name="menu" />
-              </Button>
-              {groupButtons}
-            </>,
-            "inspector-rail",
-          )}
           {!mobile &&
             editor(
               <div

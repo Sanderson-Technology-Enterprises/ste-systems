@@ -11,7 +11,7 @@ export function HomeHeroActions() {
           data-hero-action="primary"
           data-surface-variant="accent"
           data-surface-level="2"
-          href={withBasePath(SITE.labPath)}
+          href={withBasePath(`${SITE.labPath}?choose=type`)}
           tabIndex={0}
         >
           Start your design plan
@@ -31,7 +31,7 @@ export function HomeHeroActions() {
       <p className="hero-service-copy">
         Need an application for your business?{" "}
         <a
-          className="hero-service-link"
+          className="interactive-surface hero-service-link"
           href={SITE.customizedPlatforms.url}
           target="_blank"
           rel="noreferrer noopener"

@@ -11,6 +11,25 @@ import {
 } from "../app/lib/design-plan";
 import { DEFAULT_MOTION_SETTINGS } from "../app/lib/motion-settings";
 
+test("new plans work on HTTP LAN origins without randomUUID", () => {
+  const randomUUID = crypto.randomUUID;
+  Object.defineProperty(crypto, "randomUUID", {
+    value: undefined,
+    configurable: true,
+  });
+  try {
+    assert.match(
+      createDesignPlan().id,
+      /^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/,
+    );
+  } finally {
+    Object.defineProperty(crypto, "randomUUID", {
+      value: randomUUID,
+      configurable: true,
+    });
+  }
+});
+
 test("complete design choices and both palette scopes survive a portable round trip", () => {
   const plan = createDesignPlan();
   plan.title = "Client consultation";

@@ -36,6 +36,7 @@ export function ReactProjectExample() {
             >
               <Layout.Stack gap={4}>
                 <Form.Input
+                  className="interactive-surface"
                   label="Project name"
                   name="projectName"
                   value={name}

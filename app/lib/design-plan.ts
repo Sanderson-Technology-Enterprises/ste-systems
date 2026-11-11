@@ -1,4 +1,6 @@
 import manifest from "../../package.json";
+import { SCENARIOS, type Scenario } from "../data/studio-scenarios";
+export { SCENARIOS, type Scenario } from "../data/studio-scenarios";
 import colorTokens from "../data/ui-color-tokens.json";
 import { presets } from "@sanderson-technology-enterprises/motion-style-css";
 import {
@@ -24,23 +26,6 @@ import type { PrimitiveConfiguration } from "../components/labs/LayoutExplorer";
 /** Canonical storage is independent from the legacy six-field configuration. */
 export const PLAN_STORAGE_KEY = "ste-systems:design-plan:v1";
 export const MAX_PLAN_BYTES = 2 * 1024 * 1024;
-export const SCENARIOS = [
-  { id: "business", label: "Business website", screens: ["home", "inquiry"] },
-  {
-    id: "storefront",
-    label: "Storefront",
-    screens: ["browse", "product", "cart"],
-  },
-  {
-    id: "booking",
-    label: "Booking or inquiry",
-    screens: ["services", "request", "confirmation"],
-  },
-  { id: "portal", label: "Client portal", screens: ["records", "detail"] },
-  { id: "components", label: "Component showcase", screens: ["showcase"] },
-  { id: "primitives", label: "Layout primitives", screens: ["structure"] },
-] as const;
-export type Scenario = (typeof SCENARIOS)[number]["id"];
 export type PreviewDevice = "fit" | "desktop" | "tablet" | "phone";
 export type PaletteScope = { name: string; variables: Record<string, string> };
 
@@ -68,7 +53,7 @@ export interface VisualDesign {
 /** Portable client preference document, shared by every studio output. */
 export interface DesignPlan {
   schemaVersion: 1;
-  rendererVersion: 1;
+  rendererVersion: 2;
   packages: Record<string, string>;
   id: string;
   revision: number;
@@ -150,14 +135,30 @@ export function fixMotionSettings(
   };
 }
 
+/**
+ * Creates a UUID with browser cryptography, including ordinary HTTP LAN previews.
+ * `getRandomValues` remains available where the secure-context-only UUID API does not.
+ * @returns A random version 4 UUID suitable for a locally owned design document.
+ */
+function createPlanId(): string {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = [...bytes]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 /** Creates a separate editable plan with the agreed client-facing defaults. */
 export function createDesignPlan(): DesignPlan {
   const now = new Date().toISOString();
   return {
     schemaVersion: 1,
-    rendererVersion: 1,
+    rendererVersion: 2,
     packages: { ...RENDERER_PACKAGES },
-    id: crypto.randomUUID(),
+    id: createPlanId(),
     revision: 1,
     createdAt: now,
     updatedAt: now,
@@ -452,7 +453,10 @@ export function parseDesignPlan(input: unknown): {
   );
   if (value.schemaVersion === undefined && value.configuration)
     return migrateLegacyPlan(value);
-  if (value.schemaVersion !== 1 || value.rendererVersion !== 1)
+  if (
+    value.schemaVersion !== 1 ||
+    ![1, 2].includes(value.rendererVersion as number)
+  )
     throw new Error(
       "This design uses an unsupported document or renderer version. Keep the original file and contact STE.",
     );
@@ -497,6 +501,10 @@ export function parseDesignPlan(input: unknown): {
         "This plan was saved with different library versions. The renderer contract is supported; review its appearance before your consultation.",
       ]
     : [];
+  if (value.rendererVersion === 1)
+    warnings.push(
+      "Migrated renderer 1 to renderer 2. Your saved scenario, styling, and project details have been preserved.",
+    );
   const timestamp = (raw: unknown, label: string) => {
     const s = text(raw, label, 100);
     if (!Number.isFinite(Date.parse(s)))
@@ -505,7 +513,7 @@ export function parseDesignPlan(input: unknown): {
   };
   const plan: DesignPlan = {
     schemaVersion: 1,
-    rendererVersion: 1,
+    rendererVersion: 2,
     packages,
     id: text(value.id, "Plan ID", 200),
     revision: numeric(value.revision, "Revision", 1, Number.MAX_SAFE_INTEGER),

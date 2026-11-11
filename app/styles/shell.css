@@ -43,14 +43,7 @@
   font-family: var(--font-code);
 }
 
-.experience svg {
-  inline-size: 1.1em;
-  block-size: 1.1em;
-  flex: 0 0 auto;
-}
-.experience usk-icon {
-  inline-size: 1.1em;
-  block-size: 1.1em;
+.experience :is(svg, usk-icon) {
   flex: 0 0 auto;
 }
 
@@ -177,7 +170,7 @@
   justify-self: start;
   inline-size: fit-content;
   max-inline-size: 100%;
-  min-inline-size: 0;
+  min-inline-size: min-content;
   text-decoration: none;
 }
 
@@ -185,6 +178,9 @@
 .footer-brand p {
   min-inline-size: 0;
   line-height: 1.1;
+}
+.brand-copy {
+  min-inline-size: min-content;
 }
 .brand-copy,
 .brand-title,
@@ -213,7 +209,7 @@
 
 .brand-title,
 .brand-owner {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .brand-title {
@@ -284,6 +280,12 @@
   justify-self: end;
   inline-size: 100%;
   gap: var(--ly-space-2);
+}
+
+/** Preserve complete package identifiers inside their own scroll region at narrow widths. */
+.footer-package-links {
+  max-inline-size: 100%;
+  overflow-x: auto;
 }
 
 .site-navigation {
@@ -630,7 +632,7 @@
 }
 
 .package-overview-card code {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .package-overview-actions {
@@ -659,8 +661,8 @@
   max-inline-size: 100%;
   margin: 0;
   overflow-x: auto;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  white-space: pre;
+  overflow-wrap: normal;
 }
 
 .quick-start-command .copy-button {
@@ -696,8 +698,8 @@
 .snippet-shell pre {
   max-inline-size: 100%;
   overflow-x: auto;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  white-space: pre;
+  overflow-wrap: normal;
 }
 
 .install-steps,
@@ -708,7 +710,7 @@
 }
 
 .library-list code {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .experience:not(.lab-experience) .library-list code {

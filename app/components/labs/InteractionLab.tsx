@@ -284,7 +284,9 @@ export function InteractionLab() {
           </section>
 
           <details>
-            <summary>View semantic attributes and class API parity</summary>
+            <summary className="interactive-surface">
+              View semantic attributes and class API parity
+            </summary>
             <div
               className="interaction-state-grid"
               data-specimen="interaction-states"
@@ -431,8 +433,9 @@ export function InteractionLab() {
               <form className="collision-controls ly-stack ly-gap-4">
                 <fieldset className="ly-stack ly-gap-2">
                   <legend>Precedence overrides</legend>
-                  <label>
+                  <label className="interactive-surface">
                     <input
+                      className="interactive-surface"
                       type="checkbox"
                       checked={collisionBusy}
                       onChange={(event) =>
@@ -441,8 +444,9 @@ export function InteractionLab() {
                     />
                     Busy
                   </label>
-                  <label>
+                  <label className="interactive-surface">
                     <input
+                      className="interactive-surface"
                       type="checkbox"
                       checked={collisionDisabled}
                       onChange={(event) =>
@@ -468,8 +472,9 @@ export function InteractionLab() {
                       ["current", "Current"],
                     ] as const
                   ).map(([value, label]) => (
-                    <label key={value}>
+                    <label className="interactive-surface" key={value}>
                       <input
+                        className="interactive-surface"
                         type="radio"
                         name="collision-persistent-state"
                         value={value}

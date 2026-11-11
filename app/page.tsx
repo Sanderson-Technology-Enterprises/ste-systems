@@ -5,6 +5,7 @@ import { ConfigurationReference } from "./components/ConfigurationReference";
 import { FeatureShowcase } from "./components/FeatureShowcase";
 import { HomeHeroActions } from "./components/HeroActions";
 import { HomeObservatory } from "./components/HomeObservatory";
+import { WebsiteTemplateGallery } from "./components/studio/WebsiteTemplateGallery";
 import { HomeExperience } from "./components/HomeExperience";
 import { ExternalLinkIcon } from "./components/Icons";
 import { LegacyLabRedirect } from "./components/LegacyLabRedirect";
@@ -212,7 +213,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializedHomeStructuredData }}
       />
-      <a className="skip-link" href="#main-content">
+      <a className="interactive-surface skip-link" href="#main-content">
         Skip to main content
       </a>
 
@@ -227,7 +228,7 @@ export default function Home() {
       {/* A programmatic focus target lets the skip link transfer focus reliably. */}
       <main id="main-content" tabIndex={-1}>
         <section
-          className="hero home-hero ly-wrapper ly-section ly-split ly-gap-8 ly-items-center"
+          className="hero home-hero home-template-entry ly-wrapper ly-section ly-split ly-gap-6 ly-items-start"
           id="top"
           aria-labelledby="home-title"
         >
@@ -246,9 +247,17 @@ export default function Home() {
             <HomeHeroActions />
           </div>
 
+          <WebsiteTemplateGallery compact />
+        </section>
+        <section
+          className="ly-wrapper ly-section ly-stack ly-gap-4"
+          aria-labelledby="system-exploration-title"
+        >
+          <h2 id="system-exploration-title">
+            Explore how the design system works
+          </h2>
           <HomeObservatory />
         </section>
-
         <FeatureShowcase />
         <ConfigurationReference />
         <ClientSystems />

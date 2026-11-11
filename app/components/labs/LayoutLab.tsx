@@ -105,7 +105,9 @@ export function LayoutLab() {
 
         <div className="layout-disclosures ly-stack ly-gap-4">
           <details>
-            <summary>View six layout recipes</summary>
+            <summary className="interactive-surface">
+              View six layout recipes
+            </summary>
             <div className="recipe-atlas ly-stack ly-gap-6">
               <article className="recipe-entry ly-stack ly-gap-4">
                 <header className="specimen-heading ly-stack ly-gap-2">
@@ -330,7 +332,9 @@ export function LayoutLab() {
           </details>
 
           <details>
-            <summary>View composition primitives</summary>
+            <summary className="interactive-surface">
+              View composition primitives
+            </summary>
             <div className="primitive-atlas ly-grid ly-gap-4">
               <article
                 className={`${cardClass} primitive-specimen ly-stack ly-gap-4 ly-pad-4`}
@@ -427,13 +431,16 @@ export function LayoutLab() {
               >
                 <div data-ly-actions="start">
                   <SpecimenLabel>Action Bar</SpecimenLabel>
-                  <button className={`${prefix}-button`} type="button">
+                  <button
+                    className={`interactive-surface ${prefix}-button`}
+                    type="button"
+                  >
                     Save draft
                   </button>
                 </div>
                 <div data-ly-actions="end">
                   <button
-                    className={`${prefix}-button`}
+                    className={`interactive-surface ${prefix}-button`}
                     data-ui-variant="primary"
                     type="button"
                   >
@@ -553,7 +560,9 @@ export function LayoutLab() {
           </details>
 
           <details>
-            <summary>View wrappers and utilities</summary>
+            <summary className="interactive-surface">
+              View wrappers and utilities
+            </summary>
             <div className="wrapper-atlas ly-stack ly-gap-4">
               <div className="ly-stack ly-gap-4">
                 <div

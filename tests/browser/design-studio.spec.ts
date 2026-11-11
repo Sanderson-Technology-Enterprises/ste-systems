@@ -14,7 +14,7 @@ test("studio preserves complete selections after reload and portable fresh-conte
   page,
   browser,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await expect(page.getByText("Saved locally", { exact: true })).toBeVisible();
   await group(page, "Page layout");
   await page.getByLabel("Content width", { exact: true }).selectOption("wide");
@@ -36,7 +36,6 @@ test("studio preserves complete selections after reload and portable fresh-conte
   await fresh.goto(
     new URL("lab/", test.info().project.use.baseURL as string).href,
   );
-  await group(fresh, "Review and save");
   await fresh.getByLabel("Open design file").setInputFiles(file!);
   await expect(fresh.getByText(/Design file opened/)).toBeVisible();
   await group(fresh, "Page layout");
@@ -49,9 +48,8 @@ test("studio preserves complete selections after reload and portable fresh-conte
 test("client scenarios provide real local sample outcomes", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=storefront");
   await group(page, "Preview");
-  await page.getByLabel("Preview scenario").selectOption("storefront");
   if (
     await page
       .getByRole("button", { name: "Show preview", exact: true })
@@ -74,7 +72,7 @@ test("client scenarios provide real local sample outcomes", async ({
 test("saved alternatives remain independent and compare the same viewport", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await group(page, "Compare");
   await page
     .getByRole("button", { name: "Save as option A", exact: true })
@@ -101,7 +99,7 @@ test("saved alternatives remain independent and compare the same viewport", asyn
 test("device controls change the actual preview viewport and icons render", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await page
     .getByRole("button", { name: "Phone preview", exact: true })
     .click();
@@ -120,7 +118,7 @@ test("device controls change the actual preview viewport and icons render", asyn
 test("business inquiry and booking request show validation and honest sample confirmation", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   const frame = page.frameLocator('iframe[title="Website design preview"]');
   await frame
     .getByRole("button", { name: /Request a quote/ })
@@ -134,8 +132,14 @@ test("business inquiry and booking request show validation and honest sample con
   await expect(frame.getByRole("status")).toContainText(
     "No message has been sent",
   );
+  await frame
+    .getByRole("button", { name: "Close dialog", exact: true })
+    .click();
   await group(page, "Preview");
-  await page.getByLabel("Preview scenario").selectOption("booking");
+  await page
+    .getByText("More examples and advanced previews", { exact: true })
+    .click();
+  await page.getByLabel("Additional example").selectOption("booking");
   await frame
     .getByRole("button", { name: "Explore this service" })
     .first()
@@ -151,9 +155,12 @@ test("business inquiry and booking request show validation and honest sample con
 test("portal search and detail stay local and never imply approval", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await group(page, "Preview");
-  await page.getByLabel("Preview scenario").selectOption("portal");
+  await page
+    .getByText("More examples and advanced previews", { exact: true })
+    .click();
+  await page.getByLabel("Additional example").selectOption("portal");
   const frame = page.frameLocator('iframe[title="Website design preview"]');
   await frame.getByLabel("Search records").fill("missing");
   await expect(frame.getByText("No matching records")).toBeVisible();
@@ -169,7 +176,7 @@ test("invalid files preserve the draft and visual links omit private project con
   page,
   browser,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await group(page, "Preview");
   await page.getByLabel("Business name").fill("Private Example Co");
   await group(page, "Review and save");
@@ -199,7 +206,7 @@ test("invalid files preserve the draft and visual links omit private project con
 test("preview capture and printable brief refer to one revision", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await group(page, "Review and save");
   await page.evaluate(() => {
     window.print = () => {
@@ -228,12 +235,25 @@ test("preview capture and printable brief refer to one revision", async ({
   await expect(page.locator(".studio-brief pre")).toContainText(
     `"revision": ${revision}`,
   );
+  await expect(page.locator(".studio-brief")).toContainText(
+    "Main visitor action: Request a quote",
+  );
+  await expect(page.locator(".studio-brief")).toContainText(
+    "Spacing: Comfortable",
+  );
+  await expect(page.locator(".studio-brief")).toContainText(
+    "Animation: Enabled",
+  );
+  await expect(page.locator(".studio-brief")).toContainText(
+    "Icons: Follow visual style",
+  );
+  await expect(page.locator(".studio-brief")).toContainText("Compatibility");
 });
 
 test("mobile settings return focus to preview and keep the design state", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await page.getByRole("button", { name: "Open settings" }).click();
   await page
     .getByRole("button", { name: "Page layout", exact: true })
@@ -269,7 +289,7 @@ test("storage write failure keeps the working design and portable download", asy
       return original.call(this, key, value);
     };
   });
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await expect(page.getByText(/Not saved locally/)).toBeVisible();
   await group(page, "Preview");
   await page.getByLabel("Business name").fill("Working in memory");
@@ -287,7 +307,7 @@ test("storage write failure keeps the working design and portable download", asy
 test("gallery presents every visual style with rendered examples and palette swatches", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await group(page, "Style and colors");
   await page.getByRole("button", { name: /Browse all 20 styles/ }).click();
   await expect(page.locator(".studio-gallery-card")).toHaveCount(20);
@@ -309,7 +329,7 @@ test("gallery presents every visual style with rendered examples and palette swa
 test("random motion discovery saves a fixed effect and advanced timing survives reload", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await group(page, "Effects");
   await page.getByRole("button", { name: "Surprise me" }).click();
   await page.getByText(/Advanced animation/).click();
@@ -327,7 +347,7 @@ test("random motion discovery saves a fixed effect and advanced timing survives 
 test("fullscreen preview restores its control after Escape", async ({
   page,
 }) => {
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await page.getByRole("button", { name: "Fullscreen preview" }).click();
   await expect(
     page.getByRole("button", { name: "Exit fullscreen" }),
@@ -348,8 +368,11 @@ test("the home and editor controls use published package icons", async ({
   await expect(
     page.locator('[data-hero-action="primary"] usk-icon svg'),
   ).toBeVisible();
-  await page.goto("lab/");
+  await page.goto("lab/?template=business");
   await expect(
-    page.locator(".inspector-rail usk-icon svg").first(),
+    page
+      .getByRole("navigation", { name: "Configuration groups", exact: true })
+      .locator("usk-icon svg")
+      .first(),
   ).toBeVisible();
 });

@@ -20,6 +20,13 @@
 Owns the complete design and autosave; hydration cannot overwrite an existing draft.
 
 **Kind**: global function
+<a name="DesignPlanProvider..chooseTemplate"></a>
+
+### DesignPlanProvider~chooseTemplate
+
+Commits template intent at the same validated boundary as file opening and undo.
+
+**Kind**: inner constant of [<code>DesignPlanProvider</code>](#DesignPlanProvider)
 <a name="useDesignPlan"></a>
 
 ## useDesignPlan()

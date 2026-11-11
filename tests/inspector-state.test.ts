@@ -7,7 +7,7 @@ import {
 } from "../app/lib/inspector-state";
 
 test("inspector resizing preserves readable widths and snaps in both directions", () => {
-  assert.equal(inspectorMaximum(1200), 784);
+  assert.equal(inspectorMaximum(1200), 832);
   assert.deepEqual(resizeInspector(300, true, 1200), {
     open: true,
     width: 300,
@@ -27,7 +27,7 @@ test("inspector resizing preserves readable widths and snaps in both directions"
   });
   assert.deepEqual(resizeInspector(1000, true, 1200), {
     open: true,
-    width: 784,
+    width: 832,
   });
 });
 
@@ -35,7 +35,7 @@ test("inspector preferences recover safely without accepting invalid stored stat
   assert.deepEqual(parseInspectorPreferences(null), {
     width: 320,
     open: true,
-    group: "Appearance",
+    group: "Preview",
   });
   assert.deepEqual(
     parseInspectorPreferences("broken"),
@@ -45,7 +45,7 @@ test("inspector preferences recover safely without accepting invalid stored stat
     parseInspectorPreferences(
       JSON.stringify({ width: 540, open: false, group: "Motion" }),
     ),
-    { width: 540, open: false, group: "Motion" },
+    { width: 540, open: false, group: "Effects" },
   );
   assert.deepEqual(
     parseInspectorPreferences(

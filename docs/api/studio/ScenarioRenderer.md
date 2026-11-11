@@ -6,6 +6,6 @@
 
 ## ScenarioRenderer()
 
-Renders the same curated content in live, comparison, thumbnail, and capture contexts.
+Dispatches the same template components for live views, thumbnails, comparisons, and captures.
 
 **Kind**: global function

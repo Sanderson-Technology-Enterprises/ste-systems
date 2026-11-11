@@ -6,6 +6,7 @@ import {
   type InterfaceMode,
 } from "@sanderson-technology-enterprises/ste-usk-react";
 import { DEFAULT_CONFIGURATION } from "../lib/configuration";
+import { withBasePath } from "../lib/site";
 
 /**
  * Keep the homepage interactive while previewing its supported color modes.
@@ -39,6 +40,7 @@ export function HomeExperience({ children }: { children: ReactNode }) {
       preset={DEFAULT_CONFIGURATION.ui}
       theme={DEFAULT_CONFIGURATION.theme}
       mode={mode}
+      iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
     >
       {children}
     </InterfaceRoot>

@@ -248,6 +248,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
       />
       <Layout.Grid minColumnWidth="16rem" gap={3}>
         <Form.Select
+          className="interactive-surface"
           label="Motion target"
           value={target}
           onChange={(event) => {
@@ -260,6 +261,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           <option value="featured">Featured card</option>
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview style"
           value={requestedAppearance.style}
           onChange={(event) => {
@@ -273,6 +275,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview layout"
           value={requestedAppearance.layout}
           onChange={(event) =>
@@ -288,6 +291,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview recipe"
           value={requestedAppearance.recipe}
           onChange={(event) =>
@@ -301,6 +305,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview density"
           value={requestedAppearance.density}
           onChange={(event) =>
@@ -316,6 +321,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview palette"
           value={requestedAppearance.theme}
           onChange={(event) =>
@@ -332,6 +338,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview wrapper"
           value={requestedAppearance.wrapper}
           onChange={(event) =>
@@ -357,6 +364,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Hover intensity"
           value={intensity}
           onChange={(event) =>
@@ -370,6 +378,7 @@ export function MotionLab({ embedded = false }: MotionLabProps) {
           ))}
         </Form.Select>
         <Form.Select
+          className="interactive-surface"
           label="Preview appearance"
           value={requestedAppearance.mode}
           onChange={(event) => {

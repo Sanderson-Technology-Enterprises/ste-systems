@@ -105,7 +105,7 @@ function AdoptionGroup({
 }) {
   return (
     <details className="adoption-disclosure" data-adoption-group={scope}>
-      <summary>{label}</summary>
+      <summary className="interactive-surface">{label}</summary>
       <div className="adoption-grid ly-grid ly-gap-6">
         {paths.map((path) => (
           <AdoptionCard
@@ -217,7 +217,10 @@ export function InstallGuide() {
         </div>
 
         <p>
-          <a href={withBasePath(`${SITE.componentsPath}#atlas-react`)}>
+          <a
+            className="interactive-surface"
+            href={withBasePath(`${SITE.componentsPath}#atlas-react`)}
+          >
             Read the React integration guide
           </a>{" "}
           for installed exports, props, and a working example.

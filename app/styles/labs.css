@@ -70,8 +70,8 @@
   display: block;
   max-inline-size: 100%;
   overflow-x: auto;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  white-space: pre;
+  overflow-wrap: normal;
 }
 
 .configuration-console textarea {
@@ -85,7 +85,7 @@
 }
 
 .client-workspace {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .workbench-kicker {
@@ -122,7 +122,7 @@
 }
 
 .workbench-config dd {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .layout-base-grid {
@@ -136,7 +136,7 @@
 .wrapper-sample,
 .utility-chip {
   min-inline-size: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .specimen-label {
@@ -168,7 +168,7 @@
 }
 
 .recipe-specimen {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 /*
@@ -233,7 +233,7 @@
 }
 
 .alignment-inventory code {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .ui-inventory,
@@ -313,7 +313,7 @@
 .adoption-path code,
 .library-entrypoint code {
   max-inline-size: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .integration-paths > *,
@@ -456,7 +456,7 @@
 
 .native-token-list code {
   max-inline-size: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .native-dialog-body {

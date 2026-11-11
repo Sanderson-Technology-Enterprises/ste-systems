@@ -185,7 +185,7 @@ function PresetExtraRecipe({ prefix, preset }: VisualInventoryProps) {
             Ship expressive UI
           </span>
           <button
-            className={`${c("button")} ${c("wiggle")}`}
+            className={`interactive-surface ${c("button")} ${c("wiggle")}`}
             data-ui-extra="wiggle"
             type="button"
           >
@@ -226,7 +226,7 @@ function PresetExtraRecipe({ prefix, preset }: VisualInventoryProps) {
             aria-label="Tactile knob"
           />
           <button
-            className={`${c("button")} ${c("pressed")}`}
+            className={`interactive-surface ${c("button")} ${c("pressed")}`}
             data-ui-extra="pressed"
             type="button"
             aria-pressed="true"
@@ -238,7 +238,7 @@ function PresetExtraRecipe({ prefix, preset }: VisualInventoryProps) {
     case "brutalism":
       return (
         <button
-          className={`${c("button")} ${c("pressed")}`}
+          className={`interactive-surface ${c("button")} ${c("pressed")}`}
           data-ui-extra="pressed"
           type="button"
           aria-pressed="true"
@@ -419,18 +419,24 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </section>
 
       <details>
-        <summary>View buttons and component states</summary>
+        <summary className="interactive-surface">
+          View buttons and component states
+        </summary>
         <section
           className="ui-button-board"
           data-ui-category="buttons"
           data-specimen="ui-buttons"
           aria-label="Semantic buttons"
         >
-          <button className={s("button")} data-ui-suffix="button" type="button">
+          <button
+            className={`interactive-surface ${s("button") ?? ""}`}
+            data-ui-suffix="button"
+            type="button"
+          >
             Base
           </button>
           <button
-            className={s("button")}
+            className={`interactive-surface ${s("button") ?? ""}`}
             data-ui-suffix="button-primary"
             data-ui-variant="primary"
             type="button"
@@ -438,7 +444,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             Primary
           </button>
           <button
-            className={s("button")}
+            className={`interactive-surface ${s("button") ?? ""}`}
             data-ui-suffix="button-secondary"
             data-ui-variant="secondary"
             type="button"
@@ -446,7 +452,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             Secondary
           </button>
           <button
-            className={s("button")}
+            className={`interactive-surface ${s("button") ?? ""}`}
             data-ui-suffix="button-warning"
             data-ui-variant="warning"
             type="button"
@@ -454,7 +460,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             Warning
           </button>
           <button
-            className={s("button")}
+            className={`interactive-surface ${s("button") ?? ""}`}
             data-ui-suffix="button-danger"
             data-ui-variant="danger"
             type="button"
@@ -462,7 +468,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             Danger
           </button>
           <button
-            className={s("button")}
+            className={`interactive-surface ${s("button") ?? ""}`}
             data-ui-suffix="button-ghost"
             data-ui-variant="ghost"
             type="button"
@@ -470,32 +476,35 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             Ghost
           </button>
           <button
-            className={`${c("button")} ${c("button-cut")}`}
+            className={`interactive-surface ${c("button")} ${c("button-cut")}`}
             data-ui-suffix="button-cut"
             type="button"
           >
             Cut-corner action
           </button>
           <button
-            className={`${c("button")} ${c("button-outline-heavy")}`}
+            className={`interactive-surface ${c("button")} ${c("button-outline-heavy")}`}
             data-ui-suffix="button-outline-heavy"
             type="button"
           >
             Heavy outline action
           </button>
           <button
-            className={s("icon-button")}
+            className={`interactive-surface ${s("icon-button") ?? ""}`}
             data-ui-suffix="icon-button"
             type="button"
             aria-label="Add specimen"
           >
             +
           </button>
-          <button className={s("button")} type="button">
+          <button
+            className={`interactive-surface ${s("button") ?? ""}`}
+            type="button"
+          >
             Copy token
           </button>
           <button
-            className={`${s("button")} ${c("disabled")}`}
+            className={`interactive-surface ${s("button")} ${c("disabled")}`}
             data-ui-suffix="disabled"
             type="button"
             disabled
@@ -504,7 +513,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
           </button>
           <div className="ui-pill-row">
             <button
-              className={c("button-pill")}
+              className={`interactive-surface ${c("button-pill") ?? ""}`}
               data-ui-suffix="button-pill"
               type="button"
             >
@@ -515,7 +524,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </details>
 
       <details>
-        <summary>View alerts, status, and badges</summary>
+        <summary className="interactive-surface">
+          View alerts, status, and badges
+        </summary>
         <div className="ly-stack ly-gap-6">
           <section
             className="feedback-grid"
@@ -594,7 +605,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </details>
 
       <details>
-        <summary>View form recipes and native-first choices</summary>
+        <summary className="interactive-surface">
+          View form recipes and native-first choices
+        </summary>
         <div className="ly-stack ly-gap-6">
           <section
             className="ui-field-grid"
@@ -602,12 +615,15 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             data-specimen="ui-fields"
             aria-label="Semantic fields"
           >
-            <label className={s("field")} data-ui-suffix="field">
+            <label
+              className={`interactive-surface ${s("field") ?? ""}`}
+              data-ui-suffix="field"
+            >
               <span className={s("label")} data-ui-suffix="label">
                 Project name
               </span>
               <input
-                className={s("input")}
+                className={`interactive-surface ${s("input") ?? ""}`}
                 data-ui-suffix="input"
                 defaultValue="STE Systems"
               />
@@ -616,10 +632,10 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                 paints them.
               </span>
             </label>
-            <label className={s("field")}>
+            <label className={`interactive-surface ${s("field") ?? ""}`}>
               <span className={s("label")}>Review lane</span>
               <select
-                className={s("select")}
+                className={`interactive-surface ${s("select") ?? ""}`}
                 data-ui-suffix="select"
                 defaultValue="qa"
               >
@@ -627,10 +643,10 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                 <option value="qa">Quality assurance</option>
               </select>
             </label>
-            <label className={s("field")}>
+            <label className={`interactive-surface ${s("field") ?? ""}`}>
               <span className={s("label")}>Notes</span>
               <textarea
-                className={s("textarea")}
+                className={`interactive-surface ${s("textarea") ?? ""}`}
                 data-ui-suffix="textarea"
                 defaultValue="Native semantics, preset paint, and library-owned states."
               />
@@ -650,8 +666,15 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                   the fully visible native controls below remain the functional
                   cross-preset baseline.
                 </p>
-                <label className={s("check")} data-ui-suffix="check">
-                  <input type="checkbox" defaultChecked />
+                <label
+                  className={`interactive-surface ${s("check") ?? ""}`}
+                  data-ui-suffix="check"
+                >
+                  <input
+                    className="interactive-surface"
+                    type="checkbox"
+                    defaultChecked
+                  />
                   <span
                     className={s("check-control")}
                     data-ui-suffix="check-control"
@@ -659,8 +682,12 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                   />
                   Include audit notes
                 </label>
-                <label className={s("radio")} data-ui-suffix="radio">
+                <label
+                  className={`interactive-surface ${s("radio") ?? ""}`}
+                  data-ui-suffix="radio"
+                >
                   <input
+                    className="interactive-surface"
                     type="radio"
                     name="prefixed-review-lane"
                     defaultChecked
@@ -688,8 +715,16 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             aria-label="Switch recipe"
           >
             {hasRichChoiceRecipe ? (
-              <label className={s("switch")} data-ui-suffix="switch">
-                <input type="checkbox" role="switch" defaultChecked />
+              <label
+                className={`interactive-surface ${s("switch") ?? ""}`}
+                data-ui-suffix="switch"
+              >
+                <input
+                  className="interactive-surface"
+                  type="checkbox"
+                  role="switch"
+                  defaultChecked
+                />
                 <span
                   className={s("switch-track")}
                   data-ui-suffix="switch-track"
@@ -710,7 +745,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </details>
 
       <details>
-        <summary>View progress, loading, and tooltips</summary>
+        <summary className="interactive-surface">
+          View progress, loading, and tooltips
+        </summary>
         <div className="ly-stack ly-gap-8">
           <section
             className="ly-stack ly-gap-4"
@@ -780,7 +817,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                 data-tooltip-position="top"
               >
                 <button
-                  className={s("button")}
+                  className={`interactive-surface ${s("button") ?? ""}`}
                   type="button"
                   aria-describedby="ui-tooltip-top"
                 >
@@ -806,7 +843,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                 data-tooltip-position="right"
               >
                 <button
-                  className={s("button")}
+                  className={`interactive-surface ${s("button") ?? ""}`}
                   type="button"
                   aria-describedby="ui-tooltip-right"
                 >
@@ -828,7 +865,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                 data-tooltip-position="bottom"
               >
                 <button
-                  className={s("button")}
+                  className={`interactive-surface ${s("button") ?? ""}`}
                   type="button"
                   aria-describedby="ui-tooltip-bottom"
                 >
@@ -850,7 +887,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
                 data-tooltip-position="left"
               >
                 <button
-                  className={s("button")}
+                  className={`interactive-surface ${s("button") ?? ""}`}
                   type="button"
                   aria-describedby="ui-tooltip-left"
                 >
@@ -879,7 +916,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </details>
 
       <details>
-        <summary>View navigation, toolbar, and table</summary>
+        <summary className="interactive-surface">
+          View navigation, toolbar, and table
+        </summary>
         <section
           className="ui-data-board ly-stack ly-gap-6"
           data-ui-category="data"
@@ -892,14 +931,17 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             aria-label="UI specimen navigation"
           >
             <a
-              className={s("nav-link")}
+              className={`interactive-surface ${s("nav-link") ?? ""}`}
               data-ui-suffix="nav-link"
               href="#ui-native"
               aria-current="page"
             >
               Components
             </a>
-            <a className={s("nav-link")} href="#interactions">
+            <a
+              className={`interactive-surface ${s("nav-link") ?? ""}`}
+              href="#interactions"
+            >
               States
             </a>
           </nav>
@@ -910,7 +952,10 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
             aria-label="Specimen toolbar"
           >
             <strong>Review queue</strong>
-            <button className={s("button")} type="button">
+            <button
+              className={`interactive-surface ${s("button") ?? ""}`}
+              type="button"
+            >
               Filter
             </button>
           </div>
@@ -939,7 +984,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </details>
 
       <details>
-        <summary>View shape, state, and accessibility helpers</summary>
+        <summary className="interactive-surface">
+          View shape, state, and accessibility helpers
+        </summary>
         <section
           className="helper-board"
           data-ui-category="helpers"
@@ -969,7 +1016,7 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
           </span>
           <hr className={c("divider")} data-ui-suffix="divider" />
           <a
-            className={c("skip-link")}
+            className={`interactive-surface ${c("skip-link") ?? ""}`}
             data-ui-suffix="skip-link"
             href="#ui-native-title"
           >
@@ -988,7 +1035,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
       </details>
 
       <details>
-        <summary>View current preset extras</summary>
+        <summary className="interactive-surface">
+          View current preset extras
+        </summary>
         <section
           className="preset-extra-board ly-stack ly-gap-4"
           data-ui-category="preset-extra"
@@ -1013,7 +1062,9 @@ function VisualInventory({ prefix, preset }: VisualInventoryProps) {
 function NativeSupportDisclosure() {
   return (
     <details className="native-support-details">
-      <summary>View native support and public tokens</summary>
+      <summary className="interactive-surface">
+        View native support and public tokens
+      </summary>
       <section
         className="native-support-disclosure ly-stack ly-gap-6"
         data-ui-category="native-support"
@@ -1088,10 +1139,15 @@ function NativeInventory() {
             const inputId = `native-${type}`;
             const nativePart = nativePartByInput[type];
             return (
-              <label className="native-control" htmlFor={inputId} key={type}>
+              <label
+                className="interactive-surface native-control"
+                htmlFor={inputId}
+                key={type}
+              >
                 <span>{label}</span>
                 {type === "file" ? (
                   <input
+                    className="interactive-surface"
                     id={inputId}
                     type="file"
                     data-native-type={type}
@@ -1099,6 +1155,7 @@ function NativeInventory() {
                   />
                 ) : type === "range" ? (
                   <input
+                    className="interactive-surface"
                     id={inputId}
                     type="range"
                     min="0"
@@ -1112,6 +1169,7 @@ function NativeInventory() {
                   />
                 ) : (
                   <input
+                    className="interactive-surface"
                     id={inputId}
                     type={type}
                     defaultValue={value}
@@ -1139,12 +1197,13 @@ function NativeInventory() {
                 const inputId = `native-file-${state}`;
                 return (
                   <label
-                    className="native-control"
+                    className="interactive-surface native-control"
                     htmlFor={inputId}
                     key={state}
                   >
                     <span>{titleCase(state)}</span>
                     <input
+                      className="interactive-surface"
                       id={inputId}
                       type="file"
                       data-native-file-state={state}
@@ -1160,11 +1219,17 @@ function NativeInventory() {
       </section>
 
       <details>
-        <summary>View select, datalist, textarea, and popups</summary>
+        <summary className="interactive-surface">
+          View select, datalist, textarea, and popups
+        </summary>
         <div className="native-input-grid">
-          <label className="native-control" htmlFor="native-select">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-select"
+          >
             <span>Grouped select</span>
             <select
+              className="interactive-surface"
               id="native-select"
               defaultValue="qa"
               data-native-part="select-indicator"
@@ -1183,9 +1248,13 @@ function NativeInventory() {
             </small>
           </label>
 
-          <label className="native-control" htmlFor="native-datalist-input">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-datalist-input"
+          >
             <span>Datalist</span>
             <input
+              className="interactive-surface"
               id="native-datalist-input"
               list="native-capability-list"
               defaultValue="Native controls"
@@ -1201,9 +1270,13 @@ function NativeInventory() {
             </small>
           </label>
 
-          <label className="native-control" htmlFor="native-textarea">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-textarea"
+          >
             <span>Textarea and placeholder</span>
             <textarea
+              className="interactive-surface"
               id="native-textarea"
               placeholder="Describe a cross-engine observation"
               data-native-part="placeholder"
@@ -1217,34 +1290,50 @@ function NativeInventory() {
       </details>
 
       <details>
-        <summary>
+        <summary className="interactive-surface">
           View checkbox, radio, switch, and indeterminate states
         </summary>
         <form>
           <fieldset className="native-choice-grid">
             <legend>Native choice controls</legend>
-            <label>
+            <label className="interactive-surface">
               <input
+                className="interactive-surface"
                 type="checkbox"
                 defaultChecked
                 data-native-part="accent-color"
               />
               Checkbox
             </label>
-            <label>
-              <input type="radio" name="native-lane" defaultChecked />
+            <label className="interactive-surface">
+              <input
+                className="interactive-surface"
+                type="radio"
+                name="native-lane"
+                defaultChecked
+              />
               Design lane
             </label>
-            <label>
-              <input type="radio" name="native-lane" />
+            <label className="interactive-surface">
+              <input
+                className="interactive-surface"
+                type="radio"
+                name="native-lane"
+              />
               Engineering lane
             </label>
-            <label>
-              <input type="checkbox" role="switch" defaultChecked />
+            <label className="interactive-surface">
+              <input
+                className="interactive-surface"
+                type="checkbox"
+                role="switch"
+                defaultChecked
+              />
               Switch-like checkbox
             </label>
-            <label>
+            <label className="interactive-surface">
               <input
+                className="interactive-surface"
                 ref={indeterminateRef}
                 type="checkbox"
                 data-native-state="indeterminate"
@@ -1256,41 +1345,58 @@ function NativeInventory() {
       </details>
 
       <details>
-        <summary>View native validation and control states</summary>
+        <summary className="interactive-surface">
+          View native validation and control states
+        </summary>
         <form
           className="native-state-grid"
           onSubmit={(event) => event.preventDefault()}
         >
-          <label className="native-control" htmlFor="native-readonly">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-readonly"
+          >
             <span>Read only</span>
             <input
+              className="interactive-surface"
               id="native-readonly"
               defaultValue="Published contract"
               readOnly
               data-native-state="readonly"
             />
           </label>
-          <label className="native-control" htmlFor="native-required">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-required"
+          >
             <span>Required and complete</span>
             <input
+              className="interactive-surface"
               id="native-required"
               defaultValue="Approved"
               required
               data-native-state="required"
             />
           </label>
-          <label className="native-control" htmlFor="native-valid">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-valid"
+          >
             <span>Valid class API</span>
             <input
               id="native-valid"
-              className="is-valid"
+              className="interactive-surface is-valid"
               defaultValue="Valid value"
               data-native-state="valid"
             />
           </label>
-          <label className="native-control" htmlFor="native-aria-invalid">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-aria-invalid"
+          >
             <span>ARIA invalid</span>
             <input
+              className="interactive-surface"
               id="native-aria-invalid"
               defaultValue="Needs correction"
               aria-invalid="true"
@@ -1301,18 +1407,25 @@ function NativeInventory() {
               Use a published package version.
             </small>
           </label>
-          <label className="native-control" htmlFor="native-class-invalid">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-class-invalid"
+          >
             <span>Invalid class API</span>
             <input
               id="native-class-invalid"
-              className="is-invalid"
+              className="interactive-surface is-invalid"
               defaultValue="Unknown release"
               data-native-state="is-invalid"
             />
           </label>
-          <label className="native-control" htmlFor="native-user-invalid">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-user-invalid"
+          >
             <span>User-invalid after validation</span>
             <input
+              className="interactive-surface"
               id="native-user-invalid"
               required
               aria-describedby="native-user-invalid-help"
@@ -1322,26 +1435,38 @@ function NativeInventory() {
               Untouched required controls do not receive danger paint.
             </small>
           </label>
-          <label className="native-control" htmlFor="native-disabled">
+          <label
+            className="interactive-surface native-control"
+            htmlFor="native-disabled"
+          >
             <span>Disabled</span>
             <input
+              className="interactive-surface"
               id="native-disabled"
               defaultValue="Unavailable"
               disabled
               data-native-state="disabled"
             />
           </label>
-          <button type="button" data-native-state="active">
+          <button
+            className="interactive-surface"
+            type="button"
+            data-native-state="active"
+          >
             Hold to inspect native active paint
           </button>
-          <button type="submit">Validate native field</button>
+          <button className="interactive-surface" type="submit">
+            Validate native field
+          </button>
         </form>
       </details>
 
       <details>
-        <summary>View progress, meter, output, details, and scrollbars</summary>
+        <summary className="interactive-surface">
+          View progress, meter, output, details, and scrollbars
+        </summary>
         <div className="native-semantic-grid">
-          <label className="native-control">
+          <label className="interactive-surface native-control">
             <span>Determinate progress</span>
             <progress
               value="68"
@@ -1351,30 +1476,33 @@ function NativeInventory() {
               68%
             </progress>
           </label>
-          <label className="native-control">
+          <label className="interactive-surface native-control">
             <span>Indeterminate progress</span>
             <progress data-native-part="progress-track">Loading</progress>
           </label>
-          <label className="native-control">
+          <label className="interactive-surface native-control">
             <span>Optimum meter</span>
             <meter min={0} max={100} low={35} high={75} optimum={90} value={92}>
               92
             </meter>
           </label>
-          <label className="native-control">
+          <label className="interactive-surface native-control">
             <span>Suboptimal meter</span>
             <meter min={0} max={100} low={35} high={75} optimum={90} value={58}>
               58
             </meter>
           </label>
-          <label className="native-control">
+          <label className="interactive-surface native-control">
             <span>Low meter</span>
             <meter min={0} max={100} low={35} high={75} optimum={90} value={18}>
               18
             </meter>
           </label>
           <details>
-            <summary data-native-part="summary-marker">
+            <summary
+              className="interactive-surface"
+              data-native-part="summary-marker"
+            >
               Native summary marker
             </summary>
             <p>
@@ -1409,7 +1537,9 @@ function NativeInventory() {
       </details>
 
       <details>
-        <summary>Open a real modal dialog</summary>
+        <summary className="interactive-surface">
+          Open a real modal dialog
+        </summary>
         <NativeDialogDemo />
       </details>
     </div>

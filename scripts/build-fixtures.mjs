@@ -269,16 +269,16 @@ ${stylesheetMarkup}
         <h1 data-fixture-heading>${escapeHtml(fixture.title)}</h1>
         <p>${escapeHtml(fixture.summary)}</p>
       </header>
-      ${hasMotion ? '<button id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
+      ${hasMotion ? '<button class="interactive-surface" id="motion-replay" type="button">Replay motion</button><div data-proof-motion>' : ""}
       <section class="ly-grid" data-proof-layout aria-label="${escapeHtml(fixture.title)} layout proof">
         <article class="usk-card ly-stack ly-gap-4" data-proof-paint>
           <h2>Shared semantic specimen</h2>
-          <label class="usk-field" for="fixture-field">
+          <label class="interactive-surface usk-field" for="fixture-field">
             <span class="usk-label">Project name</span>
             <!-- Keep the native field's intrinsic width usable when UI-kit geometry is absent. -->
-            <input class="usk-input" id="fixture-field" type="text" size="12" placeholder="Interface system">
+            <input class="interactive-surface usk-input" id="fixture-field" type="text" size="12" placeholder="Interface system">
           </label>
-          <button class="usk-button" type="button" data-ui-variant="primary" data-proof-ui-control>
+          <button class="interactive-surface usk-button" type="button" data-ui-variant="primary" data-proof-ui-control>
             UI-owned control
           </button>
         </article>

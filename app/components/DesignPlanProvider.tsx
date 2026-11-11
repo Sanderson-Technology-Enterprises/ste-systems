@@ -23,6 +23,8 @@ import {
 import { CONFIGURATION_STORAGE_KEY } from "../lib/configuration";
 import { decodeVisualLink } from "../lib/design-sharing";
 import { MotionPreferences } from "./MotionPreferences";
+import { applyWebsiteTemplate } from "../lib/website-templates";
+import { websiteTemplate } from "../data/studio-scenarios";
 
 type PlanUpdater = (plan: DesignPlan) => DesignPlan;
 interface PlanContextValue {
@@ -31,6 +33,11 @@ interface PlanContextValue {
   saveStatus: string;
   notice: string;
   canUndo: boolean;
+  pickerMode: "new" | "change" | null;
+  hasDraft: boolean;
+  chooseTemplate: (id: string) => void;
+  showTemplates: (fresh?: boolean) => void;
+  resume: () => void;
   update: (change: PlanUpdater) => void;
   updateDesign: (patch: Partial<VisualDesign>) => void;
   open: (plan: DesignPlan, notice?: string) => void;
@@ -49,6 +56,9 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
   const [saveStatus, setSaveStatus] = useState("Opening design…");
   const [notice, announce] = useState("");
   const [canUndo, setCanUndo] = useState(false);
+  const [pickerMode, setPickerMode] = useState<"new" | "change" | null>(null);
+  const [hasDraft, setHasDraft] = useState(false);
+  const committed = useRef(false);
 
   const persist = useCallback((next: DesignPlan) => {
     try {
@@ -61,10 +71,14 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
   const open = useCallback(
     (next: DesignPlan, message = "Design file opened.") => {
       const checked = parseDesignPlan(next).plan;
-      history.current = [...history.current.slice(-29), current.current];
-      setCanUndo(true);
+      if (committed.current)
+        history.current = [...history.current.slice(-29), current.current];
+      setCanUndo(history.current.length > 0);
       current.current = checked;
       setPlan(checked);
+      committed.current = true;
+      setHasDraft(true);
+      setPickerMode(null);
       if (hydrated.current) persist(checked);
       announce(message);
     },
@@ -85,6 +99,8 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
       current.current = next;
       setPlan(next);
       setCanUndo(true);
+      committed.current = true;
+      setHasDraft(true);
       persist(next);
     },
     [persist],
@@ -108,10 +124,38 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
     };
     current.current = next;
     setPlan(next);
+    setPickerMode(null);
     setCanUndo(history.current.length > 0);
     persist(next);
     announce("Previous design restored.");
   }, [persist]);
+
+  /** Commits template intent at the same validated boundary as file opening and undo. */
+  const chooseTemplate = useCallback(
+    (id: string) => {
+      const fresh = pickerMode === "new" || !committed.current;
+      const next = applyWebsiteTemplate(
+        fresh ? createDesignPlan() : current.current,
+        id,
+        { fresh },
+      );
+      if (!fresh) {
+        next.revision = current.current.revision + 1;
+        next.updatedAt = new Date().toISOString();
+      }
+      // The studio's live direction status announces success without displacing the preview.
+      open(next, "");
+      const query = new URLSearchParams(location.search);
+      query.delete("choose");
+      query.delete("template");
+      window.history.replaceState(
+        window.history.state,
+        "",
+        location.pathname + (query.size ? `?${query}` : "") + location.hash,
+      );
+    },
+    [open, pickerMode],
+  );
 
   useEffect(() => {
     let disposed = false;
@@ -119,14 +163,20 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
       let next = createDesignPlan();
       let message = "";
       let safeToSave = true;
+      let existing = false;
+      let incoming = false;
+      let requestedChooser = false;
       try {
         const stored = localStorage.getItem(PLAN_STORAGE_KEY);
+        existing = Boolean(stored);
         if (stored) {
           const result = parseDesignPlan(stored);
           next = result.plan;
           message = result.warnings.join(" ");
         }
         const query = new URLSearchParams(location.search);
+        if (!existing && location.hash && !location.hash.startsWith("#design="))
+          existing = true;
         const legacyKeys = [
           "layout",
           "ui",
@@ -136,9 +186,11 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
           "density",
         ];
         if (location.hash.startsWith("#design=")) {
+          incoming = true;
           const shared = await decodeVisualLink(location.hash);
           if (stored) history.current = [next];
           next = shared;
+          existing = true;
           message =
             "Shared visual direction opened. Project details and notes are not included. Undo restores your previous draft.";
           window.history.replaceState(
@@ -147,6 +199,7 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
             location.pathname,
           );
         } else if (legacyKeys.some((key) => query.has(key))) {
+          incoming = true;
           const fields = Object.fromEntries(
             legacyKeys
               .filter((key) => query.has(key))
@@ -155,6 +208,7 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
           const result = migrateLegacyPlan({ configuration: fields });
           if (stored) history.current = [next];
           next = result.plan;
+          existing = true;
           message = result.warnings.join(" ");
           window.history.replaceState(
             window.history.state,
@@ -168,7 +222,37 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
               configuration: JSON.parse(legacy),
             });
             next = result.plan;
+            existing = true;
             message = result.warnings.join(" ");
+          }
+        }
+        if (!incoming) {
+          requestedChooser = query.get("choose") === "type";
+          const id = query.get("template");
+          if (id) {
+            if (websiteTemplate(id)) {
+              if (existing) history.current = [next];
+              const previous = next;
+              next = applyWebsiteTemplate(next, id, { fresh: !existing });
+              if (existing) {
+                next.revision = previous.revision + 1;
+                next.updatedAt = new Date().toISOString();
+              }
+              existing = true;
+              requestedChooser = false;
+              message = "";
+            } else
+              message =
+                "Unknown website type. Your saved draft is unchanged; choose one of the six starters.";
+            query.delete("template");
+            query.delete("choose");
+            window.history.replaceState(
+              window.history.state,
+              "",
+              location.pathname +
+                (query.size ? `?${query}` : "") +
+                location.hash,
+            );
           }
         }
       } catch (error) {
@@ -182,10 +266,26 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
       hydrated.current = true;
       setReady(true);
       setCanUndo(history.current.length > 0);
-      if (safeToSave) persist(next);
+      committed.current = existing;
+      setHasDraft(existing);
+      setPickerMode(
+        incoming
+          ? null
+          : requestedChooser
+            ? existing
+              ? "change"
+              : "new"
+            : existing
+              ? null
+              : "new",
+      );
+      if (safeToSave && existing) persist(next);
+      else if (safeToSave) setSaveStatus("Choose a website type to begin");
       else setSaveStatus("Recovery required — original draft retained");
     };
-    void hydrate();
+    // Development effect replay must retain consumed URL intent even when storage rejects writes.
+    // Read the document once per provider instance; disposed guards pending asynchronous restores.
+    if (!hydrated.current) void hydrate();
     const external = (event: StorageEvent) => {
       if (event.key === PLAN_STORAGE_KEY)
         announce(
@@ -195,7 +295,6 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
     addEventListener("storage", external);
     return () => {
       disposed = true;
-      hydrated.current = false;
       removeEventListener("storage", external);
     };
   }, [persist]);
@@ -208,6 +307,21 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
         saveStatus,
         notice,
         canUndo,
+        pickerMode,
+        hasDraft,
+        chooseTemplate,
+        showTemplates: (fresh = false) =>
+          setPickerMode(fresh || !committed.current ? "new" : "change"),
+        resume: () => {
+          if (committed.current) setPickerMode(null);
+          const query = new URLSearchParams(location.search);
+          query.delete("choose");
+          window.history.replaceState(
+            window.history.state,
+            "",
+            location.pathname + (query.size ? `?${query}` : "") + location.hash,
+          );
+        },
         update,
         updateDesign,
         open,

@@ -22,6 +22,10 @@
 <dt><a href="#fixMotionSettings">fixMotionSettings()</a></dt>
 <dd><p>Samples legacy random controls once so a saved plan replays the same motion.</p>
 </dd>
+<dt><a href="#createPlanId">createPlanId()</a> ⇒</dt>
+<dd><p>Creates a UUID with browser cryptography, including ordinary HTTP LAN previews.
+<code>getRandomValues</code> remains available where the secure-context-only UUID API does not.</p>
+</dd>
 <dt><a href="#createDesignPlan">createDesignPlan()</a></dt>
 <dd><p>Creates a separate editable plan with the agreed client-facing defaults.</p>
 </dd>
@@ -82,6 +86,15 @@ Fixed client presets never resample during replay or document restoration.
 Samples legacy random controls once so a saved plan replays the same motion.
 
 **Kind**: global function
+<a name="createPlanId"></a>
+
+## createPlanId() ⇒
+
+Creates a UUID with browser cryptography, including ordinary HTTP LAN previews.
+`getRandomValues` remains available where the secure-context-only UUID API does not.
+
+**Kind**: global function
+**Returns**: A random version 4 UUID suitable for a locally owned design document.
 <a name="createDesignPlan"></a>
 
 ## createDesignPlan()

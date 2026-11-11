@@ -17,7 +17,8 @@
 <dd><p>Downloads a frozen client artifact without requiring an account or server.</p>
 </dd>
 <dt><a href="#LabWorkbench">LabWorkbench()</a></dt>
-<dd><p>Provides the guided client workflow while keeping durable choices in DesignPlan.</p>
+<dd><p>Provides the guided client workflow while keeping durable choices in DesignPlan.
+Appearance owns icon family, treatment, and their scoped reset; Effects owns motion and elevation.</p>
 </dd>
 </dl>
 
@@ -40,5 +41,6 @@ Downloads a frozen client artifact without requiring an account or server.
 ## LabWorkbench()
 
 Provides the guided client workflow while keeping durable choices in DesignPlan.
+Appearance owns icon family, treatment, and their scoped reset; Effects owns motion and elevation.
 
 **Kind**: global function

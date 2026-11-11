@@ -42,11 +42,33 @@
 }
 .inspector-dock {
   display: grid;
-  grid-template-columns: 168px minmax(0, var(--inspector-width)) 8px;
+  grid-template-columns: minmax(0, var(--inspector-width)) 8px;
   align-content: stretch;
   block-size: 100%;
   min-block-size: 0;
   min-inline-size: 0;
+}
+.inspector-desktop-toolbar {
+  flex: 0 0 auto;
+}
+.inspector-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.4rem;
+}
+.inspector-navigation .inspector-groups {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.inspector-navigation .inspector-mobile-label {
+  display: inline;
+}
+.inspector-navigation .inspector-groups button {
+  display: inline-flex;
+  gap: 0.4rem;
+  min-block-size: 44px;
 }
 .inspector-rail {
   inline-size: 168px;
@@ -283,6 +305,9 @@
     inline-size: calc(100% - 1rem);
   }
   .inspector-dock {
+    display: none;
+  }
+  .inspector-desktop-toolbar {
     display: none;
   }
   .workbench-panes {

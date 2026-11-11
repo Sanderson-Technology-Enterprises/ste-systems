@@ -13,6 +13,8 @@ import {
   Button,
   Form,
   InterfaceRoot,
+  Modal,
+  Layout,
 } from "@sanderson-technology-enterprises/ste-usk-react";
 import { presets } from "@sanderson-technology-enterprises/motion-style-css";
 import {
@@ -50,6 +52,7 @@ import { describeContrast, type ContrastCheck } from "../lib/contrast";
 import { useDesignPlan } from "./DesignPlanProvider";
 import { WorkbenchInspector } from "./WorkbenchInspector";
 import { PreviewFrame, type PreviewFrameHandle } from "./studio/PreviewFrame";
+import { WebsiteTemplateGallery } from "./studio/WebsiteTemplateGallery";
 
 const DIRECTIONS = [
   {
@@ -200,7 +203,10 @@ function download(
   setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
-/** Provides the guided client workflow while keeping durable choices in DesignPlan. */
+/**
+ * Provides the guided client workflow while keeping durable choices in DesignPlan.
+ * Appearance owns icon family, treatment, and their scoped reset; Effects owns motion and elevation.
+ */
 export function LabWorkbench() {
   const {
     plan,
@@ -213,6 +219,11 @@ export function LabWorkbench() {
     open,
     undo,
     announce,
+    pickerMode,
+    hasDraft,
+    chooseTemplate,
+    showTemplates,
+    resume,
   } = useDesignPlan();
   const [contrast, setContrast] = useState<ContrastCheck[]>([]);
   const [compare, setCompare] = useState(false);
@@ -226,6 +237,11 @@ export function LabWorkbench() {
   const frame = useRef<PreviewFrameHandle>(null);
   const full = useRef<HTMLDivElement>(null);
   const fullOpener = useRef<HTMLButtonElement>(null);
+  const completeTemplateChoice = (id: string) => {
+    chooseTemplate(id);
+    setCompare(false);
+    requestAnimationFrame(() => document.getElementById("lab-title")?.focus());
+  };
   useEffect(() => {
     const changed = () => {
       if (document.fullscreenElement !== full.current) {
@@ -275,6 +291,8 @@ export function LabWorkbench() {
           mode: defaults.configuration.mode,
         },
         palettes: {},
+        iconPack: defaults.iconPack,
+        iconVariant: defaults.iconVariant,
       });
     if (section === "layout")
       updateDesign({
@@ -353,9 +371,19 @@ export function LabWorkbench() {
     try {
       const link = await encodeVisualLink(plan, location.href);
       setShareLink(link);
-      await navigator.clipboard.writeText(link);
+      let copied = false;
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(link);
+          copied = true;
+        } catch {
+          /* The visible link remains usable when clipboard permissions are denied. */
+        }
+      }
       announce(
-        "Visual link copied. It contains no project copy or consultation notes.",
+        copied
+          ? "Visual link copied. It contains no project copy or consultation notes."
+          : "Visual link ready. Copy it from the Visual link field below. It contains no project copy or consultation notes.",
       );
     } catch (error) {
       announce(
@@ -423,7 +451,7 @@ export function LabWorkbench() {
     multiline ? (
       <Form.TextArea
         label={label}
-        className="studio-field"
+        className="interactive-surface studio-field"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         rows={3}
@@ -431,7 +459,7 @@ export function LabWorkbench() {
     ) : (
       <Form.Input
         label={label}
-        className="studio-field"
+        className="interactive-surface studio-field"
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />
@@ -443,7 +471,7 @@ export function LabWorkbench() {
     onChange: (value: string) => void,
   ) => (
     <Form.Select
-      className="studio-field"
+      className="interactive-surface studio-field"
       label={label}
       value={value}
       onChange={(event) => onChange(event.target.value)}
@@ -466,6 +494,7 @@ export function LabWorkbench() {
       {roles.map((role) => (
         <div key={role} className="studio-color">
           <Form.Input
+            className="interactive-surface"
             label={`${role.replaceAll("-", " ")} color`}
             type="color"
             value={color(role)}
@@ -484,16 +513,37 @@ export function LabWorkbench() {
             Choose a sample site and explore how your design works. Sample
             actions stay local.
           </p>
-          {select(
-            "Preview scenario",
-            plan.preview.scenario,
-            SCENARIOS.map((item) => ({ value: item.id, label: item.label })),
-            (value) =>
-              preview({
-                scenario: value as DesignPlan["preview"]["scenario"],
-                screen: SCENARIOS.find((item) => item.id === value)!.screens[0],
-              }),
-          )}
+          <p>
+            <strong>Website type</strong>
+            <br />
+            {SCENARIOS.find((item) => item.id === plan.preview.scenario)!.label}
+          </p>
+          <details>
+            <summary className="interactive-surface">
+              More examples and advanced previews
+            </summary>
+            {select(
+              "Additional example",
+              SCENARIOS.find((item) => item.id === plan.preview.scenario)
+                ?.group === "website"
+                ? ""
+                : plan.preview.scenario,
+              [
+                { value: "", label: "Choose an additional example" },
+                ...SCENARIOS.filter((item) => item.group !== "website").map(
+                  (item) => ({ value: item.id, label: item.label }),
+                ),
+              ],
+              (value) => {
+                if (value)
+                  preview({
+                    scenario: value as DesignPlan["preview"]["scenario"],
+                    screen: SCENARIOS.find((item) => item.id === value)!
+                      .screens[0],
+                  });
+              },
+            )}
+          </details>
           {select(
             "Screen",
             plan.preview.screen,
@@ -583,51 +633,26 @@ export function LabWorkbench() {
           >
             {galleryOpen ? "Hide" : "Browse"} all {UI_PRESETS.length} styles
           </Button>
-          {galleryOpen && (
-            <div className="studio-gallery">
-              {UI_PRESETS.map((item) => (
-                <div key={item.id} className="studio-gallery-card">
-                  <div className="studio-gallery-image">
-                    <PreviewFrame
-                      thumbnail
-                      readOnly
-                      model={{
-                        ...model,
-                        specimen: true,
-                        design: {
-                          ...design,
-                          configuration: { ...config, ui: item.id },
-                        },
-                      }}
-                      title={`${item.label} sample`}
-                    />
-                  </div>
-                  <Button
-                    variant="secondary"
-                    onClick={() => configuration({ ui: item.id })}
-                    aria-pressed={config.ui === item.id}
-                    aria-label={`Use ${item.label} visual style`}
-                  >
-                    <strong>{item.label}</strong>
-                    <span className="studio-style-description">
-                      {STYLE_DETAILS[item.id].description}
-                    </span>
-                    <span
-                      className="studio-gallery-swatches"
-                      aria-label="Representative palette colors"
-                    >
-                      {STYLE_DETAILS[item.id].swatches.map((swatch) => (
-                        <i
-                          key={swatch}
-                          className="studio-gallery-swatch"
-                          style={{ backgroundColor: swatch }}
-                        />
-                      ))}
-                    </span>
-                  </Button>
-                </div>
-              ))}
-            </div>
+          <h3>Icons</h3>
+          {select(
+            "Icon family",
+            design.iconPack,
+            [
+              { value: "auto", label: "Follow visual style" },
+              ...UI_PRESETS.map((item) => ({
+                value: item.id,
+                label: item.label,
+              })),
+            ],
+            (value) =>
+              updateDesign({ iconPack: value as typeof design.iconPack }),
+          )}
+          {select(
+            "Icon treatment",
+            design.iconVariant,
+            ["themed", "monochrome"],
+            (value) =>
+              updateDesign({ iconVariant: value as typeof design.iconVariant }),
           )}
           <h3>Colors</h3>
           {field("Palette name", palette?.name || "My colors", (value) =>
@@ -725,7 +750,9 @@ export function LabWorkbench() {
               configuration({ density: value as typeof config.density }),
           )}
           <details>
-            <summary>Advanced layout geometry</summary>
+            <summary className="interactive-surface">
+              Advanced layout geometry
+            </summary>
             {select(
               "Layout personality",
               config.layout,
@@ -826,8 +853,11 @@ export function LabWorkbench() {
             )}
           </div>
           <details>
-            <summary>Advanced animation · {presets.length} effects</summary>
+            <summary className="interactive-surface">
+              Advanced animation · {presets.length} effects
+            </summary>
             <Form.Checkbox
+              className="interactive-surface"
               label="Animate design changes"
               checked={design.motion.animateConfigurationChanges}
               onChange={(event) =>
@@ -881,6 +911,7 @@ export function LabWorkbench() {
             )}
             {(["duration", "delay", "interval"] as const).map((key) => (
               <Form.Input
+                className="interactive-surface"
                 key={key}
                 label={`${key[0].toUpperCase() + key.slice(1)} (ms)`}
                 type="number"
@@ -921,27 +952,6 @@ export function LabWorkbench() {
                 level:
                   value === "mixed" ? "mixed" : (Number(value) as 1 | 2 | 3),
               }),
-          )}
-          <h3>Icons</h3>
-          {select(
-            "Icon family",
-            design.iconPack,
-            [
-              { value: "auto", label: "Follow visual style" },
-              ...UI_PRESETS.map((item) => ({
-                value: item.id,
-                label: item.label,
-              })),
-            ],
-            (value) =>
-              updateDesign({ iconPack: value as typeof design.iconPack }),
-          )}
-          {select(
-            "Icon treatment",
-            design.iconVariant,
-            ["themed", "monochrome"],
-            (value) =>
-              updateDesign({ iconVariant: value as typeof design.iconVariant }),
           )}
           <Button onClick={() => resetSection("animation")}>
             Reset animation
@@ -988,7 +998,10 @@ export function LabWorkbench() {
                   </p>
                   <Button
                     variant="secondary"
-                    onClick={() => update((p) => selectAlternative(p, key))}
+                    onClick={() => {
+                      update((p) => selectAlternative(p, key));
+                      setCompare(false);
+                    }}
                   >
                     Use option {key}
                   </Button>
@@ -1073,6 +1086,7 @@ export function LabWorkbench() {
               Download design file
             </Button>
             <Form.Input
+              className="interactive-surface"
               label="Open design file"
               type="file"
               accept=".json,.ste-design.json,application/json"
@@ -1082,7 +1096,12 @@ export function LabWorkbench() {
               Copy visual link
             </Button>
             {shareLink && (
-              <Form.TextArea label="Visual link" readOnly value={shareLink} />
+              <Form.TextArea
+                className="interactive-surface"
+                label="Visual link"
+                readOnly
+                value={shareLink}
+              />
             )}
             <Button onClick={() => void capture()} disabled={busy}>
               Download preview image
@@ -1145,12 +1164,10 @@ export function LabWorkbench() {
             </Button>
             <Button
               variant="secondary"
-              onClick={() =>
-                open(
-                  createDesignPlan(),
-                  "Started a new design. Undo restores the previous draft.",
-                )
-              }
+              onClick={() => {
+                setCompare(false);
+                showTemplates(true);
+              }}
             >
               Start over
             </Button>
@@ -1159,144 +1176,402 @@ export function LabWorkbench() {
       )}
     </div>
   );
-  if (!ready) return <p role="status">Opening design plan…</p>;
   return (
     <section
       className="unified-workbench studio-workbench"
+      id="top"
       aria-label="Client design studio"
+      aria-busy={!ready}
+      data-choosing-template={Boolean(pickerMode)}
     >
       <header className="studio-intro">
         <div>
-          <p className="studio-eyebrow">STE design studio</p>
-          <h1>Plan the look and feel of your STE website</h1>
+          <h1 id="lab-title" tabIndex={-1}>
+            Website design studio
+          </h1>
           <p>
-            Choose a starting direction, try sample pages, and save the choices
-            you want STE to implement.
+            Personalize the preview. Compare directions. Save your plan for STE.
           </p>
         </div>
-        <div className="studio-meta">
-          <strong>
-            {config.ui.replaceAll("-", " ")} ·{" "}
-            {config.theme.replaceAll("-", " ")}
-          </strong>
-          <span role="status">{saveStatus}</span>
-        </div>
-      </header>
-      {notice && (
-        <p role="status" className="studio-notice">
-          {notice}
-        </p>
-      )}
-      <WorkbenchInspector controls={controls}>
         <InterfaceRoot
           preset="minimal-saas"
           theme="midnight-gold"
           mode="dark"
           iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
-          className="studio-canvas"
-          ref={full}
+          className="studio-plan-actions"
         >
-          <div className="studio-toolbar">
-            <div
-              className="studio-device-controls"
-              role="group"
-              aria-label="Preview viewport"
-            >
-              {(["fit", "desktop", "tablet", "phone"] as const).map(
-                (device) => (
-                  <Button
-                    key={device}
-                    variant={
-                      plan.preview.device === device ? "primary" : "secondary"
-                    }
-                    aria-label={`${device[0].toUpperCase() + device.slice(1)} preview`}
-                    onClick={() => preview({ device })}
-                  >
-                    {device}
-                  </Button>
-                ),
-              )}
-            </div>
-            <Button
-              ref={fullOpener}
-              variant="secondary"
-              onClick={() => void toggleFull()}
-            >
-              {fullscreen ? "Exit fullscreen" : "Fullscreen preview"}
+          <div className="studio-meta">
+            <strong>
+              {config.ui.replaceAll("-", " ")} ·{" "}
+              {config.theme.replaceAll("-", " ")}
+            </strong>
+            <span role="status">{saveStatus}</span>
+            {ready && hasDraft && (
+              <span
+                className="ly-visually-hidden"
+                role="status"
+                aria-live="polite"
+              >
+                {
+                  SCENARIOS.find((item) => item.id === plan.preview.scenario)
+                    ?.label
+                }{" "}
+                selected.
+              </span>
+            )}
+          </div>
+          {ready && hasDraft && !pickerMode && (
+            <Button variant="secondary" onClick={() => showTemplates()}>
+              Change website type
             </Button>
-          </div>
-          <PreviewFrame
-            ref={frame}
-            model={model}
-            onScreenChange={(screen) => preview({ screen })}
-            onContrast={setContrast}
-            onReport={announce}
-            onFocusBeforeExit={() => fullOpener.current?.focus()}
-          />
-          <p className="studio-canvas-help">
-            Interactive sample. Nothing sends messages, places orders, books
-            appointments, or approves a design.
-          </p>
+          )}
         </InterfaceRoot>
-        {compare && plan.alternatives.A && plan.alternatives.B && (
-          <div className="studio-compare-canvas">
-            <h2>Compare options on the same screen and device</h2>
-            <div className="studio-compare-grid">
-              {(["A", "B"] as const).map((key) => (
-                <section key={key}>
-                  <h3>{plan.alternatives[key]!.name}</h3>
+      </header>
+      {ready && (
+        <>
+          {notice && (
+            <p role="status" className="studio-notice">
+              {notice}
+            </p>
+          )}
+          {pickerMode ? (
+            <InterfaceRoot
+              preset="minimal-saas"
+              theme="midnight-gold"
+              mode="dark"
+              iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
+              className="studio-template-picker"
+            >
+              <WebsiteTemplateGallery
+                plan={pickerMode === "new" ? undefined : plan}
+                onChoose={completeTemplateChoice}
+              />
+              <Layout.Stack gap={3} className="studio-picker-recovery">
+                {hasDraft && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      resume();
+                      requestAnimationFrame(() =>
+                        document.getElementById("lab-title")?.focus(),
+                      );
+                    }}
+                  >
+                    Continue your saved plan
+                  </Button>
+                )}
+                <Form.Input
+                  className="interactive-surface"
+                  label="Open design file"
+                  type="file"
+                  accept=".json,.ste-design.json,application/json"
+                  onChange={handleFile}
+                />
+                <p>
+                  {pickerMode === "new"
+                    ? "Your new plan is saved after you select a website type."
+                    : "Changing type updates sample pages and arrangement. Your styling, project details, notes, and saved alternatives stay with the plan."}
+                </p>
+              </Layout.Stack>
+            </InterfaceRoot>
+          ) : (
+            <>
+              <InterfaceRoot
+                preset="minimal-saas"
+                theme="midnight-gold"
+                mode="dark"
+                iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
+              >
+                <Modal
+                  open={galleryOpen}
+                  onOpenChange={setGalleryOpen}
+                  size="full"
+                  title="Choose a visual style"
+                  description="The same sample is rendered in every style. Choose one to see it in your website preview."
+                >
+                  {galleryOpen && (
+                    <div className="studio-gallery">
+                      {UI_PRESETS.map((item) => (
+                        <div key={item.id} className="studio-gallery-card">
+                          <div className="studio-gallery-image">
+                            <PreviewFrame
+                              thumbnail
+                              readOnly
+                              model={{
+                                ...model,
+                                specimen: true,
+                                design: {
+                                  ...design,
+                                  palettes: {},
+                                  configuration: {
+                                    ...config,
+                                    ui: item.id,
+                                    theme: "native",
+                                    mode: "light",
+                                  },
+                                },
+                              }}
+                              title={`${item.label} sample`}
+                            />
+                          </div>
+                          <Button
+                            variant="secondary"
+                            onClick={() => {
+                              configuration({ ui: item.id });
+                              setGalleryOpen(false);
+                            }}
+                            aria-pressed={config.ui === item.id}
+                            aria-label={`Use ${item.label} visual style`}
+                          >
+                            <strong>{item.label}</strong>
+                            <span className="studio-style-description">
+                              {STYLE_DETAILS[item.id].description}
+                            </span>
+                            <span
+                              className="studio-gallery-swatches"
+                              aria-label="Representative palette colors"
+                            >
+                              {STYLE_DETAILS[item.id].swatches.map((swatch) => (
+                                <i
+                                  key={swatch}
+                                  className="studio-gallery-swatch"
+                                  style={{ backgroundColor: swatch }}
+                                />
+                              ))}
+                            </span>
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </Modal>
+              </InterfaceRoot>
+              <WorkbenchInspector
+                controls={controls}
+                mobileAction={
+                  <Button
+                    aria-label="Change website type"
+                    variant="secondary"
+                    onClick={() => showTemplates()}
+                  >
+                    Website type
+                  </Button>
+                }
+              >
+                <InterfaceRoot
+                  preset="minimal-saas"
+                  theme="midnight-gold"
+                  mode="dark"
+                  iconAssetBase={withBasePath("/vendor/ui-style-kit-icons/")}
+                  className="studio-canvas"
+                  ref={full}
+                >
+                  <div className="studio-toolbar">
+                    <div
+                      className="studio-device-controls"
+                      role="group"
+                      aria-label="Preview viewport"
+                    >
+                      {(["fit", "desktop", "tablet", "phone"] as const).map(
+                        (device) => (
+                          <Button
+                            key={device}
+                            variant={
+                              plan.preview.device === device
+                                ? "primary"
+                                : "secondary"
+                            }
+                            aria-label={`${device[0].toUpperCase() + device.slice(1)} preview`}
+                            onClick={() => preview({ device })}
+                          >
+                            {device}
+                          </Button>
+                        ),
+                      )}
+                    </div>
+                    <Button
+                      ref={fullOpener}
+                      variant="secondary"
+                      onClick={() => void toggleFull()}
+                    >
+                      {fullscreen ? "Exit fullscreen" : "Fullscreen preview"}
+                    </Button>
+                  </div>
                   <PreviewFrame
-                    readOnly
-                    model={{ ...model, design: plan.alternatives[key]!.design }}
-                    title={`Option ${key} preview`}
+                    ref={frame}
+                    model={model}
+                    onScreenChange={(screen) => preview({ screen })}
+                    onContrast={setContrast}
+                    onReport={announce}
+                    onFocusBeforeExit={() => fullOpener.current?.focus()}
                   />
-                </section>
-              ))}
-            </div>
-          </div>
-        )}
-      </WorkbenchInspector>
-      <section className="studio-brief" aria-label="Design preference brief">
-        <h1>Design preference brief</h1>
-        <p>
-          {brief.title} · Revision {brief.revision} ·{" "}
-          {new Date(brief.updatedAt).toLocaleDateString()}
-        </p>
-        <p>
-          Business: {brief.project.name || "To discuss"} · Purpose:{" "}
-          {brief.project.purpose || "To discuss"} · Audience:{" "}
-          {brief.project.audience || "To discuss"}
-        </p>
-        {briefImage && (
-          <Image
-            unoptimized
-            src={briefImage}
-            alt="Representative website preview"
-            width={1200}
-            height={900}
-          />
-        )}
-        <h2>Selected direction</h2>
-        <p>
-          {brief.design.configuration.ui} · {brief.design.configuration.theme} ·{" "}
-          {brief.design.configuration.mode} ·{" "}
-          {brief.design.configuration.recipe} · {brief.design.wrapper} width
-        </p>
-        <h2>Consultation notes</h2>
-        <p>Likes: {brief.notes.likes || "—"}</p>
-        <p>Changes: {brief.notes.dislikes || "—"}</p>
-        <p>Rationale: {brief.notes.rationale || "—"}</p>
-        <p>Requests: {brief.notes.requests || "—"}</p>
-        <p>Open decisions: {brief.notes.decisions || "—"}</p>
-        <h2>Alternatives</h2>
-        <p>
-          {Object.entries(brief.alternatives)
-            .map(([key, value]) => `${key}: ${value.name}`)
-            .join(" · ") || "None saved"}
-        </p>
-        <h2>Technical appendix</h2>
-        <pre>{JSON.stringify(brief, null, 2)}</pre>
-      </section>
+                  <p className="studio-canvas-help">
+                    Interactive sample. Nothing sends messages, places orders,
+                    books appointments, or approves a design.
+                  </p>
+                </InterfaceRoot>
+                {compare && plan.alternatives.A && plan.alternatives.B && (
+                  <div className="studio-compare-canvas">
+                    <h2>Compare options on the same screen and device</h2>
+                    <div className="studio-compare-grid">
+                      {(["A", "B"] as const).map((key) => (
+                        <section key={key}>
+                          <h3>{plan.alternatives[key]!.name}</h3>
+                          <PreviewFrame
+                            readOnly
+                            model={{
+                              ...model,
+                              design: plan.alternatives[key]!.design,
+                            }}
+                            title={`Option ${key} preview`}
+                          />
+                        </section>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </WorkbenchInspector>
+              <section
+                className="studio-brief"
+                aria-label="Design preference brief"
+              >
+                <h1>Design preference brief</h1>
+                <p>
+                  {brief.title} · Revision {brief.revision} ·{" "}
+                  {new Date(brief.updatedAt).toLocaleDateString()}
+                </p>
+                <p>
+                  Business: {brief.project.name || "To discuss"} · Purpose:{" "}
+                  {brief.project.purpose || "To discuss"} · Audience:{" "}
+                  {brief.project.audience || "To discuss"}
+                </p>
+                <p>
+                  Main visitor action: {brief.project.action || "To discuss"}
+                </p>
+                <p>
+                  Preview headline: {brief.project.headline || "To discuss"}
+                </p>
+                {briefImage && (
+                  <Image
+                    unoptimized
+                    src={briefImage}
+                    alt="Representative website preview"
+                    width={1200}
+                    height={900}
+                  />
+                )}
+                <h2>Selected direction</h2>
+                <p>
+                  Preferred option:{" "}
+                  {brief.favorite
+                    ? brief.alternatives[brief.favorite]?.name
+                    : "Current working design"}
+                </p>
+                <p>
+                  {brief.design.configuration.ui} ·{" "}
+                  {brief.design.configuration.theme} ·{" "}
+                  {brief.design.configuration.mode} ·{" "}
+                  {brief.design.configuration.recipe} · {brief.design.wrapper}{" "}
+                  width
+                </p>
+                <p>
+                  Preview:{" "}
+                  {
+                    SCENARIOS.find((item) => item.id === brief.preview.scenario)
+                      ?.label
+                  }{" "}
+                  · {brief.preview.screen} · {brief.preview.device}
+                </p>
+                <p>
+                  Spacing:{" "}
+                  {
+                    (
+                      {
+                        compact: "Compact",
+                        normal: "Comfortable",
+                        spacious: "Spacious",
+                      } as const
+                    )[brief.design.configuration.density ?? "normal"]
+                  }{" "}
+                  · Layout style: {brief.design.configuration.layout}
+                </p>
+                <p>
+                  Display preferences: {brief.design.modePreferences.join(", ")}
+                </p>
+                <p>
+                  Hover and click effects: {brief.design.intensity} · Elevation:{" "}
+                  {brief.design.level === "mixed"
+                    ? "All three levels"
+                    : `Level ${brief.design.level}`}
+                </p>
+                <p>
+                  Animation: {brief.design.motion.enabled ? "Enabled" : "None"}{" "}
+                  · {brief.design.motion.entrance} entrance /{" "}
+                  {brief.design.motion.exit} exit ·{" "}
+                  {brief.design.motion.direction} ·{" "}
+                  {brief.design.motion.duration} ms · Delay{" "}
+                  {brief.design.motion.delay} ms · Stagger{" "}
+                  {brief.design.motion.interval} ms ·{" "}
+                  {brief.design.motion.easing}
+                </p>
+                <p>
+                  Icons:{" "}
+                  {brief.design.iconPack === "auto"
+                    ? "Follow visual style"
+                    : brief.design.iconPack}{" "}
+                  · {brief.design.iconVariant}
+                </p>
+                <h2>Custom colors</h2>
+                {Object.keys(brief.design.palettes).length ? (
+                  <ul>
+                    {Object.entries(brief.design.palettes).map(
+                      ([scope, palette]) => (
+                        <li key={scope}>
+                          {palette.name} ({scope}):{" "}
+                          {Object.entries(palette.variables)
+                            .map(
+                              ([token, value]) =>
+                                `${token.replace(/^--/, "").replace(/-rgb$/, "")}: ${colorToHex(value)}`,
+                            )
+                            .join(", ") || "No color overrides"}
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                ) : (
+                  <p>Selected palette colors, with no custom overrides.</p>
+                )}
+                <h2>Consultation notes</h2>
+                <p>Likes: {brief.notes.likes || "—"}</p>
+                <p>Changes: {brief.notes.dislikes || "—"}</p>
+                <p>Rationale: {brief.notes.rationale || "—"}</p>
+                <p>Requests: {brief.notes.requests || "—"}</p>
+                <p>Open decisions: {brief.notes.decisions || "—"}</p>
+                <h2>Alternatives</h2>
+                <p>
+                  {Object.entries(brief.alternatives)
+                    .map(([key, value]) => `${key}: ${value.name}`)
+                    .join(" · ") || "None saved"}
+                </p>
+                <h2>Technical appendix</h2>
+                <h3>Compatibility</h3>
+                <p>
+                  Design schema {brief.schemaVersion} · Renderer{" "}
+                  {brief.rendererVersion}
+                </p>
+                <ul>
+                  {Object.entries(brief.packages).map(([name, version]) => (
+                    <li key={name}>
+                      {name} {version}
+                    </li>
+                  ))}
+                </ul>
+                <pre>{JSON.stringify(brief, null, 2)}</pre>
+              </section>
+            </>
+          )}
+        </>
+      )}
     </section>
   );
 }

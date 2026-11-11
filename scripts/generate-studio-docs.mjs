@@ -7,14 +7,28 @@ import { format } from "prettier";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const modules = [
+  "app/data/studio-scenarios.ts",
+  "app/lib/website-templates.ts",
   "app/lib/design-plan.ts",
   "app/lib/design-sharing.ts",
   "app/lib/preview-protocol.ts",
   "app/lib/contrast.ts",
+  "app/lib/inspector-state.ts",
   "app/components/DesignPlanProvider.tsx",
   "app/components/studio/PreviewFrame.tsx",
   "app/components/studio/ScenarioRenderer.tsx",
+  "app/components/studio/LegacyScenarioRenderer.tsx",
+  "app/components/studio/WebsiteTemplateGallery.tsx",
+  "app/components/studio/scenarios/ScenarioScaffold.tsx",
+  "app/components/studio/scenarios/MarketingTemplate.tsx",
+  "app/components/studio/scenarios/StorefrontTemplate.tsx",
+  "app/components/studio/scenarios/NewsletterTemplate.tsx",
+  "app/components/studio/scenarios/BlogTemplate.tsx",
+  "app/components/studio/scenarios/IndustrialTemplate.tsx",
+  "app/components/studio/scenarios/InventoryTemplate.tsx",
+  "app/components/studio/StudioReferences.tsx",
   "app/components/LabWorkbench.tsx",
+  "app/components/WorkbenchInspector.tsx",
 ];
 const check = process.argv.includes("--check");
 let drift = false;

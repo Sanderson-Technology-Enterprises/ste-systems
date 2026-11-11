@@ -29,10 +29,10 @@ test("Turbopack development hydrates the interactive routes cleanly", async ({
       .getByRole("heading", { name: "UI Style Kit CSS" }),
   ).toBeVisible();
 
-  await page.goto("/lab/");
+  await page.goto("/lab/?template=business");
   await expect(
     page.getByRole("heading", {
-      name: "Make it yours.",
+      name: "Website design studio",
     }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Style and colors" }).click();

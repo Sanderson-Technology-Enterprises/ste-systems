@@ -43,7 +43,7 @@ export function SiteHeader({
     >
       <div className="site-header-inner ly-wrapper">
         <a
-          className="brand ly-cluster ly-gap-2"
+          className="interactive-surface brand ly-cluster ly-gap-2"
           href={resolvedBrandHref}
           aria-label="STE Systems home"
         >

@@ -10,7 +10,8 @@
 
 html {
   max-inline-size: 100%;
-  overflow-x: clip;
+  /* Keep an unavoidable whole word reachable instead of clipping it at narrow viewports. */
+  overflow-x: auto;
   scroll-behavior: smooth;
 }
 
@@ -24,7 +25,7 @@ body {
 
   max-inline-size: 100%;
   margin: 0;
-  overflow-x: clip;
+  overflow-x: visible;
   background: rgb(var(--usk-bg-rgb));
   color: rgb(var(--usk-text-rgb));
   font-family: var(--font-copy);

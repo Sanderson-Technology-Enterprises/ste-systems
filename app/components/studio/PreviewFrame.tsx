@@ -29,6 +29,7 @@ export const PreviewFrame = forwardRef<
     model: PreviewRenderModel;
     title?: string;
     thumbnail?: boolean;
+    thumbnailKind?: "style" | "template";
     readOnly?: boolean;
     onReport?: (message: string) => void;
     onScreenChange?: (screen: string) => void;
@@ -40,6 +41,7 @@ export const PreviewFrame = forwardRef<
     model,
     title = "Website design preview",
     thumbnail = false,
+    thumbnailKind = "style",
     readOnly = false,
     onReport,
     onScreenChange,
@@ -60,6 +62,8 @@ export const PreviewFrame = forwardRef<
   contrast.current = onContrast;
   const focusBeforeExit = useRef(onFocusBeforeExit);
   focusBeforeExit.current = onFocusBeforeExit;
+  // Correlation is scoped to this frame and its pending map; no secure-origin API is needed.
+  const requestSequence = useRef(0);
   const pending = useRef(
     new Map<
       string,
@@ -81,7 +85,7 @@ export const PreviewFrame = forwardRef<
   const request = useCallback(
     (kind: string, fields: Record<string, unknown>) =>
       new Promise<Record<string, unknown>>((resolve, reject) => {
-        const requestId = crypto.randomUUID();
+        const requestId = `preview-${++requestSequence.current}`;
         const timer = setTimeout(() => {
           pending.current.delete(requestId);
           reject(
@@ -143,6 +147,13 @@ export const PreviewFrame = forwardRef<
   useEffect(() => {
     if (ready) send("render", { model });
   }, [ready, model, send]);
+  useEffect(() => {
+    if (ready) return;
+    // Either realm may hydrate first. Retry the idempotent hello until both listeners exist.
+    const timer = setInterval(() => send("hello"), 250);
+    send("hello");
+    return () => clearInterval(timer);
+  }, [ready, send]);
   useImperativeHandle(
     ref,
     () => ({
@@ -168,14 +179,18 @@ export const PreviewFrame = forwardRef<
     [ready, request, send],
   );
   const width = thumbnail
-    ? 480
+    ? thumbnailKind === "template"
+      ? 960
+      : 480
     : { desktop: 1280, tablet: 768, phone: 390, fit: undefined }[
         model.preview.device
       ];
   return (
     <div
       className={
-        thumbnail ? "studio-thumbnail-viewport" : "studio-frame-viewport"
+        thumbnail
+          ? `studio-thumbnail-viewport${thumbnailKind === "template" ? " studio-template-thumbnail" : ""}`
+          : "studio-frame-viewport"
       }
     >
       <iframe
@@ -189,7 +204,16 @@ export const PreviewFrame = forwardRef<
         className={
           thumbnail ? "studio-thumbnail-frame" : "studio-preview-frame"
         }
-        style={width ? { width } : undefined}
+        style={
+          width
+            ? {
+                width,
+                ...(thumbnail && thumbnailKind === "template"
+                  ? { height: 640 }
+                  : {}),
+              }
+            : undefined
+        }
         onLoad={() => send("hello")}
       />
     </div>

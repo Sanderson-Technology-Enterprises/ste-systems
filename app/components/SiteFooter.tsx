@@ -41,12 +41,18 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
         </div>
 
         <div className="ly-cluster ly-gap-4 ly-items-start">
-          <a href={companyUrl} target="_blank" rel="noreferrer noopener">
+          <a
+            className="interactive-surface"
+            href={companyUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             {SITE.owner.legalName}
             <ExternalLinkIcon />
             <span className="ly-visually-hidden"> (opens in a new tab)</span>
           </a>
           <a
+            className="interactive-surface"
             href={SITE.customizedPlatforms.url}
             target="_blank"
             rel="noreferrer noopener"
@@ -55,7 +61,12 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
             <ExternalLinkIcon />
             <span className="ly-visually-hidden"> (opens in a new tab)</span>
           </a>
-          <a href={SITE.repository} target="_blank" rel="noreferrer noopener">
+          <a
+            className="interactive-surface"
+            href={SITE.repository}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             GitHub repository
             <ExternalLinkIcon />
             <span className="ly-visually-hidden"> (opens in a new tab)</span>
@@ -68,6 +79,7 @@ export function SiteFooter({ companyUrl }: SiteFooterProps) {
         >
           {ECOSYSTEM_PACKAGES.map((pkg) => (
             <a
+              className="interactive-surface"
               key={pkg.name}
               href={pkg.links.npm}
               target="_blank"
