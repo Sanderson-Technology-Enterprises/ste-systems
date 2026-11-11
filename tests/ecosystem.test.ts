@@ -674,48 +674,25 @@ test("quality runs every source, fixture, export, and browser gate", async () =>
   }
 });
 
-test("Pages workflow verifies the complete artifact before non-PR deployment", async () => {
-  const workflow = await readFile(
-    new URL("../.github/workflows/deploy-pages.yml", import.meta.url),
-    "utf8",
-  );
+/** Verifies that repository automation cannot restore the retired Pages checks. */
+test("repository workflows omit retired Pages deployment and verification", async () => {
+  const workflowDirectory = new URL("../.github/workflows/", import.meta.url);
+  let workflowFiles: string[] = [];
+  try {
+    workflowFiles = await readdir(workflowDirectory);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
 
-  assert.match(workflow, /^\s*run: npm ci\s*$/m);
-  assert.doesNotMatch(workflow, /legacy-peer-deps/);
-  assert.match(workflow, /^\s*run: npm run fixtures:build\s*$/m);
-  assert.match(
-    workflow,
-    /^\s*run: npx playwright install --with-deps chromium\s*$/m,
-  );
-  assert.match(workflow, /^\s*path: out\s*$/m);
-  assert.match(
-    workflow,
-    /- name: Upload verified Pages artifact\s+if: github\.event_name != 'pull_request' && github\.ref == 'refs\/heads\/main'[\s\S]*?path: out/,
-  );
-  assert.match(
-    workflow,
-    /deploy:\s+name: Deploy GitHub Pages\s+if: github\.event_name != 'pull_request' && github\.ref == 'refs\/heads\/main'\s+needs: verify/,
-  );
-  assert.match(
-    workflow,
-    /concurrency:\s+group: \$\{\{ github\.event_name == 'pull_request' && format\('verify-pr-\{0\}', github\.event\.pull_request\.number\) \|\| 'pages' \}\}\s+cancel-in-progress: true/,
-  );
-  const mainDeploymentGuard =
-    "if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'";
-  assert.equal(workflow.split(mainDeploymentGuard).length - 1, 2);
-  const verifyTimeout = Number(
-    workflow.match(/verify:[\s\S]*?timeout-minutes:\s*(\d+)/)?.[1],
-  );
-  assert.ok(verifyTimeout >= 30, `verify timeout was ${verifyTimeout}`);
-
-  const fixtureStep = workflow.indexOf("run: npm run fixtures:build");
-  const browserStep = workflow.indexOf(
-    "run: npx playwright install --with-deps chromium",
-  );
-  const qualityStep = workflow.indexOf("run: npm run quality");
-  assert.ok(fixtureStep >= 0);
-  assert.ok(browserStep > fixtureStep);
-  assert.ok(qualityStep > browserStep);
+  assert.equal(workflowFiles.includes("deploy-pages.yml"), false);
+  for (const file of workflowFiles.filter((name) => /\.ya?ml$/.test(name))) {
+    const workflow = await readFile(new URL(file, workflowDirectory), "utf8");
+    assert.doesNotMatch(
+      workflow,
+      /actions\/(?:configure-pages|upload-pages-artifact|deploy-pages)@|name:\s*(?:Deploy to GitHub Pages|Verify production export)/,
+      file,
+    );
+  }
 });
 
 test("Playwright keeps exhaustive Chromium and tagged cross-engine projects", async () => {

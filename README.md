@@ -4,7 +4,7 @@
 
 The design studio at `/lab/` is a static, account-free planning tool. Clients can try business, storefront, booking, and portal samples; choose a visual style, palette, page arrangement, icon treatment, and motion; save independent options A and B; and download a versioned `.ste-design.json` file. The project brief and notes stay in that file. A compressed visual link carries rendering choices only, within an 8 KiB URL limit. Local autosave and Undo support work in progress; the studio does not send sample transactions or approve a design.
 
-Open **Review and save** to print a design preference brief or browser PDF, download a representative PNG, and export technical JSON, theme CSS, or starter markup. Preview artwork comes from the installed `ui-style-kit-icons@2.0.0` package; `npm run assets:build` copies it to generated public assets for root and GitHub Pages paths.
+Open **Review and save** to print a design preference brief or browser PDF, download a representative PNG, and export technical JSON, theme CSS, or starter markup. Preview artwork comes from the installed `ui-style-kit-icons@2.0.0` package; `npm run assets:build` copies it to generated public assets for root and subpath hosting.
 
 The complete studio runtime is pinned to:
 
@@ -14,7 +14,7 @@ npm install @sanderson-technology-enterprises/ste-usk-react@2.4.0 @sanderson-tec
 
 Run `npm run docs:generate` after changing the studio's JSDoc contracts and `npm run docs:check` to detect generated API drift. The source of truth is the TypeScript code, not the generated Markdown in `docs/api/studio/`.
 
-Run `npm run quality:studio` for the focused client-studio gate used by the Pages workflow. The existing `npm run quality` command remains available for the broader legacy regression suite.
+Run `npm run quality:studio` for the focused local client-studio gate. The existing `npm run quality` command remains available for the broader legacy regression suite.
 
 [STE Systems](https://stesystems.com/) is the accessible four-library design system from Sanderson Technology Enterprises LLC. It demonstrates how structure, visual identity, interaction, and lifecycle motion can share one semantic HTML contract.
 
@@ -64,8 +64,12 @@ npm start
 The production start command serves the static `out/` export at
 `http://127.0.0.1:3000/`. Build first; Next.js server mode is incompatible with
 this project's `output: "export"` configuration. Use `npm run dev` for development
-with live updates. The existing `preview:prepare` and `preview:serve` commands
-remain the separate GitHub Pages preview workflow after `npm run build:pages`.
+with live updates.
+
+Production is hosted on Render. The obsolete GitHub Pages deployment workflow
+and its PR verification check have been removed. The existing `build:pages`,
+`preview:prepare`, and `preview:serve` commands remain optional local subpath
+compatibility tools; they do not publish or deploy the application.
 
 Override the production port with `PORT` or `npm start -- --port 4173`.
 To listen on another interface, use `npm start -- --hostname 0.0.0.0`.
@@ -188,7 +192,7 @@ npm run quality
 ```
 
 `quality` includes formatting, linting, type checks, unit/source contracts, deterministic
-fixture safety and byte-parity checks, the GitHub Pages export build, export
+fixture safety and byte-parity checks, a subpath compatibility export build, export
 verification, exhaustive Chromium desktop/mobile QA, and representative Firefox
 and WebKit coverage.
 
