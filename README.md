@@ -71,6 +71,11 @@ and its PR verification check have been removed. The existing `build:pages`,
 `preview:prepare`, and `preview:serve` commands remain optional local subpath
 compatibility tools; they do not publish or deploy the application.
 
+CodeQL uses GitHub's default setup to scan JavaScript and TypeScript. Its language
+selection must match the tracked source: GitHub Actions analysis is excluded while
+this repository has no workflows. If workflows are introduced, enable Actions
+analysis alongside them. Verify all checks on the current PR head before merging.
+
 Override the production port with `PORT` or `npm start -- --port 4173`.
 To listen on another interface, use `npm start -- --hostname 0.0.0.0`.
 
