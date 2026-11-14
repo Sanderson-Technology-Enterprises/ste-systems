@@ -1377,6 +1377,17 @@
         "Template success feedback preserves the first-screen preview; compact mobile actions preserve accessible names; footer identifiers scroll locally without letter wrapping",
         "Remote CI and source publication are recorded by the current PR head; this proof covers local checks only. No full legacy suite was run."
       ]
+    },
+    {
+      "requirement": "Trusted commercial consultation return with stable shared paint",
+      "status": "verified",
+      "evidence": [
+        "app/components/studio/ConsultationBridge.tsx",
+        "app/lib/consultation-bridge.ts",
+        "tests/consultation-bridge.test.ts",
+        "tests/browser/consultation-return.spec.ts",
+        "docs/api/studio/consultation-bridge.md"
+      ]
     }
   ],
   "configurationInventory": {
@@ -1733,5 +1744,13 @@
     "cloudBrowser": "Not applicable: localhost-only implementation; no public deployment authorized.",
     "nativeOwner": "Gnomie Browser Commander",
     "video": "Not requested; screenshots and action journal retained."
+  },
+  "consultationReturnRepair": {
+    "boundary": "local source and root/Pages export verification; not live release",
+    "components": "Public InterfaceRoot, Link and Layout.Stack; existing shared stylesheet imports",
+    "localCssAddedBytes": 0,
+    "provenance": "Only validated public source/service context survives shared/legacy URL cleanup",
+    "contrast": "Default blue link reproduced at 2.01:1; themed composition passes focused axe color-contrast check",
+    "browser": "Desktop/phone chooser and keyboard return; shared-direction restore/reload; root and Pages exports"
   }
 }

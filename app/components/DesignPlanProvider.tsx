@@ -22,6 +22,7 @@ import {
 } from "../lib/design-plan";
 import { CONFIGURATION_STORAGE_KEY } from "../lib/configuration";
 import { decodeVisualLink } from "../lib/design-sharing";
+import { retainedConsultationSearch } from "../lib/consultation-bridge";
 import { MotionPreferences } from "./MotionPreferences";
 import { applyWebsiteTemplate } from "../lib/website-templates";
 import { websiteTemplate } from "../data/studio-scenarios";
@@ -196,7 +197,7 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
           window.history.replaceState(
             window.history.state,
             "",
-            location.pathname,
+            location.pathname + retainedConsultationSearch(location.search),
           );
         } else if (legacyKeys.some((key) => query.has(key))) {
           incoming = true;
@@ -213,7 +214,9 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
           window.history.replaceState(
             window.history.state,
             "",
-            location.pathname + location.hash,
+            location.pathname +
+              retainedConsultationSearch(location.search) +
+              location.hash,
           );
         } else if (!stored) {
           const legacy = localStorage.getItem(CONFIGURATION_STORAGE_KEY);

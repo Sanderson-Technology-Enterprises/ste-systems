@@ -7,6 +7,8 @@ import { format } from "prettier";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const modules = [
+  "app/lib/consultation-bridge.ts",
+  "app/components/studio/ConsultationBridge.tsx",
   "app/data/studio-scenarios.ts",
   "app/lib/website-templates.ts",
   "app/lib/design-plan.ts",
