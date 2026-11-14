@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import Image from "next/image";
+import { ConsultationBridge } from "./studio/ConsultationBridge";
 import {
   Button,
   Form,
@@ -1184,6 +1185,7 @@ export function LabWorkbench() {
       aria-busy={!ready}
       data-choosing-template={Boolean(pickerMode)}
     >
+      <ConsultationBridge />
       <header className="studio-intro">
         <div>
           <h1 id="lab-title" tabIndex={-1}>
