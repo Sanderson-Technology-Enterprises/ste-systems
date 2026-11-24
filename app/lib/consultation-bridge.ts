@@ -13,16 +13,19 @@ const services = new Set([
 
 /**
  * Retains only validated public consultation provenance while consuming saved design settings.
+ * A return requires one source. The service is retained when supplied once and recognized.
  * @param search Incoming URL query; unrelated values and private text are discarded.
  * @returns A normalized query string including its leading question mark, or an empty string.
  */
 export function retainedConsultationSearch(search: string): string {
   if (search.length > 2000) return "";
   const params = new URLSearchParams(search);
-  if (params.get("source") !== "customized-platforms") return "";
+  const sources = params.getAll("source");
+  if (sources.length !== 1 || sources[0] !== "customized-platforms") return "";
   const retained = new URLSearchParams({ source: "customized-platforms" });
-  const service = params.get("service");
-  if (service && services.has(service)) retained.set("service", service);
+  const [service, ...duplicates] = params.getAll("service");
+  if (service && duplicates.length === 0 && services.has(service))
+    retained.set("service", service);
   return `?${retained}`;
 }
 

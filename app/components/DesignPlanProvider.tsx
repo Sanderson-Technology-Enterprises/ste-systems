@@ -161,6 +161,11 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let disposed = false;
     const hydrate = async () => {
+      const originalSearch = location.search;
+      const query = new URLSearchParams(originalSearch);
+      const fromConsultation = query
+        .getAll("source")
+        .includes("customized-platforms");
       let next = createDesignPlan();
       let message = "";
       let safeToSave = true;
@@ -175,7 +180,6 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
           next = result.plan;
           message = result.warnings.join(" ");
         }
-        const query = new URLSearchParams(location.search);
         if (!existing && location.hash && !location.hash.startsWith("#design="))
           existing = true;
         const legacyKeys = [
@@ -263,6 +267,21 @@ export function DesignPlanProvider({ children }: { children: ReactNode }) {
         message = `Could not restore the saved design: ${error instanceof Error ? error.message : "Storage unavailable."} The original data has been retained. Open a design file or start a new plan.`;
       }
       if (disposed) return;
+      if (fromConsultation) {
+        // Retain the public return coordinates and the still-open template chooser.
+        const retained = new URLSearchParams(
+          retainedConsultationSearch(originalSearch),
+        );
+        if (requestedChooser && retained.size) retained.set("choose", "type");
+        const search = retained.size ? `?${retained}` : "";
+        if (location.search !== search) {
+          window.history.replaceState(
+            window.history.state,
+            "",
+            location.pathname + search + location.hash,
+          );
+        }
+      }
       current.current = next;
       setPlan(next);
       announce(message);

@@ -14,7 +14,8 @@
 
 <dl>
 <dt><a href="#retainedConsultationSearch">retainedConsultationSearch(search)</a> ⇒</dt>
-<dd><p>Retains only validated public consultation provenance while consuming saved design settings.</p>
+<dd><p>Retains only validated public consultation provenance while consuming saved design settings.
+A return requires one source. The service is retained when supplied once and recognized.</p>
 </dd>
 <dt><a href="#consultationReturn">consultationReturn(search)</a> ⇒</dt>
 <dd><p>Resolves a fixed commercial return destination for studio visits from Customized Platforms.</p>
@@ -33,6 +34,7 @@ Known commercial service contexts; private form content never travels in a URL.
 ## retainedConsultationSearch(search) ⇒
 
 Retains only validated public consultation provenance while consuming saved design settings.
+A return requires one source. The service is retained when supplied once and recognized.
 
 **Kind**: global function
 **Returns**: A normalized query string including its leading question mark, or an empty string.

@@ -71,6 +71,10 @@ and its PR verification check have been removed. The existing `build:pages`,
 `preview:prepare`, and `preview:serve` commands remain optional local subpath
 compatibility tools; they do not publish or deploy the application.
 
+The npm build commands record installed package identity at `out/build-identity.json`.
+See [Studio build identity](docs/studio-build-identity.md) for the scope and limits
+of that public receipt.
+
 CodeQL uses GitHub's default setup to scan JavaScript and TypeScript. Its language
 selection must match the tracked source: GitHub Actions analysis is excluded while
 this repository has no workflows. If workflows are introduced, enable Actions

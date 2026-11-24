@@ -65,12 +65,28 @@ test("authored runtime sources do not use removed Layout v2 selectors", () => {
   }
 });
 
-async function readShippingSources(directory: URL): Promise<string[]> {
+/**
+ * Read shipping files while allowing an absent optional repository metadata root.
+ * Nested directories and required roots must still remain readable.
+ * @param directory Source directory to scan.
+ * @param optional Whether the root may be absent from this checkout.
+ * @returns Text from supported shipping files.
+ */
+async function readShippingSources(
+  directory: URL,
+  optional = false,
+): Promise<string[]> {
   const sources: string[] = [];
   const supportedExtensions =
     /\.(?:json|md|mjs|ts|tsx|txt|webmanifest|xml|ya?ml)$/;
 
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
+  const entries = await readdir(directory, { withFileTypes: true }).catch(
+    (error: NodeJS.ErrnoException) => {
+      if (optional && error.code === "ENOENT") return [];
+      throw error;
+    },
+  );
+  for (const entry of entries) {
     if (entry.name === "generated") continue;
     const entryUrl = new URL(
       `${encodeURIComponent(entry.name)}${entry.isDirectory() ? "/" : ""}`,
@@ -1021,7 +1037,10 @@ test("active shipping surfaces omit superseded lab identities", async () => {
     await Promise.all(
       ["../app/", "../scripts/", "../.github/", "../public/"].map(
         (relativePath) =>
-          readShippingSources(new URL(relativePath, import.meta.url)),
+          readShippingSources(
+            new URL(relativePath, import.meta.url),
+            relativePath === "../.github/",
+          ),
       ),
     )
   ).flat();

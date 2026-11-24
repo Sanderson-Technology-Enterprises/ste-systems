@@ -7,6 +7,7 @@ import { format } from "prettier";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const modules = [
+  "scripts/record-build-identity.mjs",
   "app/lib/consultation-bridge.ts",
   "app/components/studio/ConsultationBridge.tsx",
   "app/data/studio-scenarios.ts",
@@ -38,20 +39,22 @@ let drift = false;
 /** Generate one stable jsdoc2md page per public studio module. */
 for (const entry of modules) {
   const source = await readFile(path.join(root, entry), "utf8");
-  const javascript = ts.transpileModule(source, {
-    fileName: entry,
-    compilerOptions: {
-      target: ts.ScriptTarget.ES2022,
-      module: ts.ModuleKind.ESNext,
-      jsx: ts.JsxEmit.ReactJSX,
-      removeComments: false,
-    },
-  }).outputText;
+  const javascript = entry.endsWith(".mjs")
+    ? source
+    : ts.transpileModule(source, {
+        fileName: entry,
+        compilerOptions: {
+          target: ts.ScriptTarget.ES2022,
+          module: ts.ModuleKind.ESNext,
+          jsx: ts.JsxEmit.ReactJSX,
+          removeComments: false,
+        },
+      }).outputText;
   const temporary = path.join(
     root,
     ".tmp",
     "studio-docs",
-    path.basename(entry).replace(/\.tsx?$/, ".js"),
+    path.basename(entry).replace(/\.(?:tsx?|mjs)$/, ".js"),
   );
   await mkdir(path.dirname(temporary), { recursive: true });
   await writeFile(temporary, javascript);
@@ -71,7 +74,7 @@ for (const entry of modules) {
     "docs",
     "api",
     "studio",
-    path.basename(entry).replace(/\.tsx?$/, ".md"),
+    path.basename(entry).replace(/\.(?:tsx?|mjs)$/, ".md"),
   );
   if (check) {
     try {
