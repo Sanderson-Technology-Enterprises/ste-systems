@@ -29,7 +29,11 @@ export function ConsultationBridge() {
   return (
     <InterfaceRoot preset="minimal-saas" theme="native" mode="dark">
       <Layout.Stack as="aside" gap={2} aria-label="Your consultation">
-        <Link className="interactive-surface" href={destination}>
+        <Link
+          className="interactive-surface"
+          href={destination}
+          referrerPolicy="no-referrer"
+        >
           Return to your consultation at Customized Platforms
         </Link>
         <p>

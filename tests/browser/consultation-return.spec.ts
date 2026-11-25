@@ -6,7 +6,7 @@ test("consultation return survives the template chooser and keyboard activation"
   page,
 }) => {
   await page.goto(
-    "lab/?choose=type&source=customized-platforms&service=website-design-development",
+    "lab/?choose=type&source=customized-platforms&service=website-design-development&email=private%40example.test&returnTo=https%3A%2F%2Fexample.test&notes=fixture-private",
   );
   const back = page.getByRole("link", {
     name: "Return to your consultation at Customized Platforms",
@@ -16,6 +16,9 @@ test("consultation return survives the template chooser and keyboard activation"
     "href",
     "https://customizedplatforms.com/contact?context=website-design-development",
   );
+  await expect(page).toHaveURL(
+    /\?source=customized-platforms&service=website-design-development&choose=type$/,
+  );
   await page
     .getByRole("button", { name: "Start with Marketing site", exact: true })
     .click();
@@ -23,6 +26,10 @@ test("consultation return survives the template chooser and keyboard activation"
     page.getByRole("button", { name: "Change website type", exact: true }),
   ).toBeVisible();
   await expect(back).toBeVisible();
+  await expect(back).toHaveAttribute("referrerpolicy", "no-referrer");
+  await expect(page).toHaveURL(
+    /\?source=customized-platforms&service=website-design-development$/,
+  );
   await expect(back).toHaveClass(/interactive-surface/);
   const contrast = await new AxeBuilder({ page })
     .include('aside[aria-label="Your consultation"]')
@@ -54,6 +61,11 @@ test("consultation return survives shared-direction restoration and reload", asy
     });
   });
   await page.goto("lab/?template=business");
+  const settings = page.getByRole("button", {
+    name: "Open settings",
+    exact: true,
+  });
+  if (await settings.isVisible()) await settings.click();
   await page
     .getByRole("button", { name: "Review and save", exact: true })
     .last()

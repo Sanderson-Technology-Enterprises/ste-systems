@@ -18,6 +18,18 @@ test("consultation return links never accept an arbitrary destination or private
     consultationReturn("?source=customized-platforms&service=private%20note"),
     "https://customizedplatforms.com/contact",
   );
+  assert.equal(
+    consultationReturn(
+      "?source=customized-platforms&source=other&service=dashboards",
+    ),
+    null,
+  );
+  assert.equal(
+    consultationReturn(
+      "?source=customized-platforms&service=dashboards&service=web-applications",
+    ),
+    "https://customizedplatforms.com/contact",
+  );
 });
 
 /** Consuming shared or legacy settings must retain only validated public consultation provenance. */
